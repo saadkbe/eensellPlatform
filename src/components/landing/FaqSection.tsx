@@ -49,7 +49,7 @@ export function FaqSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <Accordion type="single" collapsible className="w-full space-y-4">
+          <Accordion className="w-full space-y-4">
             {faqs.map((faq, idx) => (
               <AccordionItem key={idx} value={`item-${idx}`} className="bg-card border border-border rounded-xl px-6 data-[state=open]:border-brand/50 transition-colors">
                 <AccordionTrigger className="text-lg font-bold hover:no-underline hover:text-brand transition-colors text-right py-4">
