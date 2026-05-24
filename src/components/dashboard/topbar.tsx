@@ -1,0 +1,116 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
+import { Search, Bell, Calendar, ChevronRight, HelpCircle, MessageSquare } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import Link from "next/link";
+
+export function TopBar() {
+  const pathname = usePathname();
+  const [currentDate, setCurrentDate] = useState("");
+
+  // Render date client-side only to avoid hydration mismatch
+  useEffect(() => {
+    setCurrentDate(
+      new Date().toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "short",
+        day: "numeric",
+      })
+    );
+  }, []);
+  
+  // Basic breadcrumb generation
+  const paths = pathname.split('/').filter(Boolean);
+  const breadcrumbs = paths.map((path, index) => {
+    const isLast = index === paths.length - 1;
+    const title = path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, ' ');
+    return (
+      <div key={path} className="flex items-center text-sm">
+        {index > 0 && <ChevronRight className="w-4 h-4 mx-2 text-muted-foreground shrink-0" />}
+        <span className={`truncate max-w-[100px] sm:max-w-none ${isLast ? "text-foreground font-semibold" : "text-muted-foreground"}`}>
+          {title}
+        </span>
+      </div>
+    );
+  });
+
+  return (
+    <div className="sticky top-0 z-30 w-full flex items-center justify-between px-4 sm:px-6 lg:px-8 py-4 bg-card border-b border-border transition-all duration-300 shadow-sm">
+      <div className="flex items-center">
+        {breadcrumbs.length > 0 ? breadcrumbs : <span className="text-foreground font-semibold">Home</span>}
+      </div>
+      
+      <div className="flex items-center gap-3 sm:gap-4">
+        <div className="hidden md:flex items-center relative">
+          <Search className="w-4 h-4 absolute left-3 text-muted-foreground" />
+          <Input 
+            placeholder="Search resources..." 
+            className="w-[200px] lg:w-[280px] pl-9 bg-muted/50 border-border h-9 text-sm focus-visible:ring-1 focus-visible:ring-primary rounded-full transition-all hover:bg-muted"
+          />
+        </div>
+        
+        {currentDate && (
+          <div className="hidden sm:flex items-center gap-2 text-xs font-medium text-muted-foreground bg-muted/50 px-3 py-1.5 rounded-full border border-border">
+            <Calendar className="w-3.5 h-3.5" />
+            <span>{currentDate}</span>
+          </div>
+        )}
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link href="/dashboard/community">
+                <Button variant="outline" size="icon" className="hidden sm:flex text-muted-foreground hover:text-foreground h-9 w-9 rounded-full bg-muted/50 border-border transition-colors">
+                  <HelpCircle className="w-4 h-4" />
+                </Button>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" className="text-xs">
+              <p>Help & Support</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link href="/dashboard/community">
+                <Button variant="outline" size="icon" className="text-muted-foreground hover:text-foreground h-9 w-9 rounded-full bg-muted/50 border-border transition-colors">
+                  <MessageSquare className="w-4 h-4" />
+                </Button>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" className="text-xs">
+              <p>Messages</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link href="/dashboard/settings">
+                <Button variant="outline" size="icon" className="relative text-muted-foreground hover:text-foreground h-9 w-9 rounded-full bg-muted/50 border-border transition-colors">
+                  <Bell className="w-4 h-4" />
+                  <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-background animate-pulse" />
+                </Button>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" className="text-xs">
+              <p>Notifications</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+    </div>
+  );
+}

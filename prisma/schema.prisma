@@ -1,0 +1,163 @@
+// Eensell University — Prisma Schema
+// Premium Education Platform Database Models
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  ACTIVE_USER
+  PENDING_USER
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  REJECTED
+}
+
+model User {
+  id        String     @id @default(cuid())
+  clerkId   String     @unique
+  email     String     @unique
+  firstName String?
+  lastName  String?
+  imageUrl  String?
+  role      UserRole   @default(PENDING_USER)
+  status    UserStatus @default(PENDING)
+  onboardingCompleted Boolean @default(false)
+  goals     String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  progress       Progress[]
+  dailyGoals     Goal[]
+  communityPosts CommunityPost[]
+
+  @@index([clerkId])
+  @@index([status])
+  @@index([role])
+}
+
+model Module {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  imageUrl    String?
+  order       Int      @default(0)
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  lessons Lesson[]
+
+  @@index([order])
+}
+
+model Lesson {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  videoUrl    String?  // Vimeo embed URL
+  order       Int      @default(0)
+  duration    Int?     // in seconds
+  isPublished Boolean  @default(false)
+  isFree      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  moduleId String
+  module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  resources Resource[]
+  progress  Progress[]
+
+  @@index([moduleId, order])
+}
+
+model Progress {
+  id          String   @id @default(cuid())
+  isCompleted Boolean  @default(false)
+  watchedAt   DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  lessonId String
+  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+}
+
+model Resource {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  type        String   // "pdf", "template", "prompt", "link"
+  fileUrl     String?
+  createdAt   DateTime @default(now())
+
+  lessonId String?
+  lesson   Lesson? @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+
+  @@index([type])
+}
+
+model LiveCall {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  scheduledAt DateTime
+  meetingUrl  String?
+  replayUrl   String?
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([scheduledAt])
+}
+
+model Announcement {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([createdAt])
+}
+
+model Goal {
+  id        String   @id @default(cuid())
+  title     String
+  completed Boolean  @default(false)
+  category  String   @default("Learning") // Learning, Review, Practical, Engagement
+  date      DateTime @default(now())       // Which day this goal belongs to
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+}
+
+model CommunityPost {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  isPinned  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+}
