@@ -65,51 +65,18 @@ export function TopBar() {
           </div>
         )}
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link href="/dashboard/community">
-                <Button variant="outline" size="icon" className="hidden sm:flex text-muted-foreground hover:text-foreground h-9 w-9 rounded-full bg-muted/50 border-border transition-colors">
-                  <HelpCircle className="w-4 h-4" />
-                </Button>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="bottom" className="text-xs">
-              <p>Help & Support</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Link href="/dashboard/community" className="hidden sm:flex items-center justify-center text-muted-foreground hover:text-foreground h-9 w-9 rounded-full bg-muted/50 border border-border transition-colors">
+          <HelpCircle className="w-4 h-4" />
+        </Link>
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link href="/dashboard/community">
-                <Button variant="outline" size="icon" className="text-muted-foreground hover:text-foreground h-9 w-9 rounded-full bg-muted/50 border-border transition-colors">
-                  <MessageSquare className="w-4 h-4" />
-                </Button>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="bottom" className="text-xs">
-              <p>Messages</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Link href="/dashboard/community" className="flex items-center justify-center text-muted-foreground hover:text-foreground h-9 w-9 rounded-full bg-muted/50 border border-border transition-colors">
+          <MessageSquare className="w-4 h-4" />
+        </Link>
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link href="/dashboard/settings">
-                <Button variant="outline" size="icon" className="relative text-muted-foreground hover:text-foreground h-9 w-9 rounded-full bg-muted/50 border-border transition-colors">
-                  <Bell className="w-4 h-4" />
-                  <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-background animate-pulse" />
-                </Button>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="bottom" className="text-xs">
-              <p>Notifications</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Link href="/dashboard/settings" className="relative flex items-center justify-center text-muted-foreground hover:text-foreground h-9 w-9 rounded-full bg-muted/50 border border-border transition-colors">
+          <Bell className="w-4 h-4" />
+          <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-background animate-pulse" />
+        </Link>
       </div>
     </div>
   );

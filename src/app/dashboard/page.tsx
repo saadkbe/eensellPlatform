@@ -429,11 +429,14 @@ export default async function DashboardPage() {
                     })}
                   </div>
                   {upcomingCall.meetingUrl && (
-                    <Button asChild className="w-full gap-2 font-semibold shadow-lg shadow-primary/15 hover:-translate-y-0.5 transition-transform h-9 text-sm">
-                      <a href={upcomingCall.meetingUrl} target="_blank" rel="noopener noreferrer">
-                        Join Meeting <ArrowRight className="w-3.5 h-3.5" />
-                      </a>
-                    </Button>
+                    <a 
+                      href={upcomingCall.meetingUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-center gap-2 font-semibold shadow-lg shadow-primary/15 hover:-translate-y-0.5 transition-transform h-9 text-sm rounded-lg bg-primary text-primary-foreground hover:bg-primary/90"
+                    >
+                      Join Meeting <ArrowRight className="w-3.5 h-3.5" />
+                    </a>
                   )}
                 </div>
               ) : (

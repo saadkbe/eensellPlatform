@@ -173,10 +173,8 @@ export function CommunityClient({
 
           {isAdmin && (
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
-                  <MoreHorizontal className="w-4 h-4" />
-                </Button>
+              <DropdownMenuTrigger className="inline-flex items-center justify-center rounded-md h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-accent focus:outline-none">
+                <MoreHorizontal className="w-4 h-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-card border-border">
                 <DropdownMenuItem onClick={() => handleTogglePin(post.id)} className="text-sm gap-2">
@@ -237,11 +235,9 @@ export function CommunityClient({
 
           {isAdmin && (
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-              <DialogTrigger asChild>
-                <Button className="gap-1.5 h-9 text-sm shadow-md">
-                  <PenLine className="w-4 h-4" />
-                  New Post
-                </Button>
+              <DialogTrigger className="inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/80 gap-1.5 h-9 px-4 shadow-md">
+                <PenLine className="w-4 h-4" />
+                New Post
               </DialogTrigger>
               <DialogContent className="bg-card border-border text-foreground max-w-xl">
                 <DialogHeader>
