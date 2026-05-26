@@ -6,6 +6,28 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
 
+const UPCOMING_MODULES = [
+  { title: "AI Foundations & Opportunity Mindset" },
+  { title: "AI Tools Mastery" },
+  { title: "AI Content Creation Systems" },
+  { title: "Viral AI Short-Form Content" },
+  { title: "AI Ads Video Generation" },
+  { title: "AI Automation & Workflows" },
+  { title: "AI Chatbots & AI Agents" },
+  { title: "Building an AI Business From Scratch" },
+  { title: "AI Client Acquisition & Outreach" },
+  { title: "Personal Branding With AI" },
+  { title: "AI-Powered Freelancing" },
+  { title: "AI SaaS & Startup Ideas" },
+  { title: "AI Video Editing & Cinematic Content" },
+  { title: "AI Productivity & Life Systems" },
+  { title: "AI Money-Making Opportunities" },
+  { title: "AI Website & Landing Page Creation" },
+  { title: "AI Marketing & Copywriting" },
+  { title: "AI Prompt Engineering Mastery" },
+  { title: "AI E-commerce & Digital Products" },
+  { title: "Future AI Trends & Emerging Opportunities" },
+];
 export default async function ModulesPage() {
   const clerkUser = await currentUser();
 
@@ -56,7 +78,7 @@ export default async function ModulesPage() {
       </div>
 
       {/* Modules Grid */}
-      {modules.length === 0 ? (
+      {modules.length === 0 && UPCOMING_MODULES.length === 0 ? (
         <div className="text-center py-20">
           <div className="w-16 h-16 rounded-2xl bg-card border border-border flex items-center justify-center mx-auto mb-4">
             <BookOpen className="w-7 h-7 text-muted-foreground" />
@@ -107,8 +129,9 @@ export default async function ModulesPage() {
                           />
                         </>
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-primary/5 to-purple-500/5 flex items-center justify-center group-hover:scale-105 transition-transform duration-700 ease-out">
-                          <BookOpen className="w-12 h-12 text-primary/20" />
+                        <div className="w-full h-full bg-neutral-950 flex flex-col items-center justify-center group-hover:scale-105 transition-transform duration-700 ease-out border-b border-neutral-900 relative overflow-hidden">
+                          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+                          <BookOpen className="w-12 h-12 text-neutral-800 relative z-10" />
                         </div>
                       )}
                       
@@ -174,6 +197,57 @@ export default async function ModulesPage() {
                   </CardContent>
                 </Card>
               </Link>
+            );
+          })}
+          
+          {UPCOMING_MODULES.map((module, index) => {
+            const modNumber = modules.length + index + 1;
+            return (
+              <div key={`upcoming-${index}`}>
+                <Card className="bg-neutral-950 border-neutral-900 transition-all duration-300 group h-full overflow-hidden flex flex-col shadow-none">
+                  {/* Full Bleed Image Cover */}
+                  <div className="w-full aspect-video relative bg-card/80 border-b border-border/50 overflow-hidden shrink-0">
+                    {/* Always use the modern near-black design for upcoming modules */}
+                    <div className="w-full h-full bg-neutral-950 flex flex-col items-center justify-center border-b border-neutral-900 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
+                      <BookOpen className="w-10 h-10 text-neutral-800 relative z-10" />
+                    </div>
+                    
+                    {/* Floating Badges on Image */}
+                    <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-20">
+                      <span className="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md text-[10px] font-bold text-white uppercase tracking-widest">
+                        MOD {String(modNumber).padStart(2, "0")}
+                      </span>
+                      <Badge className="bg-amber-500/80 backdrop-blur-md text-white border-transparent text-[10px] shadow-sm">
+                        <Lock className="w-3 h-3 mr-1" />
+                        Dropping Soon
+                      </Badge>
+                    </div>
+                  </div>
+
+                  <CardContent className="p-6 flex flex-col flex-1">
+                    {/* Title */}
+                    <h3 className="text-base font-semibold text-neutral-100 mb-1.5">
+                      {module.title}
+                    </h3>
+                    <p className="text-xs text-neutral-400 line-clamp-2 mb-4 leading-relaxed">
+                      This module is currently in production and will be dropping soon. Stay tuned!
+                    </p>
+
+                    {/* Progress (disabled) */}
+                    <div className="space-y-2 mt-auto pt-4 border-t border-neutral-900/50">
+                      <div className="flex items-center justify-between text-xs mt-2">
+                        <span className="text-neutral-500">Progress</span>
+                        <span className="text-neutral-300 font-medium">0%</span>
+                      </div>
+                      <Progress
+                        value={0}
+                        className="h-1.5 bg-neutral-900"
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             );
           })}
         </div>
