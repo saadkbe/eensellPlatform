@@ -12,6 +12,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import Link from "next/link";
+import { CommandMenu } from "./command-menu";
 
 export function TopBar() {
   const pathname = usePathname();
@@ -51,11 +52,7 @@ export function TopBar() {
       
       <div className="flex items-center gap-3 sm:gap-4">
         <div className="hidden md:flex items-center relative">
-          <Search className="w-4 h-4 absolute left-3 text-muted-foreground" />
-          <Input 
-            placeholder="Search resources..." 
-            className="w-[200px] lg:w-[280px] pl-9 bg-muted/50 border-border h-9 text-sm focus-visible:ring-1 focus-visible:ring-primary rounded-full transition-all hover:bg-muted"
-          />
+          <CommandMenu />
         </div>
         
         {currentDate && (

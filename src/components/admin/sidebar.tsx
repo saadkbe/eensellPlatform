@@ -37,7 +37,7 @@ export function AdminSidebar() {
         <img 
           src="/logo.png" 
           alt="Eensell University" 
-          className="h-20 w-auto object-contain origin-center scale-[1.5]" 
+          className="h-20 w-auto object-contain origin-center scale-[1.5] dark:brightness-0 dark:invert" 
         />
       </div>
       <nav className="flex-1 px-3 py-4 space-y-1">
@@ -91,7 +91,7 @@ export function AdminSidebar() {
     <>
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 bg-background/95 backdrop-blur-xl border-b border-border">
         <div className="flex items-center">
-          <img src="/logo.png" alt="Eensell University" className="h-16 w-auto object-contain origin-left scale-[1.5]" />
+          <img src="/logo.png" alt="Eensell University" className="h-16 w-auto object-contain origin-left scale-[1.5] dark:brightness-0 dark:invert" />
         </div>
         <Button variant="ghost" size="icon" onClick={() => setMobileOpen(!mobileOpen)}
           className="text-muted-foreground hover:text-foreground hover:bg-secondary">
