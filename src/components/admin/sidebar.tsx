@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { UserButton, SignOutButton } from "@clerk/nextjs";
 import {
   BarChart3, Users, Clock, GraduationCap,
-  TrendingUp, Mail, Menu, X, Shield, LogOut
+  TrendingUp, Mail, Menu, X, Shield, LogOut,
+  FolderOpen, PenLine, Video
 } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,13 +14,34 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 
-const navItems = [
-  { title: "Overview", href: "/admin", icon: BarChart3 },
-  { title: "Users", href: "/admin/users", icon: Users },
-  { title: "Pending", href: "/admin/pending", icon: Clock },
-  { title: "Courses", href: "/admin/courses", icon: GraduationCap },
-  { title: "Analytics", href: "/admin/analytics", icon: TrendingUp },
-  { title: "Emails", href: "/admin/emails", icon: Mail },
+type NavItem = { title: string; href: string; icon: any };
+type NavSection = { label: string; items: NavItem[] };
+
+const navSections: NavSection[] = [
+  {
+    label: "Overview",
+    items: [
+      { title: "Dashboard", href: "/admin", icon: BarChart3 },
+      { title: "Analytics", href: "/admin/analytics", icon: TrendingUp },
+    ],
+  },
+  {
+    label: "Users",
+    items: [
+      { title: "All Users", href: "/admin/users", icon: Users },
+      { title: "Pending", href: "/admin/pending", icon: Clock },
+      { title: "Emails", href: "/admin/emails", icon: Mail },
+    ],
+  },
+  {
+    label: "Content",
+    items: [
+      { title: "Courses", href: "/admin/courses", icon: GraduationCap },
+      { title: "Resources", href: "/admin/resources", icon: FolderOpen },
+      { title: "Posts", href: "/admin/posts", icon: PenLine },
+      { title: "Live Calls", href: "/admin/live-calls", icon: Video },
+    ],
+  },
 ];
 
 export function AdminSidebar() {
@@ -40,26 +62,35 @@ export function AdminSidebar() {
           className="h-20 w-auto object-contain origin-center scale-[1.5] dark:brightness-0 dark:invert" 
         />
       </div>
-      <nav className="flex-1 px-3 py-4 space-y-1">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const active = isActive(item.href);
-          return (
-            <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative",
-                active ? "text-primary-foreground bg-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-              )}>
-              {active && (
-                <motion.div layoutId="adminTab"
-                  className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-primary-foreground"
-                  transition={{ type: "spring", stiffness: 380, damping: 30 }} />
-              )}
-              <Icon className={cn("w-[18px] h-[18px] shrink-0", active ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground")} />
-              <span>{item.title}</span>
-            </Link>
-          );
-        })}
+      <nav className="flex-1 px-3 py-4 space-y-5 overflow-y-auto no-scrollbar">
+        {navSections.map((section) => (
+          <div key={section.label}>
+            <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/60">
+              {section.label}
+            </p>
+            <div className="space-y-0.5">
+              {section.items.map((item) => {
+                const Icon = item.icon;
+                const active = isActive(item.href);
+                return (
+                  <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)}
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative",
+                      active ? "text-primary-foreground bg-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                    )}>
+                    {active && (
+                      <motion.div layoutId="adminTab"
+                        className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-primary-foreground"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }} />
+                    )}
+                    <Icon className={cn("w-[18px] h-[18px] shrink-0", active ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground")} />
+                    <span>{item.title}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </nav>
       <div className="px-3 py-3 border-t border-border">
         <Link href="/dashboard" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-secondary transition-all">

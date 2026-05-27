@@ -45,6 +45,30 @@ export const ourFileRouter = {
       console.log("Resource upload complete for userId:", metadata.userId);
       return { uploadedBy: metadata.userId, url: file.ufsUrl };
     }),
+
+  // Define a route for post images (community posts)
+  postImage: f({ image: { maxFileSize: "8MB", maxFileCount: 4 } })
+    .middleware(async () => {
+      const user = await auth();
+      if (!user) throw new UploadThingError("Unauthorized");
+      return { userId: user.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Post image upload complete for userId:", metadata.userId);
+      return { uploadedBy: metadata.userId, url: file.ufsUrl };
+    }),
+
+  // Define a route for replay videos
+  replayVideo: f({ video: { maxFileSize: "256MB", maxFileCount: 1 } })
+    .middleware(async () => {
+      const user = await auth();
+      if (!user) throw new UploadThingError("Unauthorized");
+      return { userId: user.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Replay video upload complete for userId:", metadata.userId);
+      return { uploadedBy: metadata.userId, url: file.ufsUrl };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

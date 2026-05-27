@@ -17,7 +17,6 @@ import {
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -29,6 +28,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { RichTextEditor, RichTextRenderer } from "@/components/ui/rich-text-editor";
 
 type Author = {
   id: string;
@@ -195,9 +195,9 @@ export function CommunityClient({
             {post.isPinned && <Pin className="w-3.5 h-3.5 text-amber-500 fill-amber-500 shrink-0" />}
             {post.title}
           </h3>
-          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
-            {post.content}
-          </p>
+          <div className="text-sm text-muted-foreground leading-relaxed">
+            <RichTextRenderer content={post.content} />
+          </div>
         </CardContent>
 
         <CardFooter className="pt-0 border-t border-border/50 pt-3 flex items-center justify-end">
@@ -239,7 +239,7 @@ export function CommunityClient({
                 <PenLine className="w-4 h-4" />
                 New Post
               </DialogTrigger>
-              <DialogContent className="bg-card border-border text-foreground max-w-xl">
+              <DialogContent className="bg-card border-border text-foreground sm:max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle className="text-lg font-bold">Create Community Post</DialogTitle>
                   <p className="text-sm text-muted-foreground mt-1">
@@ -257,13 +257,11 @@ export function CommunityClient({
                     />
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-foreground">Content</Label>
-                    <Textarea
-                      value={newPost.content}
-                      onChange={(e) => setNewPost((p) => ({ ...p, content: e.target.value }))}
-                      className="bg-muted/30 border-border text-foreground mt-1.5 resize-none"
-                      placeholder="Write your announcement..."
-                      rows={5}
+                    <Label className="text-sm font-medium text-foreground mb-1.5 block">Content</Label>
+                    <RichTextEditor
+                      content={newPost.content}
+                      onChange={(html) => setNewPost((p) => ({ ...p, content: html }))}
+                      placeholder="Write your announcement... Use the toolbar to format text, add images, and embed videos."
                     />
                   </div>
                   <Button

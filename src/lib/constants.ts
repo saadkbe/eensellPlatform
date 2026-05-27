@@ -58,6 +58,21 @@ export const ADMIN_NAV = [
     icon: "GraduationCap",
   },
   {
+    title: "Resources",
+    href: "/admin/resources",
+    icon: "FolderOpen",
+  },
+  {
+    title: "Posts",
+    href: "/admin/posts",
+    icon: "PenLine",
+  },
+  {
+    title: "Live Calls",
+    href: "/admin/live-calls",
+    icon: "Video",
+  },
+  {
     title: "Analytics",
     href: "/admin/analytics",
     icon: "TrendingUp",
