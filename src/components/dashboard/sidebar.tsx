@@ -58,11 +58,13 @@ function SidebarContent({
   setMobileOpen,
   isAdmin,
   isActive,
+  hasNewLesson,
 }: {
   pathname: string;
   setMobileOpen: (open: boolean) => void;
   isAdmin: boolean;
   isActive: (href: string) => boolean;
+  hasNewLesson: boolean;
 }) {
   return (
     <div className="flex flex-col h-full">
@@ -93,7 +95,7 @@ function SidebarContent({
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative",
+                      "flex justify-between items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative",
                       active
                         ? "text-primary-foreground bg-primary"
                         : "text-muted-foreground hover:text-foreground hover:bg-secondary"
@@ -106,13 +108,18 @@ function SidebarContent({
                         transition={{ type: "spring", stiffness: 380, damping: 30 }}
                       />
                     )}
-                    <Icon
-                      className={cn(
-                        "w-[18px] h-[18px] shrink-0 transition-colors",
-                        active ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground"
-                      )}
-                    />
-                    <span>{item.title}</span>
+                    <div className="flex items-center gap-3">
+                      <Icon
+                        className={cn(
+                          "w-[18px] h-[18px] shrink-0 transition-colors",
+                          active ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground"
+                        )}
+                      />
+                      <span>{item.title}</span>
+                    </div>
+                    {item.title === "Modules" && hasNewLesson && (
+                      <span className="bg-foreground text-background text-[10px] font-bold px-1.5 py-0.5 rounded ml-2">New Lesson</span>
+                    )}
                     {active && (
                       <div className="absolute inset-0 rounded-lg bg-white/10 pointer-events-none" />
                     )}
@@ -167,7 +174,7 @@ function SidebarContent({
   );
 }
 
-export function DashboardSidebar() {
+export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: boolean }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user } = useUser();
@@ -219,6 +226,7 @@ export function DashboardSidebar() {
                 setMobileOpen={setMobileOpen}
                 isAdmin={isAdmin}
                 isActive={isActive}
+                hasNewLesson={hasNewLesson}
               />
             </motion.aside>
           </>
@@ -232,6 +240,7 @@ export function DashboardSidebar() {
           setMobileOpen={setMobileOpen}
           isAdmin={isAdmin}
           isActive={isActive}
+          hasNewLesson={hasNewLesson}
         />
       </aside>
     </>

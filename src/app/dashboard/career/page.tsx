@@ -1,25 +1,17 @@
-"use client";
-
-import { useState } from "react";
+import { db } from "@/lib/db";
+import { currentUser } from "@clerk/nextjs/server";
 import {
   Compass,
-  ChevronRight,
   CheckCircle2,
-  Circle,
-  TrendingUp,
-  DollarSign,
-  Award,
-  MapPin,
-  Zap,
-  Sparkles,
-  Bot,
-  Megaphone,
-  Clock,
-  Globe,
+  Lock,
   Heart,
   ArrowRight,
-  Lock,
   Target,
+  Award,
+  DollarSign,
+  Clock,
+  Globe,
+  TrendingUp,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -27,171 +19,57 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-const PATHS = {
-  automation: {
-    name: "AI Automation Freelancer",
-    emoji: "⚡",
-    icon: Zap,
-    color: "text-blue-500",
-    bgColor: "bg-blue-500/10",
-    borderColor: "border-blue-500/20",
-    tagline: "Build systems that work while you sleep",
-    description:
-      "Help businesses save 20+ hours/week with AI-powered workflows. From chatbots to CRM automations — you become the person who makes everything run on autopilot.",
-    income: "$3K – $15K/mo",
-    timeline: "3–6 months to first client",
-    freedom: "Work from anywhere",
-    steps: [
-      {
-        id: 1,
-        title: "Your First Automation",
-        status: "completed",
-        desc: "Learn Make, Zapier, and n8n. Build your first workflow that actually saves time.",
-        milestone: "You realize: 'I can automate anything.'",
-      },
-      {
-        id: 2,
-        title: "AI Integration Mastery",
-        status: "completed",
-        desc: "Connect ChatGPT, Claude, and custom AI to automations. Build intelligent workflows that think.",
-        milestone: "Your automations start making decisions.",
-      },
-      {
-        id: 3,
-        title: "Your First Paying Client",
-        status: "in-progress",
-        desc: "Package your skills. Price your services. Land your first client through outreach or referrals.",
-        milestone: "💰 Someone pays you for your brain.",
-      },
-      {
-        id: 4,
-        title: "Scale to $5K/Month",
-        status: "locked",
-        desc: "Systematize your delivery. Build templates. Create recurring revenue with retainer clients.",
-        milestone: "You quit the idea of ever going back to 9-5.",
-      },
-      {
-        id: 5,
-        title: "Agency or Freedom",
-        status: "locked",
-        desc: "Choose your path: build a team and scale to $20K+/mo, or stay solo with $10K/mo and total freedom.",
-        milestone: "You design your life on your terms.",
-      },
-    ],
-  },
-  generative: {
-    name: "Generative AI Creator",
-    emoji: "✨",
-    icon: Sparkles,
-    color: "text-purple-500",
-    bgColor: "bg-purple-500/10",
-    borderColor: "border-purple-500/20",
-    tagline: "Create what used to take teams of 10",
-    description:
-      "Master AI content creation — from viral videos to brand assets to full marketing campaigns. Become the one-person creative agency that outperforms entire teams.",
-    income: "$4K – $20K/mo",
-    timeline: "2–4 months to first client",
-    freedom: "Create from anywhere",
-    steps: [
-      {
-        id: 1,
-        title: "Master the AI Stack",
-        status: "completed",
-        desc: "ChatGPT, Midjourney, Runway, ElevenLabs, Sora. Learn what each tool does best.",
-        milestone: "You create in minutes what used to take days.",
-      },
-      {
-        id: 2,
-        title: "Build a Portfolio That Sells",
-        status: "in-progress",
-        desc: "Create 5 stunning projects. Build a portfolio site. Show the world what AI + your taste can produce.",
-        milestone: "People start asking: 'How did you make this?'",
-      },
-      {
-        id: 3,
-        title: "Land Premium Clients",
-        status: "locked",
-        desc: "Position yourself as an AI creative director, not just a 'prompt engineer.' Charge $2K+ per project.",
-        milestone: "💰 Your first $2K project feels surreal.",
-      },
-      {
-        id: 4,
-        title: "Productize Your Skills",
-        status: "locked",
-        desc: "Sell templates, presets, courses. Create digital products that generate income while you sleep.",
-        milestone: "You wake up to money you didn't trade time for.",
-      },
-      {
-        id: 5,
-        title: "Build Your Brand",
-        status: "locked",
-        desc: "Become known in the space. Speaking, consulting, partnerships. Your name becomes the brand.",
-        milestone: "Clients come to you. You never cold-outreach again.",
-      },
-    ],
-  },
-  ads: {
-    name: "AI Ads Specialist",
-    emoji: "📈",
-    icon: Megaphone,
-    color: "text-emerald-500",
-    bgColor: "bg-emerald-500/10",
-    borderColor: "border-emerald-500/20",
-    tagline: "Turn ad spend into revenue machines",
-    description:
-      "Use AI to create, test, and optimize ad campaigns 10x faster than traditional agencies. Help businesses scale their revenue and take a cut of the growth.",
-    income: "$5K – $25K/mo",
-    timeline: "4–8 months to consistent income",
-    freedom: "Performance-based income",
-    steps: [
-      {
-        id: 1,
-        title: "Ad Fundamentals + AI Tools",
-        status: "completed",
-        desc: "Master Meta Ads, Google Ads, and TikTok Ads. Learn AI tools for creative generation and copy.",
-        milestone: "You understand how attention becomes revenue.",
-      },
-      {
-        id: 2,
-        title: "AI-Powered Creative Production",
-        status: "completed",
-        desc: "Generate 50 ad variations in the time it takes others to make 3. AI video, AI copy, AI targeting.",
-        milestone: "Your creative volume gives you an unfair advantage.",
-      },
-      {
-        id: 3,
-        title: "Get Results for Real Businesses",
-        status: "in-progress",
-        desc: "Run campaigns for 2-3 businesses (even for free at first). Build case studies with real ROAS numbers.",
-        milestone: "💰 Your first client says: 'This actually works.'",
-      },
-      {
-        id: 4,
-        title: "Charge Based on Results",
-        status: "locked",
-        desc: "Move from flat-fee to performance-based pricing. Take a % of revenue you generate. Align incentives.",
-        milestone: "Your income scales with your client's success.",
-      },
-      {
-        id: 5,
-        title: "Build Your AI Ads Agency",
-        status: "locked",
-        desc: "Hire media buyers. Build SOPs. Use AI to run 20+ accounts with a small team. Scale to $50K+/mo.",
-        milestone: "You realize you've built something bigger than a job.",
-      },
-    ],
-  },
-};
+export const dynamic = "force-dynamic";
 
-type PathKey = keyof typeof PATHS;
+export default async function CareerPage() {
+  const clerkUser = await currentUser();
 
-export default function CareerPage() {
-  const [activePath, setActivePath] = useState<PathKey>("automation");
-  const currentPath = PATHS[activePath];
-  const Icon = currentPath.icon;
+  const [modules, userProgress] = await Promise.all([
+    db.module.findMany({
+      orderBy: { order: "asc" },
+      include: {
+        lessons: {
+          where: { isPublished: true },
+          select: { id: true },
+        },
+      },
+    }),
+    clerkUser
+      ? db.progress.findMany({
+          where: { user: { clerkId: clerkUser.id }, isCompleted: true },
+          select: { lessonId: true },
+        })
+      : [],
+  ]);
 
-  const completedSteps = currentPath.steps.filter((s) => s.status === "completed").length;
-  const progressPercent = Math.round((completedSteps / currentPath.steps.length) * 100);
+  const completedLessonIds = new Set(userProgress.map((p) => p.lessonId));
+
+  let firstInProgressFound = false;
+  let completedModulesCount = 0;
+
+  const steps = modules.map((mod) => {
+    let status: "completed" | "in-progress" | "locked" = "locked";
+
+    if (mod.isPublished) {
+      const completedLessonsCount = mod.lessons.filter((l) => completedLessonIds.has(l.id)).length;
+      if (mod.lessons.length > 0 && completedLessonsCount === mod.lessons.length) {
+        status = "completed";
+        completedModulesCount++;
+      } else if (completedLessonsCount > 0) {
+        status = "in-progress";
+        firstInProgressFound = true;
+      } else if (!firstInProgressFound) {
+        status = "in-progress";
+        firstInProgressFound = true;
+      }
+    }
+
+    const nextLesson = mod.lessons.find((l) => !completedLessonIds.has(l.id)) || mod.lessons[0];
+
+    return { ...mod, status, nextLesson };
+  });
+
+  const progressPercent = modules.length > 0 ? Math.round((completedModulesCount / modules.length) * 100) : 0;
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto pb-10">
@@ -202,59 +80,17 @@ export default function CareerPage() {
         <div className="relative z-10 max-w-2xl">
           <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 mb-4 text-xs">
             <Compass className="w-3 h-3 mr-1" />
-            Career Roadmaps
+            Ultimate AI Entrepreneur Roadmap
           </Badge>
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight mb-3 leading-tight">
             You're not looking for a job. <br />
-            <span className="text-primary">You're building a life.</span>
+            <span className="text-primary">You're building an empire.</span>
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-lg">
-            These aren't career ladders — they're escape routes. Each path is designed to take you from
-            where you are now to financial freedom with AI skills the market desperately needs.
+            This roadmap tracks your actual progress through the Eensell University curriculum. 
+            Complete modules, unlock new skills, and scale your income.
           </p>
         </div>
-      </div>
-
-      {/* ── Path Selector Cards ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {(Object.entries(PATHS) as [PathKey, typeof PATHS.automation][]).map(([key, path]) => {
-          const PathIcon = path.icon;
-          const isActive = activePath === key;
-
-          return (
-            <button
-              key={key}
-              onClick={() => setActivePath(key)}
-              className={cn(
-                "text-left p-5 rounded-xl border transition-all duration-300 group",
-                isActive
-                  ? `${path.bgColor} ${path.borderColor} shadow-md`
-                  : "bg-card/50 border-border hover:border-primary/20 hover:shadow-sm"
-              )}
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div
-                  className={cn(
-                    "w-10 h-10 rounded-xl flex items-center justify-center border transition-transform group-hover:scale-110",
-                    path.bgColor,
-                    path.borderColor
-                  )}
-                >
-                  <PathIcon className={cn("w-5 h-5", path.color)} />
-                </div>
-                <span className="text-lg">{path.emoji}</span>
-              </div>
-              <h3 className="text-sm font-bold text-foreground mb-1">{path.name}</h3>
-              <p className="text-[11px] text-muted-foreground leading-snug">{path.tagline}</p>
-              {isActive && (
-                <div className="mt-3 flex items-center gap-1 text-[10px] font-semibold text-primary">
-                  <span>Currently viewing</span>
-                  <ChevronRight className="w-3 h-3" />
-                </div>
-              )}
-            </button>
-          );
-        })}
       </div>
 
       {/* ── Main Content ── */}
@@ -266,16 +102,16 @@ export default function CareerPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-lg font-bold flex items-center gap-2">
-                    <Icon className={cn("w-5 h-5", currentPath.color)} />
-                    {currentPath.name}
+                    <Target className="w-5 h-5 text-primary" />
+                    Master Curriculum
                   </CardTitle>
                   <CardDescription className="mt-1 text-xs max-w-md">
-                    {currentPath.description}
+                    Follow the modules in order to build your AI skillset.
                   </CardDescription>
                 </div>
                 <div className="text-right hidden sm:block">
                   <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
-                    Progress
+                    Overall Progress
                   </span>
                   <p className="text-lg font-bold text-primary">{progressPercent}%</p>
                 </div>
@@ -283,7 +119,7 @@ export default function CareerPage() {
             </CardHeader>
             <CardContent className="p-6">
               <div className="relative pl-7 sm:pl-9 border-l-2 border-muted space-y-8 py-2">
-                {currentPath.steps.map((step, idx) => {
+                {steps.map((step, idx) => {
                   let icon, borderCol, textCol, cardBg;
 
                   if (step.status === "completed") {
@@ -339,34 +175,46 @@ export default function CareerPage() {
                           )}
                           {step.status === "in-progress" && (
                             <Badge className="bg-primary/10 text-primary border-primary/20 text-[9px] shrink-0">
-                              You are here
+                              Next Up
+                            </Badge>
+                          )}
+                          {step.status === "locked" && (
+                            <Badge className="bg-muted text-muted-foreground border-transparent text-[9px] shrink-0">
+                              {step.isPublished ? "Locked" : "Upcoming"}
                             </Badge>
                           )}
                         </div>
 
-                        <p className="text-xs text-muted-foreground leading-relaxed mb-3">
-                          {step.desc}
-                        </p>
+                        {step.description && (
+                          <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+                            {step.description}
+                          </p>
+                        )}
 
-                        {/* Emotional milestone */}
-                        {step.status !== "locked" && (
-                          <div className="flex items-start gap-2 p-3 rounded-lg bg-muted/30 border border-border/50">
-                            <Heart className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
+                        {!step.isPublished && step.status === "locked" && (
+                          <div className="flex items-start gap-2 p-3 rounded-lg bg-muted/30 border border-border/50 mt-4">
+                            <Clock className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
                             <p className="text-[11px] text-foreground/80 italic leading-snug">
-                              {step.milestone}
+                              This module is currently in production and dropping soon.
                             </p>
                           </div>
                         )}
 
-                        {step.status === "in-progress" && (
-                          <Link href="/dashboard/modules">
+                        {step.status === "in-progress" && step.isPublished && step.lessons.length > 0 && step.nextLesson && (
+                          <Link href={`/dashboard/modules/${step.id}/${step.nextLesson.id}`}>
                             <Button
                               size="sm"
                               className="mt-4 gap-2 text-xs h-8 shadow-md shadow-primary/15"
                             >
-                              Continue Learning <ArrowRight className="w-3 h-3" />
+                              Start Learning <ArrowRight className="w-3 h-3" />
                             </Button>
                           </Link>
+                        )}
+                        
+                        {step.status === "in-progress" && step.isPublished && step.lessons.length === 0 && (
+                           <div className="mt-4 text-xs text-amber-500 font-medium">
+                             Lessons are currently being added...
+                           </div>
                         )}
                       </div>
                     </div>
@@ -389,9 +237,9 @@ export default function CareerPage() {
             </CardHeader>
             <CardContent className="p-5 space-y-5">
               <div>
-                <p className="text-3xl font-bold text-foreground">{currentPath.income}</p>
+                <p className="text-3xl font-bold text-foreground">5K – 30K MAD</p>
                 <p className="text-[10px] text-emerald-500 font-medium mt-1">
-                  Freelance monthly income range
+                  Monthly income potential
                 </p>
               </div>
 
@@ -403,8 +251,8 @@ export default function CareerPage() {
                     <Clock className="w-4 h-4 text-amber-500" />
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-foreground">{currentPath.timeline}</p>
-                    <p className="text-[10px] text-muted-foreground">Time to income</p>
+                    <p className="text-xs font-medium text-foreground">3–6 Months</p>
+                    <p className="text-[10px] text-muted-foreground">Estimated completion time</p>
                   </div>
                 </div>
 
@@ -413,7 +261,7 @@ export default function CareerPage() {
                     <Globe className="w-4 h-4 text-blue-500" />
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-foreground">{currentPath.freedom}</p>
+                    <p className="text-xs font-medium text-foreground">Work From Anywhere</p>
                     <p className="text-[10px] text-muted-foreground">Location independence</p>
                   </div>
                 </div>
@@ -423,57 +271,10 @@ export default function CareerPage() {
                     <TrendingUp className="w-4 h-4 text-purple-500" />
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-foreground">Extremely High Demand</p>
-                    <p className="text-[10px] text-muted-foreground">Market demand for AI skills</p>
+                    <p className="text-xs font-medium text-foreground">High Demand</p>
+                    <p className="text-[10px] text-muted-foreground">AI skills are highly sought after</p>
                   </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Freedom Milestones */}
-          <Card className="bg-gradient-to-br from-primary/8 to-card border-primary/15 shadow-sm overflow-hidden relative">
-            <div className="absolute right-0 top-0 w-24 h-24 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
-            <CardContent className="p-5 relative z-10">
-              <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center mb-4 border border-primary/20 text-primary">
-                <Target className="w-5 h-5" />
-              </div>
-              <h3 className="text-sm font-bold text-foreground mb-3">Freedom Milestones</h3>
-              <div className="space-y-3">
-                {[
-                  { label: "First $1K month", icon: "🎯", done: true },
-                  { label: "Replace your salary", icon: "🔥", done: false },
-                  { label: "First $10K month", icon: "💎", done: false },
-                  { label: "Work from anywhere", icon: "🌍", done: false },
-                  { label: "Financial freedom", icon: "👑", done: false },
-                ].map((milestone, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <div
-                      className={cn(
-                        "w-6 h-6 rounded-full flex items-center justify-center text-[10px] shrink-0 border",
-                        milestone.done
-                          ? "bg-emerald-500/15 border-emerald-500/30"
-                          : "bg-muted/50 border-border"
-                      )}
-                    >
-                      {milestone.done ? (
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                      ) : (
-                        <span>{milestone.icon}</span>
-                      )}
-                    </div>
-                    <span
-                      className={cn(
-                        "text-xs font-medium",
-                        milestone.done
-                          ? "text-muted-foreground line-through"
-                          : "text-foreground"
-                      )}
-                    >
-                      {milestone.label}
-                    </span>
-                  </div>
-                ))}
               </div>
             </CardContent>
           </Card>
@@ -486,9 +287,7 @@ export default function CareerPage() {
               </div>
               <h3 className="text-sm font-bold text-foreground mb-1">Eensell Certified</h3>
               <p className="text-[11px] text-muted-foreground leading-relaxed mb-3">
-                Complete this roadmap to earn your{" "}
-                <span className="font-semibold text-foreground">{currentPath.name}</span>{" "}
-                certification — proof that you can deliver results.
+                Complete all {modules.length} modules to earn your Eensell AI Mastery certification.
               </p>
               <div className="w-full bg-muted h-1.5 rounded-full">
                 <div
@@ -497,7 +296,7 @@ export default function CareerPage() {
                 />
               </div>
               <p className="text-[10px] text-muted-foreground mt-2">
-                {progressPercent}% complete
+                {completedModulesCount} of {modules.length} modules complete
               </p>
             </CardContent>
           </Card>

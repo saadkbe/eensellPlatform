@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 import { LessonViewer } from "@/components/dashboard/lesson-viewer";
+import { getHomeworkForLesson } from "@/actions/homework.actions";
 
 interface LessonPageProps {
   params: Promise<{ moduleId: string; lessonId: string }>;
@@ -41,6 +42,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
   const prevLesson = idx > 0 ? lesson.module.lessons[idx - 1] : null;
   const nextLesson = idx < lesson.module.lessons.length - 1 ? lesson.module.lessons[idx + 1] : null;
 
+  const homework = lesson.requiresHomework ? await getHomeworkForLesson(lessonId) : null;
+
   return (
     <LessonViewer
       lesson={lesson}
@@ -51,6 +54,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
       nextLesson={nextLesson}
       completedLessonIds={completedIds}
       isCompleted={completedIds.includes(lessonId)}
+      homework={homework}
     />
   );
 }

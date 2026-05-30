@@ -100,13 +100,47 @@ export async function updateModule(
 ) {
   await requireAdmin();
 
+  // Check if we are publishing the module for the first time
+  let wasJustPublished = false;
+  if (data.isPublished === true) {
+    const existing = await db.module.findUnique({
+      where: { id: moduleId },
+      select: { isPublished: true },
+    });
+    if (existing && !existing.isPublished) {
+      wasJustPublished = true;
+    }
+  }
+
   const module = await db.module.update({
     where: { id: moduleId },
     data,
   });
 
+  // Notify all active users when a module goes live
+  if (wasJustPublished) {
+    // Get the first published lesson to build the correct URL
+    const firstLesson = await db.lesson.findFirst({
+      where: { moduleId: module.id, isPublished: true },
+      orderBy: { order: "asc" },
+      select: { id: true },
+    });
+
+    const linkUrl = firstLesson
+      ? `/dashboard/modules/${module.id}/${firstLesson.id}`
+      : `/dashboard/modules`;
+
+    const { notifyAllActiveUsers } = await import("./notification.actions");
+    await notifyAllActiveUsers({
+      title: "🎉 محتوى جديد متاح!",
+      message: `الموديول "${module.title}" أصبح متاحاً الآن. شاهده الآن!`,
+      linkUrl,
+    });
+  }
+
   revalidatePath("/admin/courses");
   revalidatePath("/dashboard/modules");
+  revalidatePath("/dashboard");
 
   return module;
 }
@@ -143,6 +177,21 @@ export async function reorderModules(
 // LESSON ACTIONS
 // =====================
 
+// Check if there is a new lesson published in the last 7 days
+export async function getHasNewLesson() {
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  
+  const newLessonCount = await db.lesson.count({
+    where: {
+      isPublished: true,
+      createdAt: { gte: sevenDaysAgo },
+    },
+  });
+
+  return newLessonCount > 0;
+}
+
 // Get lesson with module context
 export async function getLesson(lessonId: string) {
   return db.lesson.findUnique({
@@ -169,6 +218,7 @@ export async function createLesson(data: {
   videoUrl?: string;
   duration?: number;
   moduleId: string;
+  requiresHomework?: boolean;
 }) {
   await requireAdmin();
 
@@ -201,6 +251,7 @@ export async function updateLesson(
     duration?: number;
     isPublished?: boolean;
     isFree?: boolean;
+    requiresHomework?: boolean;
   }
 ) {
   await requireAdmin();

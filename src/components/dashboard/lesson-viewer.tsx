@@ -13,11 +13,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { HomeworkUploader } from "./homework-uploader";
 
 interface LessonViewerProps {
   lesson: {
     id: string; title: string; description: string | null;
     videoUrl: string | null; duration: number | null;
+    requiresHomework: boolean;
     resources: { id: string; title: string; type: string; fileUrl: string | null }[];
   };
   moduleLessons: { id: string; title: string; order: number; duration: number | null }[];
@@ -26,14 +28,18 @@ interface LessonViewerProps {
   nextLesson: { id: string; title: string } | null;
   completedLessonIds: string[];
   isCompleted: boolean;
+  homework?: { status: string; fileUrl: string; feedback: string | null } | null;
 }
 
 export function LessonViewer({
   lesson, moduleLessons, moduleId, moduleTitle,
-  prevLesson, nextLesson, completedLessonIds, isCompleted: initialCompleted,
+  prevLesson, nextLesson, completedLessonIds, isCompleted: initialCompleted, homework
 }: LessonViewerProps) {
   const [completed, setCompleted] = useState(initialCompleted);
   const [isPending, startTransition] = useTransition();
+
+  const isHomeworkApproved = homework?.status === "APPROVED";
+  const canComplete = !lesson.requiresHomework || isHomeworkApproved;
 
   const handleToggleComplete = () => {
     startTransition(async () => {
@@ -124,15 +130,23 @@ export function LessonViewer({
             </div>
 
             <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={handleToggleComplete}
+              whileHover={canComplete ? { scale: 1.02 } : {}}
+              whileTap={canComplete ? { scale: 0.98 } : {}}
+              onClick={() => {
+                if (!canComplete) {
+                  toast.error(homework?.status === "PENDING" ? "Waiting for homework approval." : "You must complete the homework first.");
+                  return;
+                }
+                handleToggleComplete();
+              }}
               disabled={isPending}
               className={cn(
                 "relative shrink-0 flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 shadow-lg border",
                 completed
                   ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20 hover:bg-emerald-500/20 shadow-emerald-500/10"
-                  : "gradient-primary text-white hover:opacity-90 border-transparent shadow-primary/20"
+                  : canComplete 
+                    ? "gradient-primary text-white hover:opacity-90 border-transparent shadow-primary/20"
+                    : "bg-muted text-muted-foreground border-border/50 cursor-not-allowed opacity-80"
               )}
             >
               <AnimatePresence mode="wait">
@@ -169,6 +183,16 @@ export function LessonViewer({
             <div className="p-6 rounded-2xl bg-card/40 backdrop-blur-xl border border-white/5 shadow-sm text-base text-muted-foreground/90 leading-relaxed whitespace-pre-wrap">
               {lesson.description}
             </div>
+          )}
+
+          {/* Homework Section */}
+          {lesson.requiresHomework && (
+             <HomeworkUploader
+               lessonId={lesson.id}
+               initialStatus={homework?.status as any}
+               initialFileUrl={homework?.fileUrl}
+               initialFeedback={homework?.feedback}
+             />
           )}
 
           {/* Resources */}

@@ -6,7 +6,7 @@ import { UserButton, SignOutButton } from "@clerk/nextjs";
 import {
   BarChart3, Users, Clock, GraduationCap,
   TrendingUp, Mail, Menu, X, Shield, LogOut,
-  FolderOpen, PenLine, Video
+  FolderOpen, PenLine, Video, FileCheck
 } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -40,6 +40,7 @@ const navSections: NavSection[] = [
       { title: "Resources", href: "/admin/resources", icon: FolderOpen },
       { title: "Posts", href: "/admin/posts", icon: PenLine },
       { title: "Live Calls", href: "/admin/live-calls", icon: Video },
+      { title: "Homeworks", href: "/admin/homeworks", icon: FileCheck },
     ],
   },
 ];

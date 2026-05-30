@@ -2,7 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Search, Bell, Calendar, ChevronRight, HelpCircle, MessageSquare } from "lucide-react";
+import { Search, Calendar, ChevronRight, HelpCircle, MessageSquare } from "lucide-react";
+import { NotificationBell } from "./notification-bell";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,15 +30,15 @@ export function TopBar() {
     );
   }, []);
   
-  // Basic breadcrumb generation
-  const paths = pathname.split('/').filter(Boolean);
+  // Basic breadcrumb generation, ignoring long database IDs
+  const paths = pathname.split('/').filter(Boolean).filter(p => !p.match(/^[a-z0-9]{20,}$/i));
   const breadcrumbs = paths.map((path, index) => {
     const isLast = index === paths.length - 1;
     const title = path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, ' ');
     return (
       <div key={path} className="flex items-center text-sm">
         {index > 0 && <ChevronRight className="w-4 h-4 mx-2 text-muted-foreground shrink-0" />}
-        <span className={`truncate max-w-[100px] sm:max-w-none ${isLast ? "text-foreground font-semibold" : "text-muted-foreground"}`}>
+        <span className={`truncate max-w-[150px] sm:max-w-none ${isLast ? "text-foreground font-semibold" : "text-muted-foreground"}`}>
           {title}
         </span>
       </div>
@@ -70,10 +71,7 @@ export function TopBar() {
           <MessageSquare className="w-4 h-4" />
         </Link>
 
-        <Link href="/dashboard/settings" className="relative flex items-center justify-center text-muted-foreground hover:text-foreground h-9 w-9 rounded-full bg-muted/50 border border-border transition-colors">
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-background animate-pulse" />
-        </Link>
+        <NotificationBell />
       </div>
     </div>
   );

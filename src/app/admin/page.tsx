@@ -1,9 +1,10 @@
 import { db } from "@/lib/db";
-import { Users, UserCheck, Clock, BookOpen, TrendingUp, DollarSign, Shield, Download } from "lucide-react";
+import { Users, UserCheck, Clock, BookOpen, TrendingUp, DollarSign, Shield } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { STATUS_LABELS } from "@/lib/constants";
+import { ExportReportButton } from "@/components/admin/export-report-button";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +20,7 @@ export default async function AdminPage() {
     db.user.findMany({ where: { role: { not: "ADMIN" } }, orderBy: { createdAt: "desc" }, take: 8 }),
   ]);
 
-  const revenue = activeUsers * 299;
+  const revenue = activeUsers * 200;
 
   const stats = [
     { label: "Total Revenue", value: `${revenue.toLocaleString()} MAD`, icon: DollarSign, color: "#10B981", bg: "rgba(16,185,129,0.1)" },
@@ -50,10 +51,7 @@ export default async function AdminPage() {
             </p>
           </div>
           <div className="shrink-0 flex gap-3">
-             <Button variant="outline" className="gap-2 shadow-sm border-border hover:bg-muted/50 transition-all">
-               <Download className="w-4 h-4" />
-               Export Report
-             </Button>
+             <ExportReportButton />
           </div>
         </div>
       </div>

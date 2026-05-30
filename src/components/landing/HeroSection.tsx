@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Play, Sparkles } from "lucide-react";
+import { ArrowLeft, Sparkles } from "lucide-react";
 
 export function HeroSection() {
   return (
@@ -45,13 +45,13 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-[5rem] font-black text-foreground tracking-tight leading-[1.1] mb-8"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] font-black text-foreground tracking-tight leading-[1.3] md:leading-[1.1] mb-6 md:mb-8"
         >
-          اكتشف سر بناء <br className="hidden md:block" />
+          اكتشف سر بناء <br />
           <span className="text-brand">
             ثروتك الرقمية الأولى
           </span>
-          <br className="hidden md:block" />
+          <br />
           بالذكاء الاصطناعي
         </motion.h1>
 
@@ -60,12 +60,12 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed font-medium"
+          className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-10 md:mb-12 leading-relaxed font-medium px-2 md:px-0"
         >
           الطريق التقليدي لن يجعلك حراً أبداً. انضم إلى الحركة الحصرية للمؤسسين الذين يربحون المال يومياً باستخدام أحدث أدوات الذكاء الاصطناعي.. بدون خبرة سابقة.
         </motion.p>
 
-        {/* Premium Dual CTA */}
+        {/* Premium Single CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -78,11 +78,6 @@ export function HeroSection() {
               <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             </Button>
           </Link>
-          
-          <Button variant="outline" size="lg" className="w-full sm:w-auto h-16 px-8 text-lg font-bold rounded-2xl border-2 border-border hover:bg-secondary/50 transition-all flex items-center gap-3">
-            <Play className="w-5 h-5 text-brand fill-brand" />
-            شاهد كيف تعمل المنصة
-          </Button>
         </motion.div>
 
         {/* Trust Note */}

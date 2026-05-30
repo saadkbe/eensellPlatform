@@ -3,10 +3,11 @@
 import { useState, useTransition } from "react";
 import { createModule, createLesson, deleteModule, deleteLesson, updateModule, updateLesson, createResource } from "@/actions/module.actions";
 import { toast } from "sonner";
-import { Plus, Trash2, BookOpen, PlayCircle, ChevronDown, ChevronRight, Eye, EyeOff, FileText, Paperclip, X, ImageIcon } from "lucide-react";
+import { Plus, Trash2, BookOpen, PlayCircle, ChevronDown, ChevronRight, Eye, EyeOff, FileText, Paperclip, X, ImageIcon, FileCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -14,8 +15,8 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { FileUploader } from "@/components/admin/file-uploader";
 
-type Lesson = { id: string; title: string; description: string | null; videoUrl: string | null; order: number; isPublished: boolean; duration: number | null; isFree: boolean };
-type Module = { id: string; title: string; description: string | null; order: number; isPublished: boolean; lessons: Lesson[] };
+type Lesson = { id: string; title: string; description: string | null; videoUrl: string | null; order: number; isPublished: boolean; duration: number | null; isFree: boolean; requiresHomework: boolean };
+type Module = { id: string; title: string; description: string | null; imageUrl: string | null; order: number; isPublished: boolean; lessons: Lesson[] };
 
 export function CourseManager({ initialModules }: { initialModules: Module[] }) {
   const [modules, setModules] = useState(initialModules);
@@ -27,11 +28,13 @@ export function CourseManager({ initialModules }: { initialModules: Module[] }) 
   };
 
   const [newModule, setNewModule] = useState({ title: "", description: "", imageUrl: "" });
-  const [newLesson, setNewLesson] = useState({ title: "", description: "", videoUrl: "", moduleId: "" });
+  const [newLesson, setNewLesson] = useState({ title: "", description: "", videoUrl: "", moduleId: "", requiresHomework: false });
   const [moduleDialogOpen, setModuleDialogOpen] = useState(false);
   const [lessonDialogOpen, setLessonDialogOpen] = useState(false);
   const [resourceDialogOpen, setResourceDialogOpen] = useState<string | null>(null);
   const [newResource, setNewResource] = useState({ title: "", type: "pdf", fileUrl: "", lessonId: "" });
+  const [thumbnailDialogOpen, setThumbnailDialogOpen] = useState<string | null>(null);
+  const [thumbnailUrl, setThumbnailUrl] = useState("");
 
   const handleCreateModule = () => {
     if (!newModule.title.trim()) return;
@@ -52,7 +55,7 @@ export function CourseManager({ initialModules }: { initialModules: Module[] }) 
       try {
         const l = await createLesson({ ...newLesson, duration: 0 });
         setModules((prev) => prev.map((m) => m.id === newLesson.moduleId ? { ...m, lessons: [...m.lessons, l] } : m));
-        setNewLesson({ title: "", description: "", videoUrl: "", moduleId: "" });
+        setNewLesson({ title: "", description: "", videoUrl: "", moduleId: "", requiresHomework: false });
         setLessonDialogOpen(false);
         toast.success("Lesson created");
       } catch { toast.error("Failed to create lesson"); }
@@ -89,6 +92,20 @@ export function CourseManager({ initialModules }: { initialModules: Module[] }) 
     });
   };
 
+  const handleToggleHomeworkLesson = (lessonId: string, moduleId: string, current: boolean) => {
+    setModules(prev => prev.map(m => m.id === moduleId ? { ...m, lessons: m.lessons.map(l => l.id === lessonId ? { ...l, requiresHomework: !current } : l) } : m));
+    startTransition(async () => {
+      try {
+        await updateLesson(lessonId, { requiresHomework: !current });
+        toast.success(current ? "Homework requirement removed" : "Homework requirement added");
+      } catch (e) {
+        toast.error("Failed to update homework requirement");
+        // Revert
+        setModules(prev => prev.map(m => m.id === moduleId ? { ...m, lessons: m.lessons.map(l => l.id === lessonId ? { ...l, requiresHomework: current } : l) } : m));
+      }
+    });
+  };
+
   const handleTogglePublishLesson = (lessonId: string, moduleId: string, current: boolean) => {
     startTransition(async () => {
       try {
@@ -106,6 +123,29 @@ export function CourseManager({ initialModules }: { initialModules: Module[] }) 
         setModules((prev) => prev.filter((m) => m.id !== moduleId));
         toast.success("Module deleted");
       } catch { toast.error("Failed to delete module"); }
+    });
+  };
+
+  const handleUpdateThumbnail = (moduleId: string) => {
+    if (!thumbnailUrl) return;
+    startTransition(async () => {
+      try {
+        await updateModule(moduleId, { imageUrl: thumbnailUrl });
+        setModules((prev) => prev.map((m) => m.id === moduleId ? { ...m, imageUrl: thumbnailUrl } : m));
+        setThumbnailDialogOpen(null);
+        setThumbnailUrl("");
+        toast.success("Thumbnail updated");
+      } catch { toast.error("Failed to update thumbnail"); }
+    });
+  };
+
+  const handleRemoveThumbnail = (moduleId: string) => {
+    startTransition(async () => {
+      try {
+        await updateModule(moduleId, { imageUrl: "" });
+        setModules((prev) => prev.map((m) => m.id === moduleId ? { ...m, imageUrl: null } : m));
+        toast.success("Thumbnail removed");
+      } catch { toast.error("Failed to remove thumbnail"); }
     });
   };
 
@@ -141,7 +181,6 @@ export function CourseManager({ initialModules }: { initialModules: Module[] }) 
                 <p className="text-sm text-muted-foreground mt-1">Add a new module with a thumbnail, title, and description.</p>
               </DialogHeader>
               <div className="space-y-5 pt-4">
-                {/* Thumbnail section — prominent at the top */}
                 <div>
                   <Label className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
                     <ImageIcon className="w-4 h-4 text-primary" />
@@ -218,6 +257,9 @@ export function CourseManager({ initialModules }: { initialModules: Module[] }) 
                     </div>
                   </button>
                   <div className="flex items-center gap-1">
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10" onClick={() => { setThumbnailDialogOpen(mod.id); setThumbnailUrl(mod.imageUrl || ""); }} disabled={isPending} title="Edit Thumbnail">
+                      <ImageIcon className="w-4 h-4" />
+                    </Button>
                     <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" onClick={() => handleTogglePublishModule(mod.id, mod.isPublished)} disabled={isPending}>
                       {mod.isPublished ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </Button>
@@ -241,6 +283,9 @@ export function CourseManager({ initialModules }: { initialModules: Module[] }) 
                           </Badge>
                         </div>
                         <div className="flex items-center gap-1 shrink-0">
+                          <Button variant="ghost" size="icon" title="Toggle Homework Requirement" className="h-7 w-7 text-muted-foreground hover:text-foreground" onClick={() => handleToggleHomeworkLesson(les.id, mod.id, les.requiresHomework)} disabled={isPending}>
+                            <FileCheck className={cn("w-4 h-4", les.requiresHomework ? "text-amber-500" : "text-muted-foreground")} />
+                          </Button>
                           <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-primary hover:bg-primary/10" onClick={() => { setResourceDialogOpen(les.id); setNewResource(p => ({ ...p, lessonId: les.id })); }}>
                             <Paperclip className="w-3.5 h-3.5" />
                           </Button>
@@ -278,6 +323,13 @@ export function CourseManager({ initialModules }: { initialModules: Module[] }) 
                           <div>
                             <Label className="text-sm font-medium text-foreground">Vimeo URL</Label>
                             <Input value={newLesson.videoUrl} onChange={(e) => setNewLesson(p => ({ ...p, videoUrl: e.target.value }))} className="bg-background border-border text-foreground mt-1.5 h-11" placeholder="https://player.vimeo.com/video/..." />
+                          </div>
+                          <div className="flex items-center justify-between p-3 rounded-lg border border-border bg-muted/20">
+                            <div>
+                              <Label className="text-sm font-medium text-foreground">Requires Homework</Label>
+                              <p className="text-xs text-muted-foreground">Students must upload a PDF assignment to complete this lesson.</p>
+                            </div>
+                            <Switch checked={newLesson.requiresHomework} onCheckedChange={(checked) => setNewLesson(p => ({ ...p, requiresHomework: checked }))} />
                           </div>
                           <Button onClick={handleCreateLesson} disabled={isPending} className="w-full gradient-primary text-white h-11 text-sm font-medium">
                             {isPending ? "Creating..." : "Create Lesson"}
@@ -347,6 +399,44 @@ export function CourseManager({ initialModules }: { initialModules: Module[] }) 
                       </DialogContent>
                     </Dialog>
                   </div>
+
+                    {/* Thumbnail Edit Dialog */}
+                    <Dialog open={thumbnailDialogOpen === mod.id} onOpenChange={(open) => { if (!open) { setThumbnailDialogOpen(null); setThumbnailUrl(""); } }}>
+                      <DialogContent className="bg-card border-border text-foreground max-w-2xl">
+                        <DialogHeader>
+                          <DialogTitle className="text-lg font-bold">Edit Thumbnail — {mod.title}</DialogTitle>
+                          <p className="text-sm text-muted-foreground mt-1">Upload or change the module cover image.</p>
+                        </DialogHeader>
+                        <div className="space-y-5 pt-4">
+                          {(thumbnailUrl || mod.imageUrl) ? (
+                            <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-border group">
+                              <img src={thumbnailUrl || mod.imageUrl || ""} alt="Thumbnail" className="w-full h-full object-cover" />
+                              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                <Button variant="destructive" size="sm" onClick={() => { setThumbnailUrl(""); handleRemoveThumbnail(mod.id); }}>
+                                  <Trash2 className="w-4 h-4 mr-2" /> Remove
+                                </Button>
+                                <Button variant="secondary" size="sm" onClick={() => setThumbnailUrl("")}>
+                                  Replace
+                                </Button>
+                              </div>
+                            </div>
+                          ) : (
+                            <FileUploader
+                              endpoint="moduleImage"
+                              label="Upload module thumbnail"
+                              accept="image/*"
+                              maxSizeMB={4}
+                              onUploadComplete={(url) => setThumbnailUrl(url)}
+                            />
+                          )}
+                          {thumbnailUrl && thumbnailUrl !== mod.imageUrl && (
+                            <Button onClick={() => handleUpdateThumbnail(mod.id)} disabled={isPending} className="w-full gradient-primary text-white h-11 text-sm font-medium">
+                              {isPending ? "Saving..." : "Save Thumbnail"}
+                            </Button>
+                          )}
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                 </CardContent>
               )}
             </Card>

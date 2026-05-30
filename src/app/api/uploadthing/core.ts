@@ -16,7 +16,15 @@ const auth = async () => {
     console.log("Upload auth failed: User is not ADMIN", user.id);
     return null;
   }
-  
+  return { id: user.id };
+};
+
+const studentAuth = async () => {
+  const user = await currentUser();
+  if (!user) {
+    console.log("Upload auth failed: No user found");
+    return null;
+  }
   return { id: user.id };
 };
 
@@ -67,6 +75,18 @@ export const ourFileRouter = {
     })
     .onUploadComplete(async ({ metadata, file }) => {
       console.log("Replay video upload complete for userId:", metadata.userId);
+      return { uploadedBy: metadata.userId, url: file.ufsUrl };
+    }),
+
+  // Define a route for homework submission
+  homeworkPdf: f({ pdf: { maxFileSize: "16MB", maxFileCount: 1 } })
+    .middleware(async () => {
+      const user = await studentAuth();
+      if (!user) throw new UploadThingError("Unauthorized");
+      return { userId: user.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Homework upload complete for userId:", metadata.userId);
       return { uploadedBy: metadata.userId, url: file.ufsUrl };
     }),
 } satisfies FileRouter;
