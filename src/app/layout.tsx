@@ -62,6 +62,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
+import { ActivityTracker } from "@/components/activity-tracker";
 
 export default function RootLayout({
   children,
@@ -98,6 +99,7 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <body className={`${inter.variable} ${cairo.variable} font-sans antialiased`}>
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
+          <ActivityTracker />
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
             <TooltipProvider>
               {children}

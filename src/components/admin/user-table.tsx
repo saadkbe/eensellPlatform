@@ -56,7 +56,7 @@ export function UserTable({ initialUsers }: { initialUsers: User[] }) {
   const filters = ["all", "PENDING", "ACTIVE", "SUSPENDED", "REJECTED"];
 
   return (
-    <Card className="bg-card/60 border-border">
+    <Card className="bg-card/60 backdrop-blur-md border-border/50 shadow-xl">
       <CardHeader className="pb-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <CardTitle className="text-foreground text-base font-semibold">All Users ({filtered.length})</CardTitle>
@@ -64,14 +64,14 @@ export function UserTable({ initialUsers }: { initialUsers: User[] }) {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)}
-                className="pl-9 h-9 bg-background border-border text-foreground text-xs w-[200px]" />
+                className="pl-9 h-10 bg-background/50 border-border/50 text-foreground text-sm w-[240px] rounded-xl" />
             </div>
           </div>
         </div>
         <div className="flex flex-wrap gap-2 mt-3">
           {filters.map((f) => (
             <button key={f} onClick={() => setFilter(f)}
-              className={`px-3 py-1 rounded-md text-xs transition-all ${filter === f ? "bg-primary text-primary-foreground" : "bg-background text-muted-foreground hover:text-foreground"}`}>
+              className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${filter === f ? "bg-primary text-primary-foreground shadow-md" : "bg-background/50 text-muted-foreground hover:bg-background hover:text-foreground"}`}>
               {f === "all" ? "All" : f.charAt(0) + f.slice(1).toLowerCase()}
             </button>
           ))}
@@ -85,19 +85,19 @@ export function UserTable({ initialUsers }: { initialUsers: User[] }) {
             const statusInfo = STATUS_LABELS[user.status];
             const roleInfo = ROLE_LABELS[user.role];
             return (
-              <div key={user.id} className="flex items-center justify-between p-3 rounded-lg bg-background border border-border hover:border-primary/20 transition-all">
-                <div className="flex items-center gap-3 min-w-0 flex-1">
-                  <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0 text-sm font-medium text-primary">
+              <div key={user.id} className="flex items-center justify-between p-4 rounded-xl bg-background/40 backdrop-blur-sm border border-border/50 hover:border-primary/30 hover:shadow-md transition-all">
+                <div className="flex items-center gap-4 min-w-0 flex-1">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 text-base font-bold text-primary">
                     {(user.firstName?.[0] || user.email[0]).toUpperCase()}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm text-foreground font-medium truncate">{user.firstName || ""} {user.lastName || ""}</p>
-                    <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                    <p className="text-base text-foreground font-semibold truncate">{user.firstName || ""} {user.lastName || ""}</p>
+                    <p className="text-sm text-muted-foreground truncate mt-0.5">{user.email}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <Badge className={`text-[10px] hidden sm:inline-flex ${roleInfo.color}`}>{roleInfo.label}</Badge>
-                  <Badge className={`text-[10px] ${statusInfo.color}`}>{statusInfo.label}</Badge>
+                <div className="flex items-center gap-3 shrink-0">
+                  <Badge className={`text-xs px-2.5 py-0.5 hidden sm:inline-flex ${roleInfo.color}`}>{roleInfo.label}</Badge>
+                  <Badge className={`text-xs px-2.5 py-0.5 ${statusInfo.color}`}>{statusInfo.label}</Badge>
                   {user.role !== "ADMIN" && (
                     <DropdownMenu>
                       <DropdownMenuTrigger

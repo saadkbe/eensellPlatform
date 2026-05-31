@@ -41,6 +41,8 @@ model User {
   communityPosts CommunityPost[]
   notifications  Notification[]
   homeworks      Homework[]
+  sessions       UserSession[]
+  activities     UserActivity[]
 
   @@index([clerkId])
   @@index([status])
@@ -198,3 +200,27 @@ model Homework {
   @@unique([userId, lessonId])
   @@index([status])
 }
+
+model UserSession {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      String   // "YYYY-MM-DD"
+  startTime DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  totalTime Int      @default(0) // in seconds
+
+  @@unique([userId, date])
+}
+
+model UserActivity {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  path      String
+  duration  Int      @default(0) // in seconds
+  timestamp DateTime @default(now())
+
+  @@index([userId, timestamp])
+}
+

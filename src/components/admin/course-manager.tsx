@@ -231,29 +231,32 @@ export function CourseManager({ initialModules }: { initialModules: Module[] }) 
       </div>
 
       {modules.length === 0 ? (
-        <Card className="bg-card/60 border-border">
-          <CardContent className="py-16 text-center">
-            <BookOpen className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
-            <p className="text-sm text-muted-foreground">No modules yet. Create your first module to get started.</p>
+        <Card className="bg-card/60 backdrop-blur-md border-border/50 shadow-xl">
+          <CardContent className="py-20 text-center">
+            <BookOpen className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
+            <p className="text-base font-medium text-foreground">No modules yet.</p>
+            <p className="text-sm text-muted-foreground mt-1">Create your first module to get started.</p>
           </CardContent>
         </Card>
       ) : (
         <div className="space-y-3">
           {modules.map((mod, i) => (
-            <Card key={mod.id} className="bg-card/60 border-border">
-              <CardHeader className="pb-3">
+            <Card key={mod.id} className="bg-card/60 backdrop-blur-md border-border/50 shadow-xl mb-4 overflow-hidden hover:border-primary/30 transition-all duration-300">
+              <CardHeader className="pb-4 bg-background/40">
                 <div className="flex items-center justify-between">
-                  <button onClick={() => toggleExpand(mod.id)} className="flex items-center gap-3 text-left">
-                    {expanded.has(mod.id) ? <ChevronDown className="w-4 h-4 text-muted-foreground" /> : <ChevronRight className="w-4 h-4 text-muted-foreground" />}
+                  <button onClick={() => toggleExpand(mod.id)} className="flex items-center gap-4 text-left group">
+                    <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                      {expanded.has(mod.id) ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                    </div>
                     <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-mono text-muted-foreground">M{i + 1}</span>
-                        <CardTitle className="text-foreground text-sm font-semibold">{mod.title}</CardTitle>
-                        <Badge className={`text-[10px] ${mod.isPublished ? "bg-success/10 text-success border-success/20" : "bg-secondary text-muted-foreground border-primary/20"}`}>
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-bold text-primary/80">M{i + 1}</span>
+                        <CardTitle className="text-foreground text-lg font-bold">{mod.title}</CardTitle>
+                        <Badge className={`text-xs px-2.5 py-0.5 shadow-sm ${mod.isPublished ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" : "bg-secondary text-muted-foreground border-border"}`}>
                           {mod.isPublished ? "Published" : "Draft"}
                         </Badge>
                       </div>
-                      {mod.description && <p className="text-xs text-muted-foreground mt-1">{mod.description}</p>}
+                      {mod.description && <p className="text-sm text-muted-foreground mt-1.5">{mod.description}</p>}
                     </div>
                   </button>
                   <div className="flex items-center gap-1">
@@ -271,14 +274,16 @@ export function CourseManager({ initialModules }: { initialModules: Module[] }) 
               </CardHeader>
               {expanded.has(mod.id) && (
                 <CardContent className="pt-0">
-                  <div className="ml-7 space-y-2 border-l border-border pl-4">
+                  <div className="ml-10 space-y-3 border-l-2 border-border/50 pl-6 pb-4">
                     {mod.lessons.map((les, li) => (
-                      <div key={les.id} className="flex items-center justify-between p-3 rounded-lg bg-background border border-border">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <PlayCircle className="w-4 h-4 text-primary shrink-0" />
-                          <span className="text-xs font-mono text-muted-foreground">{li + 1}.</span>
-                          <span className="text-xs text-foreground truncate">{les.title}</span>
-                          <Badge className={`text-[9px] ${les.isPublished ? "bg-success/10 text-success border-success/20" : "bg-secondary text-muted-foreground border-primary/20"}`}>
+                      <div key={les.id} className="flex items-center justify-between p-4 rounded-xl bg-background/50 border border-border/50 hover:border-primary/30 hover:shadow-md transition-all group">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                            <PlayCircle className="w-4 h-4 text-primary" />
+                          </div>
+                          <span className="text-sm font-bold text-muted-foreground w-6">{li + 1}.</span>
+                          <span className="text-base font-semibold text-foreground truncate group-hover:text-primary transition-colors">{les.title}</span>
+                          <Badge className={`text-xs px-2 py-0.5 ${les.isPublished ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" : "bg-secondary text-muted-foreground border-border"}`}>
                             {les.isPublished ? "Live" : "Draft"}
                           </Badge>
                         </div>

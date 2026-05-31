@@ -9,7 +9,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <AdminSidebar />
       <main className="lg:ml-[260px] pt-16 lg:pt-0 min-h-screen flex flex-col">
         <TopBar />
-        <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1400px] w-full mx-auto">
+        <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[90rem] w-full mx-auto">
           {children}
         </div>
       </main>
