@@ -51,10 +51,8 @@ export default clerkMiddleware(async (auth, req) => {
     if (userStatus === "PENDING" || userStatus === "REJECTED" || userStatus === "SUSPENDED") {
       return NextResponse.redirect(new URL("/pending", req.url));
     }
-    // If no status set yet (new user), redirect to pending
-    if (!userStatus && userRole !== "ADMIN") {
-      return NextResponse.redirect(new URL("/pending", req.url));
-    }
+    // If no status set yet (new user), we let them pass to the dashboard.
+    // The dashboard/layout.tsx will verify their actual database status and redirect if necessary.
     return NextResponse.next();
   }
 

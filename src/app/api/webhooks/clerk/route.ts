@@ -67,9 +67,9 @@ export async function POST(req: Request) {
         where: { email: primaryEmail },
         update: {
           clerkId: id,
-          firstName: first_name || null,
-          lastName: last_name || null,
-          imageUrl: image_url || null,
+          firstName: first_name || undefined,
+          lastName: last_name || undefined,
+          imageUrl: image_url || undefined,
         },
         create: {
           clerkId: id,

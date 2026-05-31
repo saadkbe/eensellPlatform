@@ -86,6 +86,10 @@ export default function RootLayout({
           card: "bg-white dark:bg-[#0A0A0A] border border-border shadow-xl",
           userProfileBase: "bg-white dark:bg-[#0A0A0A]",
           userButtonPopoverCard: "bg-white dark:bg-[#0A0A0A]",
+          modalContent: "bg-white dark:bg-[#0A0A0A]",
+          modalBackdrop: "bg-black/60 backdrop-blur-sm",
+          scrollBox: "bg-white dark:bg-[#0A0A0A]",
+          navbar: "bg-white dark:bg-[#0A0A0A]",
           headerTitle: "text-foreground",
           headerSubtitle: "text-muted-foreground",
           socialButtonsBlockButton:

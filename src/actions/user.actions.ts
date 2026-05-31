@@ -41,9 +41,9 @@ export async function syncUserToDB() {
     where: { email },
     update: {
       clerkId: clerkUser.id,
-      firstName: clerkUser.firstName,
-      lastName: clerkUser.lastName,
-      imageUrl: clerkUser.imageUrl,
+      firstName: clerkUser.firstName || undefined,
+      lastName: clerkUser.lastName || undefined,
+      imageUrl: clerkUser.imageUrl || undefined,
     },
     create: {
       clerkId: clerkUser.id,
@@ -55,6 +55,36 @@ export async function syncUserToDB() {
       status: "PENDING",
     },
   });
+
+  // Sync back to Clerk if the session token is missing the correct role/status, OR missing name
+  try {
+    const { sessionClaims } = await auth();
+    const clerkRole = (sessionClaims?.metadata as any)?.role;
+    const clerkStatus = (sessionClaims?.metadata as any)?.status;
+
+    const { clerkClient } = await import("@clerk/nextjs/server");
+    const client = await clerkClient();
+
+    // 1. Sync Role/Status Metadata
+    if (clerkRole !== user.role || clerkStatus !== user.status) {
+      await client.users.updateUserMetadata(user.clerkId, {
+        publicMetadata: {
+          role: user.role,
+          status: user.status,
+        }
+      });
+    }
+
+    // 2. Sync Name back to Clerk if they skipped onboarding (Clerk name is empty, but DB has it)
+    if (!clerkUser.firstName && user.firstName) {
+      await client.users.updateUser(user.clerkId, {
+        firstName: user.firstName,
+        lastName: user.lastName || "",
+      });
+    }
+  } catch (e) {
+    console.error("Error syncing Clerk metadata:", e);
+  }
 
   return user;
 }

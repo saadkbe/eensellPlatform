@@ -12,6 +12,12 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const user = await syncUserToDB();
+  
+  // Securely enforce pending status based on the database (truth) rather than just the cached Clerk token
+  if (user && user.role !== "ADMIN" && (user.status === "PENDING" || user.status === "REJECTED" || user.status === "SUSPENDED")) {
+    redirect("/pending");
+  }
+
   if (user && !user.onboardingCompleted) {
     redirect("/onboarding");
   }
