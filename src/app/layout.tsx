@@ -82,7 +82,7 @@ export default function RootLayout({
         },
         elements: {
           formButtonPrimary:
-            "bg-primary hover:bg-primary/90 text-primary-foreground shadow-none",
+            "bg-black hover:bg-black/90 text-white shadow-none",
           card: "bg-white dark:bg-[#0A0A0A] border border-border shadow-xl",
           userProfileBase: "bg-white dark:bg-[#0A0A0A]",
           userButtonPopoverCard: "bg-white dark:bg-[#0A0A0A]",
