@@ -34,16 +34,20 @@ export async function syncUserToDB() {
   const clerkUser = await currentUser();
   if (!clerkUser) return null;
 
-  const existingUser = await db.user.findUnique({
-    where: { clerkId: clerkUser.id },
-  });
+  const email = clerkUser.emailAddresses[0]?.emailAddress;
+  if (!email) return null;
 
-  if (existingUser) return existingUser;
-
-  const newUser = await db.user.create({
-    data: {
+  const user = await db.user.upsert({
+    where: { email },
+    update: {
       clerkId: clerkUser.id,
-      email: clerkUser.emailAddresses[0]?.emailAddress || "",
+      firstName: clerkUser.firstName,
+      lastName: clerkUser.lastName,
+      imageUrl: clerkUser.imageUrl,
+    },
+    create: {
+      clerkId: clerkUser.id,
+      email,
       firstName: clerkUser.firstName,
       lastName: clerkUser.lastName,
       imageUrl: clerkUser.imageUrl,
@@ -52,7 +56,7 @@ export async function syncUserToDB() {
     },
   });
 
-  return newUser;
+  return user;
 }
 
 // Get user's progress

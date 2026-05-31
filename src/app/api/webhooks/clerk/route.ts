@@ -63,8 +63,15 @@ export async function POST(req: Request) {
     }
 
     try {
-      await db.user.create({
-        data: {
+      await db.user.upsert({
+        where: { email: primaryEmail },
+        update: {
+          clerkId: id,
+          firstName: first_name || null,
+          lastName: last_name || null,
+          imageUrl: image_url || null,
+        },
+        create: {
           clerkId: id,
           email: primaryEmail,
           firstName: first_name || null,
