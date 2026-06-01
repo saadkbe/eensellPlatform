@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 
 import { PageTransition } from "@/components/page-transition";
 
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardLayout({
   children,
 }: {
