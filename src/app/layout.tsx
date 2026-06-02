@@ -101,7 +101,7 @@ export default function RootLayout({
       }}
     >
       <html lang="en" suppressHydrationWarning>
-        <body className={`${inter.variable} ${cairo.variable} font-sans antialiased`}>
+        <body className={`${inter.variable} ${cairo.variable} font-arabic antialiased`}>
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
           <ActivityTracker />
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>

@@ -1,72 +1,132 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { XCircle, CheckCircle2 } from "lucide-react";
 
 export function TransformationSection() {
   return (
     <section className="relative py-24 sm:py-32 bg-foreground text-background overflow-hidden">
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand rounded-full blur-[100px]" />
+      {/* Background with dramatic spotlight and noise */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand rounded-full blur-[120px]" />
       </div>
+      <div 
+        className="absolute inset-0 opacity-[0.015] pointer-events-none mix-blend-overlay"
+        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
+      />
 
-      <div className="container max-w-5xl mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div className="container max-w-5xl mx-auto px-6 relative z-10 text-right rtl-content">
+        <div className="text-center mb-20 flex flex-col items-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl sm:text-5xl md:text-6xl font-black mb-4 leading-tight"
+          >
+            أنت لا تشتري دورة..<br />
+            <span className="text-brand-light text-glow">أنت تستثمر في نسختك المستقبلية.</span>
+          </motion.h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-8 md:gap-4 items-stretch relative">
+          
+          {/* Before Card */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-right rtl-content"
+            transition={{ duration: 0.6 }}
+            className="rounded-[2rem] bg-white/5 border border-white/10 p-8 sm:p-10 relative overflow-hidden backdrop-blur-md grayscale-[0.5]"
           >
-            <h2 className="text-3xl sm:text-5xl font-bold mb-8 leading-tight">
-              أنت لا تشتري دورة..<br />
-              <span className="text-brand-light">أنت تستثمر في نسختك المستقبلية.</span>
-            </h2>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-error/10 blur-[50px] rounded-full" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-error/10 text-error font-bold mb-8 border border-error/20">
+              <XCircle className="w-5 h-5" />
+              قبل الانضمام
+            </div>
             
-            <div className="space-y-6 text-lg text-background/80">
-              <p>
-                تخيل نفسك بعد 60 يوماً من الآن:
-              </p>
-              <ul className="space-y-4 font-medium">
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-brand-light" />
-                  شخص يفهم لغة الذكاء الاصطناعي ويستخدمه يومياً ببراعة.
+            <ul className="space-y-6">
+              {[
+                "تبحث عن طريقة للربح بدون نتائج",
+                "تعتمد على الراتب الشهري فقط",
+                "لا تعرف كيف تستخدم الذكاء الاصطناعي",
+                "محاط بأشخاص يثبطون طموحك"
+              ].map((item, idx) => (
+                <li key={idx} className="flex items-start gap-4 text-background/70 font-medium text-lg">
+                  <XCircle className="w-6 h-6 text-error shrink-0 mt-0.5" />
+                  <span>{item}</span>
                 </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-brand-light" />
-                  شخص يمتلك مهارات رقمية حديثة يطلبها السوق بشدة.
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-brand-light" />
-                  شخص بدأ في بناء مصادر دخل أونلاين وتجاوز الطرق التقليدية.
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-brand-light" />
-                  شخص محاط بشبكة من رواد الأعمال الطموحين الذين يدعمونه.
-                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Divider */}
+          <div className="hidden md:flex flex-col items-center justify-center relative py-10">
+            <div className="w-px h-full bg-gradient-to-b from-transparent via-brand/50 to-transparent" />
+            <motion.div 
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="absolute top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-foreground border-4 border-brand flex items-center justify-center z-10 shadow-[0_0_30px_rgba(59,130,246,0.5)]"
+            >
+              <span className="text-brand font-black text-sm">VS</span>
+            </motion.div>
+          </div>
+
+          {/* After Card */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="rounded-[2rem] bg-brand/10 border border-brand/30 p-8 sm:p-10 relative overflow-hidden backdrop-blur-md glow-brand"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-brand/20 via-success/10 to-transparent opacity-50" />
+            <div className="absolute top-0 right-0 w-full h-1/2 bg-gradient-to-b from-brand/10 to-transparent" />
+            
+            <div className="relative z-10">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-success/20 text-success font-bold mb-8 border border-success/30 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                <CheckCircle2 className="w-5 h-5" />
+                بعد 60 يوماً
+              </div>
+              
+              <ul className="space-y-6">
+                {[
+                  "شخص يفهم لغة الذكاء الاصطناعي ويستخدمه يومياً",
+                  "شخص يمتلك مهارات رقمية حديثة يطلبها السوق",
+                  "شخص بدأ في بناء مصادر دخل أونلاين",
+                  "محاط بشبكة من رواد الأعمال الطموحين"
+                ].map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-4 text-white font-bold text-lg">
+                    <CheckCircle2 className="w-6 h-6 text-success shrink-0 mt-0.5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
               </ul>
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="relative h-[400px] rounded-3xl overflow-hidden glass-border"
-          >
-            <div className="absolute inset-0 bg-gradient-to-tr from-brand/20 to-transparent mix-blend-overlay" />
-            <div className="absolute inset-0 flex items-center justify-center p-8">
-              {/* Abstract futuristic shape instead of a boring image */}
-              <div className="relative w-full h-full flex items-center justify-center">
-                <div className="absolute w-64 h-64 border border-brand-light/30 rounded-full animate-ping" style={{ animationDuration: '3s' }} />
-                <div className="absolute w-48 h-48 border border-brand-light/50 rounded-full animate-spin-slow" style={{ animationDuration: '10s' }} />
-                <div className="w-32 h-32 bg-brand rounded-full blur-[20px] opacity-80" />
-                <div className="w-16 h-16 bg-white rounded-full z-10 shadow-[0_0_50px_rgba(255,255,255,1)]" />
-              </div>
-            </div>
-          </motion.div>
         </div>
+
+        {/* Floating Testimonial Snippet */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="absolute -bottom-6 lg:-bottom-10 left-6 lg:left-20 z-20 animate-float hidden sm:block"
+        >
+          <div className="bg-background/10 backdrop-blur-xl border border-white/20 p-4 rounded-2xl shadow-2xl flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full border-2 border-brand overflow-hidden bg-foreground">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ahmad" alt="Ahmad" className="w-full h-full object-cover" />
+            </div>
+            <div>
+              <p className="text-white font-bold text-sm mb-1">أحمد م.</p>
+              <p className="text-brand-light text-xs font-medium">"حققت 2450 درهم في شهرين"</p>
+            </div>
+          </div>
+        </motion.div>
+        
       </div>
     </section>
   );

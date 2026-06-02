@@ -8,6 +8,7 @@ const isPublicRoute = createRouteMatcher([
   "/sign-up(.*)",
   "/api/webhooks(.*)",
   "/api/uploadthing(.*)",
+  "/pending",
 ]);
 
 // Admin-only routes
