@@ -140,20 +140,7 @@ export function SocialProofSection() {
         </div>
       </div>
 
-      {/* Floating Toast */}
-      <ScrollReveal 
-        animation="slide-up"
-        delay={0.5}
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 md:translate-x-0 md:left-auto md:right-6 z-40"
-      >
-        <div className="glass bg-background/80 backdrop-blur-xl border border-border shadow-elevated px-6 py-4 rounded-2xl flex items-center gap-4 w-max max-w-[90vw]">
-          <span className="flex h-3 w-3 relative shrink-0">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-success"></span>
-          </span>
-          <span className="text-sm sm:text-base font-bold text-foreground">طالب جديد حقق 1500 درهم اليوم</span>
-        </div>
-      </ScrollReveal>
+
 
     </section>
   );
