@@ -43,6 +43,7 @@ model User {
   homeworks      Homework[]
   sessions       UserSession[]
   activities     UserActivity[]
+  chatUsages     ChatUsage[]
 
   @@index([clerkId])
   @@index([status])
@@ -224,3 +225,15 @@ model UserActivity {
   @@index([userId, timestamp])
 }
 
+model ChatUsage {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  count     Int      @default(0)
+  month     Int
+  year      Int
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, month, year])
+  @@index([month, year])
+}

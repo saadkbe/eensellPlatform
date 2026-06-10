@@ -58,7 +58,7 @@ export default async function ResourcesPage() {
         <p className="text-muted-foreground mt-1 text-sm">Access all your learning materials, templates, and tools.</p>
       </div>
 
-      <Tabs defaultValue="all" className="w-full">
+      <Tabs defaultValue="ai-tools" className="w-full">
         <TabsList className="bg-card border border-border p-1">
           <TabsTrigger value="all" className="data-[state=active]:bg-primary data-[state=active]:text-foreground text-muted-foreground text-xs">All</TabsTrigger>
           <TabsTrigger value="pdf" className="data-[state=active]:bg-primary data-[state=active]:text-foreground text-muted-foreground text-xs">PDFs</TabsTrigger>
