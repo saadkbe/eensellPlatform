@@ -83,7 +83,7 @@ When asked to generate slides or a presentation, output the content clearly usin
       messages,
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
 
   } catch (error) {
     console.error("[CHAT_ERROR]", error);
