@@ -240,10 +240,8 @@ export function ChatInterface() {
 
               <div className="flex items-center gap-3">
                 <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <div className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground px-2 cursor-pointer hover:text-foreground transition-colors">
-                      <LayoutDashboard className="w-3.5 h-3.5" /> {model}
-                    </div>
+                  <DropdownMenuTrigger className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground px-2 cursor-pointer hover:text-foreground transition-colors outline-none">
+                    <LayoutDashboard className="w-3.5 h-3.5" /> {model}
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56 rounded-xl shadow-lg border-border/50">
                     <DropdownMenuItem onClick={() => setModel("GPT-4o (Premium)")} className="cursor-pointer">
