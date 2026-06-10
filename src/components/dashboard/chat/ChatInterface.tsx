@@ -1,7 +1,16 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Send, Plus, Paperclip, X, FileText, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Send, Plus, Target, Settings2, Zap, LayoutDashboard,
+  Presentation, FileText, Image as ImageIcon, Table, Globe,
+  Video, LayoutGrid, Download, Paperclip, X, Sparkles,
+} from "lucide-react";
+import {
+  DropdownMenu, DropdownMenuContent,
+  DropdownMenuItem, DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type Message = { id: string; role: "user" | "assistant"; content: string };
 
@@ -11,14 +20,15 @@ export function ChatInterface() {
   const [isLoading, setIsLoading] = useState(false);
   const [usage, setUsage] = useState({ count: 0, limit: 10 });
   const [files, setFiles] = useState<FileList | null>(null);
+  const [model, setModel] = useState("GPT-4o");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     fetch("/api/chat/usage")
-      .then((res) => res.json())
-      .then((data) => setUsage(data))
+      .then((r) => r.json())
+      .then((d) => setUsage(d))
       .catch(console.error);
   }, [msgs]);
 
@@ -26,13 +36,29 @@ export function ChatInterface() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [msgs, isLoading]);
 
-  // Auto-resize textarea
   useEffect(() => {
     const ta = textareaRef.current;
     if (!ta) return;
     ta.style.height = "auto";
     ta.style.height = Math.min(ta.scrollHeight, 160) + "px";
   }, [input]);
+
+  const exportPDF = async () => {
+    const { default: jsPDF } = await import("jspdf");
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text("Nexus Chat Export", 10, 10);
+    doc.setFontSize(12);
+    let y = 25;
+    msgs.forEach((m) => {
+      const text = `${m.role === "user" ? "You" : "Nexus"}: ${m.content}`;
+      const lines = doc.splitTextToSize(text, 180);
+      doc.text(lines, 10, y);
+      y += lines.length * 7 + 5;
+      if (y > 270) { doc.addPage(); y = 20; }
+    });
+    doc.save("nexus-chat.pdf");
+  };
 
   const sendMessage = async () => {
     const text = input.trim();
@@ -68,18 +94,13 @@ export function ChatInterface() {
       const decoder = new TextDecoder();
 
       if (reader) {
-        let done = false;
-        while (!done) {
-          const result = await reader.read();
-          done = result.done;
-          if (result.value) {
-            const chunk = decoder.decode(result.value, { stream: true });
-            setMsgs((prev) =>
-              prev.map((m) =>
-                m.id === assistantId ? { ...m, content: m.content + chunk } : m
-              )
-            );
-          }
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value, { stream: true });
+          setMsgs((prev) =>
+            prev.map((m) => m.id === assistantId ? { ...m, content: m.content + chunk } : m)
+          );
         }
       }
     } catch (err) {
@@ -96,17 +117,15 @@ export function ChatInterface() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
+  const appendToInput = (text: string) => {
+    setInput((prev) => prev + text);
+    textareaRef.current?.focus();
   };
 
   const suggestions = [
     "How do I make my first $100 online? 💰",
     "Give me a 7-day action plan 🗓️",
-    "What AI tools should I master first? 🤖",
+    "What AI tools should I master? 🤖",
     "Help me stay motivated today 🔥",
   ];
 
@@ -115,24 +134,18 @@ export function ChatInterface() {
       className="flex flex-col h-full w-full"
       style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', sans-serif" }}
     >
-      {/* Messages or Empty State */}
+      {/* Messages Area */}
       <div className="flex-1 overflow-y-auto">
         {msgs.length === 0 ? (
-          /* Empty State — centered */
+          /* ── Empty state ── */
           <div className="flex flex-col items-center justify-center h-full px-6 text-center">
-            <div className="mb-3">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-lg mx-auto">
-                <Sparkles className="w-7 h-7 text-white" />
-              </div>
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-lg mb-4">
+              <Sparkles className="w-7 h-7 text-white" />
             </div>
-            <h1 className="text-2xl font-semibold text-foreground mb-1 tracking-tight">
-              Nexus
-            </h1>
+            <h1 className="text-2xl font-semibold tracking-tight mb-1">Nexus</h1>
             <p className="text-muted-foreground text-sm mb-10 max-w-xs leading-relaxed">
               Your personal AI mentor — here to motivate, guide, and help you build your first income online.
             </p>
-
-            {/* Suggestion pills */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full max-w-lg">
               {suggestions.map((s) => (
                 <button
@@ -146,7 +159,7 @@ export function ChatInterface() {
             </div>
           </div>
         ) : (
-          /* Message list */
+          /* ── Message list ── */
           <div className="max-w-2xl mx-auto w-full px-4 py-6 space-y-5">
             {msgs.map((m) => (
               <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -159,12 +172,12 @@ export function ChatInterface() {
                   className={`max-w-[78%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                     m.role === "user"
                       ? "bg-foreground text-background rounded-br-md"
-                      : "bg-secondary/50 border border-border text-foreground rounded-bl-md"
+                      : "bg-secondary/50 border border-border rounded-bl-md"
                   }`}
                 >
                   {m.content ? (
                     m.content.split("\n").map((line, i) => (
-                      <p key={i} className={i > 0 ? "mt-1" : ""}>{line}</p>
+                      <p key={i} className={i > 0 ? "mt-1" : ""}>{line || <br />}</p>
                     ))
                   ) : (
                     <span className="flex gap-1 py-0.5">
@@ -181,12 +194,8 @@ export function ChatInterface() {
         )}
       </div>
 
-      {/* Input bar — always at bottom */}
-      <div className="px-4 pb-5 pt-2 max-w-2xl mx-auto w-full">
-        {/* Usage indicator */}
-        <p className="text-center text-xs text-muted-foreground/60 mb-2">
-          {usage.count} / {usage.limit} messages this month
-        </p>
+      {/* ── Input area ── */}
+      <div className="px-4 pb-4 pt-2 max-w-2xl mx-auto w-full">
 
         {/* File previews */}
         {files && files.length > 0 && (
@@ -211,7 +220,7 @@ export function ChatInterface() {
         )}
 
         {/* Input box */}
-        <div className="flex items-end gap-2 bg-card border border-border rounded-3xl px-4 py-3 shadow-sm focus-within:border-foreground/20 transition-colors">
+        <div className="bg-card border border-border rounded-3xl shadow-sm focus-within:border-foreground/20 transition-colors overflow-hidden">
           <input
             type="file"
             ref={fileInputRef}
@@ -220,36 +229,95 @@ export function ChatInterface() {
             accept="image/*,application/pdf,.doc,.docx,.txt"
             onChange={(e) => setFiles(e.target.files)}
           />
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className="w-7 h-7 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors shrink-0 mb-0.5"
-          >
-            <Plus className="w-4 h-4" />
-          </button>
 
           <textarea
             ref={textareaRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+            }}
             placeholder="Message Nexus..."
             rows={1}
-            className="flex-1 bg-transparent border-none outline-none resize-none text-sm text-foreground placeholder:text-muted-foreground/60 py-0.5 max-h-40 leading-relaxed"
+            className="w-full bg-transparent border-none outline-none resize-none text-sm text-foreground placeholder:text-muted-foreground/60 px-5 pt-4 pb-2 max-h-40 leading-relaxed"
           />
 
-          <button
-            type="button"
-            onClick={sendMessage}
-            disabled={isLoading || (!input.trim() && (!files || files.length === 0)) || usage.count >= usage.limit}
-            className="w-8 h-8 rounded-full bg-foreground text-background flex items-center justify-center shrink-0 disabled:opacity-30 hover:bg-foreground/85 transition-all shadow-sm mb-0.5"
-          >
-            <Send className="w-3.5 h-3.5" />
-          </button>
+          {/* Toolbar */}
+          <div className="flex items-center justify-between px-3 pb-3">
+            <div className="flex items-center gap-1.5">
+              <Button type="button" onClick={() => fileInputRef.current?.click()} variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-secondary">
+                <Plus className="w-4 h-4" />
+              </Button>
+              <Button type="button" onClick={() => appendToInput("@ ")} variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-secondary">
+                <Target className="w-4 h-4" />
+              </Button>
+              <Button type="button" onClick={() => appendToInput("How do I connect external tools? ")} variant="ghost" className="h-8 rounded-full hover:bg-secondary text-xs px-3 gap-1.5 font-medium hidden sm:flex">
+                <Settings2 className="w-3.5 h-3.5" /> Connect Tools
+              </Button>
+              <Button type="button" onClick={() => appendToInput("List your available skills. ")} variant="ghost" className="h-8 rounded-full hover:bg-secondary text-xs px-3 gap-1.5 font-medium hidden sm:flex">
+                <Zap className="w-3.5 h-3.5" /> Skills
+              </Button>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger className="text-xs font-medium text-muted-foreground flex items-center gap-1.5 px-2 py-1 rounded-lg hover:bg-secondary transition-colors outline-none cursor-pointer">
+                  <LayoutDashboard className="w-3.5 h-3.5" /> {model}
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-52 rounded-xl">
+                  <DropdownMenuItem onClick={() => setModel("GPT-4o")} className="cursor-pointer">
+                    <div className="flex flex-col">
+                      <span className="font-medium text-sm">GPT-4o</span>
+                      <span className="text-xs text-muted-foreground">Fast, high intelligence</span>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem disabled>
+                    <div className="flex flex-col opacity-50">
+                      <span className="font-medium text-sm">Claude 3.5 Sonnet</span>
+                      <span className="text-xs text-blue-500">Upcoming</span>
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <button
+                onClick={sendMessage}
+                disabled={isLoading || (!input.trim() && (!files || files.length === 0)) || usage.count >= usage.limit}
+                className="w-8 h-8 rounded-full bg-foreground text-background flex items-center justify-center disabled:opacity-30 hover:bg-foreground/85 transition-all shadow-sm"
+              >
+                <Send className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
         </div>
 
-        <p className="text-center text-[11px] text-muted-foreground/40 mt-2.5">
-          Nexus can make mistakes. Verify important info.
+        {/* Colored action pills */}
+        <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
+          <Button type="button" variant="outline" size="sm" className="rounded-full text-xs gap-1.5 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-colors" onClick={() => appendToInput("Generate slides about: ")}>
+            <Presentation className="w-3.5 h-3.5 text-rose-500" /> Slides
+          </Button>
+          <Button type="button" variant="outline" size="sm" className="rounded-full text-xs gap-1.5 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-colors" onClick={exportPDF}>
+            <Download className="w-3.5 h-3.5 text-blue-500" /> Export PDF
+          </Button>
+          <Button type="button" variant="outline" size="sm" className="rounded-full text-xs gap-1.5 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200 transition-colors" onClick={() => appendToInput("Generate an image prompt for: ")}>
+            <ImageIcon className="w-3.5 h-3.5 text-amber-500" /> Images
+          </Button>
+          <Button type="button" variant="outline" size="sm" className="rounded-full text-xs gap-1.5 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 transition-colors" onClick={() => appendToInput("Create a spreadsheet/table for: ")}>
+            <Table className="w-3.5 h-3.5 text-emerald-500" /> Sheets
+          </Button>
+          <Button type="button" variant="outline" size="sm" className="rounded-full text-xs gap-1.5 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200 transition-colors" onClick={() => appendToInput("Write landing page copy for: ")}>
+            <Globe className="w-3.5 h-3.5 text-purple-500" /> Websites
+          </Button>
+          <Button type="button" variant="outline" size="sm" className="rounded-full text-xs gap-1.5 hover:bg-pink-50 hover:text-pink-600 hover:border-pink-200 transition-colors" onClick={() => appendToInput("Write an engaging video script about: ")}>
+            <Video className="w-3.5 h-3.5 text-pink-500" /> Videos
+          </Button>
+          <Button type="button" variant="outline" size="sm" className="rounded-full text-xs gap-1.5 hover:bg-teal-50 hover:text-teal-600 hover:border-teal-200 transition-colors" onClick={() => appendToInput("What are all the skills you can help with? ")}>
+            <LayoutGrid className="w-3.5 h-3.5 text-teal-500" /> All Skills
+          </Button>
+        </div>
+
+        <p className="text-center text-[11px] text-muted-foreground/40 mt-3">
+          {usage.count} / {usage.limit} messages this month · Nexus can make mistakes
         </p>
       </div>
     </div>

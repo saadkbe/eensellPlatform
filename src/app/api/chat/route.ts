@@ -1,25 +1,25 @@
 import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
-import { createOpenAI } from "@ai-sdk/openai";
-import { streamText } from "ai";
+import OpenAI from "openai";
 
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
   try {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      console.error("[CHAT_ERROR] OPENAI_API_KEY is not set in environment variables");
+      return new NextResponse("API key not configured", { status: 500 });
+    }
+
+    const openai = new OpenAI({ apiKey });
+
     const user = await currentUser();
-    if (!user) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
+    if (!user) return new NextResponse("Unauthorized", { status: 401 });
 
-    const dbUser = await db.user.findUnique({
-      where: { clerkId: user.id },
-    });
-
-    if (!dbUser) {
-      return new NextResponse("User not found in database", { status: 404 });
-    }
+    const dbUser = await db.user.findUnique({ where: { clerkId: user.id } });
+    if (!dbUser) return new NextResponse("User not found", { status: 404 });
 
     const date = new Date();
     const month = date.getMonth() + 1;
@@ -58,17 +58,25 @@ Always maintain a positive, uplifting, and encouraging mood. Celebrate their sma
 Keep your business advice concise, professional, and directly actionable.
 When asked to generate slides, separate each slide with '---' on its own line and use Markdown formatting.`;
 
-    const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-    const result = streamText({
-      model: openai("gpt-4o"),
-      system: systemPrompt,
-      messages,
+    const stream = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [{ role: "system", content: systemPrompt }, ...messages],
+      stream: true,
     });
 
-    // Return a plain text stream the client can read directly
-    const stream = result.textStream;
-    const readable = stream.pipeThrough(new TextEncoderStream());
+    const readable = new ReadableStream({
+      async start(controller) {
+        const encoder = new TextEncoder();
+        try {
+          for await (const chunk of stream) {
+            const text = chunk.choices[0]?.delta?.content ?? "";
+            if (text) controller.enqueue(encoder.encode(text));
+          }
+        } finally {
+          controller.close();
+        }
+      },
+    });
 
     return new Response(readable, {
       headers: { "Content-Type": "text/plain; charset=utf-8" },
