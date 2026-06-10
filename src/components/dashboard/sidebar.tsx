@@ -17,6 +17,7 @@ import {
   MessageSquare,
   Target,
   Compass,
+  Bot,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -41,6 +42,7 @@ const navSections: NavSection[] = [
       { title: "Community", href: "/dashboard/community", icon: MessageSquare },
       { title: "Live Calls", href: "/dashboard/live-calls", icon: Video },
       { title: "Goals", href: "/dashboard/goals", icon: Target },
+      { title: "Nexus AI", href: "/dashboard/chat", icon: Bot },
     ],
   },
   {
