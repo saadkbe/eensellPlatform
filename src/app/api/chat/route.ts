@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
-import OpenAI from "openai";
+import { createOpenAI } from "@ai-sdk/openai";
+import { streamText } from "ai";
 
 export const maxDuration = 60;
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function POST(req: Request) {
   try {
@@ -33,7 +32,7 @@ export async function POST(req: Request) {
     if (!usage) {
       const activeUsersThisMonth = await db.chatUsage.count({ where: { month, year } });
       if (activeUsersThisMonth >= 100) {
-        return new NextResponse("Monthly global user limit reached (100 users max).", { status: 403 });
+        return new NextResponse("Monthly global user limit reached.", { status: 403 });
       }
       usage = await db.chatUsage.create({
         data: { userId: dbUser.id, month, year, count: 0 },
@@ -41,7 +40,7 @@ export async function POST(req: Request) {
     }
 
     if (usage.count >= 10) {
-      return new NextResponse("Monthly message limit reached (10 messages max).", { status: 429 });
+      return new NextResponse("Monthly message limit reached.", { status: 429 });
     }
 
     const { messages } = await req.json();
@@ -55,42 +54,24 @@ export async function POST(req: Request) {
     const systemPrompt = `You are Nexus, a highly intelligent, intensely positive, and highly motivating AI mentor for Eensell University students.
 You are currently talking to ${userName}. ALWAYS address them by their first name naturally in your responses!
 Your primary goal is to help them overcome obstacles, stay incredibly motivated, and achieve their ultimate goal: making their first dollars online through AI and digital business.
-Always maintain a positive, uplifting, and encouraging mood. Celebrate their small wins and frequently use emojis to keep the energy high! 🚀
-Remind them that consistent effort leads to freedom.
+Always maintain a positive, uplifting, and encouraging mood. Celebrate their small wins and frequently use emojis! 🚀
 Keep your business advice concise, professional, and directly actionable.
-When asked to generate slides or a presentation, output the content clearly using '---' on its own line to separate each slide, and format the slide content using Markdown (headings, bullet points).`;
+When asked to generate slides, separate each slide with '---' on its own line and use Markdown formatting.`;
 
-    const stream = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        { role: "system", content: systemPrompt },
-        ...messages,
-      ],
-      stream: true,
+    const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+    const result = streamText({
+      model: openai("gpt-4o"),
+      system: systemPrompt,
+      messages,
     });
 
-    const readable = new ReadableStream({
-      async start(controller) {
-        const encoder = new TextEncoder();
-        try {
-          for await (const chunk of stream) {
-            const text = chunk.choices[0]?.delta?.content || "";
-            if (text) {
-              controller.enqueue(encoder.encode(text));
-            }
-          }
-        } finally {
-          controller.close();
-        }
-      },
-    });
+    // Return a plain text stream the client can read directly
+    const stream = result.textStream;
+    const readable = stream.pipeThrough(new TextEncoderStream());
 
     return new Response(readable, {
-      headers: {
-        "Content-Type": "text/plain; charset=utf-8",
-        "Transfer-Encoding": "chunked",
-        "X-Content-Type-Options": "nosniff",
-      },
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
     });
 
   } catch (error) {
