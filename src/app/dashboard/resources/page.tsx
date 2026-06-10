@@ -3,6 +3,7 @@ import { FileText, Download, ExternalLink, Lightbulb, File, Link2 } from "lucide
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AIToolsList } from "@/components/dashboard/AIToolsList";
 
 const typeIcons: Record<string, React.ElementType> = {
   pdf: FileText, template: File, prompt: Lightbulb, link: Link2,
@@ -64,6 +65,7 @@ export default async function ResourcesPage() {
           <TabsTrigger value="template" className="data-[state=active]:bg-primary data-[state=active]:text-foreground text-muted-foreground text-xs">Templates</TabsTrigger>
           <TabsTrigger value="prompt" className="data-[state=active]:bg-primary data-[state=active]:text-foreground text-muted-foreground text-xs">Prompts</TabsTrigger>
           <TabsTrigger value="link" className="data-[state=active]:bg-primary data-[state=active]:text-foreground text-muted-foreground text-xs">Links</TabsTrigger>
+          <TabsTrigger value="ai-tools" className="data-[state=active]:bg-primary data-[state=active]:text-foreground text-muted-foreground text-xs">Top 50 AI Tools</TabsTrigger>
         </TabsList>
 
         {Object.entries(grouped).map(([key, items]) => (
@@ -80,6 +82,10 @@ export default async function ResourcesPage() {
             )}
           </TabsContent>
         ))}
+
+        <TabsContent value="ai-tools" className="mt-6">
+          <AIToolsList />
+        </TabsContent>
       </Tabs>
     </div>
   );
