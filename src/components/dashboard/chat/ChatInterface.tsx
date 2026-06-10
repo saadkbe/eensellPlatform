@@ -1,13 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { 
-  Bot, Send, Plus, Target, Settings2, Zap, LayoutDashboard,
-  Presentation, FileText, Image as ImageIcon, Table, Globe, Video, LayoutGrid,
-  Download, Paperclip, X
-} from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Send, Plus, Paperclip, X, FileText, Sparkles } from "lucide-react";
 
 type Message = { id: string; role: "user" | "assistant"; content: string };
 
@@ -17,9 +11,9 @@ export function ChatInterface() {
   const [isLoading, setIsLoading] = useState(false);
   const [usage, setUsage] = useState({ count: 0, limit: 10 });
   const [files, setFiles] = useState<FileList | null>(null);
-  const [model, setModel] = useState("GPT-4o (Premium)");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     fetch("/api/chat/usage")
@@ -32,29 +26,20 @@ export function ChatInterface() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [msgs, isLoading]);
 
-  const exportPDF = async () => {
-    const { default: jsPDF } = await import("jspdf");
-    const doc = new jsPDF();
-    doc.setFontSize(16);
-    doc.text("Nexus Chat Export", 10, 10);
-    doc.setFontSize(12);
-    let y = 20;
-    msgs.forEach((m) => {
-      const text = `${m.role === "user" ? "You" : "Nexus"}: ${m.content}`;
-      const splitText = doc.splitTextToSize(text, 180);
-      doc.text(splitText, 10, y);
-      y += splitText.length * 7 + 5;
-      if (y > 280) { doc.addPage(); y = 20; }
-    });
-    doc.save("nexus-chat.pdf");
-  };
+  // Auto-resize textarea
+  useEffect(() => {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    ta.style.height = "auto";
+    ta.style.height = Math.min(ta.scrollHeight, 160) + "px";
+  }, [input]);
 
-  const sendMessage = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
+  const sendMessage = async () => {
     const text = input.trim();
     if (!text && (!files || files.length === 0)) return;
+    if (isLoading) return;
     if (usage.count >= usage.limit) {
-      alert("You have reached your monthly limit of 10 messages.");
+      alert("You've reached your monthly limit of 10 messages.");
       return;
     }
 
@@ -65,235 +50,207 @@ export function ChatInterface() {
     setFiles(null);
     setIsLoading(true);
 
+    const assistantId = (Date.now() + 1).toString();
+    setMsgs((prev) => [...prev, { id: assistantId, role: "assistant", content: "" }]);
+
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newMsgs.map(({ role, content }) => ({ role, content })) }),
+        body: JSON.stringify({
+          messages: newMsgs.map(({ role, content }) => ({ role, content })),
+        }),
       });
 
       if (!res.ok) throw new Error(await res.text());
 
       const reader = res.body?.getReader();
       const decoder = new TextDecoder();
-      let assistantContent = "";
-      const assistantId = (Date.now() + 1).toString();
-
-      setMsgs((prev) => [...prev, { id: assistantId, role: "assistant", content: "" }]);
 
       if (reader) {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          assistantContent += decoder.decode(value, { stream: true });
-          setMsgs((prev) =>
-            prev.map((m) => (m.id === assistantId ? { ...m, content: assistantContent } : m))
-          );
+        let done = false;
+        while (!done) {
+          const result = await reader.read();
+          done = result.done;
+          if (result.value) {
+            const chunk = decoder.decode(result.value, { stream: true });
+            setMsgs((prev) =>
+              prev.map((m) =>
+                m.id === assistantId ? { ...m, content: m.content + chunk } : m
+              )
+            );
+          }
         }
       }
     } catch (err) {
       console.error(err);
-      setMsgs((prev) => [
-        ...prev,
-        { id: Date.now().toString(), role: "assistant", content: "Sorry, something went wrong. Please try again! 🙏" },
-      ]);
+      setMsgs((prev) =>
+        prev.map((m) =>
+          m.id === assistantId
+            ? { ...m, content: "Sorry, something went wrong. Please try again! 🙏" }
+            : m
+        )
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
-  const appendToInput = (text: string) => setInput((prev) => prev + text);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
+  const suggestions = [
+    "How do I make my first $100 online? 💰",
+    "Give me a 7-day action plan 🗓️",
+    "What AI tools should I master first? 🤖",
+    "Help me stay motivated today 🔥",
+  ];
 
   return (
-    <div className="flex flex-col h-[calc(100vh-100px)] max-w-4xl mx-auto w-full font-sans bg-background">
-      
-      {/* Header Info */}
-      <div className="flex items-center justify-between mb-8 px-4">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center relative shadow-sm border border-blue-200">
-            <Bot className="w-6 h-6 text-blue-600" />
-            <div className="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
-          </div>
-          <div>
-            <h2 className="text-sm font-semibold text-muted-foreground flex items-center gap-2">
-              Hi, I&apos;m Nexus
-            </h2>
-            <p className="text-xl sm:text-2xl font-bold text-foreground">
-              Always here to help you get things done
+    <div
+      className="flex flex-col h-full w-full"
+      style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', sans-serif" }}
+    >
+      {/* Messages or Empty State */}
+      <div className="flex-1 overflow-y-auto">
+        {msgs.length === 0 ? (
+          /* Empty State — centered */
+          <div className="flex flex-col items-center justify-center h-full px-6 text-center">
+            <div className="mb-3">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-lg mx-auto">
+                <Sparkles className="w-7 h-7 text-white" />
+              </div>
+            </div>
+            <h1 className="text-2xl font-semibold text-foreground mb-1 tracking-tight">
+              Nexus
+            </h1>
+            <p className="text-muted-foreground text-sm mb-10 max-w-xs leading-relaxed">
+              Your personal AI mentor — here to motivate, guide, and help you build your first income online.
             </p>
-          </div>
-        </div>
-        
-        <div className="text-sm font-medium bg-secondary/50 px-4 py-2 rounded-full border border-border flex items-center gap-2">
-          <Zap className="w-4 h-4 text-amber-500" />
-          <span>{usage.count} / {usage.limit} messages</span>
-        </div>
-      </div>
 
-      {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto mb-6 px-4 space-y-6">
-        {msgs.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-center opacity-50">
-            <Bot className="w-16 h-16 mb-4 text-muted-foreground" />
-            <p className="text-lg">How can I help you today?</p>
-          </div>
-        )}
-        {msgs.map((m) => (
-          <div
-            key={m.id}
-            className={`flex flex-col ${m.role === "user" ? "items-end" : "items-start"}`}
-          >
-            <div
-              className={`max-w-[85%] px-5 py-4 rounded-2xl shadow-sm text-sm sm:text-base leading-relaxed ${
-                m.role === "user"
-                  ? "bg-foreground text-background rounded-br-sm"
-                  : "bg-white border border-border rounded-bl-sm"
-              }`}
-            >
-              {(m.content || "").split("\n").map((line, i) => (
-                <p key={i} className="mb-1">{line}</p>
+            {/* Suggestion pills */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full max-w-lg">
+              {suggestions.map((s) => (
+                <button
+                  key={s}
+                  onClick={() => { setInput(s); textareaRef.current?.focus(); }}
+                  className="text-left px-4 py-3 rounded-2xl border border-border bg-card hover:bg-secondary/60 transition-colors text-sm text-foreground/80 leading-snug"
+                >
+                  {s}
+                </button>
               ))}
             </div>
           </div>
-        ))}
-        {isLoading && (
-          <div className="flex items-start">
-            <div className="max-w-[85%] px-5 py-4 rounded-2xl bg-white border border-border shadow-sm rounded-bl-sm">
-              <span className="flex gap-1">
-                <span className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" />
-                <span className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce delay-75" />
-                <span className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce delay-150" />
-              </span>
-            </div>
+        ) : (
+          /* Message list */
+          <div className="max-w-2xl mx-auto w-full px-4 py-6 space-y-5">
+            {msgs.map((m) => (
+              <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                {m.role === "assistant" && (
+                  <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center mr-2.5 mt-0.5 shrink-0 shadow-sm">
+                    <Sparkles className="w-3.5 h-3.5 text-white" />
+                  </div>
+                )}
+                <div
+                  className={`max-w-[78%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
+                    m.role === "user"
+                      ? "bg-foreground text-background rounded-br-md"
+                      : "bg-secondary/50 border border-border text-foreground rounded-bl-md"
+                  }`}
+                >
+                  {m.content ? (
+                    m.content.split("\n").map((line, i) => (
+                      <p key={i} className={i > 0 ? "mt-1" : ""}>{line}</p>
+                    ))
+                  ) : (
+                    <span className="flex gap-1 py-0.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-current opacity-40 animate-bounce" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-current opacity-40 animate-bounce" style={{ animationDelay: "0.15s" }} />
+                      <span className="w-1.5 h-1.5 rounded-full bg-current opacity-40 animate-bounce" style={{ animationDelay: "0.3s" }} />
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
           </div>
         )}
-        <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area */}
-      <div className="px-4 pb-4">
-        <form onSubmit={sendMessage} className="relative group">
-          <div className="bg-white border border-border/80 shadow-sm rounded-3xl p-2 transition-all duration-300 flex flex-col">
-            
-            {files && files.length > 0 && (
-              <div className="flex flex-wrap gap-2 px-4 pt-2 pb-1">
-                {Array.from(files).map((file, i) => (
-                  <div key={i} className="relative w-12 h-12 rounded-md overflow-hidden bg-secondary border border-border flex shrink-0 group">
-                    {file.type.startsWith("image/") ? (
-                      <img src={URL.createObjectURL(file)} alt="preview" className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-xs font-bold text-muted-foreground bg-muted">
-                        <FileText className="w-5 h-5 opacity-50" />
-                      </div>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => setFiles(null)}
-                      className="absolute top-0.5 right-0.5 w-4 h-4 bg-black/50 hover:bg-black text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
+      {/* Input bar — always at bottom */}
+      <div className="px-4 pb-5 pt-2 max-w-2xl mx-auto w-full">
+        {/* Usage indicator */}
+        <p className="text-center text-xs text-muted-foreground/60 mb-2">
+          {usage.count} / {usage.limit} messages this month
+        </p>
 
-            <input
-              type="file"
-              ref={fileInputRef}
-              hidden
-              onChange={(e) => setFiles(e.target.files)}
-              multiple
-              accept="image/*,application/pdf,.doc,.docx,.txt"
-            />
-            
-            <textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask Nexus anything — motivation, business ideas, strategies..."
-              className="w-full bg-transparent border-none focus:ring-0 resize-none min-h-[60px] max-h-[200px] p-4 text-foreground placeholder:text-muted-foreground/70 text-base outline-none"
-              rows={1}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  if (input.trim()) sendMessage();
-                }
-              }}
-            />
-
-            {/* Input Toolbar */}
-            <div className="flex items-center justify-between px-2 pb-2">
-              <div className="flex items-center gap-2">
-                <Button type="button" onClick={() => fileInputRef.current?.click()} variant="ghost" size="icon" className="w-8 h-8 rounded-full bg-secondary/50 hover:bg-secondary">
-                  <Plus className="w-4 h-4" />
-                </Button>
-                <Button type="button" onClick={() => appendToInput("@ ")} variant="ghost" size="icon" className="w-8 h-8 rounded-full bg-secondary/50 hover:bg-secondary">
-                  <Target className="w-4 h-4" />
-                </Button>
-                <Button type="button" onClick={() => appendToInput("How do I connect external tools? ")} variant="ghost" className="h-8 rounded-full bg-secondary/50 hover:bg-secondary text-xs px-3 gap-1.5 font-medium">
-                  <Settings2 className="w-3.5 h-3.5" /> Connect Tools
-                </Button>
-                <Button type="button" onClick={() => appendToInput("List your available skills. ")} variant="ghost" className="h-8 rounded-full bg-secondary/50 hover:bg-secondary text-xs px-3 gap-1.5 font-medium">
-                  <Zap className="w-3.5 h-3.5" /> Skills
-                </Button>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground px-2 cursor-pointer hover:text-foreground transition-colors outline-none">
-                    <LayoutDashboard className="w-3.5 h-3.5" /> {model}
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56 rounded-xl shadow-lg border-border/50">
-                    <DropdownMenuItem onClick={() => setModel("GPT-4o (Premium)")} className="cursor-pointer">
-                      <div className="flex flex-col">
-                        <span className="font-medium text-sm">GPT-4o (Premium)</span>
-                        <span className="text-xs text-muted-foreground">Fast, high intelligence</span>
-                      </div>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem disabled>
-                      <div className="flex flex-col opacity-50">
-                        <span className="font-medium text-sm">Claude 3.5 Sonnet</span>
-                        <span className="text-xs text-blue-500">(Upcoming)</span>
-                      </div>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <Button
-                  type="submit"
-                  disabled={isLoading || !input.trim() || usage.count >= usage.limit}
-                  className="w-10 h-10 rounded-full bg-foreground text-background hover:bg-foreground/90 disabled:opacity-50 shadow-md"
+        {/* File previews */}
+        {files && files.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-2 px-1">
+            {Array.from(files).map((file, i) => (
+              <div key={i} className="relative w-11 h-11 rounded-xl overflow-hidden bg-secondary border border-border flex items-center justify-center group shrink-0">
+                {file.type.startsWith("image/") ? (
+                  <img src={URL.createObjectURL(file)} alt="preview" className="w-full h-full object-cover" />
+                ) : (
+                  <FileText className="w-5 h-5 text-muted-foreground" />
+                )}
+                <button
+                  type="button"
+                  onClick={() => setFiles(null)}
+                  className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
                 >
-                  <Send className="w-4 h-4" />
-                </Button>
+                  <X className="w-3 h-3 text-white" />
+                </button>
               </div>
-            </div>
+            ))}
           </div>
-        </form>
+        )}
 
-        {/* Action Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
-          <Button type="button" variant="outline" className="rounded-full text-sm gap-2 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200" onClick={() => appendToInput("Generate slides about: ")}>
-            <Presentation className="w-4 h-4 text-rose-500" /> Slides
-          </Button>
-          <Button type="button" variant="outline" className="rounded-full text-sm gap-2 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200" onClick={exportPDF}>
-            <Download className="w-4 h-4 text-blue-500" /> Export PDF
-          </Button>
-          <Button type="button" variant="outline" className="rounded-full text-sm gap-2 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200" onClick={() => appendToInput("Generate an image of: ")}>
-            <ImageIcon className="w-4 h-4 text-amber-500" /> Images
-          </Button>
-          <Button type="button" variant="outline" className="rounded-full text-sm gap-2 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200" onClick={() => appendToInput("Create a spreadsheet/table for: ")}>
-            <Table className="w-4 h-4 text-emerald-500" /> Sheets
-          </Button>
-          <Button type="button" variant="outline" className="rounded-full text-sm gap-2 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200" onClick={() => appendToInput("Write a landing page copy for: ")}>
-            <Globe className="w-4 h-4 text-purple-500" /> Websites
-          </Button>
-          <Button type="button" variant="outline" className="rounded-full text-sm gap-2 hover:bg-pink-50 hover:text-pink-600 hover:border-pink-200" onClick={() => appendToInput("Write a highly engaging video script about: ")}>
-            <Video className="w-4 h-4 text-pink-500" /> Videos
-          </Button>
-          <Button type="button" variant="outline" className="rounded-full text-sm gap-2" onClick={() => appendToInput("What are all the skills you can perform? ")}>
-            <LayoutGrid className="w-4 h-4 text-teal-500" /> All Skills
-          </Button>
+        {/* Input box */}
+        <div className="flex items-end gap-2 bg-card border border-border rounded-3xl px-4 py-3 shadow-sm focus-within:border-foreground/20 transition-colors">
+          <input
+            type="file"
+            ref={fileInputRef}
+            hidden
+            multiple
+            accept="image/*,application/pdf,.doc,.docx,.txt"
+            onChange={(e) => setFiles(e.target.files)}
+          />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="w-7 h-7 flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors shrink-0 mb-0.5"
+          >
+            <Plus className="w-4 h-4" />
+          </button>
+
+          <textarea
+            ref={textareaRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Message Nexus..."
+            rows={1}
+            className="flex-1 bg-transparent border-none outline-none resize-none text-sm text-foreground placeholder:text-muted-foreground/60 py-0.5 max-h-40 leading-relaxed"
+          />
+
+          <button
+            type="button"
+            onClick={sendMessage}
+            disabled={isLoading || (!input.trim() && (!files || files.length === 0)) || usage.count >= usage.limit}
+            className="w-8 h-8 rounded-full bg-foreground text-background flex items-center justify-center shrink-0 disabled:opacity-30 hover:bg-foreground/85 transition-all shadow-sm mb-0.5"
+          >
+            <Send className="w-3.5 h-3.5" />
+          </button>
         </div>
+
+        <p className="text-center text-[11px] text-muted-foreground/40 mt-2.5">
+          Nexus can make mistakes. Verify important info.
+        </p>
       </div>
     </div>
   );
