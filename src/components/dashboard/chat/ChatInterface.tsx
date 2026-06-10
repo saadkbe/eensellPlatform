@@ -9,7 +9,7 @@ import {
   Presentation, FileText, Image as ImageIcon, Table, Globe, Video, LayoutGrid,
   Download, Paperclip, X
 } from "lucide-react";
-import jsPDF from "jspdf";
+// jsPDF loaded dynamically to avoid SSR crash
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export function ChatInterface() {
@@ -33,7 +33,8 @@ export function ChatInterface() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const exportPDF = () => {
+  const exportPDF = async () => {
+    const { default: jsPDF } = await import("jspdf");
     const doc = new jsPDF();
     doc.setFontSize(16);
     doc.text("Nexus Chat Export", 10, 10);
