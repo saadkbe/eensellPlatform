@@ -1,13 +1,13 @@
 import { ChatInterface } from "@/components/dashboard/chat/ChatInterface";
 
 export const metadata = {
-  title: "SkyClaw Chat | Eensell University",
-  description: "Chat with SkyClaw, your AI assistant.",
+  title: "Nexus AI | Eensell University",
+  description: "Chat with Nexus, your personal AI mentor.",
 };
 
 export default function ChatPage() {
   return (
-    <div className="h-full bg-background rounded-2xl overflow-hidden border border-border shadow-sm">
+    <div className="h-full">
       <ChatInterface />
     </div>
   );
