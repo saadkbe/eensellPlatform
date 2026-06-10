@@ -1,21 +1,20 @@
 "use client";
 
-import { useChat } from "@ai-sdk/react";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { 
   Bot, Send, Plus, Target, Settings2, Zap, LayoutDashboard,
   Presentation, FileText, Image as ImageIcon, Table, Globe, Video, LayoutGrid,
   Download, Paperclip, X
 } from "lucide-react";
-// jsPDF loaded dynamically to avoid SSR crash
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
+type Message = { id: string; role: "user" | "assistant"; content: string };
+
 export function ChatInterface() {
-  // @ts-ignore - Bypass buggy typings in latest AI SDK v4+
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat();
-  const msgs: any[] = messages;
+  const [msgs, setMsgs] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [usage, setUsage] = useState({ count: 0, limit: 10 });
   const [files, setFiles] = useState<FileList | null>(null);
   const [model, setModel] = useState("GPT-4o (Premium)");
@@ -27,11 +26,11 @@ export function ChatInterface() {
       .then((res) => res.json())
       .then((data) => setUsage(data))
       .catch(console.error);
-  }, [messages]);
+  }, [msgs]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [msgs, isLoading]);
 
   const exportPDF = async () => {
     const { default: jsPDF } = await import("jspdf");
@@ -40,36 +39,70 @@ export function ChatInterface() {
     doc.text("Nexus Chat Export", 10, 10);
     doc.setFontSize(12);
     let y = 20;
-
-    msgs.forEach((m: any) => {
+    msgs.forEach((m) => {
       const text = `${m.role === "user" ? "You" : "Nexus"}: ${m.content}`;
       const splitText = doc.splitTextToSize(text, 180);
       doc.text(splitText, 10, y);
       y += splitText.length * 7 + 5;
-      if (y > 280) {
-        doc.addPage();
-        y = 20;
-      }
+      if (y > 280) { doc.addPage(); y = 20; }
     });
-
     doc.save("nexus-chat.pdf");
   };
 
-  const handleCustomSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const sendMessage = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const text = input.trim();
+    if (!text && (!files || files.length === 0)) return;
     if (usage.count >= usage.limit) {
       alert("You have reached your monthly limit of 10 messages.");
       return;
     }
-    // @ts-ignore
-    handleSubmit(e, { experimental_attachments: files });
+
+    const userMsg: Message = { id: Date.now().toString(), role: "user", content: text };
+    const newMsgs = [...msgs, userMsg];
+    setMsgs(newMsgs);
+    setInput("");
     setFiles(null);
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: newMsgs.map(({ role, content }) => ({ role, content })) }),
+      });
+
+      if (!res.ok) throw new Error(await res.text());
+
+      const reader = res.body?.getReader();
+      const decoder = new TextDecoder();
+      let assistantContent = "";
+      const assistantId = (Date.now() + 1).toString();
+
+      setMsgs((prev) => [...prev, { id: assistantId, role: "assistant", content: "" }]);
+
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          assistantContent += decoder.decode(value, { stream: true });
+          setMsgs((prev) =>
+            prev.map((m) => (m.id === assistantId ? { ...m, content: assistantContent } : m))
+          );
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      setMsgs((prev) => [
+        ...prev,
+        { id: Date.now().toString(), role: "assistant", content: "Sorry, something went wrong. Please try again! 🙏" },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const appendToInput = (text: string) => {
-    // @ts-ignore
-    handleInputChange({ target: { value: input + text } } as any);
-  };
+  const appendToInput = (text: string) => setInput((prev) => prev + text);
 
   return (
     <div className="flex flex-col h-[calc(100vh-100px)] max-w-4xl mx-auto w-full font-sans bg-background">
@@ -83,7 +116,7 @@ export function ChatInterface() {
           </div>
           <div>
             <h2 className="text-sm font-semibold text-muted-foreground flex items-center gap-2">
-              Hi, I'm Nexus
+              Hi, I&apos;m Nexus
             </h2>
             <p className="text-xl sm:text-2xl font-bold text-foreground">
               Always here to help you get things done
@@ -105,47 +138,33 @@ export function ChatInterface() {
             <p className="text-lg">How can I help you today?</p>
           </div>
         )}
-        {msgs.map((m: any) => (
+        {msgs.map((m) => (
           <div
             key={m.id}
-            className={`flex flex-col ${
-              m.role === "user" ? "items-end" : "items-start"
-            }`}
+            className={`flex flex-col ${m.role === "user" ? "items-end" : "items-start"}`}
           >
             <div
               className={`max-w-[85%] px-5 py-4 rounded-2xl shadow-sm text-sm sm:text-base leading-relaxed ${
                 m.role === "user"
                   ? "bg-foreground text-background rounded-br-sm"
-                  : "bg-white border border-border rounded-bl-sm glass"
+                  : "bg-white border border-border rounded-bl-sm"
               }`}
             >
-              {/* Very simple markdown formatting for bold/newlines */}
-              {(m.content || "").toString().split('\n').map((line: string, i: number) => (
+              {(m.content || "").split("\n").map((line, i) => (
                 <p key={i} className="mb-1">{line}</p>
-              ))}
-              {m.experimental_attachments?.map((attachment: any, idx: number) => (
-                <div key={idx} className="mt-2">
-                  {attachment.contentType?.startsWith('image/') ? (
-                    <img src={attachment.url} alt="attachment" className="max-w-xs rounded-md shadow-sm" />
-                  ) : (
-                    <div className="flex items-center gap-2 text-xs bg-black/10 p-2 rounded-md">
-                      <Paperclip className="w-3 h-3" /> File attached
-                    </div>
-                  )}
-                </div>
               ))}
             </div>
           </div>
         ))}
         {isLoading && (
           <div className="flex items-start">
-             <div className="max-w-[85%] px-5 py-4 rounded-2xl bg-white border border-border shadow-sm rounded-bl-sm glass">
-               <span className="flex gap-1">
-                 <span className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" />
-                 <span className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce delay-75" />
-                 <span className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce delay-150" />
-               </span>
-             </div>
+            <div className="max-w-[85%] px-5 py-4 rounded-2xl bg-white border border-border shadow-sm rounded-bl-sm">
+              <span className="flex gap-1">
+                <span className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce" />
+                <span className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce delay-75" />
+                <span className="w-2 h-2 rounded-full bg-muted-foreground/40 animate-bounce delay-150" />
+              </span>
+            </div>
           </div>
         )}
         <div ref={messagesEndRef} />
@@ -153,23 +172,23 @@ export function ChatInterface() {
 
       {/* Input Area */}
       <div className="px-4 pb-4">
-        <form onSubmit={handleCustomSubmit} className="relative group">
-          <div className="glass bg-white/70 backdrop-blur-xl border border-border/80 shadow-elevated rounded-3xl p-2 transition-all duration-300 focus-within:shadow-premium focus-within:border-brand/40 focus-within:bg-white flex flex-col">
+        <form onSubmit={sendMessage} className="relative group">
+          <div className="bg-white border border-border/80 shadow-sm rounded-3xl p-2 transition-all duration-300 flex flex-col">
             
             {files && files.length > 0 && (
               <div className="flex flex-wrap gap-2 px-4 pt-2 pb-1">
                 {Array.from(files).map((file, i) => (
                   <div key={i} className="relative w-12 h-12 rounded-md overflow-hidden bg-secondary border border-border flex shrink-0 group">
-                    {file.type.startsWith('image/') ? (
+                    {file.type.startsWith("image/") ? (
                       <img src={URL.createObjectURL(file)} alt="preview" className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-xs font-bold text-muted-foreground bg-muted">
                         <FileText className="w-5 h-5 opacity-50" />
                       </div>
                     )}
-                    <button 
+                    <button
                       type="button"
-                      onClick={() => setFiles(null)} 
+                      onClick={() => setFiles(null)}
                       className="absolute top-0.5 right-0.5 w-4 h-4 bg-black/50 hover:bg-black text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <X className="w-3 h-3" />
@@ -179,25 +198,25 @@ export function ChatInterface() {
               </div>
             )}
 
-            <input 
-              type="file" 
-              ref={fileInputRef} 
-              hidden 
-              onChange={(e) => setFiles(e.target.files)} 
-              multiple 
+            <input
+              type="file"
+              ref={fileInputRef}
+              hidden
+              onChange={(e) => setFiles(e.target.files)}
+              multiple
               accept="image/*,application/pdf,.doc,.docx,.txt"
             />
             
             <textarea
               value={input}
-              onChange={handleInputChange}
-              placeholder="Try tasks, workflows, or rescheduling tasks — type @ to add files or skills"
-              className="w-full bg-transparent border-none focus:ring-0 resize-none min-h-[60px] max-h-[200px] p-4 text-foreground placeholder:text-muted-foreground/70 text-base"
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask Nexus anything — motivation, business ideas, strategies..."
+              className="w-full bg-transparent border-none focus:ring-0 resize-none min-h-[60px] max-h-[200px] p-4 text-foreground placeholder:text-muted-foreground/70 text-base outline-none"
               rows={1}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
+                if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
-                  if (input.trim()) handleCustomSubmit(e as any);
+                  if (input.trim()) sendMessage();
                 }
               }}
             />
@@ -221,13 +240,12 @@ export function ChatInterface() {
 
               <div className="flex items-center gap-3">
                 <DropdownMenu>
-                  {/* @ts-ignore */}
                   <DropdownMenuTrigger asChild>
                     <div className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground px-2 cursor-pointer hover:text-foreground transition-colors">
                       <LayoutDashboard className="w-3.5 h-3.5" /> {model}
                     </div>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56 rounded-xl shadow-elevated border-border/50">
+                  <DropdownMenuContent align="end" className="w-56 rounded-xl shadow-lg border-border/50">
                     <DropdownMenuItem onClick={() => setModel("GPT-4o (Premium)")} className="cursor-pointer">
                       <div className="flex flex-col">
                         <span className="font-medium text-sm">GPT-4o (Premium)</span>
@@ -237,13 +255,13 @@ export function ChatInterface() {
                     <DropdownMenuItem disabled>
                       <div className="flex flex-col opacity-50">
                         <span className="font-medium text-sm">Claude 3.5 Sonnet</span>
-                        <span className="text-xs text-brand">(Upcoming)</span>
+                        <span className="text-xs text-blue-500">(Upcoming)</span>
                       </div>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   disabled={isLoading || !input.trim() || usage.count >= usage.limit}
                   className="w-10 h-10 rounded-full bg-foreground text-background hover:bg-foreground/90 disabled:opacity-50 shadow-md"
                 >
@@ -251,36 +269,34 @@ export function ChatInterface() {
                 </Button>
               </div>
             </div>
-
           </div>
         </form>
 
         {/* Action Pills */}
         <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
-          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200" onClick={() => appendToInput("Generate slides about: ")}>
+          <Button type="button" variant="outline" className="rounded-full text-sm gap-2 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200" onClick={() => appendToInput("Generate slides about: ")}>
             <Presentation className="w-4 h-4 text-rose-500" /> Slides
           </Button>
-          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200" onClick={exportPDF}>
+          <Button type="button" variant="outline" className="rounded-full text-sm gap-2 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200" onClick={exportPDF}>
             <Download className="w-4 h-4 text-blue-500" /> Export PDF
           </Button>
-          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200" onClick={() => appendToInput("Generate an image of: ")}>
+          <Button type="button" variant="outline" className="rounded-full text-sm gap-2 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200" onClick={() => appendToInput("Generate an image of: ")}>
             <ImageIcon className="w-4 h-4 text-amber-500" /> Images
           </Button>
-          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200" onClick={() => appendToInput("Create a spreadsheet/table for: ")}>
+          <Button type="button" variant="outline" className="rounded-full text-sm gap-2 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200" onClick={() => appendToInput("Create a spreadsheet/table for: ")}>
             <Table className="w-4 h-4 text-emerald-500" /> Sheets
           </Button>
-          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200" onClick={() => appendToInput("Write a landing page copy for: ")}>
+          <Button type="button" variant="outline" className="rounded-full text-sm gap-2 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200" onClick={() => appendToInput("Write a landing page copy for: ")}>
             <Globe className="w-4 h-4 text-purple-500" /> Websites
           </Button>
-          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-pink-50 hover:text-pink-600 hover:border-pink-200" onClick={() => appendToInput("Write a highly engaging video script about: ")}>
+          <Button type="button" variant="outline" className="rounded-full text-sm gap-2 hover:bg-pink-50 hover:text-pink-600 hover:border-pink-200" onClick={() => appendToInput("Write a highly engaging video script about: ")}>
             <Video className="w-4 h-4 text-pink-500" /> Videos
           </Button>
-          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-secondary" onClick={() => appendToInput("What are all the skills you can perform? ")}>
+          <Button type="button" variant="outline" className="rounded-full text-sm gap-2" onClick={() => appendToInput("What are all the skills you can perform? ")}>
             <LayoutGrid className="w-4 h-4 text-teal-500" /> All Skills
           </Button>
         </div>
       </div>
-      
     </div>
   );
 }
