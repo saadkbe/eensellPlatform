@@ -1,20 +1,24 @@
 "use client";
 
-import { useChat } from "ai/react";
+import { useChat } from "@ai-sdk/react";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
   Bot, Send, Plus, Target, Settings2, Zap, LayoutDashboard,
   Presentation, FileText, Image as ImageIcon, Table, Globe, Video, LayoutGrid,
-  Download
+  Download, Paperclip, X
 } from "lucide-react";
 import jsPDF from "jspdf";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export function ChatInterface() {
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat();
   const [usage, setUsage] = useState({ count: 0, limit: 10 });
+  const [files, setFiles] = useState<FileList | null>(null);
+  const [model, setModel] = useState("GPT-4o (Premium)");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetch("/api/chat/usage")
@@ -30,12 +34,12 @@ export function ChatInterface() {
   const exportPDF = () => {
     const doc = new jsPDF();
     doc.setFontSize(16);
-    doc.text("Eensell University - SkyClaw Chat Export", 10, 10);
+    doc.text("Nexus Chat Export", 10, 10);
     doc.setFontSize(12);
     let y = 20;
 
     messages.forEach((m) => {
-      const text = `${m.role === "user" ? "You" : "SkyClaw"}: ${m.content}`;
+      const text = `${m.role === "user" ? "You" : "Nexus"}: ${m.content}`;
       const splitText = doc.splitTextToSize(text, 180);
       doc.text(splitText, 10, y);
       y += splitText.length * 7 + 5;
@@ -45,7 +49,7 @@ export function ChatInterface() {
       }
     });
 
-    doc.save("skyclaw-chat.pdf");
+    doc.save("nexus-chat.pdf");
   };
 
   const handleCustomSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -54,7 +58,8 @@ export function ChatInterface() {
       alert("You have reached your monthly limit of 10 messages.");
       return;
     }
-    handleSubmit(e);
+    handleSubmit(e, { experimental_attachments: files });
+    setFiles(null);
   };
 
   const appendToInput = (text: string) => {
@@ -73,7 +78,7 @@ export function ChatInterface() {
           </div>
           <div>
             <h2 className="text-sm font-semibold text-muted-foreground flex items-center gap-2">
-              Hi, I'm SkyClaw
+              Hi, I'm Nexus
             </h2>
             <p className="text-xl sm:text-2xl font-bold text-foreground">
               Always here to help you get things done
@@ -113,6 +118,17 @@ export function ChatInterface() {
               {m.content.split('\n').map((line, i) => (
                 <p key={i} className="mb-1">{line}</p>
               ))}
+              {m.experimental_attachments?.map((attachment, idx) => (
+                <div key={idx} className="mt-2">
+                  {attachment.contentType?.startsWith('image/') ? (
+                    <img src={attachment.url} alt="attachment" className="max-w-xs rounded-md shadow-sm" />
+                  ) : (
+                    <div className="flex items-center gap-2 text-xs bg-black/10 p-2 rounded-md">
+                      <Paperclip className="w-3 h-3" /> File attached
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         ))}
@@ -133,7 +149,39 @@ export function ChatInterface() {
       {/* Input Area */}
       <div className="px-4 pb-4">
         <form onSubmit={handleCustomSubmit} className="relative group">
-          <div className="glass bg-white/70 backdrop-blur-xl border border-border/80 shadow-elevated rounded-3xl p-2 transition-all duration-300 focus-within:shadow-premium focus-within:border-brand/40 focus-within:bg-white">
+          <div className="glass bg-white/70 backdrop-blur-xl border border-border/80 shadow-elevated rounded-3xl p-2 transition-all duration-300 focus-within:shadow-premium focus-within:border-brand/40 focus-within:bg-white flex flex-col">
+            
+            {files && files.length > 0 && (
+              <div className="flex flex-wrap gap-2 px-4 pt-2 pb-1">
+                {Array.from(files).map((file, i) => (
+                  <div key={i} className="relative w-12 h-12 rounded-md overflow-hidden bg-secondary border border-border flex shrink-0 group">
+                    {file.type.startsWith('image/') ? (
+                      <img src={URL.createObjectURL(file)} alt="preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-xs font-bold text-muted-foreground bg-muted">
+                        <FileText className="w-5 h-5 opacity-50" />
+                      </div>
+                    )}
+                    <button 
+                      type="button"
+                      onClick={() => setFiles(null)} 
+                      className="absolute top-0.5 right-0.5 w-4 h-4 bg-black/50 hover:bg-black text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              hidden 
+              onChange={(e) => setFiles(e.target.files)} 
+              multiple 
+              accept="image/*,application/pdf,.doc,.docx,.txt"
+            />
             
             <textarea
               value={input}
@@ -152,24 +200,42 @@ export function ChatInterface() {
             {/* Input Toolbar */}
             <div className="flex items-center justify-between px-2 pb-2">
               <div className="flex items-center gap-2">
-                <Button type="button" variant="ghost" size="icon" className="w-8 h-8 rounded-full bg-secondary/50 hover:bg-secondary">
+                <Button type="button" onClick={() => fileInputRef.current?.click()} variant="ghost" size="icon" className="w-8 h-8 rounded-full bg-secondary/50 hover:bg-secondary">
                   <Plus className="w-4 h-4" />
                 </Button>
-                <Button type="button" variant="ghost" size="icon" className="w-8 h-8 rounded-full bg-secondary/50 hover:bg-secondary">
+                <Button type="button" onClick={() => appendToInput("@ ")} variant="ghost" size="icon" className="w-8 h-8 rounded-full bg-secondary/50 hover:bg-secondary">
                   <Target className="w-4 h-4" />
                 </Button>
-                <Button type="button" variant="ghost" className="h-8 rounded-full bg-secondary/50 hover:bg-secondary text-xs px-3 gap-1.5 font-medium">
+                <Button type="button" onClick={() => appendToInput("How do I connect external tools? ")} variant="ghost" className="h-8 rounded-full bg-secondary/50 hover:bg-secondary text-xs px-3 gap-1.5 font-medium">
                   <Settings2 className="w-3.5 h-3.5" /> Connect Tools
                 </Button>
-                <Button type="button" variant="ghost" className="h-8 rounded-full bg-secondary/50 hover:bg-secondary text-xs px-3 gap-1.5 font-medium">
+                <Button type="button" onClick={() => appendToInput("List your available skills. ")} variant="ghost" className="h-8 rounded-full bg-secondary/50 hover:bg-secondary text-xs px-3 gap-1.5 font-medium">
                   <Zap className="w-3.5 h-3.5" /> Skills
                 </Button>
               </div>
 
               <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground px-2">
-                  <LayoutDashboard className="w-3.5 h-3.5" /> Auto Model
-                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground px-2 cursor-pointer hover:text-foreground transition-colors">
+                      <LayoutDashboard className="w-3.5 h-3.5" /> {model}
+                    </div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 rounded-xl shadow-elevated border-border/50">
+                    <DropdownMenuItem onClick={() => setModel("GPT-4o (Premium)")} className="cursor-pointer">
+                      <div className="flex flex-col">
+                        <span className="font-medium text-sm">GPT-4o (Premium)</span>
+                        <span className="text-xs text-muted-foreground">Fast, high intelligence</span>
+                      </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem disabled>
+                      <div className="flex flex-col opacity-50">
+                        <span className="font-medium text-sm">Claude 3.5 Sonnet</span>
+                        <span className="text-xs text-brand">(Upcoming)</span>
+                      </div>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 <Button 
                   type="submit" 
                   disabled={isLoading || !input.trim() || usage.count >= usage.limit}
@@ -191,19 +257,19 @@ export function ChatInterface() {
           <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200" onClick={exportPDF}>
             <Download className="w-4 h-4 text-blue-500" /> Export PDF
           </Button>
-          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200">
+          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200" onClick={() => appendToInput("Generate an image of: ")}>
             <ImageIcon className="w-4 h-4 text-amber-500" /> Images
           </Button>
-          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200">
+          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200" onClick={() => appendToInput("Create a spreadsheet/table for: ")}>
             <Table className="w-4 h-4 text-emerald-500" /> Sheets
           </Button>
-          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200">
+          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200" onClick={() => appendToInput("Write a landing page copy for: ")}>
             <Globe className="w-4 h-4 text-purple-500" /> Websites
           </Button>
-          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-pink-50 hover:text-pink-600 hover:border-pink-200">
+          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-pink-50 hover:text-pink-600 hover:border-pink-200" onClick={() => appendToInput("Write a highly engaging video script about: ")}>
             <Video className="w-4 h-4 text-pink-500" /> Videos
           </Button>
-          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-secondary">
+          <Button type="button" variant="outline" className="rounded-full bg-white glass-border text-sm gap-2 hover:bg-secondary" onClick={() => appendToInput("What are all the skills you can perform? ")}>
             <LayoutGrid className="w-4 h-4 text-teal-500" /> All Skills
           </Button>
         </div>
