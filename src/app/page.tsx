@@ -1,15 +1,17 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import dynamic from "next/dynamic";
+import Image from "next/image";
 import { HeroSection } from "@/components/landing/HeroSection";
-import { PricingSection } from "@/components/landing/PricingSection";
-import { FeaturesSection } from "@/components/landing/FeaturesSection";
-import { OpportunitySection } from "@/components/landing/OpportunitySection";
-import { TransformationSection } from "@/components/landing/TransformationSection";
-import { SocialProofSection } from "@/components/landing/SocialProofSection";
-import { MotivationSection } from "@/components/landing/MotivationSection";
-import { FaqSection } from "@/components/landing/FaqSection";
-import { FinalCtaSection } from "@/components/landing/FinalCtaSection";
 import { Navbar } from "@/components/landing/Navbar";
+
+// Dynamically import below-the-fold sections
+const PricingSection = dynamic(() => import("@/components/landing/PricingSection").then(mod => mod.PricingSection));
+const FeaturesSection = dynamic(() => import("@/components/landing/FeaturesSection").then(mod => mod.FeaturesSection));
+const OpportunitySection = dynamic(() => import("@/components/landing/OpportunitySection").then(mod => mod.OpportunitySection));
+const TransformationSection = dynamic(() => import("@/components/landing/TransformationSection").then(mod => mod.TransformationSection));
+const SocialProofSection = dynamic(() => import("@/components/landing/SocialProofSection").then(mod => mod.SocialProofSection));
+const MotivationSection = dynamic(() => import("@/components/landing/MotivationSection").then(mod => mod.MotivationSection));
+const FaqSection = dynamic(() => import("@/components/landing/FaqSection").then(mod => mod.FaqSection));
+const FinalCtaSection = dynamic(() => import("@/components/landing/FinalCtaSection").then(mod => mod.FinalCtaSection));
 
 export default function HomePage() {
   return (
@@ -45,7 +47,13 @@ export default function HomePage() {
         
         <div className="container max-w-5xl mx-auto px-6">
           <div className="flex flex-col items-center gap-4">
-            <img src="/logo.png" alt="Eensell University" className="h-12 w-auto object-contain opacity-60 invert" />
+            <Image 
+              src="/logo.png" 
+              alt="Eensell University" 
+              width={160}
+              height={48}
+              className="h-12 w-auto object-contain opacity-60 invert" 
+            />
             <p className="text-background/40 text-sm font-medium">
               © {new Date().getFullYear()} Eensell University. جميع الحقوق محفوظة.
             </p>

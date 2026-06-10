@@ -1,9 +1,7 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ShieldCheck, Key, Star, MessageCircle } from "lucide-react";
+import { ScrollReveal } from "@/components/animations/ScrollReveal";
 
 export function FinalCtaSection() {
   return (
@@ -31,11 +29,8 @@ export function FinalCtaSection() {
       />
 
       <div className="container max-w-5xl mx-auto px-6 relative z-10 text-center rtl-content">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, type: "spring", bounce: 0.3 }}
+        <ScrollReveal
+          animation="scale"
           className="flex flex-col items-center"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white text-sm font-bold mb-8 border border-white/20 backdrop-blur-md">
@@ -79,7 +74,7 @@ export function FinalCtaSection() {
             </div>
           </div>
 
-        </motion.div>
+        </ScrollReveal>
       </div>
     </section>
   );

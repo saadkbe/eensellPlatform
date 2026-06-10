@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
 export function Navbar() {
@@ -27,9 +28,12 @@ export function Navbar() {
       <div className="flex items-center justify-between px-6 sm:px-12 py-4 max-w-7xl mx-auto w-full">
         <div className="flex items-center">
           <Link href="/">
-            <img
+            <Image
               src="/logo.png"
               alt="Eensell University"
+              width={200}
+              height={80}
+              priority={true}
               className="h-16 sm:h-20 w-auto object-contain origin-right scale-[1.3]"
             />
           </Link>

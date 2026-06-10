@@ -1,6 +1,3 @@
-"use client";
-
-import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +8,8 @@ import {
   Zap,
   Lock,
 } from "lucide-react";
-import { useRef, useState, useEffect, useCallback } from "react";
+import { ScrollReveal } from "@/components/animations/ScrollReveal";
+import { CountUpPrice } from "@/components/animations/CountUpPrice";
 
 /* ─── data ─── */
 const features = [
@@ -44,48 +42,9 @@ const steps = [
   },
 ];
 
-/* ─── CountUp hook ─── */
-function useCountUp(target: number, duration: number, isActive: boolean) {
-  const [value, setValue] = useState(0);
-  const startedRef = useRef(false);
-
-  const animate = useCallback(() => {
-    if (startedRef.current) return;
-    startedRef.current = true;
-
-    const startTime = performance.now();
-    const step = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / (duration * 1000), 1);
-      // ease-out cubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setValue(Math.round(eased * target));
-      if (progress < 1) {
-        requestAnimationFrame(step);
-      }
-    };
-    requestAnimationFrame(step);
-  }, [target, duration]);
-
-  useEffect(() => {
-    if (isActive) animate();
-  }, [isActive, animate]);
-
-  return value;
-}
-
 export function PricingSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const priceRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.15 });
-  const priceInView = useInView(priceRef, { once: true, amount: 0.5 });
-  const countedPrice = useCountUp(200, 1.5, priceInView);
-
   return (
-    <section
-      ref={sectionRef}
-      className="relative py-24 sm:py-32 bg-foreground text-background overflow-hidden"
-    >
+    <section className="relative py-24 sm:py-32 bg-foreground text-background overflow-hidden">
       {/* ═══ DARK CINEMATIC BACKGROUND ═══ */}
       {/* Large glowing brand orb */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-brand/15 rounded-full blur-[120px] pointer-events-none" />
@@ -101,35 +60,28 @@ export function PricingSection() {
       <div className="container max-w-6xl mx-auto px-6 relative z-10">
         {/* ═══ SECTION HEADER ═══ */}
         <div className="text-center mb-16 sm:mb-20">
-          <motion.h2
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+          <ScrollReveal
+            animation="slide-up"
             className="text-4xl sm:text-5xl md:text-6xl font-black text-background mb-6 tracking-tight"
           >
             استثمارك نحو{" "}
             <span className="text-brand">الحرية المالية</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.15 }}
+          </ScrollReveal>
+          <ScrollReveal
+            animation="slide-up"
+            delay={0.15}
             className="text-xl text-background/60 max-w-2xl mx-auto font-medium"
           >
             ادفع مرة واحدة اليوم، واحصل على وصول مدى الحياة
-          </motion.p>
+          </ScrollReveal>
         </div>
 
         {/* ═══ TWO-COLUMN GRID ═══ */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start rtl-content text-right">
           {/* ─── PRICING CARD (5-col) ─── */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.1 }}
+          <ScrollReveal
+            animation="slide-up"
+            delay={0.1}
             className="lg:col-span-5 order-1"
           >
             {/* Animated rotating border wrapper */}
@@ -156,10 +108,12 @@ export function PricingSection() {
                 </p>
 
                 {/* Animated price */}
-                <div ref={priceRef} className="flex items-baseline gap-3 mb-2">
-                  <span className="text-7xl sm:text-8xl font-black text-background tabular-nums tracking-tight">
-                    {countedPrice}
-                  </span>
+                <div className="flex items-baseline gap-3 mb-2">
+                  <CountUpPrice
+                    target={200}
+                    duration={1.5}
+                    className="text-7xl sm:text-8xl font-black text-background tabular-nums tracking-tight"
+                  />
                   <span className="text-2xl text-background/50 font-bold">
                     MAD
                   </span>
@@ -179,12 +133,10 @@ export function PricingSection() {
                 {/* Feature checklist */}
                 <div className="space-y-4">
                   {features.map((feature, idx) => (
-                    <motion.div
+                    <ScrollReveal
                       key={idx}
-                      initial={{ opacity: 0, x: 20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: 0.3 + idx * 0.08 }}
+                      animation="slide-right"
+                      delay={0.3 + idx * 0.08}
                       className="flex items-center gap-3"
                     >
                       <div className="w-6 h-6 rounded-full bg-brand/20 flex items-center justify-center shrink-0">
@@ -196,19 +148,17 @@ export function PricingSection() {
                       <span className="font-medium text-background/75 text-[0.95rem]">
                         {feature}
                       </span>
-                    </motion.div>
+                    </ScrollReveal>
                   ))}
                 </div>
               </div>
             </div>
-          </motion.div>
+          </ScrollReveal>
 
           {/* ─── STEPS TIMELINE (7-col) ─── */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.25 }}
+          <ScrollReveal
+            animation="slide-left"
+            delay={0.25}
             className="lg:col-span-7 order-2"
           >
             <h3 className="text-2xl sm:text-3xl font-bold text-background mb-10">
@@ -219,12 +169,11 @@ export function PricingSection() {
             {/* Vertical timeline */}
             <div className="relative">
               {/* Connecting line */}
-              <motion.div
-                initial={{ scaleY: 0 }}
-                whileInView={{ scaleY: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
-                className="absolute right-6 top-0 bottom-0 w-[2px] bg-gradient-to-b from-brand via-success to-warning origin-top hidden sm:block"
+              <ScrollReveal
+                animation="scale"
+                delay={0.4}
+                duration={1.2}
+                className="absolute right-6 top-0 bottom-0 w-[2px] bg-gradient-to-b from-brand via-success to-warning origin-top hidden sm:block origin-top-scale"
               />
 
               <div className="space-y-10 sm:space-y-12">
@@ -244,15 +193,10 @@ export function PricingSection() {
                   const iconColor = iconColorMap[step.color];
 
                   return (
-                    <motion.div
+                    <ScrollReveal
                       key={idx}
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{
-                        duration: 0.5,
-                        delay: 0.3 + idx * 0.2,
-                      }}
+                      animation="slide-up"
+                      delay={0.3 + idx * 0.2}
                       className="flex gap-5 sm:gap-6 items-start relative"
                     >
                       {/* Step number circle */}
@@ -280,18 +224,16 @@ export function PricingSection() {
                           {step.desc}
                         </p>
                       </div>
-                    </motion.div>
+                    </ScrollReveal>
                   );
                 })}
               </div>
             </div>
 
             {/* Trust badges */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.9 }}
+            <ScrollReveal
+              animation="slide-up"
+              delay={0.9}
               className="flex flex-wrap gap-4 mt-12 pt-8 border-t border-white/10"
             >
               <div className="flex items-center gap-2.5 text-sm text-background/60 bg-white/5 px-5 py-3 rounded-full border border-white/10 hover:border-brand/30 transition-colors">
@@ -302,16 +244,14 @@ export function PricingSection() {
                 <Lock className="w-4 h-4 text-success" />
                 <span className="font-medium">خصوصية تامة</span>
               </div>
-            </motion.div>
-          </motion.div>
+            </ScrollReveal>
+          </ScrollReveal>
         </div>
 
         {/* ═══ URGENCY BANNER ═══ */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+        <ScrollReveal
+          animation="slide-up"
+          delay={0.3}
           className="mt-16 sm:mt-20"
         >
           <div className="relative overflow-hidden rounded-2xl border border-brand/30 bg-brand/10 backdrop-blur-sm px-6 py-5 text-center animate-pulse-slow">
@@ -322,7 +262,7 @@ export function PricingSection() {
               العرض التأسيسي محدود — الأماكن تنفد بسرعة
             </p>
           </div>
-        </motion.div>
+        </ScrollReveal>
       </div>
     </section>
   );

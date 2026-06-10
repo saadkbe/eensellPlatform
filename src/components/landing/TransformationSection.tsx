@@ -1,7 +1,6 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { XCircle, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
+import { ScrollReveal } from "@/components/animations/ScrollReveal";
 
 export function TransformationSection() {
   return (
@@ -17,25 +16,20 @@ export function TransformationSection() {
 
       <div className="container max-w-5xl mx-auto px-6 relative z-10 text-right rtl-content">
         <div className="text-center mb-20 flex flex-col items-center">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+          <ScrollReveal
+            animation="slide-up"
             className="text-4xl sm:text-5xl md:text-6xl font-black mb-4 leading-tight"
           >
             أنت لا تشتري دورة..<br />
             <span className="text-brand-light text-glow">أنت تستثمر في نسختك المستقبلية.</span>
-          </motion.h2>
+          </ScrollReveal>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-8 md:gap-4 items-stretch relative">
           
           {/* Before Card */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+          <ScrollReveal
+            animation="slide-right"
             className="rounded-[2rem] bg-white/5 border border-white/10 p-8 sm:p-10 relative overflow-hidden backdrop-blur-md grayscale-[0.5]"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-error/10 blur-[50px] rounded-full" />
@@ -57,28 +51,25 @@ export function TransformationSection() {
                 </li>
               ))}
             </ul>
-          </motion.div>
+          </ScrollReveal>
 
           {/* Divider */}
           <div className="hidden md:flex flex-col items-center justify-center relative py-10">
             <div className="w-px h-full bg-gradient-to-b from-transparent via-brand/50 to-transparent" />
-            <motion.div 
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+            <ScrollReveal 
+              animation="scale"
+              delay={0.3}
+              duration={0.5}
               className="absolute top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-foreground border-4 border-brand flex items-center justify-center z-10 shadow-[0_0_30px_rgba(59,130,246,0.5)]"
             >
               <span className="text-brand font-black text-sm">VS</span>
-            </motion.div>
+            </ScrollReveal>
           </div>
 
           {/* After Card */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          <ScrollReveal
+            animation="slide-left"
+            delay={0.2}
             className="rounded-[2rem] bg-brand/10 border border-brand/30 p-8 sm:p-10 relative overflow-hidden backdrop-blur-md glow-brand"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-brand/20 via-success/10 to-transparent opacity-50" />
@@ -104,28 +95,32 @@ export function TransformationSection() {
                 ))}
               </ul>
             </div>
-          </motion.div>
+          </ScrollReveal>
 
         </div>
 
         {/* Floating Testimonial Snippet */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.5 }}
+        <ScrollReveal
+          animation="slide-up"
+          delay={0.5}
           className="absolute -bottom-6 lg:-bottom-10 left-6 lg:left-20 z-20 animate-float hidden sm:block"
         >
           <div className="bg-background/10 backdrop-blur-xl border border-white/20 p-4 rounded-2xl shadow-2xl flex items-center gap-4">
             <div className="w-12 h-12 rounded-full border-2 border-brand overflow-hidden bg-foreground">
-              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ahmad" alt="Ahmad" className="w-full h-full object-cover" />
+              <Image 
+                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ahmad" 
+                alt="Ahmad" 
+                width={48}
+                height={48}
+                className="w-full h-full object-cover" 
+              />
             </div>
             <div>
               <p className="text-white font-bold text-sm mb-1">أحمد م.</p>
               <p className="text-brand-light text-xs font-medium">"حققت 2450 درهم في شهرين"</p>
             </div>
           </div>
-        </motion.div>
+        </ScrollReveal>
         
       </div>
     </section>

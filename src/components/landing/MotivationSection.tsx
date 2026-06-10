@@ -1,6 +1,4 @@
-"use client";
-
-import { motion } from "framer-motion";
+import { ScrollReveal } from "@/components/animations/ScrollReveal";
 
 export function MotivationSection() {
   return (
@@ -18,62 +16,49 @@ export function MotivationSection() {
 
       <div className="container max-w-4xl mx-auto px-6 relative z-10 text-center flex flex-col items-center">
         
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+        <ScrollReveal
+          animation="scale"
           className="w-16 h-16 rounded-full bg-brand/10 border border-brand/30 flex items-center justify-center mb-10 shadow-[0_0_50px_rgba(59,130,246,0.5)] glow-brand"
         >
           <div className="w-3 h-3 rounded-full bg-brand animate-ping" />
-        </motion.div>
+        </ScrollReveal>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 30, scale: 0.95 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.2 }}
+        <ScrollReveal
+          animation="slide-up"
+          delay={0.2}
           className="text-5xl sm:text-7xl md:text-8xl font-black mb-10 leading-tight tracking-tight text-white drop-shadow-2xl"
         >
           بعد 5 سنوات من الآن.. <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-b from-white/80 to-white/20">
             أين ستكون؟
           </span>
-        </motion.h2>
+        </ScrollReveal>
 
         <div className="space-y-6 text-xl sm:text-2xl text-white/70 max-w-2xl mx-auto leading-relaxed font-medium">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+          <ScrollReveal
+            animation="slide-up"
+            delay={0.4}
           >
             معظم الناس يعيشون نفس السنة 75 مرة ويسمون ذلك حياة. يستيقظون، يذهبون لعمل لا يحبونه، يعودون متعبين، ويشاهدون أحلامهم تتلاشى يوماً بعد يوم.
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.5 }}
+          </ScrollReveal>
+          <ScrollReveal
+            animation="slide-up"
+            delay={0.5}
             className="text-white font-bold"
           >
             لكنك لست "معظم الناس".
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+          </ScrollReveal>
+          <ScrollReveal
+            animation="slide-up"
+            delay={0.6}
           >
             وجودك في هذه الصفحة اليوم ليس صدفة. إنه دليل على أنك تبحث عن مخرج. عن طريق يمنحك الحرية لتعمل بشروطك، في وقتك، ومن أي مكان.
-          </motion.p>
+          </ScrollReveal>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.8 }}
+        <ScrollReveal
+          animation="slide-up"
+          delay={0.8}
           className="mt-20 w-full"
         >
           <div className="glass-card rounded-[2.5rem] p-10 sm:p-16 border border-white/10 relative overflow-hidden group shadow-2xl">
@@ -90,7 +75,7 @@ export function MotivationSection() {
               لا تؤجل نجاحك. العالم الرقمي لا ينتظر المترددين.
             </p>
           </div>
-        </motion.div>
+        </ScrollReveal>
 
       </div>
     </section>

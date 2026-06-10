@@ -1,10 +1,9 @@
-"use client";
-
-import { motion, useInView } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Sparkles, ChevronDown, Play } from "lucide-react";
-import { useRef } from "react";
+import { ScrollReveal } from "@/components/animations/ScrollReveal";
+import { StaggeredText } from "@/components/animations/StaggeredText";
 
 /* ─── animation helpers ─── */
 const headlineWords = [
@@ -27,16 +26,9 @@ const trustItems = [
 ];
 
 export function HeroSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
-
   return (
-    <section
-      ref={sectionRef}
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-32 pb-0 bg-background"
-    >
+    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-32 pb-0 bg-background">
       {/* ═══ BACKGROUND LAYER ═══ */}
-
       {/* Animated gradient orbs */}
       <div className="orb orb-1 -top-40 -right-40 opacity-70" />
       <div className="orb orb-2 top-1/3 -left-60 opacity-60" />
@@ -54,10 +46,8 @@ export function HeroSection() {
       {/* ═══ CONTENT ═══ */}
       <div className="relative z-20 container max-w-5xl mx-auto px-6 text-center flex flex-col items-center">
         {/* Animated badge with shimmer */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 10 }}
-          animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
+        <ScrollReveal
+          animation="slide-up"
           className="relative inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-border/50 backdrop-blur-md mb-10 shadow-sm overflow-hidden"
         >
           {/* Shimmer sweep background */}
@@ -76,64 +66,29 @@ export function HeroSection() {
           <span className="text-sm font-bold text-foreground relative z-10">
             التسجيل مفتوح للأعضاء المؤسسين
           </span>
-        </motion.div>
+        </ScrollReveal>
 
         {/* Staggered word headline */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[5.5rem] font-black text-foreground tracking-tight leading-[1.35] md:leading-[1.15] mb-6 md:mb-8">
-          {[1, 2, 3].map((lineNum) => (
-            <span key={lineNum} className="block">
-              {headlineWords
-                .filter((w) => w.line === lineNum)
-                .map((word, idx) => (
-                  <motion.span
-                    key={`${lineNum}-${idx}`}
-                    initial={{ opacity: 0, y: 25, filter: "blur(6px)" }}
-                    animate={
-                      isInView
-                        ? { opacity: 1, y: 0, filter: "blur(0px)" }
-                        : {}
-                    }
-                    transition={{
-                      duration: 0.5,
-                      delay:
-                        0.15 +
-                        headlineWords.findIndex(
-                          (w) => w === word
-                        ) *
-                          0.08,
-                      ease: [0.25, 0.4, 0.25, 1],
-                    }}
-                    className={`inline-block ${
-                      lineNum === 2 ? "text-brand" : ""
-                    }`}
-                  >
-                    {word.text}
-                    {idx <
-                      headlineWords.filter((w) => w.line === lineNum).length -
-                        1 && "\u00A0"}
-                  </motion.span>
-                ))}
-            </span>
-          ))}
-        </h1>
+        <StaggeredText
+          words={headlineWords}
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-[5.5rem] font-black text-foreground tracking-tight leading-[1.35] md:leading-[1.15] mb-6 md:mb-8"
+        />
 
         {/* Sub-headline */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.7 }}
+        <ScrollReveal
+          animation="slide-up"
+          delay={0.7}
           className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-10 md:mb-12 leading-relaxed font-medium px-2 md:px-0"
         >
           الطريق التقليدي لن يجعلك حراً أبداً. انضم إلى الحركة الحصرية
           للمؤسسين الذين يربحون المال يومياً باستخدام أحدث أدوات الذكاء
           الاصطناعي.. بدون خبرة سابقة.
-        </motion.p>
+        </ScrollReveal>
 
         {/* Dual CTA buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.85 }}
+        <ScrollReveal
+          animation="slide-up"
+          delay={0.85}
           className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto"
         >
           <Link href="/sign-up" className="w-full sm:w-auto">
@@ -155,47 +110,44 @@ export function HeroSection() {
               شاهد كيف يعمل
             </Button>
           </Link>
-        </motion.div>
+        </ScrollReveal>
 
         {/* Trust note */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 1, delay: 1.1 }}
+        <ScrollReveal
+          animation="fade"
+          delay={1.1}
           className="mt-8 flex items-center gap-2 text-sm font-bold text-muted-foreground"
         >
           <Sparkles className="w-4 h-4 text-brand" />
           <span>الأماكن التأسيسية محدودة وسيتم إغلاقها قريباً</span>
-        </motion.div>
+        </ScrollReveal>
       </div>
 
       {/* ═══ DASHBOARD PREVIEW ═══ */}
       <div className="absolute bottom-0 w-full h-40 bg-gradient-to-t from-background to-transparent z-30 pointer-events-none" />
 
-      <motion.div
-        initial={{ y: 100, opacity: 0 }}
-        animate={isInView ? { y: 0, opacity: 1 } : {}}
-        transition={{ duration: 1, delay: 0.7, type: "spring", bounce: 0.25 }}
+      <ScrollReveal
+        animation="slide-up"
+        delay={0.7}
         className="mt-20 relative w-full max-w-5xl mx-auto px-6 z-20"
       >
         <div className="perspective-container">
           <div className="tilt-card w-full rounded-t-[2.5rem] border-t border-x border-brand/30 shadow-[0_-20px_80px_rgba(59,130,246,0.18)] overflow-hidden relative bg-card glow-blue">
-            <img
+            <Image
               src="/dashboard.png"
               alt="Eensell University Dashboard"
+              width={1200}
+              height={800}
+              priority={true}
               className="w-full h-auto object-cover opacity-90"
             />
 
+            {/* Note: In a pure Server Component, we can't use Framer Motion's continuous 'animate' on div directly.
+                For this aggressive optimization, we'll replace continuous y-axis floating with pure CSS animations
+                so we don't need a client component here. */}
+                
             {/* Floating overlay 1 — Revenue */}
-            <motion.div
-              className="absolute top-10 left-4 md:left-10 p-4 bg-white/90 dark:bg-black/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-success/30 z-10 hidden sm:flex items-center gap-4"
-              animate={{ y: [0, -12, 0] }}
-              transition={{
-                duration: 4.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
+            <div className="absolute top-10 left-4 md:left-10 p-4 bg-white/90 dark:bg-black/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-success/30 z-10 hidden sm:flex items-center gap-4 animate-float-slow">
               <div className="w-12 h-12 rounded-full bg-success/10 flex items-center justify-center">
                 <span className="text-success font-black text-xl">$</span>
               </div>
@@ -206,57 +158,22 @@ export function HeroSection() {
                 <span className="text-lg font-black text-foreground flex items-center gap-2">
                   +2,450 MAD
                   {/* Mini green trend line */}
-                  <svg
-                    width="40"
-                    height="18"
-                    viewBox="0 0 40 18"
-                    fill="none"
-                    className="inline-block"
-                  >
-                    <path
-                      d="M2 14 L8 10 L14 12 L20 6 L26 8 L32 3 L38 2"
-                      stroke="#10B981"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M2 14 L8 10 L14 12 L20 6 L26 8 L32 3 L38 2 L38 18 L2 18Z"
-                      fill="url(#trendGrad)"
-                      opacity="0.2"
-                    />
+                  <svg width="40" height="18" viewBox="0 0 40 18" fill="none" className="inline-block">
+                    <path d="M2 14 L8 10 L14 12 L20 6 L26 8 L32 3 L38 2" stroke="#10B981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M2 14 L8 10 L14 12 L20 6 L26 8 L32 3 L38 2 L38 18 L2 18Z" fill="url(#trendGrad)" opacity="0.2" />
                     <defs>
-                      <linearGradient
-                        id="trendGrad"
-                        x1="20"
-                        y1="2"
-                        x2="20"
-                        y2="18"
-                      >
+                      <linearGradient id="trendGrad" x1="20" y1="2" x2="20" y2="18">
                         <stop offset="0%" stopColor="#10B981" />
-                        <stop
-                          offset="100%"
-                          stopColor="#10B981"
-                          stopOpacity="0"
-                        />
+                        <stop offset="100%" stopColor="#10B981" stopOpacity="0" />
                       </linearGradient>
                     </defs>
                   </svg>
                 </span>
               </div>
-            </motion.div>
+            </div>
 
             {/* Floating overlay 2 — Live session */}
-            <motion.div
-              className="absolute bottom-1/4 right-4 md:right-10 p-4 bg-white/90 dark:bg-black/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-brand/30 z-10 hidden sm:flex items-center gap-4"
-              animate={{ y: [0, 10, 0] }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1,
-              }}
-            >
+            <div className="absolute bottom-1/4 right-4 md:right-10 p-4 bg-white/90 dark:bg-black/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-brand/30 z-10 hidden sm:flex items-center gap-4 animate-float" style={{ animationDelay: '1s' }}>
               <div className="text-right rtl-content">
                 <span className="text-sm font-bold text-foreground block">
                   جلسة عمل حية
@@ -268,31 +185,21 @@ export function HeroSection() {
               </div>
               <div className="flex -space-x-2">
                 {[31, 32, 33].map((seed) => (
-                  <div
-                    key={seed}
-                    className="w-10 h-10 rounded-full border-2 border-white dark:border-black overflow-hidden bg-secondary"
-                  >
-                    <img
+                  <div key={seed} className="w-10 h-10 rounded-full border-2 border-white dark:border-black overflow-hidden bg-secondary">
+                    <Image
                       src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`}
                       alt="user"
+                      width={40}
+                      height={40}
                       className="w-full h-full object-cover"
                     />
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
 
             {/* Floating overlay 3 — AI Tools */}
-            <motion.div
-              className="absolute top-1/3 right-4 md:right-10 p-4 bg-white/90 dark:bg-black/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-warning/30 z-10 hidden sm:flex items-center gap-3"
-              animate={{ y: [0, -8, 0] }}
-              transition={{
-                duration: 5.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 2,
-              }}
-            >
+            <div className="absolute top-1/3 right-4 md:right-10 p-4 bg-white/90 dark:bg-black/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-warning/30 z-10 hidden sm:flex items-center gap-3 animate-float-slow" style={{ animationDelay: '2s' }}>
               <div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center text-lg">
                 🤖
               </div>
@@ -305,10 +212,10 @@ export function HeroSection() {
                   12 أداة ذكاء اصطناعي
                 </span>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
-      </motion.div>
+      </ScrollReveal>
 
       {/* ═══ MARQUEE TRUST TICKER ═══ */}
       <div className="relative w-full mt-0 pt-8 pb-6 z-20 overflow-hidden border-t border-border/30 bg-background">
@@ -328,17 +235,16 @@ export function HeroSection() {
       </div>
 
       {/* ═══ SCROLL INDICATOR ═══ */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={isInView ? { opacity: 1 } : {}}
-        transition={{ delay: 1.8, duration: 0.6 }}
+      <ScrollReveal
+        animation="fade"
+        delay={1.8}
         className="pb-8 z-20 flex flex-col items-center gap-2"
       >
         <span className="text-xs text-muted-foreground font-medium">
           اكتشف المزيد
         </span>
         <ChevronDown className="w-5 h-5 text-muted-foreground animate-bounce-slow" />
-      </motion.div>
+      </ScrollReveal>
     </section>
   );
 }

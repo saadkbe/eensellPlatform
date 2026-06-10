@@ -1,7 +1,6 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { Star } from "lucide-react";
+import Image from "next/image";
+import { ScrollReveal } from "@/components/animations/ScrollReveal";
 
 const testimonials = [
   {
@@ -53,16 +52,20 @@ export function SocialProofSection() {
         <div className="text-center flex flex-col items-center">
           
           {/* Avatar Stack & Stars */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+          <ScrollReveal 
+            animation="slide-up"
             className="flex flex-col items-center mb-8"
           >
             <div className="flex -space-x-3 rtl:space-x-reverse mb-4">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                 <div key={i} className="w-12 h-12 rounded-full border-2 border-background overflow-hidden bg-secondary shadow-sm relative z-10">
-                  <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=member${i}`} alt="Member" className="w-full h-full object-cover" />
+                  <Image 
+                    src={`https://api.dicebear.com/7.x/avataaars/svg?seed=member${i}`} 
+                    alt="Member" 
+                    width={48}
+                    height={48}
+                    className="w-full h-full object-cover" 
+                  />
                 </div>
               ))}
               <div className="w-auto px-4 h-12 rounded-full border-2 border-background bg-secondary flex items-center justify-center relative z-20 text-sm font-bold text-foreground">
@@ -75,26 +78,22 @@ export function SocialProofSection() {
                 <Star key={i} className="w-6 h-6 fill-warning text-warning" />
               ))}
             </div>
-          </motion.div>
+          </ScrollReveal>
 
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+          <ScrollReveal 
+            animation="slide-up"
+            delay={0.1}
             className="text-4xl sm:text-5xl font-black text-foreground mb-6"
           >
             قصص نجاح واقعية، أرباح حقيقية.
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+          </ScrollReveal>
+          <ScrollReveal 
+            animation="slide-up"
+            delay={0.2}
             className="text-xl text-muted-foreground max-w-2xl"
           >
             لا نبيع الوهم. هؤلاء أشخاص مثلك اتخذوا القرار وبدأوا في جني الأرباح.
-          </motion.p>
+          </ScrollReveal>
         </div>
       </div>
 
@@ -117,7 +116,13 @@ export function SocialProofSection() {
                    
                    <div className="flex items-center gap-3 w-full">
                       <div className="w-14 h-14 rounded-full bg-brand/5 flex items-center justify-center overflow-hidden border border-border">
-                        <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${test.seed}`} alt={test.name} className="w-full h-full object-cover" />
+                        <Image 
+                          src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${test.seed}`} 
+                          alt={test.name} 
+                          width={56}
+                          height={56}
+                          className="w-full h-full object-cover" 
+                        />
                       </div>
                       <div>
                         <h4 className="font-bold text-foreground text-lg">{test.name}</h4>
@@ -136,11 +141,9 @@ export function SocialProofSection() {
       </div>
 
       {/* Floating Toast */}
-      <motion.div 
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.5, duration: 0.5, type: "spring" }}
+      <ScrollReveal 
+        animation="slide-up"
+        delay={0.5}
         className="fixed bottom-6 left-1/2 -translate-x-1/2 md:translate-x-0 md:left-auto md:right-6 z-40"
       >
         <div className="glass bg-background/80 backdrop-blur-xl border border-border shadow-elevated px-6 py-4 rounded-2xl flex items-center gap-4 w-max max-w-[90vw]">
@@ -150,7 +153,7 @@ export function SocialProofSection() {
           </span>
           <span className="text-sm sm:text-base font-bold text-foreground">طالب جديد حقق 1500 درهم اليوم</span>
         </div>
-      </motion.div>
+      </ScrollReveal>
 
     </section>
   );

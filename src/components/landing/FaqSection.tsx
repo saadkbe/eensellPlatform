@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { HelpCircle } from "lucide-react";
 import {
   Accordion,
@@ -8,6 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { ScrollReveal } from "@/components/animations/ScrollReveal";
 
 const faqs = [
   {
@@ -57,11 +55,8 @@ export function FaqSection() {
               FAQ
             </div>
             
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+            <ScrollReveal
+              animation="slide-left"
               className="relative z-10 mt-10 lg:mt-20"
             >
               <div className="w-20 h-20 rounded-full bg-brand/10 border border-brand/20 flex items-center justify-center mb-8 mx-auto lg:mx-0 shadow-[0_0_40px_rgba(59,130,246,0.2)] glow-blue">
@@ -75,16 +70,14 @@ export function FaqSection() {
               <p className="text-xl text-muted-foreground font-medium">
                 كل ما تحتاج معرفته قبل الانضمام.
               </p>
-            </motion.div>
+            </ScrollReveal>
           </div>
 
           {/* Right Column - Accordion */}
           <div className="lg:col-span-7">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+            <ScrollReveal
+              animation="slide-up"
+              delay={0.2}
             >
               <Accordion className="w-full space-y-4">
                 {faqs.map((faq, idx) => (
@@ -107,7 +100,7 @@ export function FaqSection() {
                   </AccordionItem>
                 ))}
               </Accordion>
-            </motion.div>
+            </ScrollReveal>
           </div>
           
         </div>
