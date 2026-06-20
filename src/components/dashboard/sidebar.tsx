@@ -83,7 +83,7 @@ function SidebarContent({
       <nav className="flex-1 px-3 py-4 space-y-5 overflow-y-auto no-scrollbar">
         {navSections.map((section) => (
           <div key={section.label}>
-            <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/60">
+            <p className="px-3 mb-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/60">
               {section.label}
             </p>
             <div className="space-y-0.5">
@@ -97,7 +97,7 @@ function SidebarContent({
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      "flex justify-between items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative",
+                      "flex justify-between items-center px-3 py-2.5 rounded-lg text-[15px] font-medium transition-all duration-200 group relative",
                       active
                         ? "text-primary-foreground bg-primary"
                         : "text-muted-foreground hover:text-foreground hover:bg-secondary"
@@ -113,7 +113,7 @@ function SidebarContent({
                     <div className="flex items-center gap-3">
                       <Icon
                         className={cn(
-                          "w-[18px] h-[18px] shrink-0 transition-colors",
+                          "w-5 h-5 shrink-0 transition-colors",
                           active ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground"
                         )}
                       />
@@ -236,7 +236,7 @@ export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: bool
       </AnimatePresence>
 
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex lg:flex-col fixed left-0 top-0 h-screen w-[260px] bg-card border-r border-border z-30">
+      <aside className="hidden lg:flex lg:flex-col fixed left-0 top-0 h-screen w-[280px] bg-card border-r border-border z-30">
         <SidebarContent
           pathname={pathname}
           setMobileOpen={setMobileOpen}
