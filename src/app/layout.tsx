@@ -13,7 +13,7 @@ const cairo = Cairo({
 
 export const metadata: Metadata = {
   title: {
-    default: "Eensell University — Premium Education Platform",
+    default: "Eensell University | Premium Education Platform",
     template: "%s | Eensell University",
   },
   description:
@@ -30,13 +30,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Eensell University",
-    title: "Eensell University — Premium Education Platform",
+    title: "Eensell University | Premium Education Platform",
     description:
       "Premium AI-powered education platform for mastering modern skills.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Eensell University — Premium Education Platform",
+    title: "Eensell University | Premium Education Platform",
     description:
       "Premium AI-powered education platform for mastering modern skills.",
   },

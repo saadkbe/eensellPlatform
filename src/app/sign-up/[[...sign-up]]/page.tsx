@@ -10,9 +10,9 @@ export default function SignUpPage() {
       {/* Dark Image Background */}
       <div className="absolute inset-0 w-full h-full -z-10 bg-black">
         <img
-          src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"
+          src="/pricingBackground.jpg"
           alt="Background"
-          className="w-full h-full object-cover opacity-50 blur-md scale-105"
+          className="w-full h-full object-cover opacity-30 blur-xl scale-110"
         />
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/40 to-black/80 pointer-events-none" />
