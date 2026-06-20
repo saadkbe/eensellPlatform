@@ -26,6 +26,28 @@ export async function createLiveCall(data: {
 }) {
   await requireAdmin();
   const call = await db.liveCall.create({ data });
+
+  // Send Premium Email Template for Live Session
+  const activeUsers = await db.user.findMany({
+    where: { status: "ACTIVE" },
+    select: { email: true, firstName: true },
+  });
+  
+  if (activeUsers.length > 0) {
+    const { sendLiveSessionScheduledEmail } = await import("./email.actions");
+    const recipients = activeUsers.map(u => ({ 
+      email: u.email!, 
+      name: u.firstName || "Student" 
+    }));
+    
+    const formattedDate = new Date(data.scheduledAt).toLocaleString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    });
+    
+    await sendLiveSessionScheduledEmail(recipients, data.title, formattedDate, "/dashboard/live-calls");
+  }
+
   revalidatePath("/admin/live-calls");
   revalidatePath("/dashboard/live-calls");
   revalidatePath("/dashboard");

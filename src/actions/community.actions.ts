@@ -54,6 +54,21 @@ export async function createPost(title: string, content: string) {
     },
   });
 
+  // Send Premium Email Template for Community Post
+  const activeUsers = await db.user.findMany({
+    where: { status: "ACTIVE" },
+    select: { email: true, firstName: true },
+  });
+  
+  if (activeUsers.length > 0) {
+    const { sendCommunityPostEmail } = await import("./email.actions");
+    const recipients = activeUsers.map(u => ({ 
+      email: u.email!, 
+      name: u.firstName || "Student" 
+    }));
+    await sendCommunityPostEmail(recipients, title, "/dashboard/community");
+  }
+
   revalidatePath("/dashboard/community");
   return post;
 }

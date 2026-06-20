@@ -135,7 +135,23 @@ export async function updateModule(
       title: "🎉 محتوى جديد متاح!",
       message: `الموديول "${module.title}" أصبح متاحاً الآن. شاهده الآن!`,
       linkUrl,
+      skipEmail: true, // We send the premium custom email instead
     });
+
+    // Send Premium Email Template
+    const activeUsers = await db.user.findMany({
+      where: { status: "ACTIVE" },
+      select: { email: true, firstName: true },
+    });
+    
+    if (activeUsers.length > 0) {
+      const { sendModuleDroppedEmail } = await import("./email.actions");
+      const recipients = activeUsers.map(u => ({ 
+        email: u.email!, 
+        name: u.firstName || "Student" 
+      }));
+      await sendModuleDroppedEmail(recipients, module.title, linkUrl);
+    }
   }
 
   revalidatePath("/admin/courses");

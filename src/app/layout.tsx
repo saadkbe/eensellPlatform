@@ -1,14 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Inter, Cairo } from "next/font/google";
+import { Cairo } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
 
 const cairo = Cairo({
   subsets: ["arabic"],
@@ -100,8 +95,17 @@ export default function RootLayout({
         },
       }}
     >
-      <html lang="en" suppressHydrationWarning>
-        <body className={`${inter.variable} ${cairo.variable} font-arabic antialiased`}>
+      <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+        <head>
+          <link rel="preconnect" href="https://fonts.cdnfonts.com" />
+          <link rel="dns-prefetch" href="https://fonts.cdnfonts.com" />
+          <link rel="preconnect" href="https://flagcdn.com" />
+          <link rel="dns-prefetch" href="https://flagcdn.com" />
+          <link rel="preconnect" href="https://github.com" />
+          <link rel="preconnect" href="https://cdn.simpleicons.org" />
+          <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet" />
+        </head>
+        <body className={`${cairo.variable} font-arabic antialiased`}>
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
           <ActivityTracker />
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>

@@ -1,268 +1,182 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Check,
-  ShieldCheck,
-  UserPlus,
-  MessageCircle,
-  Zap,
-  Lock,
-} from "lucide-react";
-import { ScrollReveal } from "@/components/animations/ScrollReveal";
+import { Check, ShieldCheck, UserPlus, MessageCircle, Zap, Lock } from "lucide-react";
+import { motion } from "framer-motion";
 import { CountUpPrice } from "@/components/animations/CountUpPrice";
+import { useLanguage } from "@/components/landing/LanguageProvider";
 
-/* ─── data ─── */
-const features = [
-  "وصول مدى الحياة للمنصة",
-  "مكالمتين مباشرتين أسبوعياً",
-  "مكتبة ملقنات الذكاء الاصطناعي",
-  "توجيه خطوة بخطوة للربح",
-  "مجتمع رواد الأعمال الخاص",
-  "دعم مستمر عبر الواتساب",
-];
-
-const steps = [
-  {
-    icon: UserPlus,
-    title: "أنشئ حسابك مجاناً",
-    desc: "اضغط على زر الانضمام وقم بإنشاء حسابك على منصتنا بثوانٍ معدودة.",
-    color: "brand",
-  },
-  {
-    icon: MessageCircle,
-    title: "تواصل معنا على واتساب",
-    desc: "تواصل معنا على رقم الواتساب المخصص لنزودك بالمعلومات البنكية، وبعد التحويل أرسل لنا صورة إيصال الدفع.",
-    color: "success",
-  },
-  {
-    icon: Zap,
-    title: "احصل على وصول فوري ومدى الحياة",
-    desc: "سنقوم بتفعيل حسابك فوراً لتبدأ رحلتك وتتمتع بكافة الميزات، المكالمات، والمجتمع الخاص.",
-    color: "warning",
-  },
-];
+const featureKeys = [
+  "pricing_feat_1",
+  "pricing_feat_2",
+  "pricing_feat_3",
+  "pricing_feat_4",
+  "pricing_feat_5",
+  "pricing_feat_6",
+] as const;
 
 export function PricingSection() {
-  return (
-    <section className="relative py-24 sm:py-32 bg-foreground text-background overflow-hidden">
-      {/* ═══ DARK CINEMATIC BACKGROUND ═══ */}
-      {/* Large glowing brand orb */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-brand/15 rounded-full blur-[120px] pointer-events-none" />
-      {/* Subtle dot pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none"
-        style={{
-          backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px)`,
-          backgroundSize: "40px 40px",
-        }}
-      />
+  const { t, dir, isRTL } = useLanguage();
 
-      <div className="container max-w-6xl mx-auto px-6 relative z-10">
-        {/* ═══ SECTION HEADER ═══ */}
-        <div className="text-center mb-16 sm:mb-20">
-          <ScrollReveal
-            animation="slide-up"
-            className="text-4xl sm:text-5xl md:text-6xl font-black text-background mb-6 tracking-tight"
+  return (
+    <section dir={dir} className="relative py-16 md:py-24 bg-[#FAFAFA] text-zinc-900 overflow-hidden">
+      <div className="container max-w-5xl mx-auto px-6 relative z-10">
+        
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <motion.h2 
+            initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            className="text-4xl sm:text-5xl md:text-6xl font-black text-zinc-900 mb-6 tracking-tight"
           >
-            استثمارك نحو{" "}
-            <span className="text-brand">الحرية المالية</span>
-          </ScrollReveal>
-          <ScrollReveal
-            animation="slide-up"
-            delay={0.15}
-            className="text-xl text-background/60 max-w-2xl mx-auto font-medium"
+            {t("pricing_title")}{" "}
+            <span className="text-[#FF6B4A]">{t("pricing_title_highlight")}</span>
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
+            className="text-xl text-zinc-500 max-w-2xl mx-auto font-medium"
           >
-            ادفع مرة واحدة اليوم، واحصل على وصول مدى الحياة
-          </ScrollReveal>
+            {t("pricing_sub")}
+          </motion.p>
         </div>
 
-        {/* ═══ TWO-COLUMN GRID ═══ */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start rtl-content text-right">
-          {/* ─── PRICING CARD (5-col) ─── */}
-          <ScrollReveal
-            animation="slide-up"
-            delay={0.1}
-            className="lg:col-span-5 order-1"
-          >
-            {/* Animated rotating border wrapper */}
-            <div className="relative rounded-[2rem] p-[2px] overflow-hidden">
-              {/* Spinning conic gradient border */}
-              <div
-                className="absolute inset-[-50%] animate-spin-border"
-                style={{
-                  background:
-                    "conic-gradient(from 0deg, #3B82F6, #10B981, #60A5FA, #8B5CF6, #3B82F6)",
-                }}
-              />
+        {/* Pricing Bento */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
+          className="max-w-4xl mx-auto bg-white rounded-[2rem] border border-zinc-200/60 shadow-xl overflow-hidden flex flex-col md:flex-row"
+        >
+          {/* Left Pricing Side */}
+          <div className="flex-1 p-8 sm:p-12 border-b md:border-b-0 md:border-r border-zinc-200/60 rtl:md:border-l rtl:md:border-r-0 relative overflow-hidden">
+            {/* Background Image & Overlay */}
+            <div 
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat blur-[2px] scale-105 opacity-90 z-0"
+              style={{ backgroundImage: "url('/pricingBackground.jpg')" }}
+            />
+            <div className="absolute inset-0 bg-black/40 z-0" />
 
-              {/* Card content */}
-              <div className="relative rounded-[calc(2rem-2px)] bg-[#0A0A0A] p-8 sm:p-10 flex flex-col">
-                {/* Badge */}
-                <div className="inline-flex w-fit px-4 py-1.5 rounded-full bg-brand/15 text-brand font-bold text-sm mb-6 border border-brand/25">
-                  العضوية التأسيسية
+            {/* Content */}
+            <div className="relative z-10 flex flex-col h-full justify-center">
+              <div>
+                <div className="inline-flex px-4 py-1.5 rounded-full bg-white/20 text-white font-bold text-sm mb-6 border border-white/30 backdrop-blur-md shadow-sm">
+                  {t("pricing_badge")}
                 </div>
-
-                {/* Comparison price */}
-                <p className="text-base text-background/40 line-through mb-2 font-medium">
-                  بدلاً من 500 MAD
+                <p className="text-zinc-300 line-through mb-2 font-medium drop-shadow-sm">
+                  {t("pricing_old")}
                 </p>
-
-                {/* Animated price */}
-                <div className="flex items-baseline gap-3 mb-2">
-                  <CountUpPrice
-                    target={200}
-                    duration={1.5}
-                    className="text-7xl sm:text-8xl font-black text-background tabular-nums tracking-tight"
-                  />
-                  <span className="text-2xl text-background/50 font-bold">
-                    MAD
-                  </span>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <CountUpPrice target={200} duration={1.5} className="text-6xl sm:text-7xl font-black text-white tracking-tight drop-shadow-md" />
+                  <span className="text-xl text-zinc-200 font-bold drop-shadow-sm">{t("pricing_currency")}</span>
                 </div>
-
-                <p className="text-success font-bold text-sm mb-8">
-                  دفع مرة واحدة فقط. لا توجد رسوم خفية.
+                <p className="text-white/90 font-bold text-sm mb-8 drop-shadow-sm">
+                  {t("pricing_note")}
                 </p>
+              </div>
 
-                {/* CTA Button */}
-                <Link href="/sign-up" className="block w-full mb-8">
-                  <Button className="w-full h-16 text-lg sm:text-xl font-bold bg-brand text-white hover:bg-brand-hover rounded-2xl shadow-xl transition-all hover:-translate-y-1 animate-pulse-ring cursor-pointer">
-                    ابدأ الخطوة الأولى الآن
+              <div className="mt-auto pt-4">
+                <Link href="/sign-up" className="block w-full">
+                  <Button className="w-full h-14 text-lg font-bold bg-[#FF6B4A] hover:bg-[#E85A3B] text-white rounded-xl shadow-[0_8px_20px_-8px_rgba(255,107,74,0.6)] border border-[#FF6B4A]/50 transition-all hover:-translate-y-0.5">
+                    {t("pricing_cta")}
                   </Button>
                 </Link>
-
-                {/* Feature checklist */}
-                <div className="space-y-4">
-                  {features.map((feature, idx) => (
-                    <ScrollReveal
-                      key={idx}
-                      animation="slide-right"
-                      delay={0.3 + idx * 0.08}
-                      className="flex items-center gap-3"
-                    >
-                      <div className="w-6 h-6 rounded-full bg-brand/20 flex items-center justify-center shrink-0">
-                        <Check
-                          className="w-3.5 h-3.5 text-brand"
-                          strokeWidth={3}
-                        />
-                      </div>
-                      <span className="font-medium text-background/75 text-[0.95rem]">
-                        {feature}
-                      </span>
-                    </ScrollReveal>
-                  ))}
-                </div>
               </div>
             </div>
-          </ScrollReveal>
-
-          {/* ─── STEPS TIMELINE (7-col) ─── */}
-          <ScrollReveal
-            animation="slide-left"
-            delay={0.25}
-            className="lg:col-span-7 order-2"
-          >
-            <h3 className="text-2xl sm:text-3xl font-bold text-background mb-10">
-              كيفية الانضمام{" "}
-              <span className="text-background/40">(3 خطوات بسيطة):</span>
-            </h3>
-
-            {/* Vertical timeline */}
-            <div className="relative">
-              {/* Connecting line */}
-              <ScrollReveal
-                animation="scale"
-                delay={0.4}
-                duration={1.2}
-                className="absolute right-6 top-0 bottom-0 w-[2px] bg-gradient-to-b from-brand via-success to-warning origin-top hidden sm:block origin-top-scale"
-              />
-
-              <div className="space-y-10 sm:space-y-12">
-                {steps.map((step, idx) => {
-                  const Icon = step.icon;
-                  const colorMap: Record<string, string> = {
-                    brand: "bg-brand",
-                    success: "bg-success",
-                    warning: "bg-warning",
-                  };
-                  const iconColorMap: Record<string, string> = {
-                    brand: "text-brand",
-                    success: "text-success",
-                    warning: "text-warning",
-                  };
-                  const bgColor = colorMap[step.color];
-                  const iconColor = iconColorMap[step.color];
-
-                  return (
-                    <ScrollReveal
-                      key={idx}
-                      animation="slide-up"
-                      delay={0.3 + idx * 0.2}
-                      className="flex gap-5 sm:gap-6 items-start relative"
-                    >
-                      {/* Step number circle */}
-                      <div className="relative z-10 shrink-0">
-                        <div
-                          className={`w-12 h-12 rounded-full ${bgColor} flex items-center justify-center text-white font-black text-lg shadow-lg`}
-                        >
-                          {idx + 1}
-                        </div>
-                      </div>
-
-                      {/* Step content */}
-                      <div className="flex-1 pb-2">
-                        <div className="flex items-center gap-3 mb-2">
-                          <div
-                            className={`w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center`}
-                          >
-                            <Icon className={`w-5 h-5 ${iconColor}`} />
-                          </div>
-                          <h4 className="text-xl font-bold text-background">
-                            {step.title}
-                          </h4>
-                        </div>
-                        <p className="text-background/50 leading-relaxed text-[0.95rem] mr-[3.25rem]">
-                          {step.desc}
-                        </p>
-                      </div>
-                    </ScrollReveal>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Trust badges */}
-            <ScrollReveal
-              animation="slide-up"
-              delay={0.9}
-              className="flex flex-wrap gap-4 mt-12 pt-8 border-t border-white/10"
-            >
-              <div className="flex items-center gap-2.5 text-sm text-background/60 bg-white/5 px-5 py-3 rounded-full border border-white/10 hover:border-brand/30 transition-colors">
-                <ShieldCheck className="w-4 h-4 text-brand" />
-                <span className="font-medium">دفع آمن 100%</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-sm text-background/60 bg-white/5 px-5 py-3 rounded-full border border-white/10 hover:border-success/30 transition-colors">
-                <Lock className="w-4 h-4 text-success" />
-                <span className="font-medium">خصوصية تامة</span>
-              </div>
-            </ScrollReveal>
-          </ScrollReveal>
-        </div>
-
-        {/* ═══ URGENCY BANNER ═══ */}
-        <ScrollReveal
-          animation="slide-up"
-          delay={0.3}
-          className="mt-16 sm:mt-20"
-        >
-          <div className="relative overflow-hidden rounded-2xl border border-brand/30 bg-brand/10 backdrop-blur-sm px-6 py-5 text-center animate-pulse-slow">
-            {/* Glow behind */}
-            <div className="absolute inset-0 bg-brand/5 pointer-events-none" />
-            <p className="relative z-10 text-lg sm:text-xl font-black text-background flex items-center justify-center gap-3 flex-wrap">
-              <span className="text-2xl">⏳</span>
-              العرض التأسيسي محدود — الأماكن تنفد بسرعة
-            </p>
           </div>
-        </ScrollReveal>
+
+          {/* Right Features Side */}
+          <div className="flex-1 p-8 sm:p-12 bg-zinc-50 flex flex-col justify-center">
+            <h3 className="text-lg font-black text-zinc-900 mb-6">{t("pricing_includes" as any)}</h3>
+            <div className="space-y-4">
+              {featureKeys.map((key, idx) => (
+                <div key={key} className="flex items-center gap-4">
+                  <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                    <Check className="w-3.5 h-3.5 text-green-600" strokeWidth={3} />
+                  </div>
+                  <span className="font-medium text-zinc-700">
+                    {t(key)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* How to Join Steps */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}
+          className="max-w-5xl mx-auto mt-16"
+        >
+          <div className="text-center mb-10">
+            <h3 className="text-2xl sm:text-3xl font-black text-zinc-900 mb-2">{t("pricing_steps_title")}</h3>
+            <p className="text-zinc-500 font-medium">{t("pricing_steps_subtitle")}</p>
+          </div>
+          <div className="relative mt-16">
+            {/* Horizontal Road Line (Desktop) */}
+            <div className="hidden md:block absolute top-[24px] left-[16.66%] right-[16.66%] h-1 bg-zinc-200 rounded-full" />
+            <motion.div 
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              transition={{ duration: 1.5, delay: 0.4, ease: "easeInOut" }}
+              viewport={{ once: true }}
+              style={{ originX: isRTL ? 1 : 0 }}
+              className="hidden md:block absolute top-[24px] left-[16.66%] right-[16.66%] h-1 bg-[#FF6B4A] rounded-full z-0"
+            />
+
+            {/* Vertical Road Line (Mobile) */}
+            <div className="md:hidden absolute top-0 bottom-0 left-[24px] rtl:left-auto rtl:right-[24px] w-1 bg-zinc-200 rounded-full" />
+            <motion.div 
+              initial={{ scaleY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              transition={{ duration: 1.5, delay: 0.4, ease: "easeInOut" }}
+              viewport={{ once: true }}
+              style={{ originY: 0 }}
+              className="md:hidden absolute top-0 bottom-0 left-[24px] rtl:left-auto rtl:right-[24px] w-1 bg-[#FF6B4A] rounded-full z-0"
+            />
+
+            <div className="grid md:grid-cols-3 gap-12 md:gap-6 relative z-10">
+              {[1, 2, 3].map((step, idx) => (
+                <div key={step} className="relative flex flex-col md:items-center">
+                  
+                  {/* Step Circle */}
+                  <motion.div 
+                    initial={{ scale: 0 }}
+                    whileInView={{ scale: 1 }}
+                    transition={{ type: "spring", delay: 0.2 + idx * 0.4 }}
+                    viewport={{ once: true }}
+                    className="w-12 h-12 rounded-full bg-[#FF6B4A] text-white flex items-center justify-center font-black text-xl shrink-0 mx-0 md:mx-auto mb-6 shadow-[0_0_0_8px_#FAFAFA] relative z-20"
+                  >
+                    {step}
+                  </motion.div>
+
+                  {/* Step Card */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 + idx * 0.4 }}
+                    viewport={{ once: true }}
+                    className="bg-white rounded-[1.5rem] p-6 border border-zinc-200/60 shadow-sm text-start md:text-center ml-16 rtl:ml-0 rtl:mr-16 md:ml-0 md:rtl:mr-0 flex-1 w-[calc(100%-4rem)] md:w-full"
+                  >
+                    <h4 className="font-bold text-zinc-900 mb-3 text-lg">
+                      {t(`pricing_step_${step}_title` as any)}
+                    </h4>
+                    <p className="text-sm text-zinc-500 leading-relaxed font-medium">
+                      {t(`pricing_step_${step}_desc` as any)}
+                    </p>
+                  </motion.div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Urgency */}
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}
+          className="mt-12 text-center"
+        >
+          <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-orange-50 border border-orange-200/60 text-orange-800 font-bold text-sm sm:text-base">
+            <span className="text-xl">⏳</span> {t("pricing_urgency")}
+          </div>
+        </motion.div>
       </div>
     </section>
   );

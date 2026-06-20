@@ -1,108 +1,63 @@
-import { HelpCircle } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { ScrollReveal } from "@/components/animations/ScrollReveal";
+"use client";
 
-const faqs = [
-  {
-    question: "هل هذه المنصة مناسبة للمبتدئين؟",
-    answer: "نعم تماماً. صممنا المنصة لتأخذك من الصفر، خطوة بخطوة، حتى وإن لم تكن لديك أي خبرة سابقة في العمل على الإنترنت أو استخدام الذكاء الاصطناعي."
-  },
-  {
-    question: "كيف تعمل المكالمات المباشرة؟",
-    answer: "نجتمع مرتين أسبوعياً في مكالمات جماعية خاصة. نناقش الاستراتيجيات، نقوم بتطبيق عملي، ونجيب على كل أسئلتك وتحدياتك وجهاً لوجه."
-  },
-  {
-    question: "إلى متى يستمر وصولي للمنصة؟",
-    answer: "إذا انضممت الآن كعضو مؤسس، ستحصل على وصول مدى الحياة للمنصة ولجميع التحديثات المستقبلية دون أي رسوم إضافية."
-  },
-  {
-    question: "ما الذي سأتعلمه بالتحديد؟",
-    answer: "ستتعلم كيفية استخدام أدوات الذكاء الاصطناعي لتقديم خدمات رقمية عالية القيمة، بناء منتجات رقمية، وإيجاد عملاء، كل ذلك بهدف الوصول إلى أول دولار لك على الإنترنت ثم التوسع."
-  },
-  {
-    question: "هل هذا مناسب للطلاب؟",
-    answer: "بالطبع! المنصة مصممة لتكون مرنة، والمكالمات يتم تسجيلها لتتمكن من مشاهدتها في أي وقت. إنها فرصة مثالية لبناء مهارات ودخل حقيقي أثناء دراستك."
-  },
-  {
-    question: "ماذا يحدث بعد الدفع؟",
-    answer: "ستحصل فوراً على بريد إلكتروني يحتوي على تفاصيل الدخول للمنصة، رابط الانضمام للمجتمع الخاص، وجدول المكالمات المباشرة لتبدأ رحلتك فوراً."
-  }
-];
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { useLanguage } from "@/components/landing/LanguageProvider";
 
 export function FaqSection() {
+  const { t, dir } = useLanguage();
+  const [openItem, setOpenItem] = useState<string[]>(["item-0"]);
+
+  const faqs = [
+    { q: "faq_q1", a: "faq_a1" },
+    { q: "faq_q2", a: "faq_a2" },
+    { q: "faq_q3", a: "faq_a3" },
+    { q: "faq_q4", a: "faq_a4" },
+    { q: "faq_q5", a: "faq_a5" },
+    { q: "faq_q6", a: "faq_a6" },
+  ] as const;
+
   return (
-    <section className="relative py-24 sm:py-32 bg-background overflow-hidden">
-      {/* Background Dot Grid */}
-      <div 
-        className="absolute inset-0 opacity-[0.02] pointer-events-none"
-        style={{
-          backgroundImage: `radial-gradient(circle at center, var(--color-foreground) 1px, transparent 1px)`,
-          backgroundSize: '24px 24px',
-        }}
-      />
-
-      <div className="container max-w-6xl mx-auto px-6 text-right rtl-content relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
+    <section dir={dir} className="relative py-16 md:py-24 bg-white">
+      <div className="container max-w-6xl mx-auto px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           
-          {/* Left Column - Branding */}
-          <div className="lg:col-span-5 relative flex flex-col items-center lg:items-start text-center lg:text-right">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10rem] lg:text-[14rem] font-black text-foreground/[0.03] select-none pointer-events-none z-0">
-              FAQ
-            </div>
-            
-            <ScrollReveal
-              animation="slide-left"
-              className="relative z-10 mt-10 lg:mt-20"
-            >
-              <div className="w-20 h-20 rounded-full bg-brand/10 border border-brand/20 flex items-center justify-center mb-8 mx-auto lg:mx-0 shadow-[0_0_40px_rgba(59,130,246,0.2)] glow-blue">
-                <HelpCircle className="w-10 h-10 text-brand" />
+          <div className="lg:col-span-5 relative">
+            <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="sticky top-32">
+              <div className="w-20 h-20 rounded-[2rem] bg-gradient-to-br from-[#FF6B4A]/20 to-purple-500/10 flex items-center justify-center mb-8 border border-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.8),0_10px_20px_rgba(255,107,74,0.15)] relative backdrop-blur-md">
+                <div className="absolute inset-0 bg-[#FF6B4A]/10 rounded-[2rem] blur-xl" />
+                <span className="text-4xl relative z-10 drop-shadow-md">💡</span>
               </div>
-              
-              <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-foreground mb-6 leading-tight">
-                الأسئلة <br className="hidden lg:block" />
-                الشائعة
+              <h2 className="text-4xl font-black text-zinc-900 mb-6 tracking-tight">
+                {t("faq_title")} <span className="text-[#FF6B4A]">{t("faq_title_2")}</span>
               </h2>
-              <p className="text-xl text-muted-foreground font-medium">
-                كل ما تحتاج معرفته قبل الانضمام.
+              <p className="text-xl text-zinc-500 font-medium">
+                {t("faq_sub")}
               </p>
-            </ScrollReveal>
+            </motion.div>
           </div>
 
-          {/* Right Column - Accordion */}
-          <div className="lg:col-span-7">
-            <ScrollReveal
-              animation="slide-up"
-              delay={0.2}
-            >
-              <Accordion className="w-full space-y-4">
-                {faqs.map((faq, idx) => (
-                  <AccordionItem 
-                    key={idx} 
-                    value={`item-${idx}`} 
-                    className="bg-card border border-border rounded-xl px-6 data-[state=open]:border-brand/50 data-[state=open]:border-r-4 data-[state=open]:bg-brand/5 transition-all shadow-sm overflow-hidden"
-                  >
-                    <AccordionTrigger className="text-lg font-bold hover:no-underline hover:text-brand transition-colors text-right py-5 group">
-                      <div className="flex items-center gap-4 text-right">
-                        <span className="text-sm font-black text-brand bg-brand/10 px-2 py-1 rounded-md shrink-0">
-                          {String(idx + 1).padStart(2, '0')}
-                        </span>
-                        <span>{faq.question}</span>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground leading-relaxed pb-6 text-base font-medium pr-14">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </ScrollReveal>
-          </div>
-          
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            viewport={{ once: true }} 
+            className="lg:col-span-7"
+          >
+            <Accordion value={openItem} onValueChange={setOpenItem} className="space-y-4">
+              {faqs.map((faq, idx) => (
+                <AccordionItem key={idx} value={`item-${idx}`} className="bg-[#FAFAFA] border border-zinc-200/60 rounded-2xl px-6 data-[state=open]:bg-white data-[state=open]:shadow-lg data-[state=open]:border-[#FF6B4A]/40 data-[state=open]:ring-4 data-[state=open]:ring-[#FF6B4A]/10 transition-all">
+                  <AccordionTrigger className="text-lg font-bold text-zinc-900 hover:no-underline py-6 text-start data-[state=open]:text-[#FF6B4A] transition-colors">
+                    {t(faq.q)}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-zinc-600 text-base leading-relaxed pb-6">
+                    {t(faq.a)}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </motion.div>
+
         </div>
       </div>
     </section>

@@ -1,151 +1,123 @@
-import { Sparkles } from "lucide-react";
-import { ScrollReveal } from "@/components/animations/ScrollReveal";
+"use client";
+
+import { useRef } from "react";
+import { Sparkles, TrendingUp, Zap, Target } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useLanguage } from "@/components/landing/LanguageProvider";
 
 export function OpportunitySection() {
+  const { t, dir } = useLanguage();
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  // Smooth Parallax effects
+  const yText = useTransform(scrollYProgress, [0, 1], [60, -60]);
+  const yCards = useTransform(scrollYProgress, [0, 1], [120, -120]);
+  const opacityGradient = useTransform(scrollYProgress, [0, 0.5, 1], [0.3, 1, 0.3]);
+
   return (
-    <section className="relative py-24 sm:py-32 overflow-hidden bg-background">
-      <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-b from-brand/5 to-transparent pointer-events-none" />
-      <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none"
-        style={{
-          backgroundImage: `repeating-linear-gradient(45deg, var(--color-brand) 0, var(--color-brand) 1px, transparent 0, transparent 50%)`,
-          backgroundSize: "30px 30px",
-        }}
+    <section ref={containerRef} className="relative py-16 md:py-32 bg-[#FAFAFA] overflow-hidden" dir={dir}>
+      {/* Orange Mesh Gradient Light */}
+      <motion.div 
+        style={{ opacity: opacityGradient }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] md:w-[1000px] md:h-[1000px] bg-[#FF6B4A]/10 rounded-full blur-[120px] pointer-events-none z-0"
       />
 
-      <div className="container max-w-6xl mx-auto px-6 relative z-10 rtl-content text-right">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-16">
-          {/* Right Column (RTL primary) - Text Content */}
-          <ScrollReveal
-            animation="slide-left"
-            className="order-1 lg:order-2"
+      <div className="container max-w-6xl mx-auto px-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center mb-12 lg:mb-24">
+          
+          {/* Left Text Content - Parallax */}
+          <motion.div 
+            style={{ y: yText }}
+            className="lg:col-span-6"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-success/10 text-success text-sm font-bold mb-6 border border-success/20">
-              أقصر طريق للحرية المالية
-            </div>
-
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-foreground mb-8 leading-tight">
-              الراتب الشهري لن يجعلك غنياً <br className="hidden sm:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-success to-brand">
-                هذا هو وقت التغيير الحقيقي
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.8 }} 
+              whileInView={{ opacity: 1, scale: 1 }} 
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white text-zinc-900 text-sm font-bold mb-8 shadow-sm border border-zinc-200"
+            >
+              <Sparkles className="w-4 h-4 text-[#FF6B4A]" />
+              {t("opp_badge")}
+            </motion.div>
+            
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-zinc-900 mb-8 leading-[1.15] tracking-tight text-balance">
+              {t("opp_title_1")}{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] to-[#E85A3B] block mt-2">
+                {t("opp_title_2")}
               </span>
             </h2>
-
-            <div className="space-y-6 text-xl text-muted-foreground leading-relaxed font-medium">
-              <p>
-                بينما يشتكي الجميع من قلة الوظائف وغلاء المعيشة، هناك فئة صامتة
-                من الشباب تصنع ثروات يومياً من غرف نومهم باستخدام الذكاء
-                الاصطناعي.
-              </p>
-              <p>
-                الذكاء الاصطناعي ليس مجرد "أداة ذكية".. إنه{" "}
-                <strong className="text-success font-black">
-                  آلة طباعة أموال
-                </strong>{" "}
-                إذا عرفت كيف تستخدمه لتقديم قيمة حقيقية وخدمات يطلبها السوق
-                ويدفع مقابلها آلاف الدولارات.
-              </p>
+            
+            <div className="space-y-6 text-lg lg:text-xl text-zinc-500 leading-relaxed font-medium">
+              <p>{t("opp_p1")}</p>
+              <div className="p-6 bg-white rounded-2xl border border-zinc-200/60 shadow-sm relative overflow-hidden">
+                <div className="absolute left-0 rtl:left-auto rtl:right-0 top-0 bottom-0 w-1.5 bg-[#FF6B4A]" />
+                <p className="px-2">
+                  {t("opp_p2_pre")}{" "}
+                  <strong className="text-zinc-900 font-black">{t("opp_p2_bold")}</strong>{" "}
+                  {t("opp_p2_post")}
+                </p>
+              </div>
             </div>
-          </ScrollReveal>
+          </motion.div>
 
-          {/* Left Column - Stat Cards */}
-          <div className="order-2 lg:order-1 flex flex-col gap-6">
-            <ScrollReveal
-              animation="slide-right"
-              delay={0.1}
-              className="glass glass-border rounded-2xl p-8 relative overflow-hidden flex items-center justify-between"
-            >
-              <div className="absolute right-0 top-0 w-32 h-full bg-brand/5" />
-              <div className="relative z-10 flex items-center gap-6">
-                <div className="w-16 h-16 rounded-full bg-brand/10 flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.3)]">
-                  <div className="w-8 h-8 rounded-full bg-brand animate-pulse-slow" />
+          {/* Right Stats Cards - Floating & Parallax */}
+          <motion.div 
+            style={{ y: yCards }}
+            className="lg:col-span-6 relative flex flex-col md:block justify-center items-center h-full lg:min-h-[450px]"
+          >
+            {/* Decorative background dashed circle */}
+            <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] border-2 border-dashed border-zinc-300 rounded-full animate-[spin_60s_linear_infinite] z-0" />
+
+            {[
+              { val: t("opp_stat_1_value"), label: t("opp_stat_1_label"), color: "purple", icon: TrendingUp, pos: "relative md:absolute md:top-[0%] md:right-[5%] rtl:md:right-auto rtl:md:left-[5%] mb-4 md:mb-0", delay: 0.1 },
+              { val: t("opp_stat_2_value"), label: t("opp_stat_2_label"), color: "blue", icon: Target, pos: "relative md:absolute md:top-[40%] md:left-[0%] rtl:md:left-auto rtl:md:right-[0%] mb-4 md:mb-0", delay: 0.3 },
+              { val: t("opp_stat_3_value"), label: t("opp_stat_3_label"), color: "yellow", icon: Zap, pos: "relative md:absolute md:bottom-[5%] md:right-[15%] rtl:md:right-auto rtl:md:left-[15%] mb-4 md:mb-0", delay: 0.5 }
+            ].map((stat, idx) => (
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, scale: 0.5, y: 50 }} 
+                whileInView={{ opacity: 1, scale: 1, y: 0 }} 
+                viewport={{ once: true, margin: "-50px" }} 
+                transition={{ type: "spring", stiffness: 100, delay: stat.delay }}
+                whileHover={{ scale: 1.05, y: -5 }}
+                className={`bg-white rounded-[2rem] border border-zinc-200/80 p-6 flex items-center gap-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl transition-all ${stat.pos} w-full md:w-[300px] z-20 backdrop-blur-sm bg-white/95`}
+              >
+                <div className={`icon-squircle icon-squircle-${stat.color} w-14 h-14 shrink-0 flex items-center justify-center text-white shadow-sm`}>
+                  <stat.icon className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-5xl font-black text-brand mb-1">$100M+</h3>
-                  <p className="text-lg text-foreground font-bold">
-                    حجم سوق الذكاء الاصطناعي
-                  </p>
+                  <h3 className="text-3xl font-black text-zinc-900 mb-0.5">{stat.val}</h3>
+                  <p className="text-xs text-zinc-500 font-bold uppercase tracking-wider">{stat.label}</p>
                 </div>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal
-              animation="slide-right"
-              delay={0.2}
-              className="glass glass-border rounded-2xl p-8 relative overflow-hidden flex items-center justify-between"
-            >
-              <div className="absolute right-0 top-0 w-32 h-full bg-success/5" />
-              <div className="relative z-10 flex items-center gap-6">
-                <div className="w-16 h-16 rounded-full bg-success/10 flex items-center justify-center shadow-[0_0_30px_rgba(16,185,129,0.3)]">
-                  <div
-                    className="w-8 h-8 rounded-full bg-success animate-pulse-slow"
-                    style={{ animationDelay: "1s" }}
-                  />
-                </div>
-                <div>
-                  <h3 className="text-5xl font-black text-success mb-1">10x</h3>
-                  <p className="text-lg text-foreground font-bold">
-                    أسرع في الإنتاجية
-                  </p>
-                </div>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal
-              animation="slide-right"
-              delay={0.3}
-              className="glass glass-border rounded-2xl p-8 relative overflow-hidden flex items-center justify-between"
-            >
-              <div className="absolute right-0 top-0 w-32 h-full bg-warning/5" />
-              <div className="relative z-10 flex items-center gap-6">
-                <div className="w-16 h-16 rounded-full bg-warning/10 flex items-center justify-center shadow-[0_0_30px_rgba(245,158,11,0.3)]">
-                  <div
-                    className="w-8 h-8 rounded-full bg-warning animate-pulse-slow"
-                    style={{ animationDelay: "2s" }}
-                  />
-                </div>
-                <div>
-                  <h3 className="text-5xl font-black text-warning mb-1">0</h3>
-                  <p className="text-lg text-foreground font-bold">خبرة مطلوبة</p>
-                </div>
-              </div>
-            </ScrollReveal>
-          </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
 
-        {/* Callout Card */}
-        <ScrollReveal
-          animation="slide-up"
-          delay={0.4}
-          className="w-full relative"
+        {/* Floating Callout Card */}
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }} 
+          whileInView={{ opacity: 1, y: 0 }} 
+          viewport={{ once: true }}
+          transition={{ type: "spring", stiffness: 80, delay: 0.2 }}
+          className="w-full max-w-5xl mx-auto bg-zinc-900 rounded-[2.5rem] p-10 sm:p-16 text-center relative overflow-hidden shadow-2xl"
         >
-          <div className="animated-border rounded-[2.5rem]">
-            <div className="glass-card rounded-[2.5rem] p-12 text-center relative overflow-hidden group bg-background/80 dark:bg-black/80">
-              <div className="absolute inset-0 bg-gradient-to-br from-brand/10 via-success/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              {/* Floating Sparkles */}
-              <Sparkles className="absolute top-8 right-12 w-6 h-6 text-brand opacity-50 animate-pulse" />
-              <Sparkles
-                className="absolute bottom-12 left-16 w-8 h-8 text-success opacity-50 animate-pulse"
-                style={{ animationDelay: "1s" }}
-              />
-              <Sparkles
-                className="absolute top-1/2 left-1/4 w-4 h-4 text-warning opacity-50 animate-pulse"
-                style={{ animationDelay: "2s" }}
-              />
-
-              <div className="relative z-10">
-                <p className="text-3xl sm:text-4xl font-black text-foreground mb-4 drop-shadow-md">
-                  لا تضيع المزيد من سنوات عمرك.
-                </p>
-                <p className="text-xl text-muted-foreground font-medium max-w-2xl mx-auto">
-                  انضم إلينا اليوم لتتعلم المهارة الوحيدة التي يمكنها مضاعفة
-                  دخلك خلال الـ 60 يوماً القادمة.
-                </p>
-              </div>
-            </div>
-          </div>
-        </ScrollReveal>
+          {/* Animated Gradient Border Effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B4A]/20 via-purple-500/10 to-[#FF6B4A]/20 opacity-60 blur-3xl pointer-events-none" />
+          
+          <Sparkles className="absolute top-10 right-10 md:right-20 w-8 h-8 text-[#FF6B4A] animate-pulse" />
+          <p className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-6 tracking-tight relative z-10 text-balance leading-tight">
+            {t("opp_callout_1")}
+          </p>
+          <p className="text-lg md:text-xl text-zinc-400 font-medium max-w-2xl mx-auto relative z-10 leading-relaxed text-balance">
+            {t("opp_callout_2")}
+          </p>
+        </motion.div>
       </div>
     </section>
   );
