@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { LanguageProvider } from "@/components/landing/LanguageProvider";
+
 
 export const metadata: Metadata = {
   title: "Terms of Use",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <LanguageProvider>
+
       <div className="min-h-screen bg-[#FAFAFA] text-zinc-900 relative overflow-x-hidden rtl-content flex flex-col">
         <Navbar />
         
@@ -86,6 +86,6 @@ export default function TermsPage() {
 
         <Footer />
       </div>
-    </LanguageProvider>
+
   );
 }

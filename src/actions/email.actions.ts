@@ -160,9 +160,17 @@ export async function sendModuleDroppedEmail(
   redirectUrl: string
 ) {
   try {
-    const results = await Promise.allSettled(
-      users.map((user) =>
-        resend.emails.send({
+    if (users.length === 0) return { success: true, sent: 0, failed: 0 };
+    
+    // Resend allows up to 100 emails per batch request
+    const BATCH_SIZE = 100;
+    let sent = 0;
+    let failed = 0;
+
+    for (let i = 0; i < users.length; i += BATCH_SIZE) {
+      const batch = users.slice(i, i + BATCH_SIZE);
+      const { data, error } = await resend.batch.send(
+        batch.map((user) => ({
           from: `Eensell <${FROM_EMAIL}>`,
           to: user.email,
           subject: `New Module Available: ${moduleTitle} 🚀`,
@@ -176,12 +184,16 @@ export async function sendModuleDroppedEmail(
             ctaText: "Start Learning",
             ctaUrl: redirectUrl.startsWith('http') ? redirectUrl : `${APP_URL}${redirectUrl}`
           })
-        })
-      )
-    );
+        }))
+      );
 
-    const sent = results.filter((r) => r.status === "fulfilled").length;
-    const failed = results.filter((r) => r.status === "rejected").length;
+      if (error) {
+        console.error("Batch send error:", error);
+        failed += batch.length;
+      } else {
+        sent += batch.length;
+      }
+    }
 
     return { success: true, sent, failed };
   } catch (error) {
@@ -198,9 +210,16 @@ export async function sendLiveSessionScheduledEmail(
   redirectUrl: string
 ) {
   try {
-    const results = await Promise.allSettled(
-      users.map((user) =>
-        resend.emails.send({
+    if (users.length === 0) return { success: true, sent: 0, failed: 0 };
+    
+    const BATCH_SIZE = 100;
+    let sent = 0;
+    let failed = 0;
+
+    for (let i = 0; i < users.length; i += BATCH_SIZE) {
+      const batch = users.slice(i, i + BATCH_SIZE);
+      const { data, error } = await resend.batch.send(
+        batch.map((user) => ({
           from: `Eensell <${FROM_EMAIL}>`,
           to: user.email,
           subject: `Upcoming Live Session: ${sessionTitle} 📅`,
@@ -215,12 +234,16 @@ export async function sendLiveSessionScheduledEmail(
             ctaText: "View Session Details",
             ctaUrl: redirectUrl.startsWith('http') ? redirectUrl : `${APP_URL}${redirectUrl}`
           })
-        })
-      )
-    );
+        }))
+      );
 
-    const sent = results.filter((r) => r.status === "fulfilled").length;
-    const failed = results.filter((r) => r.status === "rejected").length;
+      if (error) {
+        console.error("Batch send error:", error);
+        failed += batch.length;
+      } else {
+        sent += batch.length;
+      }
+    }
 
     return { success: true, sent, failed };
   } catch (error) {
@@ -236,9 +259,16 @@ export async function sendCommunityPostEmail(
   redirectUrl: string
 ) {
   try {
-    const results = await Promise.allSettled(
-      users.map((user) =>
-        resend.emails.send({
+    if (users.length === 0) return { success: true, sent: 0, failed: 0 };
+    
+    const BATCH_SIZE = 100;
+    let sent = 0;
+    let failed = 0;
+
+    for (let i = 0; i < users.length; i += BATCH_SIZE) {
+      const batch = users.slice(i, i + BATCH_SIZE);
+      const { data, error } = await resend.batch.send(
+        batch.map((user) => ({
           from: `Eensell <${FROM_EMAIL}>`,
           to: user.email,
           subject: `New Admin Announcement: ${postTitle} 📢`,
@@ -252,12 +282,16 @@ export async function sendCommunityPostEmail(
             ctaText: "Read the Post",
             ctaUrl: redirectUrl.startsWith('http') ? redirectUrl : `${APP_URL}${redirectUrl}`
           })
-        })
-      )
-    );
+        }))
+      );
 
-    const sent = results.filter((r) => r.status === "fulfilled").length;
-    const failed = results.filter((r) => r.status === "rejected").length;
+      if (error) {
+        console.error("Batch send error:", error);
+        failed += batch.length;
+      } else {
+        sent += batch.length;
+      }
+    }
 
     return { success: true, sent, failed };
   } catch (error) {
@@ -273,9 +307,16 @@ export async function sendBroadcastEmail(
   content: string
 ) {
   try {
-    const results = await Promise.allSettled(
-      toEmails.map((email) =>
-        resend.emails.send({
+    if (toEmails.length === 0) return { success: true, sent: 0, failed: 0 };
+    
+    const BATCH_SIZE = 100;
+    let sent = 0;
+    let failed = 0;
+
+    for (let i = 0; i < toEmails.length; i += BATCH_SIZE) {
+      const batch = toEmails.slice(i, i + BATCH_SIZE);
+      const { data, error } = await resend.batch.send(
+        batch.map((email) => ({
           from: `Eensell <${FROM_EMAIL}>`,
           to: email,
           subject,
@@ -284,12 +325,16 @@ export async function sendBroadcastEmail(
             subtitle: "Update",
             content: `<div style="color:#d4d4d8;line-height:1.7;">${content}</div>`
           })
-        })
-      )
-    );
+        }))
+      );
 
-    const sent = results.filter((r) => r.status === "fulfilled").length;
-    const failed = results.filter((r) => r.status === "rejected").length;
+      if (error) {
+        console.error("Batch send error:", error);
+        failed += batch.length;
+      } else {
+        sent += batch.length;
+      }
+    }
 
     return { success: true, sent, failed };
   } catch (error) {

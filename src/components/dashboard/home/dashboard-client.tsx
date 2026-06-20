@@ -28,31 +28,35 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { LeaderboardWidget } from "../leaderboard-widget";
 
 // Animation Variants
 const containerVariants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 },
+    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 30, filter: "blur(12px)", scale: 0.98 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { type: "spring" as const, stiffness: 300, damping: 24 },
+    filter: "blur(0px)",
+    scale: 1,
+    transition: { type: "spring" as const, stiffness: 260, damping: 25 },
   },
 };
 
 const scaleVariants = {
-  hidden: { opacity: 0, scale: 0.95 },
+  hidden: { opacity: 0, scale: 0.85, filter: "blur(8px)" },
   show: {
     opacity: 1,
     scale: 1,
-    transition: { type: "spring" as const, stiffness: 300, damping: 24 },
+    filter: "blur(0px)",
+    transition: { type: "spring" as const, stiffness: 280, damping: 20 },
   },
 };
 
@@ -69,6 +73,7 @@ export function DashboardClient({
   announcements,
   upcomingCall,
   recentlyWatched,
+  leaderboard,
 }: any) {
   const circumference = 2 * Math.PI * 54;
   const strokeDashoffset = circumference - (progressPercent / 100) * circumference;
@@ -472,6 +477,11 @@ export function DashboardClient({
                 </div>
               </CardContent>
             </Card>
+          </motion.div>
+
+          {/* Gamification Leaderboard */}
+          <motion.div variants={itemVariants} className="h-[420px]">
+            <LeaderboardWidget users={leaderboard} />
           </motion.div>
 
           {/* Premium Live Sessions */}

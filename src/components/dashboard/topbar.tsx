@@ -2,7 +2,9 @@
 
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Search, Calendar, ChevronRight, HelpCircle, MessageSquare } from "lucide-react";
+import { Search, Calendar, ChevronRight, HelpCircle, MessageSquare, ChevronDown } from "lucide-react";
+import { useLanguage } from "@/components/landing/LanguageProvider";
+import { Language } from "@/lib/translations";
 import { NotificationBell } from "./notification-bell";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,9 +17,17 @@ import {
 import Link from "next/link";
 import { CommandMenu } from "./command-menu";
 
+const languages: { code: Language; label: string; flagUrl: string }[] = [
+  { code: "ar", label: "العربية", flagUrl: "https://flagcdn.com/sa.svg" },
+  { code: "fr", label: "Français", flagUrl: "https://flagcdn.com/fr.svg" },
+  { code: "en", label: "English", flagUrl: "https://flagcdn.com/us.svg" },
+];
+
 export function TopBar() {
   const pathname = usePathname();
   const [currentDate, setCurrentDate] = useState("");
+  const [isLangOpen, setIsLangOpen] = useState(false);
+  const { language, setLanguage } = useLanguage();
 
   // Render date client-side only to avoid hydration mismatch
   useEffect(() => {
@@ -52,6 +62,38 @@ export function TopBar() {
       </div>
       
       <div className="flex items-center gap-3 sm:gap-4">
+        {/* Language Toggle */}
+        <div className="relative">
+          <button
+            onClick={() => setIsLangOpen(!isLangOpen)}
+            className="flex items-center justify-center gap-2 h-9 px-3 rounded-full bg-muted/50 hover:bg-muted border border-border transition-colors text-muted-foreground hover:text-foreground"
+          >
+            <img src={languages.find((l) => l.code === language)?.flagUrl} alt={language} className="w-4 h-auto rounded-[2px] shadow-sm" />
+            <span className="font-semibold text-xs hidden sm:block">{language.toUpperCase()}</span>
+            <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isLangOpen ? "rotate-180" : ""}`} />
+          </button>
+
+          {isLangOpen && (
+            <div className="absolute top-full mt-2 right-0 bg-popover shadow-md border border-border rounded-xl py-1.5 w-36 flex flex-col z-50">
+              {languages.map((lang) => (
+                <button
+                  key={lang.code}
+                  onClick={() => {
+                    setLanguage(lang.code);
+                    setIsLangOpen(false);
+                  }}
+                  className={`flex items-center gap-2 px-3 py-2 hover:bg-muted transition-colors w-full text-left ${
+                    language === lang.code ? "bg-muted font-bold text-foreground" : "font-semibold text-muted-foreground text-sm"
+                  }`}
+                >
+                  <img src={lang.flagUrl} alt={lang.code} className="w-4 h-auto rounded-[2px] shadow-sm border border-border/50" />
+                  <span className="text-xs">{lang.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
         <div className="hidden md:flex items-center relative">
           <CommandMenu />
         </div>

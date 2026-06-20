@@ -4,7 +4,7 @@ import { SignOutButton } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 import { LogOut, MessageCircle, CreditCard, Zap, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { LanguageProvider, useLanguage } from "@/components/landing/LanguageProvider";
+import { useLanguage } from "@/components/landing/LanguageProvider";
 import { Navbar } from "@/components/landing/Navbar";
 
 function PendingContent() {
@@ -184,8 +184,8 @@ function PendingContent() {
 
 export default function PendingPage() {
   return (
-    <LanguageProvider>
+
       <PendingContent />
-    </LanguageProvider>
+
   );
 }

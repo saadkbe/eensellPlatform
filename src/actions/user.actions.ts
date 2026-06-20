@@ -104,7 +104,16 @@ export async function markLessonComplete(lessonId: string) {
   const user = await getCurrentUser();
   if (!user) throw new Error("Unauthorized");
 
-  return db.progress.upsert({
+  const existingProgress = await db.progress.findUnique({
+    where: {
+      userId_lessonId: {
+        userId: user.id,
+        lessonId,
+      },
+    },
+  });
+
+  const result = await db.progress.upsert({
     where: {
       userId_lessonId: {
         userId: user.id,
@@ -118,12 +127,37 @@ export async function markLessonComplete(lessonId: string) {
       isCompleted: true,
     },
   });
+
+  if (!existingProgress?.isCompleted) {
+    await db.user.update({
+      where: { id: user.id },
+      data: { xp: { increment: 50 } },
+    });
+  }
+
+  return result;
 }
 
 // Mark lesson as incomplete
 export async function markLessonIncomplete(lessonId: string) {
   const user = await getCurrentUser();
   if (!user) throw new Error("Unauthorized");
+
+  const existingProgress = await db.progress.findUnique({
+    where: {
+      userId_lessonId: {
+        userId: user.id,
+        lessonId,
+      },
+    },
+  });
+
+  if (existingProgress?.isCompleted) {
+    await db.user.update({
+      where: { id: user.id },
+      data: { xp: { decrement: 50 } },
+    });
+  }
 
   return db.progress.update({
     where: {
@@ -186,4 +220,23 @@ export async function updateUserGoals(goals: string) {
   });
 
   return { success: true };
+}
+
+// Get top 10 leaderboard
+export async function getLeaderboard() {
+  return db.user.findMany({
+    where: { 
+      status: "ACTIVE",
+      role: { not: "ADMIN" }
+    },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      imageUrl: true,
+      xp: true,
+    },
+    orderBy: { xp: "desc" },
+    take: 10,
+  });
 }

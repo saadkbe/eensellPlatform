@@ -43,7 +43,7 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
               alt="Eensell University"
               width={360}
               height={80}
-              className="h-10 w-auto scale-[1.6] origin-left rtl:origin-right object-contain ml-3"
+              className="h-14 w-auto scale-[1.5] sm:scale-[1.7] origin-left rtl:origin-right object-contain ml-3"
             />
           </Link>
         </div>

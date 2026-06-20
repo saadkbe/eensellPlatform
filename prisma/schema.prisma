@@ -33,6 +33,7 @@ model User {
   status    UserStatus @default(PENDING)
   onboardingCompleted Boolean @default(false)
   goals     String?
+  xp        Int        @default(0)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 

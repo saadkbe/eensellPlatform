@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { LanguageProvider } from "@/components/landing/LanguageProvider";
+
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <LanguageProvider>
+
       <div className="min-h-screen bg-[#FAFAFA] text-zinc-900 relative overflow-x-hidden rtl-content flex flex-col">
         <Navbar />
         
@@ -93,6 +93,6 @@ export default function PrivacyPage() {
 
         <Footer />
       </div>
-    </LanguageProvider>
+
   );
 }

@@ -46,6 +46,14 @@ export async function createLiveCall(data: {
     });
     
     await sendLiveSessionScheduledEmail(recipients, data.title, formattedDate, "/dashboard/live-calls");
+    
+    const { notifyAllActiveUsers } = await import("./notification.actions");
+    await notifyAllActiveUsers({
+      title: "New Live Session Scheduled",
+      message: `A new live session "${data.title}" has been scheduled for ${formattedDate}.`,
+      linkUrl: "/dashboard/live-calls",
+      skipEmail: true,
+    });
   }
 
   revalidatePath("/admin/live-calls");

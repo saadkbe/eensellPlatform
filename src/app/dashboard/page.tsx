@@ -3,6 +3,8 @@ import { BookOpen, Trophy, TrendingUp, FileText } from "lucide-react";
 import { db } from "@/lib/db";
 import { DashboardClient } from "@/components/dashboard/home/dashboard-client";
 
+import { getLeaderboard } from "@/actions/user.actions";
+
 function getGreeting(): string {
   const hour = new Date().getHours();
   if (hour < 12) return "Good morning";
@@ -20,7 +22,7 @@ export default async function DashboardPage() {
     include: { progress: { include: { lesson: { include: { module: true } } } } },
   });
 
-  const [totalModules, totalLessons, announcements, upcomingCall, totalResources] = await Promise.all([
+  const [totalModules, totalLessons, announcements, upcomingCall, totalResources, leaderboard] = await Promise.all([
     db.module.count({ where: { isPublished: true } }),
     db.lesson.count({ where: { isPublished: true } }),
     db.announcement.findMany({
@@ -33,6 +35,7 @@ export default async function DashboardPage() {
       orderBy: { scheduledAt: "asc" },
     }),
     db.resource.count(),
+    getLeaderboard(),
   ]);
 
   const completedLessons = dbUser?.progress.filter((p) => p.isCompleted).length || 0;
@@ -64,6 +67,7 @@ export default async function DashboardPage() {
       announcements={announcements}
       upcomingCall={upcomingCall}
       recentlyWatched={recentlyWatched}
+      leaderboard={leaderboard}
     />
   );
 }

@@ -3,7 +3,7 @@ import Image from "next/image";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { LanguageProvider } from "@/components/landing/LanguageProvider";
+
 
 // Dynamically import below-the-fold sections
 const PricingSection = dynamic(() =>
@@ -33,7 +33,7 @@ const FinalCtaSection = dynamic(() =>
 
 export default function HomePage() {
   return (
-    <LanguageProvider>
+
       <div className="min-h-screen bg-[#FAFAFA] text-zinc-900 relative overflow-x-hidden rtl-content">
         <Navbar />
 
@@ -51,6 +51,6 @@ export default function HomePage() {
 
         <Footer />
       </div>
-    </LanguageProvider>
+
   );
 }

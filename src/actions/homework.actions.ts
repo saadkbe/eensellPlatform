@@ -93,6 +93,9 @@ export async function reviewHomework(homeworkId: string, status: "APPROVED" | "R
   const user = await getAuthUser();
   if (user.role !== "ADMIN") throw new Error("Only admins can review homework");
 
+  const existing = await db.homework.findUnique({ where: { id: homeworkId } });
+  if (!existing) throw new Error("Homework not found");
+
   const homework = await db.homework.update({
     where: { id: homeworkId },
     data: {
@@ -100,6 +103,18 @@ export async function reviewHomework(homeworkId: string, status: "APPROVED" | "R
       feedback,
     },
   });
+
+  if (status === "APPROVED" && existing.status !== "APPROVED") {
+    await db.user.update({
+      where: { id: existing.userId },
+      data: { xp: { increment: 100 } },
+    });
+  } else if (status !== "APPROVED" && existing.status === "APPROVED") {
+    await db.user.update({
+      where: { id: existing.userId },
+      data: { xp: { decrement: 100 } },
+    });
+  }
 
   revalidatePath("/admin/homeworks");
   return homework;

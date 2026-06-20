@@ -116,24 +116,24 @@ export function HeroSection() {
 
       </div>
 
-      {/* === DASHBOARD SCREENSHOT === */}
+      {/* === DASHBOARD VIDEO SHOWCASE === */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.7 }}
         className="relative z-20 container max-w-5xl mx-auto px-6 mt-16 sm:mt-24 pb-10"
       >
-        {/* Premium Glass Frame with Orange Glow */}
-        <div className="relative w-full p-2 sm:p-4 bg-white/40 backdrop-blur-2xl rounded-[1.5rem] lg:rounded-[2.5rem] border border-white/60 shadow-[0_0_100px_-20px_rgba(255,107,74,0.4)]">
-          <div className="overflow-hidden rounded-xl lg:rounded-[2rem] border border-zinc-200/50 bg-white shadow-inner">
-            <Image
-              src="/dashboard.png"
-              alt="Eensell University Platform"
-              width={1600}
-              height={900}
-              className="w-full h-auto object-cover"
-              priority
-              fetchPriority="high"
+        {/* Premium Thin Orange Frame */}
+        <div className="relative w-full p-[2px] sm:p-[3px] bg-gradient-to-br from-[#FF6B4A]/60 to-[#D14526]/60 backdrop-blur-md rounded-[1.5rem] lg:rounded-[2.5rem] shadow-[0_0_80px_-15px_rgba(255,107,74,0.4)]">
+          <div className="overflow-hidden rounded-xl lg:rounded-[2rem] bg-zinc-900 shadow-inner relative aspect-video">
+            <video
+              src="/dashboard-video.mp4"
+              poster="/dashboard.png"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
             />
           </div>
         </div>
@@ -147,7 +147,7 @@ export function HeroSection() {
         className="relative z-30 w-full bg-[#D14526] py-3 mt-8 border-y border-white/20 shadow-xl overflow-hidden"
       >
         <div className="marquee-track flex w-max items-center gap-8">
-          {[...Array(20)].map((_, i) => (
+          {[...Array(40)].map((_, i) => (
             <div key={i} className="flex items-center gap-8 text-white font-bold text-sm sm:text-base tracking-widest uppercase whitespace-nowrap">
               <span>Accès à vie pour 200Dh</span>
               <span className="text-white/40 text-xs">✦</span>

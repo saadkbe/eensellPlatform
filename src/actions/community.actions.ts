@@ -67,6 +67,14 @@ export async function createPost(title: string, content: string) {
       name: u.firstName || "Student" 
     }));
     await sendCommunityPostEmail(recipients, title, "/dashboard/community");
+    
+    const { notifyAllActiveUsers } = await import("./notification.actions");
+    await notifyAllActiveUsers({
+      title: "New Community Post",
+      message: `A new post "${title}" has been published.`,
+      linkUrl: "/dashboard/community",
+      skipEmail: true,
+    });
   }
 
   revalidatePath("/dashboard/community");

@@ -421,6 +421,14 @@ export async function createAnnouncement(data: {
 
   const announcement = await db.announcement.create({ data });
 
+  const { notifyAllActiveUsers } = await import("./notification.actions");
+  await notifyAllActiveUsers({
+    title: "📢 " + data.title,
+    message: data.content,
+    linkUrl: "/dashboard",
+    skipEmail: false, // Broadcast an email as well
+  });
+
   revalidatePath("/admin");
   revalidatePath("/dashboard");
 

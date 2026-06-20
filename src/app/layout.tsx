@@ -64,6 +64,7 @@ import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 import { ActivityTracker } from "@/components/activity-tracker";
+import { LanguageProvider } from "@/components/landing/LanguageProvider";
 
 export default function RootLayout({
   children,
@@ -112,9 +113,11 @@ export default function RootLayout({
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
           <ActivityTracker />
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-            <TooltipProvider>
-              {children}
-            </TooltipProvider>
+            <LanguageProvider>
+              <TooltipProvider>
+                {children}
+              </TooltipProvider>
+            </LanguageProvider>
             <Toaster
               toastOptions={{
                 style: {

@@ -54,10 +54,24 @@ export async function toggleGoal(goalId: string) {
   const goal = await db.goal.findUnique({ where: { id: goalId } });
   if (!goal || goal.userId !== user.id) throw new Error("Goal not found");
 
+  const newCompletedState = !goal.completed;
+
   const updated = await db.goal.update({
     where: { id: goalId },
-    data: { completed: !goal.completed },
+    data: { completed: newCompletedState },
   });
+
+  if (newCompletedState) {
+    await db.user.update({
+      where: { id: user.id },
+      data: { xp: { increment: 20 } },
+    });
+  } else {
+    await db.user.update({
+      where: { id: user.id },
+      data: { xp: { decrement: 20 } },
+    });
+  }
 
   revalidatePath("/dashboard/goals");
   return updated;
