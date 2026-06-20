@@ -14,7 +14,7 @@ export default async function CommunityPage() {
   const isAdmin = dbUser?.role === "ADMIN";
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto pb-8">
+    <div className="space-y-6 pb-8">
       {/* Header */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#5865F2]/15 via-background to-background border border-border p-7 sm:p-8">
         <div className="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-l from-[#5865F2]/5 to-transparent pointer-events-none" />

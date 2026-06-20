@@ -14,7 +14,7 @@ export default async function SettingsPage() {
   });
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto pb-10">
+    <div className="space-y-8 pb-10">
       {/* Header */}
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">

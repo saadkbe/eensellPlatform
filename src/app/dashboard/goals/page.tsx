@@ -10,7 +10,7 @@ export default async function GoalsPage() {
   ]);
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto pb-8">
+    <div className="space-y-6 pb-8">
       {/* Header */}
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight flex items-center gap-3 mb-1">

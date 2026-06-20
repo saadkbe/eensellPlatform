@@ -72,7 +72,7 @@ export default async function CareerPage() {
   const progressPercent = modules.length > 0 ? Math.round((completedModulesCount / modules.length) * 100) : 0;
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto pb-10">
+    <div className="space-y-6 pb-10">
       {/* ── Emotional Hero ── */}
       <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-card via-card to-primary/5 p-7 sm:p-9">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_hsl(var(--primary)/0.08),transparent_70%)] pointer-events-none" />
