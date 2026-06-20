@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 
 // Get the current user from DB
 export async function getCurrentUser() {
@@ -135,6 +136,9 @@ export async function markLessonComplete(lessonId: string) {
     });
   }
 
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/modules");
+  
   return result;
 }
 
@@ -158,8 +162,7 @@ export async function markLessonIncomplete(lessonId: string) {
       data: { xp: { decrement: 50 } },
     });
   }
-
-  return db.progress.update({
+  const updated = await db.progress.update({
     where: {
       userId_lessonId: {
         userId: user.id,
@@ -168,6 +171,11 @@ export async function markLessonIncomplete(lessonId: string) {
     },
     data: { isCompleted: false },
   });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/modules");
+
+  return updated;
 }
 
 // Complete onboarding

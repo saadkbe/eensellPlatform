@@ -27,7 +27,7 @@ export function TopBar() {
   const pathname = usePathname();
   const [currentDate, setCurrentDate] = useState("");
   const [isLangOpen, setIsLangOpen] = useState(false);
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
 
   // Render date client-side only to avoid hydration mismatch
   useEffect(() => {
@@ -56,9 +56,9 @@ export function TopBar() {
   });
 
   return (
-    <div className="sticky top-0 z-30 w-full flex items-center justify-between px-4 sm:px-6 lg:px-8 py-4 bg-card border-b border-border transition-all duration-300 shadow-sm">
+    <div className="sticky top-0 z-30 w-full flex items-center justify-between px-4 sm:px-8 lg:px-10 py-5 bg-card border-b border-border transition-all duration-300 shadow-sm">
       <div className="flex items-center">
-        {breadcrumbs.length > 0 ? breadcrumbs : <span className="text-foreground font-semibold">Home</span>}
+        {breadcrumbs.length > 0 ? breadcrumbs : <span className="text-foreground font-semibold text-lg">{t("topbar_home")}</span>}
       </div>
       
       <div className="flex items-center gap-3 sm:gap-4">

@@ -23,33 +23,35 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useLanguage } from "@/components/landing/LanguageProvider";
+import { TranslationKey } from "@/lib/translations";
 
-type NavItem = { title: string; href: string; icon: any };
-type NavSection = { label: string; items: NavItem[] };
+type NavItem = { titleKey: TranslationKey; href: string; icon: any };
+type NavSection = { labelKey: TranslationKey; items: NavItem[] };
 
 const navSections: NavSection[] = [
   {
-    label: "Learn",
+    labelKey: "nav_learn",
     items: [
-      { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-      { title: "Modules", href: "/dashboard/modules", icon: BookOpen },
-      { title: "Resources", href: "/dashboard/resources", icon: FolderOpen },
+      { titleKey: "nav_dashboard", href: "/dashboard", icon: LayoutDashboard },
+      { titleKey: "nav_modules", href: "/dashboard/modules", icon: BookOpen },
+      { titleKey: "nav_resources", href: "/dashboard/resources", icon: FolderOpen },
     ],
   },
   {
-    label: "Engage",
+    labelKey: "nav_engage",
     items: [
-      { title: "Community", href: "/dashboard/community", icon: MessageSquare },
-      { title: "Live Calls", href: "/dashboard/live-calls", icon: Video },
-      { title: "Goals", href: "/dashboard/goals", icon: Target },
-      { title: "Nexus AI", href: "/dashboard/chat", icon: Bot },
+      { titleKey: "nav_community", href: "/dashboard/community", icon: MessageSquare },
+      { titleKey: "nav_live_calls", href: "/dashboard/live-calls", icon: Video },
+      { titleKey: "nav_goals", href: "/dashboard/goals", icon: Target },
+      { titleKey: "nav_chat", href: "/dashboard/chat", icon: Bot },
     ],
   },
   {
-    label: "Grow",
+    labelKey: "nav_grow",
     items: [
-      { title: "Career Paths", href: "/dashboard/career", icon: Compass },
-      { title: "Settings", href: "/dashboard/settings", icon: Settings },
+      { titleKey: "nav_career", href: "/dashboard/career", icon: Compass },
+      { titleKey: "nav_settings", href: "/dashboard/settings", icon: Settings },
     ],
   },
 ];
@@ -68,10 +70,12 @@ function SidebarContent({
   isActive: (href: string) => boolean;
   hasNewLesson: boolean;
 }) {
+  const { t, dir } = useLanguage();
+
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full" dir={dir}>
       {/* Logo */}
-      <div className="flex justify-center items-center px-6 py-6 border-b border-border">
+      <div className="flex justify-center items-center px-8 py-8 border-b border-border">
         <img
           src="/logo.png"
           alt="Eensell University"
@@ -80,13 +84,13 @@ function SidebarContent({
       </div>
 
       {/* Navigation with sections */}
-      <nav className="flex-1 px-3 py-4 space-y-5 overflow-y-auto no-scrollbar">
+      <nav className="flex-1 px-4 py-6 space-y-6 overflow-y-auto no-scrollbar">
         {navSections.map((section) => (
-          <div key={section.label}>
-            <p className="px-3 mb-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/60">
-              {section.label}
+          <div key={section.labelKey}>
+            <p className="px-4 mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground/60">
+              {t(section.labelKey)}
             </p>
-            <div className="space-y-0.5">
+            <div className="space-y-1">
               {section.items.map((item) => {
                 const Icon = item.icon;
                 const active = isActive(item.href);
@@ -97,7 +101,7 @@ function SidebarContent({
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      "flex justify-between items-center px-3 py-2.5 rounded-lg text-[15px] font-medium transition-all duration-200 group relative",
+                      "flex justify-between items-center px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 group relative",
                       active
                         ? "text-primary-foreground bg-primary"
                         : "text-muted-foreground hover:text-foreground hover:bg-secondary"
@@ -106,21 +110,24 @@ function SidebarContent({
                     {active && (
                       <motion.div
                         layoutId="activeTab"
-                        className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-primary-foreground"
+                        className={cn(
+                          "absolute top-1/2 -translate-y-1/2 w-[4px] h-6 rounded-r-full bg-primary-foreground",
+                          dir === "rtl" ? "right-0 rounded-l-full rounded-r-none" : "left-0"
+                        )}
                         transition={{ type: "spring", stiffness: 380, damping: 30 }}
                       />
                     )}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <Icon
                         className={cn(
-                          "w-5 h-5 shrink-0 transition-colors",
+                          "w-6 h-6 shrink-0 transition-colors",
                           active ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground"
                         )}
                       />
-                      <span>{item.title}</span>
+                      <span>{t(item.titleKey)}</span>
                     </div>
-                    {item.title === "Modules" && hasNewLesson && (
-                      <span className="bg-foreground text-background text-[10px] font-bold px-1.5 py-0.5 rounded ml-2">New Lesson</span>
+                    {item.titleKey === "nav_modules" && hasNewLesson && (
+                      <span className="bg-foreground text-background text-[11px] font-bold px-2 py-0.5 rounded mx-2">{t("nav_new_lesson")}</span>
                     )}
                     {active && (
                       <div className="absolute inset-0 rounded-lg bg-white/10 pointer-events-none" />
@@ -138,36 +145,36 @@ function SidebarContent({
             <Link
               href="/admin"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-destructive hover:bg-destructive/10 transition-all duration-200 border border-destructive/20"
+              className="flex items-center gap-4 px-4 py-3 rounded-lg text-base font-medium text-destructive hover:bg-destructive/10 transition-all duration-200 border border-destructive/20"
             >
-              <Shield className="w-[18px] h-[18px] shrink-0" />
-              <span>Admin Panel</span>
+              <Shield className="w-6 h-6 shrink-0" />
+              <span>{t("nav_admin")}</span>
             </Link>
           </div>
         )}
       </nav>
 
       {/* User section */}
-      <div className="px-4 py-4 border-t border-border mt-auto">
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-3 px-2">
+      <div className="px-5 py-5 border-t border-border mt-auto">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-4 px-2">
             <UserButton
               appearance={{
                 elements: {
-                  avatarBox: "w-8 h-8",
+                  avatarBox: "w-10 h-10",
                 },
               }}
             />
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-foreground font-medium truncate">Account</p>
-              <p className="text-xs text-muted-foreground truncate">Manage profile</p>
+              <p className="text-base text-foreground font-medium truncate">{t("nav_account")}</p>
+              <p className="text-sm text-muted-foreground truncate">{t("nav_manage_profile")}</p>
             </div>
             <ThemeToggle />
           </div>
           <SignOutButton>
-            <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-foreground hover:bg-secondary">
-              <LogOut className="w-4 h-4 mr-2" />
-              Log out
+            <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-foreground hover:bg-secondary text-base py-6">
+              <LogOut className={cn("w-5 h-5", dir === "rtl" ? "ml-3" : "mr-3")} />
+              {t("nav_logout")}
             </Button>
           </SignOutButton>
         </div>
@@ -219,9 +226,9 @@ export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: bool
             <motion.aside
               initial={{ x: -280 }}
               animate={{ x: 0 }}
-              exit={{ x: -280 }}
+              exit={{ x: -320 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="lg:hidden fixed top-0 left-0 z-50 w-[280px] h-screen bg-card border-r border-border"
+              className={cn("lg:hidden fixed top-0 z-50 w-[320px] h-screen bg-card border-border", dir === "rtl" ? "right-0 border-l" : "left-0 border-r")}
             >
               <SidebarContent
                 pathname={pathname}
@@ -236,7 +243,7 @@ export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: bool
       </AnimatePresence>
 
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex lg:flex-col fixed left-0 top-0 h-screen w-[280px] bg-card border-r border-border z-30">
+      <aside className={cn("hidden lg:flex lg:flex-col fixed top-0 h-screen w-[320px] bg-card border-border z-30", dir === "rtl" ? "right-0 border-l" : "left-0 border-r")}>
         <SidebarContent
           pathname={pathname}
           setMobileOpen={setMobileOpen}

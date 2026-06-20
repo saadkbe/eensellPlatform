@@ -5,6 +5,7 @@ import { getHasNewLesson } from "@/actions/module.actions";
 import { redirect } from "next/navigation";
 
 import { PageTransition } from "@/components/page-transition";
+import { MainLayoutWrapper } from "@/components/dashboard/main-layout-wrapper";
 
 export const dynamic = 'force-dynamic';
 
@@ -29,14 +30,14 @@ export default async function DashboardLayout({
   return (
     <div className="min-h-screen bg-background">
       <DashboardSidebar hasNewLesson={hasNewLesson} />
-      <main className="lg:ml-[280px] pt-16 lg:pt-0 min-h-screen flex flex-col">
+      <MainLayoutWrapper>
         <TopBar />
         <div className="flex-1 p-4 sm:p-6 lg:p-8 w-full">
           <PageTransition>
             {children}
           </PageTransition>
         </div>
-      </main>
+      </MainLayoutWrapper>
     </div>
   );
 }

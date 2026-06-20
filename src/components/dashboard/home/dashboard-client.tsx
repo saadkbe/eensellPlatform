@@ -28,6 +28,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/components/landing/LanguageProvider";
 import { LeaderboardWidget } from "../leaderboard-widget";
 
 // Animation Variants
@@ -75,41 +76,42 @@ export function DashboardClient({
   recentlyWatched,
   leaderboard,
 }: any) {
+  const { t } = useLanguage();
   const circumference = 2 * Math.PI * 54;
   const strokeDashoffset = circumference - (progressPercent / 100) * circumference;
 
   const stats = [
     {
-      label: "Modules",
+      label: t("dash_modules_label"),
       value: totalModules,
       icon: BookOpen,
       color: "#3B82F6",
       bgColor: "rgba(59,130,246,0.15)",
-      subtext: "available",
+      subtext: t("dash_modules_subtext"),
     },
     {
-      label: "Completed",
+      label: t("dash_completed_label"),
       value: completedLessons,
       icon: Trophy,
       color: "#10B981",
       bgColor: "rgba(16,185,129,0.15)",
-      subtext: "lessons",
+      subtext: t("dash_completed_subtext"),
     },
     {
-      label: "Progress",
+      label: t("dash_progress_label"),
       value: `${progressPercent}%`,
       icon: TrendingUp,
       color: "#F59E0B",
       bgColor: "rgba(245,158,11,0.15)",
-      subtext: "overall",
+      subtext: t("dash_progress_subtext"),
     },
     {
-      label: "Resources",
+      label: t("dash_resources_label"),
       value: totalResources,
       icon: FileText,
       color: "#8B5CF6",
       bgColor: "rgba(139,92,246,0.15)",
-      subtext: "available",
+      subtext: t("dash_resources_subtext"),
     },
   ];
 
@@ -167,7 +169,7 @@ export function DashboardClient({
               transition={{ delay: 0.3 }}
               className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-indigo-200 tracking-tight mb-4"
             >
-              Welcome back, {firstName}
+              {t("dash_welcome_back")}, {firstName}
             </motion.h1>
             
             <motion.p 
@@ -176,7 +178,7 @@ export function DashboardClient({
               transition={{ delay: 0.4 }}
               className="text-base sm:text-lg text-slate-300 leading-relaxed font-light"
             >
-              Your journey continues today. Stay consistent, push your boundaries, and unlock your ultimate potential.
+              {t("dash_welcome_sub")}
             </motion.p>
           </div>
           
@@ -191,7 +193,7 @@ export function DashboardClient({
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
                 <span className="relative flex items-center gap-3">
                   <PlayCircle className="w-5 h-5 text-indigo-600" />
-                  Resume Journey
+                  {t("dash_resume_journey")}
                 </span>
               </Button>
             </Link>
@@ -264,7 +266,7 @@ export function DashboardClient({
                     <div className="p-6 sm:p-8 flex-1 flex flex-col justify-center">
                       <div className="flex items-center gap-2 text-primary mb-3">
                         <PlayCircle className="w-5 h-5 animate-pulse" />
-                        <span className="text-sm font-bold uppercase tracking-widest text-primary/80">Continue Watching</span>
+                        <span className="text-sm font-bold uppercase tracking-widest text-primary/80">{t("dash_continue_watching")}</span>
                       </div>
                       
                       <h4 className="text-2xl sm:text-3xl font-bold text-foreground mb-3 leading-tight group-hover:text-primary transition-colors duration-300">
@@ -279,7 +281,7 @@ export function DashboardClient({
                         <Link href={`/dashboard/modules/${continueModule?.id}/${continueLesson.id}`}>
                           <Button className="w-full sm:w-auto gap-3 h-12 px-8 rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:-translate-y-0.5 transition-all">
                             <PlayCircle className="w-5 h-5" />
-                            Jump Right In
+                            {t("dash_jump_right_in")}
                           </Button>
                         </Link>
                       </div>
@@ -295,12 +297,12 @@ export function DashboardClient({
                     <GraduationCap className="w-12 h-12 text-primary" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-foreground mb-2">Begin Your Evolution</h3>
-                    <p className="text-muted-foreground max-w-md">You haven't started any lessons yet. Dive into your first module and ignite your learning journey today.</p>
+                    <h3 className="text-2xl font-bold text-foreground mb-2">{t("dash_begin_evolution")}</h3>
+                    <p className="text-muted-foreground max-w-md">{t("dash_begin_evolution_sub")}</p>
                   </div>
                   <Link href="/dashboard/modules" className="shrink-0">
                     <Button size="lg" className="h-14 px-8 rounded-xl font-bold gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">
-                      Browse Curriculum <ArrowRight className="w-5 h-5" />
+                      {t("dash_browse_curriculum")} <ArrowRight className="w-5 h-5" />
                     </Button>
                   </Link>
                 </CardContent>
@@ -339,12 +341,12 @@ export function DashboardClient({
                     </svg>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                       <span className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-foreground to-foreground/70">{progressPercent}%</span>
-                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">Mastered</span>
+                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">{t("dash_mastered")}</span>
                     </div>
                   </div>
-                  <h4 className="font-bold text-foreground text-lg mb-1">Global Mastery</h4>
+                  <h4 className="font-bold text-foreground text-lg mb-1">{t("dash_global_mastery")}</h4>
                   <p className="text-sm font-medium text-muted-foreground">
-                    <span className="text-foreground">{completedLessons}</span> out of <span className="text-foreground">{totalLessons}</span> milestones
+                    <span className="text-foreground">{completedLessons}</span> {t("dash_out_of")} <span className="text-foreground">{totalLessons}</span> {t("dash_milestones")}
                   </p>
                 </CardContent>
               </Card>
@@ -359,11 +361,11 @@ export function DashboardClient({
                       <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
                         <Megaphone className="w-4 h-4 text-indigo-500" />
                       </div>
-                      Updates & Intel
+                      {t("dash_updates_intel")}
                     </CardTitle>
                     {announcements.length > 0 && (
                       <Badge variant="default" className="bg-indigo-500 text-white border-none font-bold px-3 shadow-md shadow-indigo-500/20 animate-pulse">
-                        {announcements.length} New
+                        {announcements.length} {t("dash_new")}
                       </Badge>
                     )}
                   </div>
@@ -374,8 +376,8 @@ export function DashboardClient({
                       <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
                         <Megaphone className="w-8 h-8 text-muted-foreground/30" />
                       </div>
-                      <p className="text-sm font-semibold text-foreground">All caught up!</p>
-                      <p className="text-xs text-muted-foreground mt-1">Check back later for new announcements.</p>
+                      <p className="text-sm font-semibold text-foreground">{t("dash_all_caught_up")}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{t("dash_check_back_later")}</p>
                     </div>
                   ) : (
                     <div className="divide-y divide-border/30 h-full overflow-auto no-scrollbar">
@@ -420,15 +422,15 @@ export function DashboardClient({
             <div className="flex items-center justify-between mb-5">
               <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
                 <Zap className="w-5 h-5 text-amber-400" />
-                Command Center
+                {t("dash_command_center")}
               </h3>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-5">
               {[
-                { title: "Community", desc: "Network & Grow", href: "/dashboard/community", icon: Users, color: "text-blue-500", bg: "bg-blue-500/10", hoverBg: "hover:bg-blue-500", hoverBorder: "group-hover:border-blue-500/50", shadow: "group-hover:shadow-blue-500/20" },
-                { title: "Missions", desc: "Track Objectives", href: "/dashboard/goals", icon: Target, color: "text-emerald-500", bg: "bg-emerald-500/10", hoverBg: "hover:bg-emerald-500", hoverBorder: "group-hover:border-emerald-500/50", shadow: "group-hover:shadow-emerald-500/20" },
-                { title: "Career Path", desc: "Map Your Future", href: "/dashboard/career", icon: Compass, color: "text-purple-500", bg: "bg-purple-500/10", hoverBg: "hover:bg-purple-500", hoverBorder: "group-hover:border-purple-500/50", shadow: "group-hover:shadow-purple-500/20" },
-                { title: "Vault", desc: "Access Resources", href: "/dashboard/resources", icon: FileText, color: "text-amber-500", bg: "bg-amber-500/10", hoverBg: "hover:bg-amber-500", hoverBorder: "group-hover:border-amber-500/50", shadow: "group-hover:shadow-amber-500/20" },
+                { title: t("dash_community"), desc: t("dash_network_grow"), href: "/dashboard/community", icon: Users, color: "text-blue-500", bg: "bg-blue-500/10", hoverBg: "hover:bg-blue-500", hoverBorder: "group-hover:border-blue-500/50", shadow: "group-hover:shadow-blue-500/20" },
+                { title: t("dash_missions"), desc: t("dash_track_objectives"), href: "/dashboard/goals", icon: Target, color: "text-emerald-500", bg: "bg-emerald-500/10", hoverBg: "hover:bg-emerald-500", hoverBorder: "group-hover:border-emerald-500/50", shadow: "group-hover:shadow-emerald-500/20" },
+                { title: t("dash_career_path"), desc: t("dash_map_future"), href: "/dashboard/career", icon: Compass, color: "text-purple-500", bg: "bg-purple-500/10", hoverBg: "hover:bg-purple-500", hoverBorder: "group-hover:border-purple-500/50", shadow: "group-hover:shadow-purple-500/20" },
+                { title: t("dash_vault"), desc: t("dash_access_resources"), href: "/dashboard/resources", icon: FileText, color: "text-amber-500", bg: "bg-amber-500/10", hoverBg: "hover:bg-amber-500", hoverBorder: "group-hover:border-amber-500/50", shadow: "group-hover:shadow-amber-500/20" },
               ].map((item, i) => {
                 const Icon = item.icon;
                 return (
@@ -469,9 +471,9 @@ export function DashboardClient({
                     <Flame className="w-8 h-8 text-white drop-shadow-md" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-orange-500 dark:text-orange-400 uppercase tracking-widest mb-1">Momentum</p>
+                    <p className="text-xs font-bold text-orange-500 dark:text-orange-400 uppercase tracking-widest mb-1">{t("dash_momentum")}</p>
                     <p className="text-4xl font-black text-foreground tracking-tighter">
-                      {completedLessons > 0 ? `${Math.min(completedLessons, 30)}` : "0"} <span className="text-xl font-bold text-muted-foreground">Days</span>
+                      {completedLessons > 0 ? `${Math.min(completedLessons, 30)}` : "0"} <span className="text-xl font-bold text-muted-foreground">{t("dash_days")}</span>
                     </p>
                   </div>
                 </div>
@@ -480,7 +482,7 @@ export function DashboardClient({
           </motion.div>
 
           {/* Gamification Leaderboard */}
-          <motion.div variants={itemVariants} className="h-[420px]">
+          <motion.div variants={itemVariants} className="w-full">
             <LeaderboardWidget users={leaderboard} />
           </motion.div>
 
@@ -492,7 +494,7 @@ export function DashboardClient({
                   <div className="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center">
                     <Video className="w-4 h-4 text-rose-500" />
                   </div>
-                  Live Broadcasts
+                  {t("dash_live_broadcasts")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 relative z-10">
@@ -504,7 +506,7 @@ export function DashboardClient({
                         <Video className="w-10 h-10 text-rose-500" />
                       </div>
                       <Badge className="absolute -top-3 -right-3 bg-rose-500 text-white border-2 border-background shadow-lg px-3 py-1 font-bold animate-bounce">
-                        LIVE
+                        {t("dash_live")}
                       </Badge>
                     </div>
                     
@@ -531,7 +533,7 @@ export function DashboardClient({
                         className="w-full"
                       >
                         <Button className="w-full h-12 text-base font-bold bg-foreground text-background hover:bg-foreground/90 gap-2 shadow-xl hover:shadow-foreground/20 transition-all hover:-translate-y-1 rounded-xl">
-                          Join Broadcast <ArrowRight className="w-4 h-4" />
+                          {t("dash_join_broadcast")} <ArrowRight className="w-4 h-4" />
                         </Button>
                       </a>
                     )}
@@ -541,8 +543,8 @@ export function DashboardClient({
                     <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center mx-auto mb-4 border border-border/50 border-dashed">
                       <Video className="w-6 h-6 text-muted-foreground/50" />
                     </div>
-                    <p className="text-sm font-bold text-foreground">No Broadcasts Scheduled</p>
-                    <p className="text-xs font-medium text-muted-foreground mt-2 max-w-[200px] mx-auto leading-relaxed">Stay tuned for the next exclusive live session.</p>
+                    <p className="text-sm font-bold text-foreground">{t("dash_no_broadcasts")}</p>
+                    <p className="text-xs font-medium text-muted-foreground mt-2 max-w-[200px] mx-auto leading-relaxed">{t("dash_stay_tuned")}</p>
                   </div>
                 )}
               </CardContent>
@@ -558,10 +560,10 @@ export function DashboardClient({
                     <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
                       <BarChart3 className="w-4 h-4 text-emerald-500" />
                     </div>
-                    Activity Log
+                    {t("dash_activity_log")}
                   </CardTitle>
                   <Link href="/dashboard/modules" className="text-xs font-bold text-emerald-500 hover:text-emerald-400 flex items-center gap-1 transition-colors">
-                    View All <ChevronRight className="w-3.5 h-3.5" />
+                    {t("dash_view_all")} <ChevronRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
               </CardHeader>
@@ -571,8 +573,8 @@ export function DashboardClient({
                     <div className="w-16 h-16 bg-muted/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
                       <PlayCircle className="w-8 h-8 text-muted-foreground/40" />
                     </div>
-                    <p className="text-sm font-bold text-foreground">Your canvas is blank</p>
-                    <p className="text-xs font-medium text-muted-foreground mt-2">Start consuming content to build your history.</p>
+                    <p className="text-sm font-bold text-foreground">{t("dash_canvas_blank")}</p>
+                    <p className="text-xs font-medium text-muted-foreground mt-2">{t("dash_start_consuming")}</p>
                   </div>
                 ) : (
                   <div className="divide-y divide-border/30 p-2">

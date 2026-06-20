@@ -117,5 +117,6 @@ export async function reviewHomework(homeworkId: string, status: "APPROVED" | "R
   }
 
   revalidatePath("/admin/homeworks");
+  revalidatePath("/dashboard");
   return homework;
 }

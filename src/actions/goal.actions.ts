@@ -74,6 +74,7 @@ export async function toggleGoal(goalId: string) {
   }
 
   revalidatePath("/dashboard/goals");
+  revalidatePath("/dashboard");
   return updated;
 }
 
