@@ -19,6 +19,11 @@ export function Footer() {
           <div className="flex flex-wrap justify-center items-center gap-6 text-sm font-bold text-zinc-400">
             <Link href="/terms" className="hover:text-white transition-colors">Terms of Use</Link>
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="/refund" className="hover:text-white transition-colors">Refund Policy</Link>
+          </div>
+          
+          <div className="text-zinc-500 text-sm font-medium mt-2">
+            Contact us: <a href="mailto:contact@eensell.com" className="hover:text-white transition-colors">contact@eensell.com</a>
           </div>
           
           <p className="text-zinc-600 text-sm font-medium mt-4">

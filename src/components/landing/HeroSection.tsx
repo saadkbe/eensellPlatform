@@ -145,6 +145,7 @@ export function HeroSection() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.9 }}
         className="relative z-30 w-full bg-[#D14526] py-3 mt-8 border-y border-white/20 shadow-xl overflow-hidden"
+        dir="ltr"
       >
         <div className="marquee-track flex w-max items-center gap-8">
           {[...Array(40)].map((_, i) => (

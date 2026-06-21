@@ -454,6 +454,66 @@ export function DashboardClient({
             </div>
           </motion.div>
 
+          {/* Refined Recent Activity */}
+          <motion.div variants={itemVariants} className="flex-1">
+            <Card className="h-full bg-card/60 backdrop-blur-md border-border/50 shadow-lg flex flex-col">
+              <CardHeader className="pb-4 border-b border-border/30 pt-5 px-6 bg-muted/5">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-foreground text-base font-bold flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                      <BarChart3 className="w-4 h-4 text-emerald-500" />
+                    </div>
+                    {t("dash_activity_log")}
+                  </CardTitle>
+                  <Link href="/dashboard/modules" className="text-xs font-bold text-emerald-500 hover:text-emerald-400 flex items-center gap-1 transition-colors">
+                    {t("dash_view_all")} <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </CardHeader>
+              <CardContent className="p-0 flex-1">
+                {recentlyWatched.length === 0 ? (
+                  <div className="text-center py-12 px-6">
+                    <div className="w-16 h-16 bg-muted/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                      <PlayCircle className="w-8 h-8 text-muted-foreground/40" />
+                    </div>
+                    <p className="text-sm font-bold text-foreground">{t("dash_canvas_blank")}</p>
+                    <p className="text-xs font-medium text-muted-foreground mt-2">{t("dash_start_consuming")}</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+                    {recentlyWatched.map((p: any) => (
+                      <Link
+                        key={p.id}
+                        href={`/dashboard/modules/${p.lesson.moduleId}/${p.lessonId}`}
+                        className="flex items-center gap-4 p-4 rounded-xl bg-muted/20 hover:bg-muted/40 border border-border/30 hover:border-border/50 transition-all duration-300 group shadow-sm"
+                      >
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 group-hover:scale-110 ${
+                          p.isCompleted 
+                            ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white" 
+                            : "bg-blue-500/10 border-blue-500/20 text-blue-500 group-hover:bg-blue-500 group-hover:text-white"
+                        }`}>
+                          {p.isCompleted ? (
+                            <CheckCircle2 className="w-5 h-5" />
+                          ) : (
+                            <PlayCircle className="w-5 h-5" />
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-bold text-foreground truncate group-hover:text-primary transition-colors">
+                            {p.lesson.title}
+                          </p>
+                          <p className="text-xs font-medium text-muted-foreground truncate mt-0.5 uppercase tracking-wider">
+                            {p.lesson.module.title}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
+
         </div>
 
         {/* ── RIGHT COLUMN ── */}
@@ -545,66 +605,6 @@ export function DashboardClient({
                     </div>
                     <p className="text-sm font-bold text-foreground">{t("dash_no_broadcasts")}</p>
                     <p className="text-xs font-medium text-muted-foreground mt-2 max-w-[200px] mx-auto leading-relaxed">{t("dash_stay_tuned")}</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Refined Recent Activity */}
-          <motion.div variants={itemVariants} className="flex-1">
-            <Card className="h-full bg-card/60 backdrop-blur-md border-border/50 shadow-lg flex flex-col">
-              <CardHeader className="pb-4 border-b border-border/30 pt-5 px-6 bg-muted/5">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-foreground text-base font-bold flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                      <BarChart3 className="w-4 h-4 text-emerald-500" />
-                    </div>
-                    {t("dash_activity_log")}
-                  </CardTitle>
-                  <Link href="/dashboard/modules" className="text-xs font-bold text-emerald-500 hover:text-emerald-400 flex items-center gap-1 transition-colors">
-                    {t("dash_view_all")} <ChevronRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              </CardHeader>
-              <CardContent className="p-0 flex-1">
-                {recentlyWatched.length === 0 ? (
-                  <div className="text-center py-12 px-6">
-                    <div className="w-16 h-16 bg-muted/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <PlayCircle className="w-8 h-8 text-muted-foreground/40" />
-                    </div>
-                    <p className="text-sm font-bold text-foreground">{t("dash_canvas_blank")}</p>
-                    <p className="text-xs font-medium text-muted-foreground mt-2">{t("dash_start_consuming")}</p>
-                  </div>
-                ) : (
-                  <div className="divide-y divide-border/30 p-2">
-                    {recentlyWatched.map((p: any) => (
-                      <Link
-                        key={p.id}
-                        href={`/dashboard/modules/${p.lesson.moduleId}/${p.lessonId}`}
-                        className="flex items-center gap-4 p-3 rounded-xl hover:bg-muted/40 transition-all duration-300 group"
-                      >
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 group-hover:scale-110 ${
-                          p.isCompleted 
-                            ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white" 
-                            : "bg-blue-500/10 border-blue-500/20 text-blue-500 group-hover:bg-blue-500 group-hover:text-white"
-                        }`}>
-                          {p.isCompleted ? (
-                            <CheckCircle2 className="w-5 h-5" />
-                          ) : (
-                            <PlayCircle className="w-5 h-5" />
-                          )}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-bold text-foreground truncate group-hover:text-primary transition-colors">
-                            {p.lesson.title}
-                          </p>
-                          <p className="text-xs font-medium text-muted-foreground truncate mt-0.5 uppercase tracking-wider">
-                            {p.lesson.module.title}
-                          </p>
-                        </div>
-                      </Link>
-                    ))}
                   </div>
                 )}
               </CardContent>
