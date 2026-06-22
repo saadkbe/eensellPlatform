@@ -108,6 +108,7 @@ export default function RootLayout({
           <link rel="dns-prefetch" href="https://flagcdn.com" />
           <link rel="preconnect" href="https://github.com" />
           <link rel="preconnect" href="https://cdn.simpleicons.org" />
+          <link rel="preload" href="/landingpagevideo.mp4" as="video" type="video/mp4" />
         </head>
         <body className={`${inter.variable} ${cairo.variable} font-sans antialiased`}>
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />

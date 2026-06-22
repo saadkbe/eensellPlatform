@@ -127,13 +127,20 @@ export function HeroSection() {
         <div className="relative w-full p-[2px] sm:p-[3px] bg-gradient-to-br from-[#FF6B4A]/60 to-[#D14526]/60 backdrop-blur-md rounded-[1.5rem] lg:rounded-[2.5rem] shadow-[0_0_80px_-15px_rgba(255,107,74,0.4)]">
           <div className="overflow-hidden rounded-xl lg:rounded-[2rem] bg-zinc-900 shadow-inner relative aspect-video">
             <video
-              src="/dashboard-video.mp4"
-              poster="/dashboard.png"
-              autoPlay
-              loop
-              muted
-              playsInline
+              src="/landingpagevideo.mp4"
+              autoPlay={true}
+              loop={true}
+              muted={true}
+              playsInline={true}
+              preload="auto"
               className="absolute inset-0 w-full h-full object-cover"
+              ref={(el) => {
+                if (el) {
+                  el.defaultMuted = true;
+                  el.muted = true;
+                  el.play().catch(e => console.log("Autoplay prevented", e));
+                }
+              }}
             />
           </div>
         </div>

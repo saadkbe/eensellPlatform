@@ -51,11 +51,12 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
         {/* Balanced Centered Links */}
         {!hideLinks && (
           <div className="hidden lg:flex flex-1 justify-center items-center gap-6 text-[15px] font-bold text-zinc-600 px-4 whitespace-nowrap">
-            <Link href="#pricing" className="hover:text-zinc-900 transition-colors">Pricing</Link>
-            <Link href="#features" className="hover:text-zinc-900 transition-colors">Features</Link>
-            <Link href="#how-it-works" className="hover:text-zinc-900 transition-colors">Process</Link>
-            <Link href="#testimonials" className="hover:text-zinc-900 transition-colors">Testimonials</Link>
-            <Link href="#faq" className="hover:text-zinc-900 transition-colors">FAQ</Link>
+            <Link href="/#pricing" className="hover:text-zinc-900 transition-colors">Pricing</Link>
+            <Link href="/#features" className="hover:text-zinc-900 transition-colors">Features</Link>
+            <Link href="/#how-it-works" className="hover:text-zinc-900 transition-colors">Process</Link>
+            <Link href="/#testimonials" className="hover:text-zinc-900 transition-colors">Testimonials</Link>
+            <Link href="/#faq" className="hover:text-zinc-900 transition-colors">FAQ</Link>
+            <Link href="/contact" className="hover:text-zinc-900 transition-colors">Contact</Link>
           </div>
         )}
 
@@ -132,11 +133,12 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
           <div className="bg-white/95 backdrop-blur-2xl border border-zinc-200/50 rounded-3xl shadow-2xl p-6 flex flex-col gap-6">
             {/* Mobile Links */}
             <div className="flex flex-col gap-5 text-lg font-bold text-zinc-700">
-              <Link href="#pricing" onClick={() => setIsMobileMenuOpen(false)}>Pricing</Link>
-              <Link href="#features" onClick={() => setIsMobileMenuOpen(false)}>Features</Link>
-              <Link href="#how-it-works" onClick={() => setIsMobileMenuOpen(false)}>Process</Link>
-              <Link href="#testimonials" onClick={() => setIsMobileMenuOpen(false)}>Testimonials</Link>
-              <Link href="#faq" onClick={() => setIsMobileMenuOpen(false)}>FAQ</Link>
+              <Link href="/#pricing" onClick={() => setIsMobileMenuOpen(false)}>Pricing</Link>
+              <Link href="/#features" onClick={() => setIsMobileMenuOpen(false)}>Features</Link>
+              <Link href="/#how-it-works" onClick={() => setIsMobileMenuOpen(false)}>Process</Link>
+              <Link href="/#testimonials" onClick={() => setIsMobileMenuOpen(false)}>Testimonials</Link>
+              <Link href="/#faq" onClick={() => setIsMobileMenuOpen(false)}>FAQ</Link>
+              <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
             </div>
 
             <div className="h-px w-full bg-zinc-200/60" />

@@ -342,3 +342,36 @@ export async function sendBroadcastEmail(
     return { success: false, error };
   }
 }
+
+// 6. Send Contact Email (from Contact Form)
+export async function sendContactEmail(name: string, email: string, message: string) {
+  try {
+    const { data, error } = await resend.emails.send({
+      from: `Eensell Website <${FROM_EMAIL}>`,
+      to: "contact@eensell.com",
+      replyTo: email,
+      subject: `New Contact Form Submission from ${name}`,
+      html: buildPremiumTemplate({
+        title: "New Contact Message",
+        subtitle: "Website Inquiry",
+        content: `
+          <p style="margin:0 0 16px;"><strong>Name:</strong> ${name}</p>
+          <p style="margin:0 0 16px;"><strong>Email:</strong> ${email}</p>
+          <div style="background-color:#27272a;padding:20px;border-radius:8px;margin-top:10px;">
+            <p style="margin:0;white-space:pre-wrap;">${message}</p>
+          </div>
+        `
+      })
+    });
+
+    if (error) {
+      console.error("Error sending contact email:", error);
+      return { success: false, error };
+    }
+
+    return { success: true, data };
+  } catch (error) {
+    console.error("Failed to send contact email:", error);
+    return { success: false, error };
+  }
+}
