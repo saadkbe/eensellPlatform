@@ -29,8 +29,8 @@ function PendingContent() {
   const whatsappSub = language === "ar" ? "دعم مباشر عبر الواتساب • تفعيل في 60 ثانية" : language === "fr" ? "Support direct via WhatsApp • Activation en 60 secondes" : "Direct WhatsApp support • Activation in 60 seconds";
 
   const bankDetails = [
-    { label: language === "ar" ? "البنك" : "Bank", value: "CIH Bank", icon: Building2, colSpan: "col-span-1" },
-    { label: language === "ar" ? "الاسم الكامل" : "Name", value: "MONSIEUR SAAD KAABOUCHE", icon: User, colSpan: "col-span-1" },
+    { label: language === "ar" ? "البنك" : "Bank", value: "CIH Bank", icon: Building2, colSpan: "col-span-1 md:col-span-2" },
+    { label: language === "ar" ? "الاسم الكامل" : "Name", value: "MONSIEUR SAAD KAABOUCHE", icon: User, colSpan: "col-span-1 md:col-span-2" },
     { label: language === "ar" ? "رقم الحساب (Compte)" : "Compte", value: "3546303211005900", icon: CreditCard, colSpan: "col-span-1 md:col-span-2" },
     { label: language === "ar" ? "رمز البنك (RIB)" : "RIB", value: "230825354630321100590031", icon: Hash, colSpan: "col-span-1 md:col-span-2" },
     { label: language === "ar" ? "رقم الحساب الدولي (IBAN)" : "IBAN", value: "MA64 2308 2535 4630 3211 0059 0031", icon: Globe, colSpan: "col-span-1 md:col-span-2" },
@@ -141,7 +141,7 @@ function PendingContent() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-xs sm:text-sm font-bold text-muted-foreground mb-1">{item.label}</p>
-                      <p className="text-sm sm:text-base md:text-lg font-black text-foreground tracking-wider break-all select-all">
+                      <p className="text-sm sm:text-base md:text-lg font-black text-foreground tracking-wider break-words select-all">
                         {item.value}
                       </p>
                     </div>
