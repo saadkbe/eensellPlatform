@@ -31,8 +31,8 @@ function PendingContent() {
   const bankDetails = [
     { label: language === "ar" ? "البنك" : "Bank", value: "CIH Bank", icon: Building2, colSpan: "col-span-1" },
     { label: language === "ar" ? "الاسم الكامل" : "Name", value: "MONSIEUR SAAD KAABOUCHE", icon: User, colSpan: "col-span-1" },
-    { label: language === "ar" ? "رقم الحساب (Compte)" : "Compte", value: "3546303211005900", icon: CreditCard, colSpan: "col-span-1" },
-    { label: language === "ar" ? "رمز البنك (RIB)" : "RIB", value: "230825354630321100590031", icon: Hash, colSpan: "col-span-1" },
+    { label: language === "ar" ? "رقم الحساب (Compte)" : "Compte", value: "3546303211005900", icon: CreditCard, colSpan: "col-span-1 md:col-span-2" },
+    { label: language === "ar" ? "رمز البنك (RIB)" : "RIB", value: "230825354630321100590031", icon: Hash, colSpan: "col-span-1 md:col-span-2" },
     { label: language === "ar" ? "رقم الحساب الدولي (IBAN)" : "IBAN", value: "MA64 2308 2535 4630 3211 0059 0031", icon: Globe, colSpan: "col-span-1 md:col-span-2" },
     { label: language === "ar" ? "رمز السويفت (SWIFT)" : "SWIFT", value: "CIHMMAMC", icon: FileCode2, colSpan: "col-span-1 md:col-span-2" },
   ];
@@ -133,15 +133,15 @@ function PendingContent() {
               return (
                 <div 
                   key={index}
-                  className={`bg-background/60 rounded-[1.5rem] p-5 sm:p-6 border border-border/50 hover:border-brand/30 transition-all duration-300 flex items-center justify-between gap-4 group ${item.colSpan}`}
+                  className={`bg-background/60 rounded-[1.5rem] p-5 sm:p-6 border border-border/50 hover:border-brand/30 transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group ${item.colSpan}`}
                 >
-                  <div className="flex items-center gap-4 min-w-0 flex-1">
+                  <div className="flex items-center gap-4 min-w-0 flex-1 w-full">
                     <div className="w-12 h-12 rounded-[1.25rem] bg-brand/10 border border-brand/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                       <Icon className="w-6 h-6 text-brand" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-xs sm:text-sm font-bold text-muted-foreground mb-1">{item.label}</p>
-                      <p className="text-sm sm:text-base font-black text-foreground tracking-wide break-all sm:break-normal select-all">
+                      <p className="text-sm sm:text-base md:text-lg font-black text-foreground tracking-wider break-all select-all">
                         {item.value}
                       </p>
                     </div>
@@ -150,7 +150,7 @@ function PendingContent() {
                   <Button
                     onClick={() => handleCopy(item.value, item.label)}
                     variant="ghost"
-                    className={`h-11 px-4 rounded-xl font-bold text-xs sm:text-sm shrink-0 flex items-center gap-2 transition-all ${
+                    className={`h-11 px-5 rounded-xl font-bold text-xs sm:text-sm shrink-0 flex items-center justify-center gap-2 transition-all w-full sm:w-auto ${
                       isCopied 
                         ? "bg-success text-white hover:bg-success hover:text-white" 
                         : "bg-secondary/80 text-foreground hover:bg-brand hover:text-white border border-border/60"
@@ -224,4 +224,5 @@ function PendingContent() {
 export default function PendingPage() {
   return <PendingContent />;
 }
+
 
