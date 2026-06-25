@@ -76,23 +76,20 @@ export default async function ModulesPage() {
             if (!module.isPublished) {
               return (
                 <div key={`upcoming-${module.id}`}>
-                  <Card className="bg-[#0a0f1d] border-border/40 transition-all duration-500 group h-full overflow-hidden flex flex-col shadow-xl hover:shadow-2xl rounded-3xl p-0 gap-0 relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-transparent via-black/20 to-black/60 pointer-events-none z-0" />
+                  <Card className="bg-black border-border/40 transition-all duration-500 group h-full overflow-hidden flex flex-col shadow-xl hover:shadow-2xl rounded-3xl p-0 gap-0 relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/[0.02] to-white/[0.05] pointer-events-none z-0" />
                     
                     {/* Full Bleed Image Cover */}
-                    <div className="w-full relative bg-[#030712] overflow-hidden shrink-0 z-10 border-b border-white/10 flex items-center justify-center">
+                    <div className="w-full relative bg-black overflow-hidden shrink-0 z-10 border-b border-white/10 flex items-center justify-center">
                       {module.imageUrl ? (
-                        <>
-                          <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors duration-500 z-10" />
-                          <Image 
-                            src={module.imageUrl} 
-                            alt={module.title}
-                            width={600}
-                            height={338}
-                            priority={index < 6}
-                            className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
-                          />
-                        </>
+                        <Image 
+                          src={module.imageUrl} 
+                          alt={module.title}
+                          width={600}
+                          height={338}
+                          priority={index < 6}
+                          className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
+                        />
                       ) : (
                         <div className="w-full aspect-[16/9] bg-neutral-950 flex flex-col items-center justify-center opacity-40 group-hover:scale-105 transition-transform duration-700 ease-out relative">
                           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
@@ -112,7 +109,7 @@ export default async function ModulesPage() {
                       </div>
                     </div>
 
-                    <CardContent className="p-7 flex flex-col flex-1 z-10 bg-gradient-to-b from-[#0a0f1d] to-[#05070f]">
+                    <CardContent className="p-7 flex flex-col flex-1 z-10 bg-black">
                       <h3 className="text-xl sm:text-2xl font-black text-white mb-3 tracking-tight leading-tight">
                         {module.title}
                       </h3>
@@ -163,23 +160,20 @@ export default async function ModulesPage() {
                 }
                 className="block h-full group"
               >
-                  <Card className="bg-[#0a0f1d] border-border/40 transition-all duration-500 h-full overflow-hidden flex flex-col p-0 gap-0 relative shadow-xl hover:shadow-[0_12px_40px_rgba(59,130,246,0.25)] hover:-translate-y-2 hover:border-primary/50 rounded-3xl">
+                  <Card className="bg-black border-border/40 transition-all duration-500 h-full overflow-hidden flex flex-col p-0 gap-0 relative shadow-xl hover:shadow-[0_12px_40px_rgba(59,130,246,0.25)] hover:-translate-y-2 hover:border-primary/50 rounded-3xl">
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent via-primary/5 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
                     
                     {/* Full Bleed Image Cover */}
-                    <div className="w-full relative bg-[#030712] overflow-hidden shrink-0 z-10 border-b border-white/10 flex items-center justify-center">
+                    <div className="w-full relative bg-black overflow-hidden shrink-0 z-10 border-b border-white/10 flex items-center justify-center">
                       {module.imageUrl ? (
-                        <>
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30 group-hover:opacity-60 transition-opacity duration-500 z-10" />
-                          <Image 
-                            src={module.imageUrl} 
-                            alt={module.title}
-                            width={600}
-                            height={338}
-                            priority={index < 6}
-                            className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
-                          />
-                        </>
+                        <Image 
+                          src={module.imageUrl} 
+                          alt={module.title}
+                          width={600}
+                          height={338}
+                          priority={index < 6}
+                          className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
+                        />
                       ) : (
                         <div className="w-full aspect-[16/9] bg-neutral-950 flex flex-col items-center justify-center group-hover:scale-105 transition-transform duration-700 ease-out relative overflow-hidden">
                           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
@@ -211,7 +205,7 @@ export default async function ModulesPage() {
                       </div>
                     </div>
 
-                  <CardContent className="p-7 flex flex-col flex-1 z-10 bg-gradient-to-b from-[#0a0f1d] to-[#05070f]">
+                  <CardContent className="p-7 flex flex-col flex-1 z-10 bg-black">
                     {/* Title & description */}
                     <h3 className="text-xl sm:text-2xl font-black text-white mb-3 group-hover:text-primary transition-colors tracking-tight leading-tight">
                       {module.title}
