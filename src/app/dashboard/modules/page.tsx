@@ -82,12 +82,9 @@ export default async function ModulesPage() {
                     {/* Full Bleed Image Cover with Smooth Black Fade */}
                     <div className="w-full relative bg-black overflow-hidden shrink-0 z-10 flex items-center justify-center">
                       {module.imageUrl ? (
-                        <Image 
+                        <img 
                           src={module.imageUrl} 
                           alt={module.title}
-                          width={600}
-                          height={338}
-                          priority={index < 6}
                           className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
                         />
                       ) : (
@@ -169,12 +166,9 @@ export default async function ModulesPage() {
                     {/* Full Bleed Image Cover with Smooth Black Fade */}
                     <div className="w-full relative bg-black overflow-hidden shrink-0 z-10 flex items-center justify-center">
                       {module.imageUrl ? (
-                        <Image 
+                        <img 
                           src={module.imageUrl} 
                           alt={module.title}
-                          width={600}
-                          height={338}
-                          priority={index < 6}
                           className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
                         />
                       ) : (
