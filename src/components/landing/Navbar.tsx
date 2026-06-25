@@ -34,7 +34,7 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
       dir={dir}
       className={`fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none transition-all duration-300 ${scrolled ? "top-4" : "top-6"}`}
     >
-      <div className={`pointer-events-auto backdrop-blur-xl rounded-[2rem] px-3 py-3 flex items-center justify-between border max-w-[1100px] w-full transition-all duration-500 relative ${scrolled ? "bg-white/95 shadow-md border-white/80" : "bg-white/40 shadow-pill border-white/40"}`}>
+      <div className={`pointer-events-auto backdrop-blur-xl rounded-[2.5rem] px-5 py-4 flex items-center justify-between border max-w-[1250px] w-full transition-all duration-500 relative ${scrolled ? "bg-white/95 shadow-lg border-white/80" : "bg-white/40 shadow-pill border-white/40"}`}>
         {/* Left side Logo */}
         <div className="flex-shrink-0">
           <Link href="/" className="pl-4 rtl:pl-0 rtl:pr-4 flex items-center">
@@ -43,14 +43,14 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
               alt="Eensell University"
               width={360}
               height={80}
-              className="h-14 w-auto scale-[1.5] sm:scale-[1.7] origin-left rtl:origin-right object-contain ml-3"
+              className="h-16 sm:h-20 w-auto scale-[1.7] sm:scale-[2.0] origin-left rtl:origin-right object-contain ml-4 transition-all duration-300"
             />
           </Link>
         </div>
 
         {/* Balanced Centered Links */}
         {!hideLinks && (
-          <div className="hidden lg:flex flex-1 justify-center items-center gap-6 text-[15px] font-bold text-zinc-600 px-4 whitespace-nowrap">
+          <div className="hidden lg:flex flex-1 justify-center items-center gap-8 text-[17px] font-bold text-zinc-600 px-6 whitespace-nowrap">
             <Link href="/#pricing" className="hover:text-zinc-900 transition-colors">Pricing</Link>
             <Link href="/#features" className="hover:text-zinc-900 transition-colors">Features</Link>
             <Link href="/#how-it-works" className="hover:text-zinc-900 transition-colors">Process</Link>
@@ -61,15 +61,15 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
         )}
 
         {/* Right side Actions & Language (Desktop) */}
-        <div className={`flex items-center gap-1 sm:gap-2 flex-shrink-0 pr-1 rtl:pr-0 rtl:pl-1 ${hideLinks ? "" : "hidden lg:flex"}`}>
+        <div className={`flex items-center gap-2 sm:gap-3 flex-shrink-0 pr-1 rtl:pr-0 rtl:pl-1 ${hideLinks ? "" : "hidden lg:flex"}`}>
           {/* Lang selector toggle */}
           <div className={`relative mr-2 rtl:ml-2 rtl:mr-0 pr-2 rtl:pl-2 rtl:pr-0 ${!hideLinks ? "border-r rtl:border-l rtl:border-r-0 border-zinc-300/50" : ""}`}>
             <button
               onClick={() => setIsLangOpen(!isLangOpen)}
-              className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-black/5 transition-colors"
+              className="flex items-center gap-2 px-3 py-2.5 rounded-xl hover:bg-black/5 transition-colors"
             >
               <img src={languages.find((l) => l.code === language)?.flagUrl} alt={language} className="w-5 h-auto rounded-[2px] shadow-sm border border-zinc-200/50" />
-              <span className="font-bold text-sm text-zinc-800 hidden sm:block">{language.toUpperCase()}</span>
+              <span className="font-bold text-base text-zinc-800 hidden sm:block">{language.toUpperCase()}</span>
               <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${isLangOpen ? "rotate-180" : ""}`} />
             </button>
 
@@ -97,12 +97,12 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
           {!hideLinks && (
             <>
               <Link href="/sign-in">
-                <Button variant="ghost" className="hidden sm:flex rounded-full px-5 h-12 font-bold text-zinc-700 hover:text-zinc-900 hover:bg-white/50">
+                <Button variant="ghost" className="hidden sm:flex rounded-full px-6 h-13 sm:h-14 text-base font-bold text-zinc-700 hover:text-zinc-900 hover:bg-white/50">
                   {t("nav_signIn")}
                 </Button>
               </Link>
               <Link href="/sign-up">
-                <Button className="rounded-full px-6 sm:px-8 h-12 font-bold bg-[#FF6B4A] hover:bg-[#E85A3B] text-white shadow-sm transition-transform hover:-translate-y-0.5">
+                <Button className="rounded-full px-7 sm:px-9 h-13 sm:h-14 text-base font-bold bg-[#FF6B4A] hover:bg-[#E85A3B] text-white shadow-md transition-transform hover:-translate-y-0.5">
                   {t("nav_cta")}
                 </Button>
               </Link>
@@ -114,10 +114,10 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
         {!hideLinks && (
           <div className="lg:hidden pr-2 rtl:pr-0 rtl:pl-2">
             <button 
-              className="p-2.5 rounded-xl bg-black/5 hover:bg-black/10 text-zinc-900 transition-colors"
+              className="p-3 rounded-xl bg-black/5 hover:bg-black/10 text-zinc-900 transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
             </button>
           </div>
         )}

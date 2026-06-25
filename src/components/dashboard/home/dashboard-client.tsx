@@ -123,16 +123,21 @@ export function DashboardClient({
       className="space-y-6 pb-12"
     >
       {/* ── Welcome Banner ── */}
-      <motion.div variants={itemVariants} className="relative overflow-hidden rounded-3xl bg-[#030712] border border-[#1f2937] p-8 sm:p-10 shadow-2xl">
-        {/* Dynamic Abstract Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1e1b4b]/80 via-[#030712] to-[#082f49]/80 pointer-events-none" />
-        <div className="absolute top-0 right-0 w-3/4 h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-500/20 via-transparent to-transparent pointer-events-none" />
-        <div className="absolute -top-32 -right-32 w-96 h-96 bg-blue-600/30 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-purple-600/20 rounded-full blur-[100px] pointer-events-none" />
+      <motion.div 
+        variants={itemVariants} 
+        className="relative overflow-hidden rounded-3xl border border-orange-500/30 p-8 sm:p-10 shadow-2xl"
+        style={{
+          backgroundImage: `url('/welcome-bg.svg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
+        {/* Dark Overlay for Text Legibility */}
+        <div className="absolute inset-0 bg-black/40 pointer-events-none" />
 
         {/* Animated Grid */}
         <div 
-          className="absolute inset-0 opacity-[0.05] pointer-events-none"
+          className="absolute inset-0 opacity-[0.07] pointer-events-none"
           style={{
             backgroundImage: `linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)`,
             backgroundSize: '40px 40px',
@@ -141,14 +146,14 @@ export function DashboardClient({
 
         {/* Floating Accents */}
         <motion.div 
-          animate={{ y: [0, -10, 0], opacity: [0.3, 0.6, 0.3] }}
+          animate={{ y: [0, -10, 0], opacity: [0.4, 0.8, 0.4] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-12 left-1/4 w-2 h-2 rounded-full bg-blue-400 shadow-[0_0_15px_rgba(96,165,250,0.8)]"
+          className="absolute top-12 left-1/4 w-2.5 h-2.5 rounded-full bg-orange-400 shadow-[0_0_20px_rgba(251,146,60,0.9)]"
         />
         <motion.div 
-          animate={{ y: [0, 15, 0], opacity: [0.2, 0.5, 0.2] }}
+          animate={{ y: [0, 15, 0], opacity: [0.3, 0.7, 0.3] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute bottom-16 right-1/3 w-1.5 h-1.5 rounded-full bg-purple-400 shadow-[0_0_10px_rgba(192,132,252,0.8)]"
+          className="absolute bottom-16 right-1/3 w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.9)]"
         />
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
@@ -157,17 +162,17 @@ export function DashboardClient({
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-6 shadow-lg"
             >
-              <Sparkles className="w-4 h-4 text-blue-400" />
-              <span className="text-sm font-medium text-blue-100">{greeting}</span>
+              <Sparkles className="w-4 h-4 text-orange-400" />
+              <span className="text-sm font-semibold text-orange-100">{greeting}</span>
             </motion.div>
             
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-indigo-200 tracking-tight mb-4"
+              className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-100 to-amber-200 tracking-tight mb-4"
             >
               {t("dash_welcome_back")}, {firstName}
             </motion.h1>
@@ -176,7 +181,7 @@ export function DashboardClient({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-base sm:text-lg text-slate-300 leading-relaxed font-light"
+              className="text-base sm:text-lg text-slate-200 leading-relaxed font-light"
             >
               {t("dash_welcome_sub")}
             </motion.p>
@@ -189,10 +194,10 @@ export function DashboardClient({
             className="shrink-0"
           >
             <Link href="/dashboard/modules">
-              <Button className="group relative h-14 px-8 bg-white text-black hover:bg-slate-100 rounded-2xl font-bold text-lg shadow-[0_0_40px_rgba(255,255,255,0.15)] transition-all hover:scale-105 hover:shadow-[0_0_60px_rgba(255,255,255,0.25)] border-0 overflow-hidden">
+              <Button className="group relative h-14 px-8 bg-white text-black hover:bg-slate-100 rounded-2xl font-bold text-lg shadow-[0_0_40px_rgba(251,146,60,0.3)] transition-all hover:scale-105 hover:shadow-[0_0_60px_rgba(251,146,60,0.5)] border-0 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
                 <span className="relative flex items-center gap-3">
-                  <PlayCircle className="w-5 h-5 text-indigo-600" />
+                  <PlayCircle className="w-5 h-5 text-orange-600" />
                   {t("dash_resume_journey")}
                 </span>
               </Button>

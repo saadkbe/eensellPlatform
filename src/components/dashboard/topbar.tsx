@@ -56,21 +56,21 @@ export function TopBar() {
   });
 
   return (
-    <div className="sticky top-0 z-30 w-full flex items-center justify-between px-4 sm:px-8 lg:px-10 py-5 bg-card border-b border-border transition-all duration-300 shadow-sm">
+    <div className="sticky top-0 z-30 w-full flex items-center justify-between px-4 sm:px-8 lg:px-10 py-6 sm:py-7 bg-card border-b border-border transition-all duration-300 shadow-sm">
       <div className="flex items-center">
-        {breadcrumbs.length > 0 ? breadcrumbs : <span className="text-foreground font-semibold text-lg">{t("topbar_home")}</span>}
+        {breadcrumbs.length > 0 ? breadcrumbs : <span className="text-foreground font-bold text-xl sm:text-2xl tracking-tight">{t("topbar_home")}</span>}
       </div>
       
-      <div className="flex items-center gap-3 sm:gap-4">
+      <div className="flex items-center gap-4 sm:gap-5">
         {/* Language Toggle */}
         <div className="relative">
           <button
             onClick={() => setIsLangOpen(!isLangOpen)}
-            className="flex items-center justify-center gap-2 h-9 px-3 rounded-full bg-muted/50 hover:bg-muted border border-border transition-colors text-muted-foreground hover:text-foreground"
+            className="flex items-center justify-center gap-2.5 h-11 px-4 rounded-full bg-muted/50 hover:bg-muted border border-border transition-colors text-muted-foreground hover:text-foreground shadow-sm"
           >
-            <img src={languages.find((l) => l.code === language)?.flagUrl} alt={language} className="w-4 h-auto rounded-[2px] shadow-sm" />
-            <span className="font-semibold text-xs hidden sm:block">{language.toUpperCase()}</span>
-            <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isLangOpen ? "rotate-180" : ""}`} />
+            <img src={languages.find((l) => l.code === language)?.flagUrl} alt={language} className="w-4.5 h-auto rounded-[2px] shadow-sm" />
+            <span className="font-semibold text-sm hidden sm:block">{language.toUpperCase()}</span>
+            <ChevronDown className={`w-4 h-4 transition-transform ${isLangOpen ? "rotate-180" : ""}`} />
           </button>
 
           {isLangOpen && (
@@ -99,18 +99,18 @@ export function TopBar() {
         </div>
         
         {currentDate && (
-          <div className="hidden sm:flex items-center gap-2 text-xs font-medium text-muted-foreground bg-muted/50 px-3 py-1.5 rounded-full border border-border">
-            <Calendar className="w-3.5 h-3.5" />
+          <div className="hidden sm:flex items-center gap-2.5 text-sm font-medium text-muted-foreground bg-muted/50 px-4 py-2.5 rounded-full border border-border shadow-sm">
+            <Calendar className="w-4 h-4" />
             <span>{currentDate}</span>
           </div>
         )}
 
-        <Link href="/dashboard/community" className="hidden sm:flex items-center justify-center text-muted-foreground hover:text-foreground h-9 w-9 rounded-full bg-muted/50 border border-border transition-colors">
-          <HelpCircle className="w-4 h-4" />
+        <Link href="/dashboard/community" className="hidden sm:flex items-center justify-center text-muted-foreground hover:text-foreground h-11 w-11 rounded-full bg-muted/50 border border-border transition-colors shadow-sm">
+          <HelpCircle className="w-5 h-5" />
         </Link>
 
-        <Link href="/dashboard/community" className="flex items-center justify-center text-muted-foreground hover:text-foreground h-9 w-9 rounded-full bg-muted/50 border border-border transition-colors">
-          <MessageSquare className="w-4 h-4" />
+        <Link href="/dashboard/community" className="flex items-center justify-center text-muted-foreground hover:text-foreground h-11 w-11 rounded-full bg-muted/50 border border-border transition-colors shadow-sm">
+          <MessageSquare className="w-5 h-5" />
         </Link>
 
         <NotificationBell />
