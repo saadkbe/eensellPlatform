@@ -36,7 +36,7 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
     >
       <div className={`pointer-events-auto backdrop-blur-xl rounded-[2.5rem] px-5 py-4 flex items-center justify-between border max-w-[1250px] w-full transition-all duration-500 relative ${scrolled ? "bg-white/95 shadow-lg border-white/80" : "bg-white/40 shadow-pill border-white/40"}`}>
         {/* Left side Logo */}
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0 mr-16 sm:mr-28 rtl:mr-0 rtl:ml-16 sm:rtl:ml-28">
           <Link href="/" className="pl-4 rtl:pl-0 rtl:pr-4 flex items-center">
             <Image
               src="/logo.png"

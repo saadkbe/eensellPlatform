@@ -79,11 +79,22 @@ export default async function ModulesPage() {
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/5 dark:to-white/[0.02] pointer-events-none z-0" />
                     
                     {/* Full Bleed Image Cover */}
-                    <div className="w-full aspect-[16/9] relative bg-neutral-950 overflow-hidden shrink-0 z-10 border-b border-border/20">
-                      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center opacity-40 group-hover:scale-105 transition-transform duration-700 ease-out">
-                        <BookOpen className="w-12 h-12 text-neutral-500 mb-2" />
-                      </div>
+                    <div className="w-full relative bg-[#030712] overflow-hidden shrink-0 z-10 border-b border-border/20 flex items-center justify-center">
+                      {module.imageUrl ? (
+                        <>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/20 group-hover:opacity-80 transition-opacity duration-500 z-10" />
+                          <img 
+                            src={module.imageUrl} 
+                            alt={module.title}
+                            className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
+                          />
+                        </>
+                      ) : (
+                        <div className="w-full aspect-[16/9] bg-neutral-950 flex flex-col items-center justify-center opacity-40 group-hover:scale-105 transition-transform duration-700 ease-out relative">
+                          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
+                          <BookOpen className="w-12 h-12 text-neutral-500 mb-2" />
+                        </div>
+                      )}
                       
                       {/* Floating Badges on Image */}
                       <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
@@ -152,18 +163,18 @@ export default async function ModulesPage() {
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
                     
                     {/* Full Bleed Image Cover */}
-                    <div className="w-full aspect-[16/9] relative bg-card overflow-hidden shrink-0 z-10 border-b border-border/20">
+                    <div className="w-full relative bg-[#030712] overflow-hidden shrink-0 z-10 border-b border-border/20 flex items-center justify-center">
                       {module.imageUrl ? (
                         <>
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/20 group-hover:opacity-80 transition-opacity duration-500 z-10" />
                           <img 
                             src={module.imageUrl} 
                             alt={module.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                            className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
                           />
                         </>
                       ) : (
-                        <div className="w-full h-full bg-neutral-950 flex flex-col items-center justify-center group-hover:scale-105 transition-transform duration-700 ease-out relative overflow-hidden">
+                        <div className="w-full aspect-[16/9] bg-neutral-950 flex flex-col items-center justify-center group-hover:scale-105 transition-transform duration-700 ease-out relative overflow-hidden">
                           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
                           <BookOpen className="w-12 h-12 text-neutral-800 relative z-10" />
                         </div>

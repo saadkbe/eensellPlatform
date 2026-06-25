@@ -249,10 +249,10 @@ export function DashboardClient({
                   <div className="flex flex-col sm:flex-row bg-background/40 rounded-2xl overflow-hidden border border-border/50">
                     
                     {/* Thumbnail Area */}
-                    <div className="relative w-full sm:w-1/3 aspect-video sm:aspect-auto overflow-hidden bg-muted group-hover:shadow-inner transition-all">
+                    <div className="relative w-full sm:w-1/3 overflow-hidden bg-[#030712] group-hover:shadow-inner transition-all flex items-center justify-center">
                       {continueModule?.imageUrl ? (
                         <>
-                          <img src={continueModule.imageUrl} alt={continueModule.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                          <img src={continueModule.imageUrl} alt={continueModule.title} className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-105" />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                         </>
                       ) : (
