@@ -100,10 +100,32 @@ function PendingContent() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.5 }}
-          className="text-muted-foreground text-base sm:text-lg mb-10 leading-relaxed font-medium text-center max-w-xl px-2"
+          className="text-muted-foreground text-base sm:text-lg mb-6 leading-relaxed font-medium text-center max-w-xl px-2"
         >
           {subtitle}
         </motion.p>
+
+        {/* Big Price Tag */}
+        <motion.h1
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45, duration: 0.5 }}
+          className="text-5xl sm:text-6xl md:text-7xl font-black text-brand mb-8 text-center drop-shadow-[0_0_25px_rgba(255,107,74,0.3)] tracking-tighter"
+        >
+          200dh
+        </motion.h1>
+
+        {/* Payment Methods Logos */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.48, duration: 0.5 }}
+          className="flex flex-wrap items-center justify-center gap-8 sm:gap-14 mb-12 bg-card/60 backdrop-blur-xl px-8 py-6 rounded-3xl border border-border/60 shadow-2xl w-full max-w-2xl mx-auto"
+        >
+          <img src="/Cih-bank.png" alt="CIH Bank" className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 hover:scale-110" />
+          <img src="/wafacash-logo-png_seeklogo-251985.png" alt="Wafacash" className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 hover:scale-110" />
+          <img src="/cashplus-logo-png_seeklogo-384674.png" alt="Cash Plus" className="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 hover:scale-110" />
+        </motion.div>
 
         {/* Premium Bento Grid Bank Details Card */}
         <motion.div
