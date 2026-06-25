@@ -51,15 +51,12 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
         {/* Center Navigation Links */}
         {!hideLinks && (
           <div className="hidden lg:flex items-center gap-1 sm:gap-2 bg-black/5 p-1.5 rounded-full border border-black/5">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="px-5 py-2.5 rounded-full text-[17px] font-semibold text-zinc-700 hover:text-zinc-950 hover:bg-white/80 transition-all duration-200"
-              >
-                {t(item.titleKey)}
-              </Link>
-            ))}
+            <Link href="/#pricing" className="px-5 py-2.5 rounded-full text-[17px] font-semibold text-zinc-700 hover:text-zinc-950 hover:bg-white/80 transition-all duration-200">Pricing</Link>
+            <Link href="/#features" className="px-5 py-2.5 rounded-full text-[17px] font-semibold text-zinc-700 hover:text-zinc-950 hover:bg-white/80 transition-all duration-200">Features</Link>
+            <Link href="/#how-it-works" className="px-5 py-2.5 rounded-full text-[17px] font-semibold text-zinc-700 hover:text-zinc-950 hover:bg-white/80 transition-all duration-200">Process</Link>
+            <Link href="/#testimonials" className="px-5 py-2.5 rounded-full text-[17px] font-semibold text-zinc-700 hover:text-zinc-950 hover:bg-white/80 transition-all duration-200">Testimonials</Link>
+            <Link href="/#faq" className="px-5 py-2.5 rounded-full text-[17px] font-semibold text-zinc-700 hover:text-zinc-950 hover:bg-white/80 transition-all duration-200">FAQ</Link>
+            <Link href="/contact" className="px-5 py-2.5 rounded-full text-[17px] font-semibold text-zinc-700 hover:text-zinc-950 hover:bg-white/80 transition-all duration-200">Contact</Link>
           </div>
         )}
 
