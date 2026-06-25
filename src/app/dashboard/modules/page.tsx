@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 
@@ -69,23 +70,26 @@ export default async function ModulesPage() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
           {modules.map((module, index) => {
             // For unpublished modules, they are "locked" and "upcoming"
             if (!module.isPublished) {
               return (
                 <div key={`upcoming-${module.id}`}>
-                  <Card className="bg-card border-border/40 transition-all duration-500 group h-full overflow-hidden flex flex-col shadow-sm hover:shadow-md p-0 gap-0 relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/5 dark:to-white/[0.02] pointer-events-none z-0" />
+                  <Card className="bg-[#0a0f1d] border-border/40 transition-all duration-500 group h-full overflow-hidden flex flex-col shadow-xl hover:shadow-2xl rounded-3xl p-0 gap-0 relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-transparent via-black/20 to-black/60 pointer-events-none z-0" />
                     
                     {/* Full Bleed Image Cover */}
-                    <div className="w-full relative bg-[#030712] overflow-hidden shrink-0 z-10 border-b border-border/20 flex items-center justify-center">
+                    <div className="w-full relative bg-[#030712] overflow-hidden shrink-0 z-10 border-b border-white/10 flex items-center justify-center">
                       {module.imageUrl ? (
                         <>
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/20 group-hover:opacity-80 transition-opacity duration-500 z-10" />
-                          <img 
+                          <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors duration-500 z-10" />
+                          <Image 
                             src={module.imageUrl} 
                             alt={module.title}
+                            width={600}
+                            height={338}
+                            priority={index < 6}
                             className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
                           />
                         </>
@@ -98,32 +102,32 @@ export default async function ModulesPage() {
                       
                       {/* Floating Badges on Image */}
                       <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
-                        <span className="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md text-[10px] font-bold text-white uppercase tracking-widest border border-white/10 shadow-xl">
+                        <span className="px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-xs font-black text-white uppercase tracking-widest border border-white/20 shadow-2xl">
                           MOD {String(index + 1).padStart(2, "0")}
                         </span>
-                        <Badge className="bg-amber-500/90 hover:bg-amber-500 text-white border-transparent text-[10px] shadow-lg backdrop-blur-md font-semibold tracking-wide">
-                          <Lock className="w-3 h-3 mr-1.5" />
+                        <Badge className="bg-amber-500 hover:bg-amber-400 text-white border-transparent text-xs shadow-[0_0_20px_rgba(245,158,11,0.5)] backdrop-blur-md font-black tracking-wider px-3 py-1 rounded-xl">
+                          <Lock className="w-3.5 h-3.5 mr-1.5" />
                           Dropping Soon
                         </Badge>
                       </div>
                     </div>
 
-                    <CardContent className="p-6 flex flex-col flex-1 z-10">
-                      <h3 className="text-lg font-bold text-foreground/80 mb-2 leading-tight">
+                    <CardContent className="p-7 flex flex-col flex-1 z-10 bg-gradient-to-b from-[#0a0f1d] to-[#05070f]">
+                      <h3 className="text-xl sm:text-2xl font-black text-white mb-3 tracking-tight leading-tight">
                         {module.title}
                       </h3>
-                      <p className="text-sm text-muted-foreground/70 line-clamp-2 mb-6 leading-relaxed">
+                      <p className="text-sm sm:text-base text-slate-400/90 line-clamp-2 mb-8 leading-relaxed font-normal">
                         {module.description || "This module is currently in production and will be dropping soon. Stay tuned!"}
                       </p>
 
-                      <div className="mt-auto pt-4 border-t border-border/30">
-                        <div className="flex items-center justify-between text-xs mb-2">
-                          <span className="text-muted-foreground font-medium">Progress</span>
-                          <span className="text-muted-foreground font-bold">Locked</span>
+                      <div className="mt-auto pt-5 border-t border-white/10">
+                        <div className="flex items-center justify-between text-xs sm:text-sm mb-2.5">
+                          <span className="text-slate-400 font-bold uppercase tracking-wider">Progress</span>
+                          <span className="text-amber-500 font-black tracking-wider uppercase">Locked</span>
                         </div>
                         <Progress
                           value={0}
-                          className="h-1.5 bg-muted opacity-50"
+                          className="h-2.5 bg-slate-800/80 rounded-full"
                         />
                       </div>
                     </CardContent>
@@ -159,17 +163,20 @@ export default async function ModulesPage() {
                 }
                 className="block h-full group"
               >
-                  <Card className="bg-card border-border/50 transition-all duration-500 h-full overflow-hidden flex flex-col p-0 gap-0 relative shadow-sm hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1.5 dark:hover:shadow-[0_8px_30px_rgba(255,255,255,0.05)] hover:border-primary/40">
-                    <div className="absolute inset-0 bg-gradient-to-br from-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
+                  <Card className="bg-[#0a0f1d] border-border/40 transition-all duration-500 h-full overflow-hidden flex flex-col p-0 gap-0 relative shadow-xl hover:shadow-[0_12px_40px_rgba(59,130,246,0.25)] hover:-translate-y-2 hover:border-primary/50 rounded-3xl">
+                    <div className="absolute inset-0 bg-gradient-to-br from-transparent via-primary/5 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
                     
                     {/* Full Bleed Image Cover */}
-                    <div className="w-full relative bg-[#030712] overflow-hidden shrink-0 z-10 border-b border-border/20 flex items-center justify-center">
+                    <div className="w-full relative bg-[#030712] overflow-hidden shrink-0 z-10 border-b border-white/10 flex items-center justify-center">
                       {module.imageUrl ? (
                         <>
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/20 group-hover:opacity-80 transition-opacity duration-500 z-10" />
-                          <img 
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30 group-hover:opacity-60 transition-opacity duration-500 z-10" />
+                          <Image 
                             src={module.imageUrl} 
                             alt={module.title}
+                            width={600}
+                            height={338}
+                            priority={index < 6}
                             className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
                           />
                         </>
@@ -182,47 +189,47 @@ export default async function ModulesPage() {
                       
                       {/* Floating Badges on Image */}
                       <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
-                        <span className="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md text-[10px] font-bold text-white uppercase tracking-widest border border-white/10 shadow-xl">
+                        <span className="px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-xs font-black text-white uppercase tracking-widest border border-white/20 shadow-2xl">
                           MOD {String(index + 1).padStart(2, "0")}
                         </span>
                         {isCompleted ? (
-                          <Badge className="bg-emerald-500/90 hover:bg-emerald-500 text-white border-transparent text-[10px] shadow-lg backdrop-blur-md font-semibold tracking-wide">
-                            <CheckCircle2 className="w-3 h-3 mr-1.5" />
+                          <Badge className="bg-emerald-500 hover:bg-emerald-400 text-white border-transparent text-xs shadow-[0_0_20px_rgba(16,185,129,0.5)] backdrop-blur-md font-black tracking-wider px-3 py-1 rounded-xl">
+                            <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />
                             Completed
                           </Badge>
                         ) : percent > 0 ? (
-                          <Badge className="bg-primary/90 hover:bg-primary text-white border-transparent text-[10px] shadow-lg backdrop-blur-md font-semibold tracking-wide">
-                            <PlayCircle className="w-3 h-3 mr-1.5" />
+                          <Badge className="bg-primary hover:bg-primary/90 text-white border-transparent text-xs shadow-[0_0_20px_rgba(249,115,22,0.5)] backdrop-blur-md font-black tracking-wider px-3 py-1 rounded-xl">
+                            <PlayCircle className="w-3.5 h-3.5 mr-1.5" />
                             In Progress
                           </Badge>
                         ) : (
-                          <Badge className="bg-black/60 hover:bg-black/80 backdrop-blur-md text-white border-white/10 text-[10px] shadow-lg font-semibold tracking-wide">
-                            <Lock className="w-3 h-3 mr-1.5 text-white/70" />
+                          <Badge className="bg-black/80 hover:bg-black backdrop-blur-md text-white border-white/20 text-xs shadow-2xl font-black tracking-wider px-3 py-1 rounded-xl">
+                            <Lock className="w-3.5 h-3.5 mr-1.5 text-white/70" />
                             Not Started
                           </Badge>
                         )}
                       </div>
                     </div>
 
-                  <CardContent className="p-6 flex flex-col flex-1 z-10 bg-card">
+                  <CardContent className="p-7 flex flex-col flex-1 z-10 bg-gradient-to-b from-[#0a0f1d] to-[#05070f]">
                     {/* Title & description */}
-                    <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors leading-tight">
+                    <h3 className="text-xl sm:text-2xl font-black text-white mb-3 group-hover:text-primary transition-colors tracking-tight leading-tight">
                       {module.title}
                     </h3>
                     {module.description && (
-                      <p className="text-sm text-muted-foreground line-clamp-2 mb-4 leading-relaxed">
+                      <p className="text-sm sm:text-base text-slate-300/90 line-clamp-2 mb-6 leading-relaxed font-normal">
                         {module.description}
                       </p>
                     )}
 
                     {/* Stats */}
-                    <div className="flex items-center gap-4 text-[13px] font-semibold text-muted-foreground/80 mb-6 mt-auto pt-2">
-                      <span className="flex items-center gap-1.5 bg-muted/40 px-2 py-1 rounded-md">
+                    <div className="flex items-center gap-3 text-xs sm:text-sm font-bold text-slate-200 mb-8 mt-auto pt-2">
+                      <span className="flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-xl shadow-inner">
                         <PlayCircle className="w-4 h-4 text-primary" />
                         {totalLessons} lessons
                       </span>
                       {durationMin > 0 && (
-                        <span className="flex items-center gap-1.5 bg-muted/40 px-2 py-1 rounded-md">
+                        <span className="flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-xl shadow-inner">
                           <Clock className="w-4 h-4 text-primary" />
                           ≈ {durationMin} min
                         </span>
@@ -230,16 +237,16 @@ export default async function ModulesPage() {
                     </div>
 
                     {/* Progress */}
-                    <div className="pt-4 border-t border-border/40">
-                      <div className="flex items-center justify-between text-xs mb-2">
-                        <span className="font-medium text-foreground">Course Progress</span>
-                        <span className={percent === 100 ? "text-emerald-500 font-bold" : "text-primary font-bold"}>
+                    <div className="pt-5 border-t border-white/10">
+                      <div className="flex items-center justify-between text-xs sm:text-sm mb-2.5">
+                        <span className="font-bold text-slate-300 uppercase tracking-wider">Course Progress</span>
+                        <span className={percent === 100 ? "text-emerald-400 font-black tracking-wider" : "text-primary font-black tracking-wider"}>
                           {percent}%
                         </span>
                       </div>
                       <Progress
                         value={percent}
-                        className={cn("h-2 bg-secondary", percent === 100 && "[&>div]:bg-emerald-500")}
+                        className={cn("h-2.5 bg-slate-800 rounded-full", percent === 100 && "[&>div]:bg-emerald-500")}
                       />
                     </div>
                   </CardContent>

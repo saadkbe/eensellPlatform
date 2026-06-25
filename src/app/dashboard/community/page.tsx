@@ -16,25 +16,30 @@ export default async function CommunityPage() {
   return (
     <div className="space-y-6 pb-8">
       {/* Header */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#5865F2]/15 via-background to-background border border-border p-7 sm:p-8">
-        <div className="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-l from-[#5865F2]/5 to-transparent pointer-events-none" />
-        <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#5865F2]/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
+      <div 
+        className="relative overflow-hidden rounded-3xl border border-[#5865F2]/40 p-8 sm:p-12 shadow-2xl"
+        style={{
+          backgroundImage: `url('/discord-bg.svg')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="max-w-xl">
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight mb-1.5 flex items-center gap-3">
-              <MessageSquare className="w-7 h-7 text-[#5865F2]" />
+            <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight mb-3 flex items-center gap-3.5 drop-shadow-md">
+              <MessageSquare className="w-8 h-8 text-[#5865F2] animate-pulse" />
               Community Hub
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-base sm:text-lg text-slate-200/90 leading-relaxed font-medium drop-shadow">
               Official announcements and updates from the Eensell team. Join Discord for live discussions.
             </p>
           </div>
-          <div className="shrink-0">
+          <div className="shrink-0 md:pr-12">
             <a
               href="#"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#5865F2] text-white text-sm font-semibold hover:bg-[#4752C4] shadow-lg shadow-[#5865F2]/20 transition-all hover:scale-105"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-[#5865F2] text-white text-base font-bold hover:bg-[#4752C4] shadow-[0_0_30px_rgba(88,101,242,0.5)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(88,101,242,0.8)]"
             >
               Join Discord
             </a>

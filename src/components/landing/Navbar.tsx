@@ -34,7 +34,7 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
       dir={dir}
       className={`fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none transition-all duration-300 ${scrolled ? "top-4" : "top-6"}`}
     >
-      <div className={`pointer-events-auto backdrop-blur-xl rounded-[2.5rem] px-5 py-4 flex items-center justify-between border max-w-[1250px] w-full transition-all duration-500 relative ${scrolled ? "bg-white/95 shadow-lg border-white/80" : "bg-white/40 shadow-pill border-white/40"}`}>
+      <div className={`pointer-events-auto backdrop-blur-xl rounded-[2.5rem] px-6 sm:px-8 py-3 flex items-center justify-between border max-w-[1250px] w-full transition-all duration-500 relative ${scrolled ? "bg-white/95 shadow-lg border-white/80" : "bg-white/40 shadow-pill border-white/40"}`}>
         {/* Left side Logo */}
         <div className="flex-shrink-0 mr-16 sm:mr-28 rtl:mr-0 rtl:ml-16 sm:rtl:ml-28">
           <Link href="/" className="pl-4 rtl:pl-0 rtl:pr-4 flex items-center">
@@ -48,15 +48,18 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
           </Link>
         </div>
 
-        {/* Balanced Centered Links */}
+        {/* Center Navigation Links */}
         {!hideLinks && (
-          <div className="hidden lg:flex flex-1 justify-center items-center gap-8 text-[17px] font-bold text-zinc-600 px-6 whitespace-nowrap">
-            <Link href="/#pricing" className="hover:text-zinc-900 transition-colors">Pricing</Link>
-            <Link href="/#features" className="hover:text-zinc-900 transition-colors">Features</Link>
-            <Link href="/#how-it-works" className="hover:text-zinc-900 transition-colors">Process</Link>
-            <Link href="/#testimonials" className="hover:text-zinc-900 transition-colors">Testimonials</Link>
-            <Link href="/#faq" className="hover:text-zinc-900 transition-colors">FAQ</Link>
-            <Link href="/contact" className="hover:text-zinc-900 transition-colors">Contact</Link>
+          <div className="hidden lg:flex items-center gap-1 sm:gap-2 bg-black/5 p-1.5 rounded-full border border-black/5">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="px-5 py-2.5 rounded-full text-[17px] font-semibold text-zinc-700 hover:text-zinc-950 hover:bg-white/80 transition-all duration-200"
+              >
+                {t(item.titleKey)}
+              </Link>
+            ))}
           </div>
         )}
 
@@ -97,12 +100,12 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
           {!hideLinks && (
             <>
               <Link href="/sign-in">
-                <Button variant="ghost" className="hidden sm:flex rounded-full px-6 h-13 sm:h-14 text-base font-bold text-zinc-700 hover:text-zinc-900 hover:bg-white/50">
+                <Button variant="ghost" className="hidden sm:flex rounded-full px-5 sm:px-6 h-11 sm:h-12 text-sm sm:text-base font-bold text-zinc-700 hover:text-zinc-900 hover:bg-white/50">
                   {t("nav_signIn")}
                 </Button>
               </Link>
               <Link href="/sign-up">
-                <Button className="rounded-full px-7 sm:px-9 h-13 sm:h-14 text-base font-bold bg-[#FF6B4A] hover:bg-[#E85A3B] text-white shadow-md transition-transform hover:-translate-y-0.5">
+                <Button className="rounded-full px-6 sm:px-7 h-11 sm:h-12 text-sm sm:text-base font-bold bg-[#FF6B4A] hover:bg-[#E85A3B] text-white shadow-md transition-transform hover:-translate-y-0.5">
                   {t("nav_cta")}
                 </Button>
               </Link>

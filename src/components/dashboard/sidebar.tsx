@@ -75,11 +75,11 @@ function SidebarContent({
   return (
     <div className="flex flex-col h-full" dir={dir}>
       {/* Logo */}
-      <div className="flex justify-center items-center px-8 py-8 border-b border-border">
+      <div className="flex justify-center items-center px-4 py-6 border-b border-border">
         <img
           src="/logo.png"
           alt="Eensell University"
-          className="h-20 w-auto object-contain origin-center scale-[1.5] dark:brightness-0 dark:invert"
+          className="h-24 sm:h-28 w-auto object-contain origin-center scale-[1.8] sm:scale-[2.2] dark:brightness-0 dark:invert my-2"
         />
       </div>
 
