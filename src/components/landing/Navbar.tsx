@@ -34,39 +34,39 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
       dir={dir}
       className={`fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none transition-all duration-300 ${scrolled ? "top-4" : "top-6"}`}
     >
-      <div className={`pointer-events-auto backdrop-blur-xl rounded-[2.5rem] px-6 sm:px-8 py-3 flex items-center justify-between border max-w-[1250px] w-full transition-all duration-500 relative ${scrolled ? "bg-white/95 shadow-lg border-white/80" : "bg-white/40 shadow-pill border-white/40"}`}>
+      <div className={`pointer-events-auto backdrop-blur-xl rounded-[2.5rem] px-6 sm:px-10 py-3 flex items-center justify-between border max-w-[1400px] w-full transition-all duration-500 relative ${scrolled ? "bg-white/95 shadow-lg border-white/80" : "bg-white/40 shadow-pill border-white/40"}`}>
         {/* Left side Logo */}
-        <div className="flex-shrink-0 mr-16 sm:mr-28 rtl:mr-0 rtl:ml-16 sm:rtl:ml-28">
-          <Link href="/" className="pl-4 rtl:pl-0 rtl:pr-4 flex items-center">
+        <div className="flex-shrink-0 mr-4 sm:mr-8 rtl:mr-0 rtl:ml-4 sm:rtl:ml-8">
+          <Link href="/" className="flex items-center">
             <Image
               src="/logo.png"
               alt="Eensell University"
               width={360}
               height={80}
-              className="h-16 sm:h-20 w-auto scale-[1.7] sm:scale-[2.0] origin-left rtl:origin-right object-contain ml-4 transition-all duration-300"
+              className="h-12 sm:h-14 w-auto object-contain transition-all duration-300"
             />
           </Link>
         </div>
 
         {/* Center Navigation Links */}
         {!hideLinks && (
-          <div className="hidden lg:flex items-center gap-1 sm:gap-2 bg-black/5 p-1.5 rounded-full border border-black/5">
-            <Link href="/#pricing" className="px-5 py-2.5 rounded-full text-[17px] font-semibold text-zinc-700 hover:text-zinc-950 hover:bg-white/80 transition-all duration-200">Pricing</Link>
-            <Link href="/#features" className="px-5 py-2.5 rounded-full text-[17px] font-semibold text-zinc-700 hover:text-zinc-950 hover:bg-white/80 transition-all duration-200">Features</Link>
-            <Link href="/#how-it-works" className="px-5 py-2.5 rounded-full text-[17px] font-semibold text-zinc-700 hover:text-zinc-950 hover:bg-white/80 transition-all duration-200">Process</Link>
-            <Link href="/#testimonials" className="px-5 py-2.5 rounded-full text-[17px] font-semibold text-zinc-700 hover:text-zinc-950 hover:bg-white/80 transition-all duration-200">Testimonials</Link>
-            <Link href="/#faq" className="px-5 py-2.5 rounded-full text-[17px] font-semibold text-zinc-700 hover:text-zinc-950 hover:bg-white/80 transition-all duration-200">FAQ</Link>
-            <Link href="/contact" className="px-5 py-2.5 rounded-full text-[17px] font-semibold text-zinc-700 hover:text-zinc-950 hover:bg-white/80 transition-all duration-200">Contact</Link>
+          <div className="hidden lg:flex items-center gap-1 sm:gap-2">
+            <Link href="/#pricing" className="px-3 sm:px-4 py-2 text-base font-semibold text-zinc-700 hover:text-zinc-950 transition-all duration-200">Pricing</Link>
+            <Link href="/#features" className="px-3 sm:px-4 py-2 text-base font-semibold text-zinc-700 hover:text-zinc-950 transition-all duration-200">Features</Link>
+            <Link href="/#how-it-works" className="px-3 sm:px-4 py-2 text-base font-semibold text-zinc-700 hover:text-zinc-950 transition-all duration-200">Process</Link>
+            <Link href="/#testimonials" className="px-3 sm:px-4 py-2 text-base font-semibold text-zinc-700 hover:text-zinc-950 transition-all duration-200">Testimonials</Link>
+            <Link href="/#faq" className="px-3 sm:px-4 py-2 text-base font-semibold text-zinc-700 hover:text-zinc-950 transition-all duration-200">FAQ</Link>
+            <Link href="/contact" className="px-3 sm:px-4 py-2 text-base font-semibold text-zinc-700 hover:text-zinc-950 transition-all duration-200">Contact</Link>
           </div>
         )}
 
         {/* Right side Actions & Language (Desktop) */}
-        <div className={`flex items-center gap-2 sm:gap-3 flex-shrink-0 pr-1 rtl:pr-0 rtl:pl-1 ${hideLinks ? "" : "hidden lg:flex"}`}>
+        <div className={`flex items-center gap-2 sm:gap-3 flex-shrink-0 ${hideLinks ? "" : "hidden lg:flex"}`}>
           {/* Lang selector toggle */}
-          <div className={`relative mr-2 rtl:ml-2 rtl:mr-0 pr-2 rtl:pl-2 rtl:pr-0 ${!hideLinks ? "border-r rtl:border-l rtl:border-r-0 border-zinc-300/50" : ""}`}>
+          <div className={`relative mr-1 rtl:ml-1 rtl:mr-0 pr-2 rtl:pl-2 rtl:pr-0 ${!hideLinks ? "border-r rtl:border-l rtl:border-r-0 border-zinc-300/50" : ""}`}>
             <button
               onClick={() => setIsLangOpen(!isLangOpen)}
-              className="flex items-center gap-2 px-3 py-2.5 rounded-xl hover:bg-black/5 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-black/5 transition-colors"
             >
               <img src={languages.find((l) => l.code === language)?.flagUrl} alt={language} className="w-5 h-auto rounded-[2px] shadow-sm border border-zinc-200/50" />
               <span className="font-bold text-base text-zinc-800 hidden sm:block">{language.toUpperCase()}</span>
@@ -97,12 +97,12 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
           {!hideLinks && (
             <>
               <Link href="/sign-in">
-                <Button variant="ghost" className="hidden sm:flex rounded-full px-5 sm:px-6 h-11 sm:h-12 text-sm sm:text-base font-bold text-zinc-700 hover:text-zinc-900 hover:bg-white/50">
+                <Button variant="ghost" className="hidden sm:flex rounded-full px-5 h-11 text-base font-bold text-zinc-700 hover:text-zinc-900 hover:bg-white/50">
                   {t("nav_signIn")}
                 </Button>
               </Link>
               <Link href="/sign-up">
-                <Button className="rounded-full px-6 sm:px-7 h-11 sm:h-12 text-sm sm:text-base font-bold bg-[#FF6B4A] hover:bg-[#E85A3B] text-white shadow-md transition-transform hover:-translate-y-0.5">
+                <Button className="rounded-full px-7 h-11 text-base font-bold bg-[#FF6B4A] hover:bg-[#E85A3B] text-white shadow-md transition-transform hover:-translate-y-0.5">
                   {t("nav_cta")}
                 </Button>
               </Link>
