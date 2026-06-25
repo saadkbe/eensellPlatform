@@ -79,7 +79,7 @@ function SidebarContent({
         <img
           src="/logo.png"
           alt="Eensell University"
-          className="h-24 sm:h-28 w-auto object-contain origin-center scale-[1.8] sm:scale-[2.2] dark:brightness-0 dark:invert my-2"
+          className="h-18 sm:h-22 w-auto object-contain origin-center scale-[1.4] sm:scale-[1.7] dark:brightness-0 dark:invert my-1"
         />
       </div>
 

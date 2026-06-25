@@ -79,8 +79,8 @@ export default async function ModulesPage() {
                   <Card className="bg-black border-border/40 transition-all duration-500 group h-full overflow-hidden flex flex-col shadow-xl hover:shadow-2xl rounded-3xl p-0 gap-0 relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/[0.02] to-white/[0.05] pointer-events-none z-0" />
                     
-                    {/* Full Bleed Image Cover */}
-                    <div className="w-full relative bg-black overflow-hidden shrink-0 z-10 border-b border-white/10 flex items-center justify-center">
+                    {/* Full Bleed Image Cover with Smooth Black Fade */}
+                    <div className="w-full relative bg-black overflow-hidden shrink-0 z-10 flex items-center justify-center">
                       {module.imageUrl ? (
                         <Image 
                           src={module.imageUrl} 
@@ -97,6 +97,9 @@ export default async function ModulesPage() {
                         </div>
                       )}
                       
+                      {/* Linear gradient fade to connect seamlessly with black CardContent */}
+                      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none z-10" />
+
                       {/* Floating Badges on Image */}
                       <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
                         <span className="px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-xs font-black text-white uppercase tracking-widest border border-white/20 shadow-2xl">
@@ -109,22 +112,22 @@ export default async function ModulesPage() {
                       </div>
                     </div>
 
-                    <CardContent className="p-7 flex flex-col flex-1 z-10 bg-black">
-                      <h3 className="text-xl sm:text-2xl font-black text-white mb-3 tracking-tight leading-tight">
+                    <CardContent className="p-5 sm:p-6 pt-2 flex flex-col flex-1 z-20 bg-black">
+                      <h3 className="text-lg sm:text-xl font-black text-white mb-2 tracking-tight leading-tight">
                         {module.title}
                       </h3>
-                      <p className="text-sm sm:text-base text-slate-400/90 line-clamp-2 mb-8 leading-relaxed font-normal">
+                      <p className="text-xs sm:text-sm text-slate-400/90 line-clamp-2 mb-6 leading-relaxed font-normal">
                         {module.description || "This module is currently in production and will be dropping soon. Stay tuned!"}
                       </p>
 
-                      <div className="mt-auto pt-5 border-t border-white/10">
-                        <div className="flex items-center justify-between text-xs sm:text-sm mb-2.5">
+                      <div className="mt-auto pt-4 border-t border-white/10">
+                        <div className="flex items-center justify-between text-xs sm:text-sm mb-2">
                           <span className="text-slate-400 font-bold uppercase tracking-wider">Progress</span>
                           <span className="text-amber-500 font-black tracking-wider uppercase">Locked</span>
                         </div>
                         <Progress
                           value={0}
-                          className="h-2.5 bg-slate-800/80 rounded-full"
+                          className="h-2 bg-slate-800/80 rounded-full"
                         />
                       </div>
                     </CardContent>
@@ -163,8 +166,8 @@ export default async function ModulesPage() {
                   <Card className="bg-black border-border/40 transition-all duration-500 h-full overflow-hidden flex flex-col p-0 gap-0 relative shadow-xl hover:shadow-[0_12px_40px_rgba(59,130,246,0.25)] hover:-translate-y-2 hover:border-primary/50 rounded-3xl">
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent via-primary/5 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
                     
-                    {/* Full Bleed Image Cover */}
-                    <div className="w-full relative bg-black overflow-hidden shrink-0 z-10 border-b border-white/10 flex items-center justify-center">
+                    {/* Full Bleed Image Cover with Smooth Black Fade */}
+                    <div className="w-full relative bg-black overflow-hidden shrink-0 z-10 flex items-center justify-center">
                       {module.imageUrl ? (
                         <Image 
                           src={module.imageUrl} 
@@ -181,6 +184,9 @@ export default async function ModulesPage() {
                         </div>
                       )}
                       
+                      {/* Linear gradient fade to connect seamlessly with black CardContent */}
+                      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none z-10" />
+
                       {/* Floating Badges on Image */}
                       <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
                         <span className="px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-xs font-black text-white uppercase tracking-widest border border-white/20 shadow-2xl">
@@ -205,34 +211,34 @@ export default async function ModulesPage() {
                       </div>
                     </div>
 
-                  <CardContent className="p-7 flex flex-col flex-1 z-10 bg-black">
+                  <CardContent className="p-5 sm:p-6 pt-2 flex flex-col flex-1 z-20 bg-black">
                     {/* Title & description */}
-                    <h3 className="text-xl sm:text-2xl font-black text-white mb-3 group-hover:text-primary transition-colors tracking-tight leading-tight">
+                    <h3 className="text-lg sm:text-xl font-black text-white mb-2 group-hover:text-primary transition-colors tracking-tight leading-tight">
                       {module.title}
                     </h3>
                     {module.description && (
-                      <p className="text-sm sm:text-base text-slate-300/90 line-clamp-2 mb-6 leading-relaxed font-normal">
+                      <p className="text-xs sm:text-sm text-slate-300/90 line-clamp-2 mb-5 leading-relaxed font-normal">
                         {module.description}
                       </p>
                     )}
 
                     {/* Stats */}
-                    <div className="flex items-center gap-3 text-xs sm:text-sm font-bold text-slate-200 mb-8 mt-auto pt-2">
-                      <span className="flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-xl shadow-inner">
-                        <PlayCircle className="w-4 h-4 text-primary" />
+                    <div className="flex items-center gap-3 text-xs font-bold text-slate-200 mb-6 mt-auto pt-1">
+                      <span className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1 rounded-xl shadow-inner">
+                        <PlayCircle className="w-3.5 h-3.5 text-primary" />
                         {totalLessons} lessons
                       </span>
                       {durationMin > 0 && (
-                        <span className="flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-xl shadow-inner">
-                          <Clock className="w-4 h-4 text-primary" />
+                        <span className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1 rounded-xl shadow-inner">
+                          <Clock className="w-3.5 h-3.5 text-primary" />
                           ≈ {durationMin} min
                         </span>
                       )}
                     </div>
 
                     {/* Progress */}
-                    <div className="pt-5 border-t border-white/10">
-                      <div className="flex items-center justify-between text-xs sm:text-sm mb-2.5">
+                    <div className="pt-4 border-t border-white/10">
+                      <div className="flex items-center justify-between text-xs sm:text-sm mb-2">
                         <span className="font-bold text-slate-300 uppercase tracking-wider">Course Progress</span>
                         <span className={percent === 100 ? "text-emerald-400 font-black tracking-wider" : "text-primary font-black tracking-wider"}>
                           {percent}%
@@ -240,7 +246,7 @@ export default async function ModulesPage() {
                       </div>
                       <Progress
                         value={percent}
-                        className={cn("h-2.5 bg-slate-800 rounded-full", percent === 100 && "[&>div]:bg-emerald-500")}
+                        className={cn("h-2 bg-slate-800 rounded-full", percent === 100 && "[&>div]:bg-emerald-500")}
                       />
                     </div>
                   </CardContent>
