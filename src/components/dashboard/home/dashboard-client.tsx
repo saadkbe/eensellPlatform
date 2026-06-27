@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   BookOpen,
@@ -79,6 +80,53 @@ export function DashboardClient({
   const { t } = useLanguage();
   const circumference = 2 * Math.PI * 54;
   const strokeDashoffset = circumference - (progressPercent / 100) * circumference;
+
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    const getNextLessonDropDate = () => {
+      const now = new Date();
+      const day = now.getDay();
+      const hour = now.getHours();
+      let daysToAdd = 0;
+
+      if (day === 1) {
+        // Monday
+        daysToAdd = hour < 20 ? 0 : 4;
+      } else if (day > 1 && day < 5) {
+        // Tuesday, Wednesday, Thursday
+        daysToAdd = 5 - day;
+      } else if (day === 5) {
+        // Friday
+        daysToAdd = hour < 20 ? 0 : 3;
+      } else if (day === 6) {
+        // Saturday
+        daysToAdd = 2;
+      } else if (day === 0) {
+        // Sunday
+        daysToAdd = 1;
+      }
+
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysToAdd, 20, 0, 0);
+    };
+
+    const updateCountdown = () => {
+      const target = getNextLessonDropDate();
+      const diff = target.getTime() - new Date().getTime();
+      if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+        setTimeLeft({ days, hours, minutes, seconds });
+      }
+    };
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const stats = [
     {
@@ -295,21 +343,73 @@ export function DashboardClient({
                 </CardContent>
               </Card>
             ) : (
-              <Card className="bg-card/60 backdrop-blur-md border-border/50 shadow-xl overflow-hidden relative">
-                 <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] pointer-events-none" />
-                <CardContent className="p-10 flex flex-col sm:flex-row items-center gap-8 text-center sm:text-left">
-                  <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center border border-primary/20 shadow-inner shrink-0">
-                    <GraduationCap className="w-12 h-12 text-primary" />
+              <Card className="relative overflow-hidden border border-white/10 shadow-2xl rounded-3xl group bg-[#09090b]">
+                {/* Mesh Gradient background blobs */}
+                <div className="absolute top-0 left-0 w-96 h-96 bg-purple-600/30 rounded-full blur-[100px] pointer-events-none animate-pulse" />
+                <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-500/20 rounded-full blur-[100px] pointer-events-none" style={{ animation: 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite' }} />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-600/20 rounded-full blur-[100px] pointer-events-none" />
+                
+                {/* Subtle grid pattern */}
+                <div 
+                  className="absolute inset-0 opacity-[0.05] pointer-events-none" 
+                  style={{ 
+                    backgroundImage: `linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)`, 
+                    backgroundSize: '32px 32px' 
+                  }} 
+                />
+
+                <CardContent className="p-8 sm:p-12 relative z-10 flex flex-col justify-between">
+                  <div>
+                    {/* Glowing Badge */}
+                    <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6 shadow-xl">
+                      <div className="w-2 h-2 rounded-full bg-orange-400 animate-ping" />
+                      <Sparkles className="w-4 h-4 text-orange-400" />
+                      <span className="text-xs font-bold uppercase tracking-widest text-orange-200">Next Lesson Drop Countdown</span>
+                    </div>
+
+                    {/* Title & Subtitle */}
+                    <h3 className="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-slate-300 tracking-tight mb-3">
+                      {t("dash_begin_evolution")}
+                    </h3>
+                    <p className="text-slate-300/80 text-base max-w-xl leading-relaxed font-light mb-8">
+                      {t("dash_begin_evolution_sub")}
+                    </p>
+
+                    {/* Countdown Timer Display */}
+                    <div className="grid grid-cols-4 gap-3 sm:gap-4 max-w-lg mb-8">
+                      {[
+                        { label: 'Days', value: isClient ? String(timeLeft.days).padStart(2, '0') : '--' },
+                        { label: 'Hours', value: isClient ? String(timeLeft.hours).padStart(2, '0') : '--' },
+                        { label: 'Minutes', value: isClient ? String(timeLeft.minutes).padStart(2, '0') : '--' },
+                        { label: 'Seconds', value: isClient ? String(timeLeft.seconds).padStart(2, '0') : '--' },
+                      ].map((item) => (
+                        <div key={item.label} className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.4)] group-hover:border-white/20 transition-all duration-300 hover:scale-105">
+                          <span className="text-2xl sm:text-4xl font-black text-white tracking-tight mb-1 font-mono drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]">
+                            {item.value}
+                          </span>
+                          <span className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">
+                            {item.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-foreground mb-2">{t("dash_begin_evolution")}</h3>
-                    <p className="text-muted-foreground max-w-md">{t("dash_begin_evolution_sub")}</p>
+
+                  {/* Call to Action Button & Info */}
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-2">
+                    <Link href="/dashboard/modules">
+                      <Button className="group relative h-14 px-8 bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 rounded-2xl font-bold text-base shadow-[0_0_30px_rgba(249,115,22,0.4)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_rgba(249,115,22,0.6)] border-0 overflow-hidden">
+                        <span className="relative flex items-center gap-3">
+                          {t("dash_browse_curriculum")} 
+                          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                      </Button>
+                    </Link>
+                    <div className="flex items-center gap-2 text-xs font-medium text-slate-400 pl-1">
+                      <Clock className="w-4 h-4 text-orange-400 animate-pulse" />
+                      <span>Lessons drop every Monday & Friday at 20:00</span>
+                    </div>
                   </div>
-                  <Link href="/dashboard/modules" className="shrink-0">
-                    <Button size="lg" className="h-14 px-8 rounded-xl font-bold gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">
-                      {t("dash_browse_curriculum")} <ArrowRight className="w-5 h-5" />
-                    </Button>
-                  </Link>
                 </CardContent>
               </Card>
             )}
