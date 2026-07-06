@@ -180,6 +180,12 @@
     background-clip: text;
   }
 
+  /* Gradient Primary Button */
+  .gradient-primary {
+    background: linear-gradient(135deg, var(--color-brand), var(--color-brand-hover));
+    color: #ffffff;
+  }
+
   /* Animations */
   .animate-float-slow {
     animation: float-slow 6s ease-in-out infinite;
