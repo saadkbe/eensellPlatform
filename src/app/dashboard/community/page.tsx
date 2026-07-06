@@ -36,7 +36,7 @@ export default async function CommunityPage() {
           </div>
           <div className="shrink-0 md:pr-12">
             <a
-              href="#"
+              href="https://discord.gg/9F3rScRvK"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-[#5865F2] text-white text-base font-bold hover:bg-[#4752C4] shadow-[0_0_30px_rgba(88,101,242,0.5)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(88,101,242,0.8)]"
