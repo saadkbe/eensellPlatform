@@ -26,6 +26,37 @@ export async function getPosts() {
           role: true,
         },
       },
+      reactions: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      },
+      comments: {
+        orderBy: { createdAt: "asc" },
+        include: {
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              imageUrl: true,
+              role: true,
+            },
+          },
+        },
+      },
+      _count: {
+        select: {
+          reactions: true,
+          comments: true,
+        },
+      },
     },
   });
 }
@@ -49,6 +80,37 @@ export async function createPost(title: string, content: string) {
           lastName: true,
           imageUrl: true,
           role: true,
+        },
+      },
+      reactions: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      },
+      comments: {
+        orderBy: { createdAt: "asc" },
+        include: {
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              imageUrl: true,
+              role: true,
+            },
+          },
+        },
+      },
+      _count: {
+        select: {
+          reactions: true,
+          comments: true,
         },
       },
     },
@@ -104,4 +166,82 @@ export async function deletePost(postId: string) {
 
   await db.communityPost.delete({ where: { id: postId } });
   revalidatePath("/dashboard/community");
+}
+
+// Toggle a reaction on a post
+export async function toggleReaction(postId: string, emoji: string) {
+  const user = await getAuthUser();
+
+  const existing = await db.postReaction.findUnique({
+    where: {
+      userId_postId_emoji: {
+        userId: user.id,
+        postId,
+        emoji,
+      },
+    },
+  });
+
+  if (existing) {
+    await db.postReaction.delete({ where: { id: existing.id } });
+  } else {
+    await db.postReaction.create({
+      data: {
+        emoji,
+        userId: user.id,
+        postId,
+      },
+    });
+  }
+
+  revalidatePath("/dashboard/community");
+  return !existing; // true if added, false if removed
+}
+
+// Add a comment to a post
+export async function addComment(postId: string, content: string) {
+  const user = await getAuthUser();
+  if (!content.trim()) throw new Error("Comment cannot be empty");
+
+  const comment = await db.postComment.create({
+    data: {
+      content: content.trim(),
+      userId: user.id,
+      postId,
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          imageUrl: true,
+          role: true,
+        },
+      },
+    },
+  });
+
+  revalidatePath("/dashboard/community");
+  return comment;
+}
+
+// Delete a comment (author or admin)
+export async function deleteComment(commentId: string) {
+  const user = await getAuthUser();
+  const comment = await db.postComment.findUnique({ where: { id: commentId } });
+  if (!comment) throw new Error("Comment not found");
+
+  if (comment.userId !== user.id && user.role !== "ADMIN") {
+    throw new Error("Not authorized to delete this comment");
+  }
+
+  await db.postComment.delete({ where: { id: commentId } });
+  revalidatePath("/dashboard/community");
+}
+
+// Get current user's ID for client-side reaction checking
+export async function getCurrentUserId() {
+  const user = await getAuthUser();
+  return user.id;
 }

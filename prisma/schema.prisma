@@ -40,6 +40,8 @@ model User {
   progress       Progress[]
   dailyGoals     Goal[]
   communityPosts CommunityPost[]
+  postReactions  PostReaction[]
+  postComments   PostComment[]
   notifications  Notification[]
   homeworks      Homework[]
   sessions       UserSession[]
@@ -182,7 +184,40 @@ model CommunityPost {
   authorId String
   author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
+  reactions PostReaction[]
+  comments  PostComment[]
+
   @@index([createdAt])
+}
+
+model PostReaction {
+  id        String   @id @default(cuid())
+  emoji     String   // e.g. "🔥", "❤️", "👏", "💡", "🚀"
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  postId String
+  post   CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId, emoji])
+  @@index([postId])
+}
+
+model PostComment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  postId String
+  post   CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId, createdAt])
 }
 
 model Homework {

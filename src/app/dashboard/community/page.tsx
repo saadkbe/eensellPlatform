@@ -12,6 +12,7 @@ export default async function CommunityPage() {
 
   const posts = await getPosts();
   const isAdmin = dbUser?.role === "ADMIN";
+  const currentUserId = dbUser?.id || "";
 
   return (
     <div className="space-y-6 pb-8">
@@ -47,7 +48,7 @@ export default async function CommunityPage() {
         </div>
       </div>
 
-      <CommunityClient initialPosts={posts} isAdmin={isAdmin} />
+      <CommunityClient initialPosts={posts} isAdmin={isAdmin} currentUserId={currentUserId} />
     </div>
   );
 }
