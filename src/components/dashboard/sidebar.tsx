@@ -196,7 +196,7 @@ export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: bool
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user } = useUser();
-  const { dir } = useLanguage();
+  const { dir, t } = useLanguage();
 
   const isAdmin = user?.publicMetadata?.role === "ADMIN";
 
