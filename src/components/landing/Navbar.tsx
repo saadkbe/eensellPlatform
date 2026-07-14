@@ -96,12 +96,12 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
 
           {!hideLinks && (
             <>
-              <Link href="/sign-in">
+              <Link href="/sign-in" prefetch={true}>
                 <Button variant="ghost" className="hidden sm:flex rounded-full px-5 h-11 text-base font-bold text-zinc-700 hover:text-zinc-900 hover:bg-white/50">
                   {t("nav_signIn")}
                 </Button>
               </Link>
-              <Link href="/sign-up">
+              <Link href="/sign-up" prefetch={true}>
                 <Button className="rounded-full px-7 h-11 text-base font-bold bg-[#FF6B4A] hover:bg-[#E85A3B] text-white shadow-md transition-transform hover:-translate-y-0.5">
                   {t("nav_cta")}
                 </Button>
@@ -159,12 +159,12 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
               </div>
 
               <div className="grid grid-cols-2 gap-3 mt-2">
-                <Link href="/sign-in" onClick={() => setIsMobileMenuOpen(false)}>
+                <Link href="/sign-in" prefetch={true} onClick={() => setIsMobileMenuOpen(false)}>
                   <Button variant="outline" className="w-full rounded-xl h-12 font-bold text-zinc-800 bg-white border-zinc-200 shadow-sm">
                     {t("nav_signIn")}
                   </Button>
                 </Link>
-                <Link href="/sign-up" onClick={() => setIsMobileMenuOpen(false)}>
+                <Link href="/sign-up" prefetch={true} onClick={() => setIsMobileMenuOpen(false)}>
                   <Button className="w-full rounded-xl h-12 font-bold bg-[#FF6B4A] hover:bg-[#E85A3B] text-white shadow-[0_4px_10px_rgba(255,107,74,0.3)]">
                     {t("nav_cta")}
                   </Button>

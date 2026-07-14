@@ -126,21 +126,10 @@ export function HeroSection() {
         {/* Premium Thin Orange Frame */}
         <div className="relative w-full p-[2px] sm:p-[3px] bg-gradient-to-br from-[#FF6B4A]/60 to-[#D14526]/60 backdrop-blur-md rounded-[1.5rem] lg:rounded-[2.5rem] shadow-[0_0_80px_-15px_rgba(255,107,74,0.4)]">
           <div className="overflow-hidden rounded-xl lg:rounded-[2rem] bg-zinc-900 shadow-inner relative aspect-video">
-            <video
-              src="/landingpagevideo.mp4"
-              autoPlay={true}
-              loop={true}
-              muted={true}
-              playsInline={true}
-              preload="auto"
-              className="absolute inset-0 w-full h-full object-cover"
-              ref={(el) => {
-                if (el) {
-                  el.defaultMuted = true;
-                  el.muted = true;
-                  el.play().catch(e => console.log("Autoplay prevented", e));
-                }
-              }}
+            <img
+              src="/dashboard.png"
+              alt="Eensell University Dashboard"
+              className="w-full h-full object-cover"
             />
           </div>
         </div>
@@ -157,7 +146,7 @@ export function HeroSection() {
         <div className="marquee-track flex w-max items-center gap-8">
           {[...Array(40)].map((_, i) => (
             <div key={i} className="flex items-center gap-8 text-white font-bold text-sm sm:text-base tracking-widest uppercase whitespace-nowrap">
-              <span>Accès à vie pour 200Dh</span>
+              <span>Accès de 2 mois pour 200Dh</span>
               <span className="text-white/40 text-xs">✦</span>
             </div>
           ))}

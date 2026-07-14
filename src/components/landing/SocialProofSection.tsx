@@ -1,7 +1,6 @@
 "use client";
 
-import { Star } from "lucide-react";
-import Image from "next/image";
+import { Star, PlayCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 import { type TranslationKey } from "@/lib/translations";
@@ -30,8 +29,10 @@ export function SocialProofSection() {
       {/* Subtle Background Pattern */}
       <div className="absolute inset-0 opacity-[0.4]" style={{ backgroundImage: 'radial-gradient(#d4d4d8 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
       
-      <div className="container max-w-5xl mx-auto px-6 mb-16 relative z-10">
-        <div className="text-center flex flex-col items-center">
+      <div className="container max-w-6xl mx-auto px-6 mb-16 relative z-10">
+        
+        {/* Header */}
+        <div className="text-center flex flex-col items-center mb-16 md:mb-24">
           <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="flex flex-col items-center mb-6">
             <div className="flex -space-x-2 mb-4">
               {avatars.map((imgUrl, i) => (
@@ -52,16 +53,97 @@ export function SocialProofSection() {
             {t("social_sub")}
           </motion.p>
         </div>
+
+        {/* Featured Video Testimonial Section */}
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center mb-24">
+          
+          {/* Video Player (Left side on LTR, Right side on RTL) */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }} 
+            whileInView={{ opacity: 1, scale: 1 }} 
+            viewport={{ once: true }}
+            className="lg:col-span-7 relative"
+          >
+            {/* Decorative Glow */}
+            <div className="absolute -inset-4 bg-[#FF6B4A]/20 blur-3xl rounded-full z-0"></div>
+            
+            <div className="relative z-10 p-[3px] bg-gradient-to-br from-[#FF6B4A] to-orange-200 rounded-[2rem] shadow-2xl overflow-hidden group">
+              <div className="relative aspect-video rounded-[1.8rem] bg-zinc-900 overflow-hidden flex items-center justify-center">
+                
+                {/* 
+                  TODO: Tomorrow, replace src with your real video file name (e.g. "/testimonial.mp4") 
+                  and add `controls` to the video tag so users can play it. 
+                */}
+                <video 
+                  src="/placeholder-video.mp4" 
+                  poster="/dashboard.png" 
+                  controls
+                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                />
+
+                {/* Optional Play Button Overlay (for aesthetic if no controls are used initially) */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0">
+                  <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30">
+                    <PlayCircle className="w-10 h-10 text-white fill-white/10" />
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Featured Quote Text (Right side on LTR, Left side on RTL) */}
+          <motion.div 
+            initial={{ opacity: 0, x: isRTL ? -30 : 30 }} 
+            whileInView={{ opacity: 1, x: 0 }} 
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="lg:col-span-5 flex flex-col justify-center"
+          >
+            <div className="flex gap-1 mb-6">
+              {[1, 2, 3, 4, 5].map((i) => <Star key={i} className="w-6 h-6 fill-yellow-400 text-yellow-400" />)}
+            </div>
+            
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-zinc-900 mb-8 leading-[1.3] relative">
+              <span className="absolute -top-6 -left-6 text-6xl text-[#FF6B4A] opacity-20 font-serif">"</span>
+              {/* Featured Quote Placeholder. Update this tomorrow with the best quote from the interview. */}
+              {isRTL 
+                ? "لقد تغيرت حياتي تماماً. من صفر خبرة إلى تحقيق أول عميل لي في أقل من 30 يوماً!"
+                : "It completely changed my life. From zero experience to landing my first client in under 30 days!"}
+            </h3>
+
+            <div className="flex items-center gap-5 pt-6 border-t border-zinc-200/80">
+              <div className="w-16 h-16 rounded-full bg-zinc-200 overflow-hidden border-2 border-white shadow-sm shrink-0">
+                <img src={avatars[1]} alt="Featured Member" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <p className="font-bold text-zinc-900 text-lg">
+                  {isRTL ? "لينا أمجادي." : "Lina Amjadi."}
+                </p>
+                <p className="text-sm font-medium text-[#FF6B4A] uppercase tracking-wider">
+                  {isRTL ? "قصة نجاح مميزة" : "Featured Success Story"}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
       </div>
 
-      <div className="relative w-full overflow-hidden pb-12 pt-4">
+      {/* The existing text marquees below to show VOLUME of success */}
+      <div className="relative w-full overflow-hidden pb-12 pt-4 border-t border-zinc-200/50 bg-white/50 backdrop-blur-sm">
+        {/* Marquee Title */}
+        <p className="text-center text-sm font-bold text-zinc-400 uppercase tracking-widest mb-8">
+          {isRTL ? "المزيد من قصص النجاح في مجتمعنا" : "MORE SUCCESS STORIES FROM OUR COMMUNITY"}
+        </p>
+
         {/* Gradients for smooth infinite scroll edges */}
         <div className="absolute left-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-r from-zinc-50 to-transparent z-20 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-l from-zinc-50 to-transparent z-20 pointer-events-none" />
         
         <motion.div 
           animate={{ x: isRTL ? ["0%", "50%"] : ["0%", "-50%"] }}
-          transition={{ repeat: Infinity, ease: "linear", duration: 50 }}
+          transition={{ repeat: Infinity, ease: "linear", duration: 60 }}
           className="flex w-max hover:[animation-play-state:paused]"
         >
           {[...testimonials, ...testimonials, ...testimonials, ...testimonials, ...testimonials].map((test, idx) => (

@@ -18,6 +18,7 @@ import {
   Target,
   Compass,
   Bot,
+  MoreHorizontal,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -25,6 +26,14 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 import { TranslationKey } from "@/lib/translations";
+
+/* ── Mobile Bottom Nav Tabs ── */
+const bottomNavItems = [
+  { labelKey: "nav_dashboard" as TranslationKey, href: "/dashboard", icon: LayoutDashboard },
+  { labelKey: "nav_modules" as TranslationKey, href: "/dashboard/modules", icon: BookOpen },
+  { labelKey: "nav_community" as TranslationKey, href: "/dashboard/community", icon: MessageSquare },
+  { labelKey: "nav_live_calls" as TranslationKey, href: "/dashboard/live-calls", icon: Video },
+];
 
 type NavItem = { titleKey: TranslationKey; href: string; icon: any };
 type NavSection = { labelKey: TranslationKey; items: NavItem[] };
@@ -199,9 +208,9 @@ export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: bool
   return (
     <>
       {/* Mobile header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 bg-background/95 backdrop-blur-xl border-b border-border">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-2 bg-background/95 backdrop-blur-xl border-b border-border">
         <div className="flex items-center">
-          <img src="/logo.png" alt="Eensell University" className="h-16 w-auto object-contain origin-left scale-[1.5] dark:brightness-0 dark:invert" />
+          <img src="/logo.png" alt="Eensell University" className="h-12 w-auto object-contain origin-left scale-[1.3] dark:brightness-0 dark:invert" />
         </div>
         <Button
           variant="ghost"
@@ -211,6 +220,50 @@ export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: bool
         >
           {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </Button>
+      </div>
+
+      {/* Mobile Bottom Navigation Bar */}
+      <div className={cn(
+        "lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-xl border-t border-border safe-area-pb",
+      )}>
+        <div className="flex items-center justify-around px-1 py-1.5">
+          {bottomNavItems.map((item) => {
+            const Icon = item.icon;
+            const active = isActive(item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "flex flex-col items-center justify-center gap-0.5 py-1.5 px-3 rounded-xl transition-all duration-200 relative min-w-[60px]",
+                  active
+                    ? "text-primary"
+                    : "text-muted-foreground"
+                )}
+              >
+                {active && (
+                  <motion.div
+                    layoutId="bottomNavActive"
+                    className="absolute -top-1.5 w-8 h-1 rounded-full bg-primary"
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
+                )}
+                <Icon className={cn("w-5 h-5 transition-all", active && "scale-110")} />
+                <span className={cn("text-[10px] font-semibold leading-tight", active ? "text-primary" : "text-muted-foreground")}>
+                  {t(item.labelKey)}
+                </span>
+              </Link>
+            );
+          })}
+          {/* More button — opens sidebar */}
+          <button
+            onClick={() => setMobileOpen(true)}
+            className="flex flex-col items-center justify-center gap-0.5 py-1.5 px-3 rounded-xl text-muted-foreground min-w-[60px]"
+          >
+            <MoreHorizontal className="w-5 h-5" />
+            <span className="text-[10px] font-semibold leading-tight">{t("nav_settings")}</span>
+          </button>
+        </div>
       </div>
 
       {/* Mobile sidebar overlay */}

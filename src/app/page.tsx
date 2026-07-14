@@ -21,6 +21,9 @@ const TransformationSection = dynamic(() =>
 const SocialProofSection = dynamic(() =>
   import("@/components/landing/SocialProofSection").then(mod => mod.SocialProofSection)
 );
+const CertificateSection = dynamic(() =>
+  import("@/components/landing/CertificateSection").then(mod => mod.CertificateSection)
+);
 const MotivationSection = dynamic(() =>
   import("@/components/landing/MotivationSection").then(mod => mod.MotivationSection)
 );
@@ -44,6 +47,7 @@ export default function HomePage() {
           <OpportunitySection />
           <div id="how-it-works"><TransformationSection /></div>
           <div id="testimonials"><SocialProofSection /></div>
+          <div id="certificate"><CertificateSection /></div>
           <MotivationSection />
           <div id="faq"><FaqSection /></div>
           <FinalCtaSection />

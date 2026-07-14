@@ -211,4 +211,8 @@
     0% { transform: translateX(0); }
     100% { transform: translateX(calc(-50% - 1rem)); }
   }
+  @keyframes marquee-ugc {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-50% - 0.625rem)); }
+  }
 }

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" fill="none">
+  <defs>
+    <linearGradient id="v" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4285F4"/>
+      <stop offset="1" stop-color="#34A853"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="8" width="24" height="24" rx="6" fill="url(#v)"/>
+  <polygon points="14,14 24,20 14,26" fill="white"/>
+  <text x="38" y="26" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="white">Veo 3</text>
+  <text x="38" y="38" font-family="system-ui,sans-serif" font-size="8" font-weight="500" fill="#9CA3AF">Google Labs</text>
+</svg>
