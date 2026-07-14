@@ -120,11 +120,11 @@ function PendingContent() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.48, duration: 0.5 }}
-          className="flex flex-wrap items-center justify-center gap-10 sm:gap-16 mb-12 bg-card/60 backdrop-blur-xl px-10 py-8 rounded-[2.5rem] border border-border/60 shadow-2xl w-full max-w-3xl mx-auto"
+          className="flex flex-wrap items-center justify-center gap-6 sm:gap-16 mb-12 bg-card/60 backdrop-blur-xl px-4 sm:px-10 py-6 sm:py-8 rounded-[2rem] sm:rounded-[2.5rem] border border-border/60 shadow-2xl w-full max-w-3xl mx-auto"
         >
-          <img src="/Cih-bank.png" alt="CIH Bank" className="h-24 sm:h-28 md:h-32 w-auto object-contain transition-transform duration-300 hover:scale-110" />
-          <img src="/wafacash-logo-png_seeklogo-251985.png" alt="Wafacash" className="h-24 sm:h-28 md:h-32 w-auto object-contain transition-transform duration-300 hover:scale-110" />
-          <img src="/cashplus-logo-png_seeklogo-384674.png" alt="Cash Plus" className="h-24 sm:h-28 md:h-32 w-auto object-contain transition-transform duration-300 hover:scale-110" />
+          <img src="/Cih-bank.png" alt="CIH Bank" className="h-16 sm:h-28 md:h-32 w-auto object-contain transition-transform duration-300 hover:scale-110" />
+          <img src="/wafacash-logo-png_seeklogo-251985.png" alt="Wafacash" className="h-16 sm:h-28 md:h-32 w-auto object-contain transition-transform duration-300 hover:scale-110" />
+          <img src="/cashplus-logo-png_seeklogo-384674.png" alt="Cash Plus" className="h-16 sm:h-28 md:h-32 w-auto object-contain transition-transform duration-300 hover:scale-110" />
         </motion.div>
 
         {/* Premium Bento Grid Bank Details Card */}
@@ -163,7 +163,7 @@ function PendingContent() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-xs sm:text-sm font-bold text-muted-foreground mb-1">{item.label}</p>
-                      <p className="text-sm sm:text-base md:text-lg font-black text-foreground tracking-wider break-words select-all">
+                      <p className="text-xs sm:text-base md:text-lg font-black text-foreground tracking-wider break-all sm:break-words select-all">
                         {item.value}
                       </p>
                     </div>

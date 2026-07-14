@@ -85,19 +85,21 @@ export function UserTable({ initialUsers }: { initialUsers: User[] }) {
             const statusInfo = STATUS_LABELS[user.status];
             const roleInfo = ROLE_LABELS[user.role];
             return (
-              <div key={user.id} className="flex items-center justify-between p-4 rounded-xl bg-background/40 backdrop-blur-sm border border-border/50 hover:border-primary/30 hover:shadow-md transition-all">
-                <div className="flex items-center gap-4 min-w-0 flex-1">
+              <div key={user.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-background/40 backdrop-blur-sm border border-border/50 hover:border-primary/30 hover:shadow-md transition-all">
+                <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
                   <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 text-base font-bold text-primary">
                     {(user.firstName?.[0] || user.email[0]).toUpperCase()}
                   </div>
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <p className="text-base text-foreground font-semibold truncate">{user.firstName || ""} {user.lastName || ""}</p>
                     <p className="text-sm text-muted-foreground truncate mt-0.5">{user.email}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 shrink-0">
-                  <Badge className={`text-xs px-2.5 py-0.5 hidden sm:inline-flex ${roleInfo.color}`}>{roleInfo.label}</Badge>
-                  <Badge className={`text-xs px-2.5 py-0.5 ${statusInfo.color}`}>{statusInfo.label}</Badge>
+                <div className="flex items-center justify-between w-full sm:w-auto gap-3 shrink-0">
+                  <div className="flex gap-2">
+                    <Badge className={`text-xs px-2.5 py-0.5 hidden sm:inline-flex ${roleInfo.color}`}>{roleInfo.label}</Badge>
+                    <Badge className={`text-xs px-2.5 py-0.5 ${statusInfo.color}`}>{statusInfo.label}</Badge>
+                  </div>
                   {user.role !== "ADMIN" && (
                     <DropdownMenu>
                       <DropdownMenuTrigger

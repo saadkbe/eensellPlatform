@@ -58,12 +58,12 @@ export function PendingList({ initialUsers }: { initialUsers: PendingUser[] }) {
         ) : (
           <div className="space-y-3">
             {users.map((user) => (
-              <div key={user.id} className="flex items-center justify-between p-5 rounded-2xl bg-background/50 backdrop-blur-sm border border-border/50 hover:border-primary/30 hover:shadow-lg transition-all group">
-                <div className="flex items-center gap-4 min-w-0">
+              <div key={user.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-background/50 backdrop-blur-sm border border-border/50 hover:border-primary/30 hover:shadow-lg transition-all group">
+                <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
                   <div className="w-12 h-12 rounded-full bg-[#F59E0B]/10 flex items-center justify-center shrink-0 text-lg font-bold text-[#F59E0B] group-hover:scale-110 transition-transform">
                     {(user.firstName?.[0] || user.email[0]).toUpperCase()}
                   </div>
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <p className="text-base text-foreground font-semibold truncate group-hover:text-primary transition-colors">{user.firstName} {user.lastName}</p>
                     <p className="text-sm text-muted-foreground truncate">{user.email}</p>
                     <p className="text-xs text-muted-foreground mt-1">
@@ -71,13 +71,13 @@ export function PendingList({ initialUsers }: { initialUsers: PendingUser[] }) {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 shrink-0">
+                <div className="flex items-center gap-3 w-full sm:w-auto shrink-0 mt-2 sm:mt-0">
                   <Button size="sm" onClick={() => handleApprove(user.id)} disabled={isPending}
-                    className="bg-success/10 text-success hover:bg-[#10B981]/20 border border-success/20 h-10 px-4 text-sm font-semibold rounded-xl">
+                    className="flex-1 sm:flex-none bg-success/10 text-success hover:bg-[#10B981]/20 border border-success/20 h-10 px-4 text-sm font-semibold rounded-xl">
                     <UserCheck className="w-4 h-4 mr-2" /> Approve
                   </Button>
                   <Button size="sm" variant="outline" onClick={() => handleReject(user.id)} disabled={isPending}
-                    className="border-[#EF4444]/20 text-[#EF4444] hover:bg-[#EF4444]/10 h-10 px-4 text-sm font-semibold rounded-xl">
+                    className="flex-1 sm:flex-none border-[#EF4444]/20 text-[#EF4444] hover:bg-[#EF4444]/10 h-10 px-4 text-sm font-semibold rounded-xl">
                     <UserX className="w-4 h-4 mr-2" /> Reject
                   </Button>
                 </div>
