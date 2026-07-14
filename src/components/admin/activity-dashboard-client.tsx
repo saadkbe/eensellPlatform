@@ -270,11 +270,9 @@ export function ActivityDashboardClient() {
         
         <div className="flex items-center gap-3 shrink-0 flex-wrap">
           <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-            <PopoverTrigger asChild>
-              <Button variant="outline" className={cn("h-11 border-border/50 bg-background/50 backdrop-blur shadow-sm", !isToday && "border-indigo-500/30 text-indigo-500")}>
-                <CalendarIcon className="w-4 h-4 mr-2 opacity-70" />
-                {isToday ? "Today" : formattedSelectedDate}
-              </Button>
+            <PopoverTrigger className={cn("inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium border h-11 px-4 py-2 hover:bg-accent hover:text-accent-foreground border-border/50 bg-background/50 backdrop-blur shadow-sm transition-colors", !isToday && "border-indigo-500/30 text-indigo-500")}>
+              <CalendarIcon className="w-4 h-4 mr-2 opacity-70" />
+              {isToday ? "Today" : formattedSelectedDate}
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0 border-border/50 shadow-xl rounded-xl" align="end">
               <Calendar 
