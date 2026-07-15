@@ -34,7 +34,7 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
       dir={dir}
       className={`fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none transition-all duration-300 ${scrolled ? "top-4" : "top-6"}`}
     >
-      <div className={`pointer-events-auto backdrop-blur-xl rounded-[2.5rem] px-6 sm:px-10 py-3 flex items-center justify-between border max-w-[1400px] w-full transition-all duration-500 relative ${scrolled ? "bg-white/95 shadow-lg border-white/80" : "bg-white/40 shadow-pill border-white/40"}`}>
+      <div className={`pointer-events-auto backdrop-blur-xl rounded-[2.5rem] px-4 sm:px-6 md:px-10 py-2 sm:py-3 flex items-center justify-between border max-w-[1400px] w-full transition-all duration-500 relative ${scrolled ? "bg-white/95 shadow-lg border-white/80" : "bg-white/40 shadow-pill border-white/40"}`}>
         {/* Left side Logo */}
         <div className="flex-shrink-0 mr-4 sm:mr-8 rtl:mr-0 rtl:ml-4 sm:rtl:ml-8">
           <Link href="/" className="flex items-center">
@@ -43,7 +43,7 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
               alt="Eensell University"
               width={360}
               height={80}
-              className="h-24 sm:h-28 w-auto object-contain transition-all duration-300"
+              className="h-10 sm:h-12 md:h-16 lg:h-20 w-auto object-contain transition-all duration-300"
             />
           </Link>
         </div>

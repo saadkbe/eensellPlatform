@@ -11,7 +11,7 @@ export function HeroSection() {
   const { t, dir, isRTL } = useLanguage();
 
   return (
-    <section dir={dir} className="relative min-h-screen pt-32 md:pt-48 pb-12 md:pb-20 flex flex-col items-center justify-center overflow-hidden bg-[#FAFAFA]">
+    <section dir={dir} className="relative min-h-screen pt-36 md:pt-48 pb-12 md:pb-20 flex flex-col items-center justify-center overflow-hidden bg-[#FAFAFA]">
       
       {/* Abstract Orange Mesh Background */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
