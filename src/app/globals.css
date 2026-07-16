@@ -215,4 +215,28 @@
     0% { transform: translateX(0); }
     100% { transform: translateX(calc(-50% - 0.625rem)); }
   }
+
+  /* Success glow for pending page icon */
+  .glow-success {
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.15), 0 0 60px rgba(16, 185, 129, 0.08);
+  }
+
+  /* Scale-in for copy-button check feedback */
+  @keyframes scale-in {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .animate-scale-in {
+    animation: scale-in 0.2s ease-out forwards;
+  }
+
+  /* Pulse ring for WhatsApp CTA */
+  @keyframes pulse-ring-glow {
+    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+  }
+  .animate-pulse-ring {
+    animation: pulse-ring-glow 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+  }
 }
