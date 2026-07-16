@@ -10,9 +10,9 @@ export const translations = {
 
     // Hero
     hero_badge: "التسجيل مفتوح للأعضاء المؤسسين",
-    hero_headline_1: "اكتشف سر بناء",
-    hero_headline_2: "ثروتك الرقمية الأولى",
-    hero_headline_3: "بالذكاء الاصطناعي",
+    hero_headline_1: "انطلق من الصفر إلى",
+    hero_headline_2: "عميلك الأول في الذكاء الاصطناعي",
+    hero_headline_3: "في 60 يوماً.",
     hero_sub: "الطريق التقليدي لن يجعلك حراً أبداً. انضم إلينا لتتعلم مهارات الذكاء الاصطناعي، تطبيقها، وبناء عرض خدمات متكامل مع استراتيجية تواصل سرية لعام 2026. هدفنا: الانتقال من مبتدئ إلى تحقيق 5000 درهم أو أكثر.",
     hero_cta_primary: "ابدأ في تحقيق أرباحك الآن",
     hero_cta_secondary: "شاهد كيف يعمل",
@@ -284,9 +284,9 @@ export const translations = {
 
     // Hero
     hero_badge: "Inscriptions ouvertes pour les membres fondateurs",
-    hero_headline_1: "Découvrez le secret pour bâtir",
-    hero_headline_2: "votre première fortune digitale",
-    hero_headline_3: "grâce à l'intelligence artificielle",
+    hero_headline_1: "Passez de Zéro à",
+    hero_headline_2: "Votre Premier Client IA",
+    hero_headline_3: "en 60 Jours.",
     hero_sub: "Le chemin traditionnel ne vous rendra jamais libre. Rejoignez-nous pour apprendre les compétences en IA, les appliquer, créer une offre complète et trouver des clients avec une formule secrète 2026. Objectif: De débutant à 5000 MAD+.",
     hero_cta_primary: "Commencez à générer des revenus",
     hero_cta_secondary: "Voir comment ça marche",
@@ -558,9 +558,9 @@ export const translations = {
 
     // Hero
     hero_badge: "Registration open for founding members",
-    hero_headline_1: "Discover the secret to building",
-    hero_headline_2: "your first digital fortune",
-    hero_headline_3: "with Artificial Intelligence",
+    hero_headline_1: "Go From Zero to",
+    hero_headline_2: "Your First AI Client",
+    hero_headline_3: "in 60 Days.",
     hero_sub: "The traditional path will never make you free. Join us to learn AI skills, apply them, build a full service offer, and do client outreach using a secret 2026 formula. Goal: Go from beginner to 5000 MAD+ selling AI services.",
     hero_cta_primary: "Start generating your profits now",
     hero_cta_secondary: "See how it works",
