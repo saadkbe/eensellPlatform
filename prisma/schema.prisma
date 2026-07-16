@@ -273,3 +273,44 @@ model ChatUsage {
   @@unique([userId, month, year])
   @@index([month, year])
 }
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+}
+
+model Campaign {
+  id              String   @id @default(cuid())
+  name            String
+  startDate       DateTime
+  endDate         DateTime
+  studentGoal     Int
+  pricePerStudent Int
+  status          CampaignStatus @default(DRAFT)
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  snapshots       CampaignSnapshot[]
+
+  @@index([status])
+}
+
+model CampaignSnapshot {
+  id                String   @id @default(cuid())
+  date              String   // "YYYY-MM-DD"
+  newAccounts       Int      @default(0)
+  pendingPayments   Int      @default(0)
+  paidStudents      Int      @default(0)
+  activatedAccounts Int      @default(0)
+  revenue           Int      @default(0)
+  runningTotal      Int      @default(0)
+  progress          Float    @default(0)
+  createdAt         DateTime @default(now())
+
+  campaignId        String
+  campaign          Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, date])
+}
