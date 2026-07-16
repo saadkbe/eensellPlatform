@@ -6,6 +6,7 @@ import { ConversionFunnel } from "@/components/admin/tracking/conversion-funnel"
 import { DailyTrackerTable } from "@/components/admin/tracking/daily-tracker-table";
 import { PendingPaymentsTable } from "@/components/admin/tracking/pending-payments-table";
 import { RecentPaymentsTable } from "@/components/admin/tracking/recent-payments-table";
+import { CreateCampaignModal } from "@/components/admin/tracking/create-campaign-modal";
 import { differenceInDays } from "date-fns";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +19,7 @@ export default async function AdminTrackingPage() {
       <div className="flex flex-col items-center justify-center h-[60vh] text-center">
         <h2 className="text-2xl font-black mb-2">No Active Campaign</h2>
         <p className="text-muted-foreground mb-6">Create a new campaign to start tracking analytics.</p>
-        {/* We can add a Create Campaign button here or link to settings */}
+        <CreateCampaignModal />
       </div>
     );
   }
