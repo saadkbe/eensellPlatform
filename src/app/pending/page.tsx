@@ -350,7 +350,7 @@ function PendingContent() {
               <div className="aspect-video rounded-xl sm:rounded-[1.25rem] overflow-hidden bg-muted">
                 {/* ▼ Replace VIDEO_ID_HERE with your YouTube video ID ▼ */}
                 <iframe
-                  src="https://www.youtube.com/embed/VIDEO_ID_HERE?autoplay=1"
+                  src="https://www.youtube.com/embed/4Wc5WVTVabM?autoplay=1"
                   title={tx("فيديو ترحيبي", "Vidéo de bienvenue", "Welcome video")}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
