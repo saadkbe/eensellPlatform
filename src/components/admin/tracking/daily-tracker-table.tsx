@@ -47,7 +47,11 @@ export function DailyTrackerTable({ snapshots, studentGoal }: { snapshots: Snaps
             </tr>
           </thead>
           <tbody className="divide-y divide-border/30">
-            {sorted.map((row) => {
+            {sorted.map((row, index) => {
+              const previousRow = sorted[index + 1];
+              const dailyPaidStudents = previousRow ? row.paidStudents - previousRow.paidStudents : row.paidStudents;
+              const dailyActivated = previousRow ? row.activatedAccounts - previousRow.activatedAccounts : row.activatedAccounts;
+
               const remaining = Math.max(studentGoal - row.paidStudents, 0);
               const isGoalMet = row.paidStudents >= studentGoal;
 
@@ -58,8 +62,8 @@ export function DailyTrackerTable({ snapshots, studentGoal }: { snapshots: Snaps
                   </td>
                   <td className="px-6 py-4 font-medium text-purple-500">{row.newAccounts}</td>
                   <td className="px-6 py-4 font-medium text-amber-500">{row.pendingPayments}</td>
-                  <td className="px-6 py-4 font-medium text-brand">{row.paidStudents}</td>
-                  <td className="px-6 py-4 font-medium text-blue-500">{row.activatedAccounts}</td>
+                  <td className="px-6 py-4 font-medium text-brand">{dailyPaidStudents}</td>
+                  <td className="px-6 py-4 font-medium text-blue-500">{dailyActivated}</td>
                   <td className="px-6 py-4 font-bold text-emerald-500">{row.revenue.toLocaleString()} MAD</td>
                   <td className="px-6 py-4 font-bold text-foreground">{row.runningTotal.toLocaleString()} MAD</td>
                   <td className="px-6 py-4 font-medium text-muted-foreground">{remaining}</td>

@@ -15,12 +15,14 @@ interface CampaignProps {
   };
   paidStudents: number;
   revenue: number;
+  daysRemaining: number;
 }
 
-export function TrackingOverview({ campaign, paidStudents, revenue }: CampaignProps) {
+export function TrackingOverview({ campaign, paidStudents, revenue, daysRemaining }: CampaignProps) {
   const progress = Math.min((paidStudents / campaign.studentGoal) * 100, 100);
   const remainingStudents = Math.max(campaign.studentGoal - paidStudents, 0);
   const targetRevenue = campaign.studentGoal * campaign.pricePerStudent;
+  const spotsPerDay = Math.ceil(remainingStudents / Math.max(daysRemaining, 1));
 
   return (
     <div className="space-y-6">
@@ -127,8 +129,37 @@ export function TrackingOverview({ campaign, paidStudents, revenue }: CampaignPr
                     </p>
                   </div>
                 </div>
-              </div>
 
+                {/* Pace Required Section */}
+                <div className="pt-2">
+                  {remainingStudents > 0 ? (
+                    <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl p-4">
+                      <div className="flex items-start gap-3">
+                        <Target className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-sm font-bold text-rose-500">Pace Required</p>
+                          <p className="text-[13px] text-foreground mt-1 leading-relaxed">
+                            You need to close <span className="font-black">{remainingStudents} spots</span> in the next <span className="font-black">{daysRemaining} days</span>. That means closing an average of <span className="font-black bg-rose-500/20 px-1.5 py-0.5 rounded text-rose-600">{spotsPerDay} spots per day</span> to reach your goal before the deadline.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4">
+                      <div className="flex items-start gap-3">
+                        <Target className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-sm font-bold text-emerald-500">Goal Achieved!</p>
+                          <p className="text-[13px] text-foreground mt-1 leading-relaxed">
+                            Congratulations! You have successfully reached your campaign goal ahead of the deadline.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+              </div>
             </div>
           </CardContent>
         </Card>

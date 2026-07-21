@@ -1,10 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useState, useTransition } from "react";
 import { format, differenceInDays } from "date-fns";
-import { ExternalLink, User } from "lucide-react";
+import { ExternalLink, User, Mail, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { sendFollowUpBroadcast } from "@/app/admin/tracking/actions";
+import { toast } from "sonner";
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
@@ -14,7 +17,26 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
-export function PendingPaymentsTable({ users }: { users: any[] }) {
+export function PendingPaymentsTable({ users, campaignId }: { users: any[], campaignId: string }) {
+  const [isPending, startTransition] = useTransition();
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const handleBroadcast = () => {
+    startTransition(async () => {
+      try {
+        const result = await sendFollowUpBroadcast(campaignId);
+        if (result.success) {
+          toast.success(`Successfully sent ${result.sent} follow-up emails!`);
+          setShowConfirm(false);
+        } else {
+          toast.error("Failed to send broadcast emails.");
+        }
+      } catch (error) {
+        toast.error("An unexpected error occurred.");
+      }
+    });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -22,11 +44,43 @@ export function PendingPaymentsTable({ users }: { users: any[] }) {
       transition={{ delay: 0.6 }}
       className="bg-card border border-border/50 rounded-2xl shadow-sm overflow-hidden"
     >
-      <div className="p-6 md:p-8 border-b border-border/50 flex justify-between items-center">
+      <div className="p-6 md:p-8 border-b border-border/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h3 className="text-lg font-black text-foreground">Pending Payments</h3>
           <p className="text-sm text-muted-foreground font-medium">Accounts created but missing payment.</p>
         </div>
+        
+        {users.length > 0 && (
+          <div>
+            {!showConfirm ? (
+              <Button 
+                onClick={() => setShowConfirm(true)} 
+                className="bg-brand hover:bg-brand/90 text-brand-foreground font-bold"
+              >
+                <Mail className="w-4 h-4 mr-2" />
+                Broadcast Reminder
+              </Button>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowConfirm(false)}
+                  disabled={isPending}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={handleBroadcast} 
+                  disabled={isPending}
+                  className="bg-rose-500 hover:bg-rose-600 text-white font-bold"
+                >
+                  {isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Mail className="w-4 h-4 mr-2" />}
+                  Confirm Send ({users.length})
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="overflow-x-auto">

@@ -67,7 +67,8 @@ export default async function AdminTrackingPage() {
       <TrackingOverview 
         campaign={activeCampaign} 
         paidStudents={todayStats.paidStudents} 
-        revenue={totalRevenue} 
+        revenue={totalRevenue}
+        daysRemaining={daysRemaining}
       />
       
       <KpiGrid data={kpiData} />
@@ -95,7 +96,7 @@ export default async function AdminTrackingPage() {
       />
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-        <PendingPaymentsTable users={pendingUsers} />
+        <PendingPaymentsTable users={pendingUsers} campaignId={activeCampaign.id} />
         <RecentPaymentsTable users={recentPayments} pricePerStudent={activeCampaign.pricePerStudent} />
       </div>
     </div>

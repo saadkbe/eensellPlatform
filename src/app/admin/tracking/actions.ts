@@ -2,6 +2,11 @@
 
 import { db } from "@/lib/db";
 import { format, startOfDay, endOfDay, subDays, isBefore } from "date-fns";
+import { Resend } from "resend";
+import { PendingFollowUpEmail } from "@/emails/PendingFollowUpEmail";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "noreply@eensell.com";
 
 export async function getActiveCampaign() {
   return await db.campaign.findFirst({
@@ -152,4 +157,59 @@ export async function getRecentPayments(startDate: Date) {
     orderBy: { updatedAt: "desc" },
     take: 10,
   });
+}
+
+export async function sendFollowUpBroadcast(campaignId: string) {
+  try {
+    const campaign = await db.campaign.findUnique({ where: { id: campaignId } });
+    if (!campaign) throw new Error("Campaign not found");
+
+    const paidStudents = await db.user.count({
+      where: { status: "ACTIVE", createdAt: { gte: campaign.startDate } },
+    });
+    
+    const remainingSpots = Math.max(campaign.studentGoal - paidStudents, 0);
+
+    const pendingUsers = await db.user.findMany({
+      where: {
+        status: "PENDING",
+        createdAt: { gte: campaign.startDate },
+      },
+      select: {
+        email: true,
+        firstName: true,
+      }
+    });
+
+    if (pendingUsers.length === 0) return { success: true, sent: 0 };
+
+    const BATCH_SIZE = 100;
+    let sent = 0;
+
+    for (let i = 0; i < pendingUsers.length; i += BATCH_SIZE) {
+      const batch = pendingUsers.slice(i, i + BATCH_SIZE);
+      const { data, error } = await resend.batch.send(
+        batch.map((user) => ({
+          from: `Eensell University <${FROM_EMAIL}>`,
+          to: user.email,
+          subject: "Ne payez pas 599 MAD pour ça... (ouvrez immédiatement) ⏳",
+          react: PendingFollowUpEmail({
+            userName: user.firstName || "There",
+            remainingSpots,
+          }),
+        }))
+      );
+
+      if (error) {
+        console.error("Batch send error:", error);
+      } else {
+        sent += batch.length;
+      }
+    }
+
+    return { success: true, sent };
+  } catch (error) {
+    console.error("Failed to send broadcast:", error);
+    return { success: false, error };
+  }
 }
