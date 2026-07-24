@@ -1,6 +1,7 @@
 "use client";
 
 import { useEditor, EditorContent } from "@tiptap/react";
+import { Node, mergeAttributes } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
@@ -30,9 +31,31 @@ import {
   Redo,
   Minus,
   Unlink,
+  Mic,
+  Loader2,
 } from "lucide-react";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { useUploadThing } from "@/lib/uploadthing";
+import { toast } from "sonner";
+
+export const AudioNode = Node.create({
+  name: 'audio',
+  group: 'block',
+  selectable: true,
+  draggable: true,
+  addAttributes() {
+    return {
+      src: { default: null },
+    }
+  },
+  parseHTML() {
+    return [{ tag: 'audio' }]
+  },
+  renderHTML({ HTMLAttributes }) {
+    return ['audio', mergeAttributes(HTMLAttributes, { controls: 'true', class: 'w-full my-4 rounded-md outline-none border border-border bg-muted/30 p-2' })];
+  },
+});
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -96,10 +119,41 @@ export function RichTextEditor({
 }: RichTextEditorProps) {
   const [linkUrl, setLinkUrl] = useState("");
   const [showLinkInput, setShowLinkInput] = useState(false);
-  const [showImageInput, setShowImageInput] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
   const [showYoutubeInput, setShowYoutubeInput] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState("");
+
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [isUploadingAudio, setIsUploadingAudio] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const audioInputRef = useRef<HTMLInputElement>(null);
+
+  const { startUpload: startImageUpload } = useUploadThing("postAttachment", {
+    onUploadBegin: () => setIsUploadingImage(true),
+    onClientUploadComplete: (res) => {
+      setIsUploadingImage(false);
+      if (res && res.length > 0) {
+        editor?.chain().focus().setImage({ src: res[0].url }).run();
+      }
+    },
+    onUploadError: (error) => {
+      setIsUploadingImage(false);
+      toast.error(error.message);
+    }
+  });
+
+  const { startUpload: startAudioUpload } = useUploadThing("postAttachment", {
+    onUploadBegin: () => setIsUploadingAudio(true),
+    onClientUploadComplete: (res) => {
+      setIsUploadingAudio(false);
+      if (res && res.length > 0) {
+        editor?.chain().focus().insertContent({ type: 'audio', attrs: { src: res[0].url } }).run();
+      }
+    },
+    onUploadError: (error) => {
+      setIsUploadingAudio(false);
+      toast.error(error.message);
+    }
+  });
 
   const editor = useEditor({
     extensions: [
@@ -133,6 +187,7 @@ export function RichTextEditor({
       Placeholder.configure({
         placeholder,
       }),
+      AudioNode,
     ],
     content,
     editable,
@@ -152,13 +207,6 @@ export function RichTextEditor({
     setLinkUrl("");
     setShowLinkInput(false);
   }, [editor, linkUrl]);
-
-  const addImage = useCallback(() => {
-    if (!editor || !imageUrl) return;
-    editor.chain().focus().setImage({ src: imageUrl }).run();
-    setImageUrl("");
-    setShowImageInput(false);
-  }, [editor, imageUrl]);
 
   const addYoutube = useCallback(() => {
     if (!editor || !youtubeUrl) return;
@@ -319,7 +367,6 @@ export function RichTextEditor({
                 editor.chain().focus().unsetLink().run();
               } else {
                 setShowLinkInput(!showLinkInput);
-                setShowImageInput(false);
                 setShowYoutubeInput(false);
               }
             }}
@@ -333,16 +380,52 @@ export function RichTextEditor({
             )}
           </ToolbarButton>
 
-          {/* Image */}
+          {/* Image Upload */}
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+            ref={imageInputRef}
+            onChange={(e) => {
+              if (e.target.files) {
+                startImageUpload(Array.from(e.target.files));
+              }
+            }}
+          />
           <ToolbarButton
             onClick={() => {
-              setShowImageInput(!showImageInput);
+              imageInputRef.current?.click();
               setShowLinkInput(false);
               setShowYoutubeInput(false);
             }}
-            tooltip="Add Image"
+            disabled={isUploadingImage}
+            tooltip="Upload Image"
           >
-            <ImageIcon className="w-4 h-4" />
+            {isUploadingImage ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImageIcon className="w-4 h-4" />}
+          </ToolbarButton>
+
+          {/* Audio Upload */}
+          <input
+            type="file"
+            accept="audio/*"
+            hidden
+            ref={audioInputRef}
+            onChange={(e) => {
+              if (e.target.files) {
+                startAudioUpload(Array.from(e.target.files));
+              }
+            }}
+          />
+          <ToolbarButton
+            onClick={() => {
+              audioInputRef.current?.click();
+              setShowLinkInput(false);
+              setShowYoutubeInput(false);
+            }}
+            disabled={isUploadingAudio}
+            tooltip="Upload Voice Note"
+          >
+            {isUploadingAudio ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mic className="w-4 h-4" />}
           </ToolbarButton>
 
           {/* YouTube */}
@@ -350,7 +433,6 @@ export function RichTextEditor({
             onClick={() => {
               setShowYoutubeInput(!showYoutubeInput);
               setShowLinkInput(false);
-              setShowImageInput(false);
             }}
             tooltip="Embed YouTube"
           >
@@ -379,32 +461,6 @@ export function RichTextEditor({
             size="sm"
             variant="ghost"
             onClick={() => setShowLinkInput(false)}
-            className="h-7 px-2 text-xs"
-          >
-            Cancel
-          </Button>
-        </div>
-      )}
-
-      {showImageInput && (
-        <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-muted/20">
-          <ImageIcon className="w-4 h-4 text-muted-foreground shrink-0" />
-          <input
-            type="url"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && addImage()}
-            placeholder="Paste image URL..."
-            className="flex-1 h-8 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-            autoFocus
-          />
-          <Button size="sm" onClick={addImage} className="h-7 px-3 text-xs">
-            Insert
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => setShowImageInput(false)}
             className="h-7 px-2 text-xs"
           >
             Cancel
@@ -484,6 +540,7 @@ export function RichTextRenderer({
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
+      AudioNode,
     ],
     content,
     editable: false,

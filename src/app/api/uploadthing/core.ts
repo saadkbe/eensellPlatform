@@ -54,15 +54,15 @@ export const ourFileRouter = {
       return { uploadedBy: metadata.userId, url: file.ufsUrl };
     }),
 
-  // Define a route for post images (community posts)
-  postImage: f({ image: { maxFileSize: "8MB", maxFileCount: 4 } })
+  // Define a route for post attachments (images, audio, video)
+  postAttachment: f({ image: { maxFileSize: "8MB", maxFileCount: 4 }, audio: { maxFileSize: "16MB", maxFileCount: 1 }, video: { maxFileSize: "64MB", maxFileCount: 1 } })
     .middleware(async () => {
       const user = await auth();
       if (!user) throw new UploadThingError("Unauthorized");
       return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log("Post image upload complete for userId:", metadata.userId);
+      console.log("Post attachment upload complete for userId:", metadata.userId);
       return { uploadedBy: metadata.userId, url: file.ufsUrl };
     }),
 

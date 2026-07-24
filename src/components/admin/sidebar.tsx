@@ -6,7 +6,7 @@ import { UserButton, SignOutButton } from "@clerk/nextjs";
 import {
   BarChart3, Users, Clock, GraduationCap,
   TrendingUp, Mail, Menu, X, Shield, LogOut,
-  FolderOpen, PenLine, Video, FileCheck, Target
+  FolderOpen, PenLine, Video, FileCheck, Target, MoreHorizontal
 } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -44,6 +44,13 @@ const navSections: NavSection[] = [
       { title: "Homeworks", href: "/admin/homeworks", icon: FileCheck },
     ],
   },
+];
+
+const bottomNavItems = [
+  { title: "Overview", href: "/admin", icon: BarChart3 },
+  { title: "Users", href: "/admin/users", icon: Users },
+  { title: "Courses", href: "/admin/courses", icon: GraduationCap },
+  { title: "Posts", href: "/admin/posts", icon: PenLine },
 ];
 
 export function AdminSidebar() {
@@ -131,6 +138,58 @@ export function AdminSidebar() {
           {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </Button>
       </div>
+
+      {/* Mobile Bottom Navigation Bar */}
+      <div className={cn(
+        "lg:hidden fixed bottom-4 left-4 right-4 z-50 bg-background/80 backdrop-blur-2xl border border-border shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-3xl safe-area-pb",
+      )}>
+        <div className="flex items-center justify-around px-2 py-2">
+          {bottomNavItems.map((item) => {
+            const Icon = item.icon;
+            const active = isActive(item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "flex flex-col items-center justify-center gap-1 py-2 px-3 rounded-2xl transition-all duration-300 relative min-w-[64px] z-10",
+                  active
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {active && (
+                  <>
+                    <motion.div
+                      layoutId="adminBottomNavActive"
+                      className="absolute inset-0 bg-primary/10 rounded-2xl -z-10"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                    <motion.div
+                      layoutId="adminBottomNavDot"
+                      className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  </>
+                )}
+                <Icon className={cn("w-5 h-5 transition-all duration-300", active && "scale-110 mb-0.5")} />
+                <span className={cn("text-[10px] font-medium leading-tight", active ? "text-primary" : "text-muted-foreground")}>
+                  {item.title}
+                </span>
+              </Link>
+            );
+          })}
+          {/* More button — opens sidebar */}
+          <button
+            onClick={() => setMobileOpen(true)}
+            className="flex flex-col items-center justify-center gap-1 py-2 px-3 rounded-2xl text-muted-foreground hover:text-foreground transition-all duration-300 min-w-[64px] z-10"
+          >
+            <MoreHorizontal className="w-5 h-5" />
+            <span className="text-[10px] font-medium leading-tight">More</span>
+          </button>
+        </div>
+      </div>
+
       <AnimatePresence>
         {mobileOpen && (
           <>

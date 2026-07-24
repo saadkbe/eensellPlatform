@@ -224,9 +224,9 @@ export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: bool
 
       {/* Mobile Bottom Navigation Bar */}
       <div className={cn(
-        "lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-xl border-t border-border safe-area-pb",
+        "lg:hidden fixed bottom-4 left-4 right-4 z-50 bg-background/80 backdrop-blur-2xl border border-border shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-3xl safe-area-pb",
       )}>
-        <div className="flex items-center justify-around px-1 py-1.5">
+        <div className="flex items-center justify-around px-2 py-2">
           {bottomNavItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
@@ -235,20 +235,27 @@ export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: bool
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center justify-center gap-0.5 py-1.5 px-3 rounded-xl transition-all duration-200 relative min-w-[60px]",
+                  "flex flex-col items-center justify-center gap-1 py-2 px-3 rounded-2xl transition-all duration-300 relative min-w-[64px] z-10",
                   active
                     ? "text-primary"
-                    : "text-muted-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 {active && (
-                  <motion.div
-                    layoutId="bottomNavActive"
-                    className="absolute -top-1.5 w-8 h-1 rounded-full bg-primary"
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                  />
+                  <>
+                    <motion.div
+                      layoutId="bottomNavActive"
+                      className="absolute inset-0 bg-primary/10 rounded-2xl -z-10"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                    <motion.div
+                      layoutId="bottomNavDot"
+                      className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  </>
                 )}
-                <Icon className={cn("w-5 h-5 transition-all", active && "scale-110")} />
+                <Icon className={cn("w-5 h-5 transition-all duration-300", active && "scale-110 mb-0.5")} />
                 <span className={cn("text-[10px] font-semibold leading-tight", active ? "text-primary" : "text-muted-foreground")}>
                   {t(item.labelKey)}
                 </span>
@@ -258,10 +265,10 @@ export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: bool
           {/* More button — opens sidebar */}
           <button
             onClick={() => setMobileOpen(true)}
-            className="flex flex-col items-center justify-center gap-0.5 py-1.5 px-3 rounded-xl text-muted-foreground min-w-[60px]"
+            className="flex flex-col items-center justify-center gap-1 py-2 px-3 rounded-2xl text-muted-foreground hover:text-foreground transition-all duration-300 min-w-[64px] z-10"
           >
             <MoreHorizontal className="w-5 h-5" />
-            <span className="text-[10px] font-semibold leading-tight">{t("nav_settings")}</span>
+            <span className="text-[10px] font-medium leading-tight">{t("nav_settings")}</span>
           </button>
         </div>
       </div>
