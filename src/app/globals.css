@@ -239,4 +239,49 @@
   .animate-pulse-ring {
     animation: pulse-ring-glow 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
   }
+
+  /* Admin V2 Dark Theme Utilities */
+  .admin-sidebar-v2 {
+    background: linear-gradient(180deg, #0c0e14 0%, #0a0b10 100%);
+  }
+
+  .admin-card-glow {
+    position: relative;
+  }
+  .admin-card-glow::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), transparent 50%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .admin-shimmer {
+    background: linear-gradient(
+      110deg,
+      transparent 25%,
+      rgba(255,255,255,0.03) 37%,
+      transparent 63%
+    );
+    background-size: 200% 100%;
+    animation: admin-shimmer 2s ease-in-out infinite;
+  }
+
+  @keyframes admin-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Admin topbar override for dark context */
+  .admin-topbar {
+    background: rgba(10, 11, 16, 0.85) !important;
+    backdrop-filter: blur(20px) !important;
+    border-color: rgba(255, 255, 255, 0.06) !important;
+  }
 }
