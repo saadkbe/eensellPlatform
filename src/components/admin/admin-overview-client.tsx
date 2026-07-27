@@ -1,16 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Users, UserCheck, Clock, BookOpen, TrendingUp, DollarSign, Shield, CalendarIcon, ChevronLeft, ChevronRight, Loader2, ArrowUpRight, AlertTriangle } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Users, UserCheck, Clock, BookOpen, DollarSign, AlertTriangle, CalendarIcon, Loader2, ArrowUpRight, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { STATUS_LABELS } from "@/lib/constants";
 import { ExportReportButton } from "@/components/admin/export-report-button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
 
 type FilterType = "ALL_TIME" | "TODAY" | "LAST_7_DAYS" | "CUSTOM";
 
@@ -35,10 +32,7 @@ function DateRangePicker({
   const handlePrevMonth = () => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
   const handleNextMonth = () => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
 
-  const isSameDay = (d1: Date, d2: Date) => {
-    return d1 && d2 && d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
-  };
-
+  const isSameDay = (d1: Date, d2: Date) => d1 && d2 && d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
   const isWithinRange = (date: Date) => {
     if (!customRange.from || !customRange.to) return false;
     const d = new Date(date).setHours(0,0,0,0);
@@ -62,10 +56,7 @@ function DateRangePicker({
 
   const renderDays = () => {
     const days = [];
-    for (let i = 0; i < firstDayOfMonth; i++) {
-      days.push(<div key={`empty-${i}`} className="h-8 w-8" />);
-    }
-    
+    for (let i = 0; i < firstDayOfMonth; i++) days.push(<div key={`empty-${i}`} className="h-8 w-8" />);
     for (let d = 1; d <= daysInMonth; d++) {
       const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), d);
       const isStart = customRange.from && isSameDay(date, customRange.from);
@@ -78,10 +69,10 @@ function DateRangePicker({
           key={d}
           onClick={() => handleDayClick(date)}
           className={cn(
-            "h-8 w-8 rounded-lg flex items-center justify-center text-sm transition-all",
-            isSelected ? "bg-indigo-600 text-white font-bold shadow-md" : "",
-            isMid && !isSelected ? "bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300" : "",
-            !isSelected && !isMid ? "hover:bg-muted text-foreground" : ""
+            "h-8 w-8 rounded-md flex items-center justify-center text-sm font-medium transition-colors",
+            isSelected ? "bg-slate-900 text-white" : "",
+            isMid && !isSelected ? "bg-slate-100 text-slate-900" : "",
+            !isSelected && !isMid ? "hover:bg-slate-100 text-slate-700" : ""
           )}
         >
           {d}
@@ -92,61 +83,39 @@ function DateRangePicker({
   };
 
   return (
-    <div className="p-3 w-[300px]">
-      <div className="grid grid-cols-2 gap-2 mb-4">
-        <Button variant={filterType === "ALL_TIME" ? "default" : "outline"} size="sm" onClick={() => { setFilterType("ALL_TIME"); onClose(); }} className={filterType === "ALL_TIME" ? "bg-indigo-600 hover:bg-indigo-700 text-white border-0" : ""}>All Time</Button>
-        <Button variant={filterType === "TODAY" ? "default" : "outline"} size="sm" onClick={() => { setFilterType("TODAY"); onClose(); }} className={filterType === "TODAY" ? "bg-indigo-600 hover:bg-indigo-700 text-white border-0" : ""}>Today</Button>
-        <Button variant={filterType === "LAST_7_DAYS" ? "default" : "outline"} size="sm" onClick={() => { setFilterType("LAST_7_DAYS"); onClose(); }} className={filterType === "LAST_7_DAYS" ? "bg-indigo-600 hover:bg-indigo-700 text-white border-0" : ""}>Last 7 Days</Button>
+    <div className="p-4 w-[320px] bg-white rounded-2xl shadow-xl border border-slate-200">
+      <div className="grid grid-cols-2 gap-2 mb-6">
+        <Button variant="outline" size="sm" onClick={() => { setFilterType("ALL_TIME"); onClose(); }} className={cn("text-xs font-medium border-slate-200", filterType === "ALL_TIME" && "bg-slate-900 text-white hover:bg-slate-800")}>All Time</Button>
+        <Button variant="outline" size="sm" onClick={() => { setFilterType("TODAY"); onClose(); }} className={cn("text-xs font-medium border-slate-200", filterType === "TODAY" && "bg-slate-900 text-white hover:bg-slate-800")}>Today</Button>
+        <Button variant="outline" size="sm" onClick={() => { setFilterType("LAST_7_DAYS"); onClose(); }} className={cn("text-xs font-medium border-slate-200", filterType === "LAST_7_DAYS" && "bg-slate-900 text-white hover:bg-slate-800")}>Last 7 Days</Button>
       </div>
 
-      <div className="border-t border-border pt-4">
-        <div className="flex items-center justify-between mb-3">
-          <Button variant="outline" size="icon" className="h-7 w-7" onClick={handlePrevMonth}>
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <div className="font-semibold text-sm text-foreground">
-            {currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}
-          </div>
-          <Button variant="outline" size="icon" className="h-7 w-7" onClick={handleNextMonth}>
-            <ChevronRight className="h-4 w-4" />
-          </Button>
+      <div className="flex items-center justify-between mb-4">
+        <button onClick={handlePrevMonth} className="p-1 hover:bg-slate-100 rounded-md transition-colors"><div className="w-4 h-4 border-t-2 border-l-2 border-slate-500 -rotate-45 translate-x-1" /></button>
+        <div className="font-semibold text-sm text-slate-900">
+          {currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
         </div>
-        <div className="grid grid-cols-7 gap-1 text-center mb-2">
-          {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
-            <div key={day} className="text-[11px] font-medium text-muted-foreground uppercase">{day}</div>
-          ))}
-        </div>
-        <div className="grid grid-cols-7 gap-1">
-          {renderDays()}
-        </div>
-        {filterType === "CUSTOM" && customRange.from && customRange.to && (
-           <Button className="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white border-0" size="sm" onClick={onClose}>Apply Range</Button>
-        )}
+        <button onClick={handleNextMonth} className="p-1 hover:bg-slate-100 rounded-md transition-colors"><div className="w-4 h-4 border-t-2 border-r-2 border-slate-500 rotate-45 -translate-x-1" /></button>
+      </div>
+      
+      <div className="grid grid-cols-7 gap-1 text-center mb-2">
+        {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
+          <div key={day} className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">{day}</div>
+        ))}
+      </div>
+      <div className="grid grid-cols-7 gap-1">
+        {renderDays()}
       </div>
     </div>
   );
 }
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.08,
-      duration: 0.4,
-      ease: "easeOut" as const,
-    },
-  }),
-};
-
 export function AdminOverviewClient() {
   const [filterType, setFilterType] = useState<FilterType>("ALL_TIME");
-  const [customRange, setCustomRange] = useState<{ from: Date | null, to: Date | null }>({ from: null, to: null });
+  const [customRange, setCustomRange] = useState<{from: Date | null, to: Date | null}>({ from: null, to: null });
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  
-  const [data, setData] = useState<any>({
+  const [data, setData] = useState({
     stats: { totalUsers: 0, activeUsers: 0, pendingUsers: 0, suspendedUsers: 0, totalModules: 0, totalLessons: 0, revenue: 0 },
     recentSignups: []
   });
@@ -156,7 +125,6 @@ export function AdminOverviewClient() {
       setLoading(true);
       try {
         let url = `/api/admin/overview`;
-        
         let fromDate = null;
         let toDate = null;
 
@@ -193,12 +161,12 @@ export function AdminOverviewClient() {
   }, [filterType, customRange]);
 
   const statsList = [
-    { label: "Total Revenue", value: `${data.stats.revenue.toLocaleString()} MAD`, icon: DollarSign, gradient: "from-emerald-500 to-teal-600", iconBg: "bg-emerald-100 dark:bg-emerald-500/15", iconColor: "text-emerald-600 dark:text-emerald-400" },
-    { label: "Total Users", value: data.stats.totalUsers, icon: Users, gradient: "from-indigo-500 to-violet-600", iconBg: "bg-indigo-100 dark:bg-indigo-500/15", iconColor: "text-indigo-600 dark:text-indigo-400" },
-    { label: "Active Users", value: data.stats.activeUsers, icon: UserCheck, gradient: "from-sky-500 to-blue-600", iconBg: "bg-sky-100 dark:bg-sky-500/15", iconColor: "text-sky-600 dark:text-sky-400" },
-    { label: "Pending Approvals", value: data.stats.pendingUsers, icon: Clock, gradient: "from-amber-500 to-orange-600", iconBg: "bg-amber-100 dark:bg-amber-500/15", iconColor: "text-amber-600 dark:text-amber-400" },
-    { label: "Total Modules", value: data.stats.totalModules, icon: BookOpen, gradient: "from-violet-500 to-purple-600", iconBg: "bg-violet-100 dark:bg-violet-500/15", iconColor: "text-violet-600 dark:text-violet-400" },
-    { label: "Suspended", value: data.stats.suspendedUsers, icon: AlertTriangle, gradient: "from-rose-500 to-red-600", iconBg: "bg-rose-100 dark:bg-rose-500/15", iconColor: "text-rose-600 dark:text-rose-400" },
+    { label: "Total Revenue", value: `${data.stats.revenue.toLocaleString()} MAD`, icon: DollarSign, trend: "+12.5%" },
+    { label: "Total Users", value: data.stats.totalUsers, icon: Users, trend: "+4.2%" },
+    { label: "Active Users", value: data.stats.activeUsers, icon: UserCheck, trend: "+2.1%" },
+    { label: "Pending Approvals", value: data.stats.pendingUsers, icon: Clock, trend: null },
+    { label: "Total Modules", value: data.stats.totalModules, icon: BookOpen, trend: null },
+    { label: "Suspended", value: data.stats.suspendedUsers, icon: AlertTriangle, trend: null },
   ];
 
   let displayDateText = "All Time";
@@ -209,174 +177,150 @@ export function AdminOverviewClient() {
   }
 
   return (
-    <>
-      {/* Hero Header */}
-      <div className="relative overflow-hidden rounded-2xl border border-border p-6 sm:p-8 md:p-10 bg-gradient-to-br from-indigo-50 via-white to-violet-50 dark:from-indigo-950/20 dark:via-background dark:to-violet-950/20 shadow-sm transition-colors duration-300">
-        <div className="absolute -top-32 -right-32 w-64 h-64 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-[80px] pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-violet-500/10 dark:bg-violet-500/15 rounded-full blur-[60px] pointer-events-none" />
+    <div className="bg-[#FAFAFA] min-h-screen text-slate-900 pb-24">
+      {/* ── HEADER ── */}
+      <div className="max-w-7xl mx-auto px-6 pt-10 pb-8 flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200/60 mb-8">
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight text-slate-900 mb-1">
+            Overview
+          </h1>
+          <p className="text-sm text-slate-500 font-medium">
+            Monitor platform metrics, user engagement, and revenue.
+          </p>
+        </div>
         
-        {/* Grid pattern overlay */}
-        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.04]" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
-          backgroundSize: '24px 24px'
-        }} />
-        
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-100/50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 text-xs font-semibold mb-4 border border-indigo-200 dark:border-indigo-500/20 backdrop-blur-sm">
-              <Shield className="w-3.5 h-3.5" />
-              <span>Admin Control Center</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight mb-2">
-              Platform Overview
-            </h1>
-            <p className="text-muted-foreground text-sm sm:text-base max-w-xl leading-relaxed">
-              Monitor user growth, engagement metrics, and platform revenue all in one place.
-            </p>
-          </div>
-          <div className="shrink-0 flex flex-col sm:flex-row gap-3">
-            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-              <PopoverTrigger className={cn(
-                "inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-medium h-11 px-5 py-2 transition-all duration-200",
-                "bg-background/60 dark:bg-background/40 border border-border text-foreground hover:bg-accent backdrop-blur-sm shadow-sm",
-                filterType !== "ALL_TIME" && "border-indigo-300 dark:border-indigo-500/30 text-indigo-700 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-500/5"
-              )}>
-                <CalendarIcon className="w-4 h-4 mr-2 opacity-70" />
-                {displayDateText}
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 bg-background border-border shadow-xl rounded-xl" align="end">
-                <DateRangePicker 
-                  filterType={filterType}
-                  setFilterType={setFilterType}
-                  customRange={customRange}
-                  setCustomRange={setCustomRange}
-                  onClose={() => {
-                     if (filterType !== "CUSTOM" || (customRange.from && customRange.to)) {
-                       setIsCalendarOpen(false);
-                     }
-                  }} 
-                />
-              </PopoverContent>
-            </Popover>
-            <ExportReportButton />
-          </div>
+        <div className="flex items-center gap-3">
+          <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+            <PopoverTrigger
+              className={cn(
+                "inline-flex items-center justify-center whitespace-nowrap h-10 px-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:bg-slate-50 text-sm font-medium transition-all text-slate-700",
+                filterType !== "ALL_TIME" && "border-slate-300 text-slate-900 bg-slate-50"
+              )}
+            >
+              <CalendarIcon className="w-4 h-4 mr-2 text-slate-400" />
+              {displayDateText}
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0 border-none shadow-none bg-transparent" align="end">
+              <DateRangePicker 
+                filterType={filterType}
+                setFilterType={setFilterType}
+                customRange={customRange}
+                setCustomRange={setCustomRange}
+                onClose={() => {
+                   if (filterType !== "CUSTOM" || (customRange.from && customRange.to)) {
+                     setIsCalendarOpen(false);
+                   }
+                }} 
+              />
+            </PopoverContent>
+          </Popover>
+          <ExportReportButton />
         </div>
       </div>
 
-      {loading ? (
-         <div className="flex flex-col items-center justify-center py-32">
-           <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-500/10 flex items-center justify-center mb-4 animate-pulse">
-             <Loader2 className="w-6 h-6 animate-spin text-indigo-600 dark:text-indigo-400" />
+      <div className="max-w-7xl mx-auto px-6">
+        {loading ? (
+           <div className="flex flex-col items-center justify-center py-32">
+             <Loader2 className="w-8 h-8 animate-spin text-slate-300 mb-4" />
+             <p className="text-slate-500 font-medium text-sm">Loading metrics...</p>
            </div>
-           <p className="text-muted-foreground font-medium text-sm">Fetching platform metrics...</p>
-         </div>
-      ) : (
-        <>
-          {/* Stats Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {statsList.map((s, i) => {
-              const Icon = s.icon;
-              return (
-                <motion.div
-                  key={s.label}
-                  custom={i}
-                  initial="hidden"
-                  animate="visible"
-                  variants={cardVariants}
-                >
-                  <div className={cn(
-                    "relative overflow-hidden rounded-2xl border border-border p-6 group",
-                    "bg-card hover:bg-accent/50 dark:bg-card/40 dark:backdrop-blur-xl transition-all duration-300",
-                    "hover:shadow-md dark:hover:shadow-[0_8px_30px_rgba(255,255,255,0.02)]"
-                  )}>
-                    {/* Subtle gradient accent */}
-                    <div className={cn("absolute top-0 right-0 w-24 h-24 rounded-full blur-[40px] opacity-0 group-hover:opacity-10 dark:group-hover:opacity-20 transition-opacity duration-500 pointer-events-none bg-gradient-to-br", s.gradient)} />
-                    
-                    <div className="relative z-10">
-                      <div className="flex items-start justify-between mb-5">
-                        <div className={cn("w-11 h-11 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110", s.iconBg)}>
-                          <Icon className={cn("w-5 h-5", s.iconColor)} />
-                        </div>
-                        <ArrowUpRight className="w-4 h-4 text-muted-foreground/30 group-hover:text-muted-foreground transition-colors" />
-                      </div>
-                      <div>
-                        <p className="text-3xl font-bold text-foreground tracking-tight mb-1">{s.value}</p>
-                        <p className="text-sm font-medium text-muted-foreground">{s.label}</p>
-                      </div>
+        ) : (
+          <>
+            {/* ── BENTO STATS GRID ── */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              {statsList.map((s) => {
+                const Icon = s.icon;
+                return (
+                  <div key={s.label} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.02)] transition-shadow hover:shadow-[0_8px_32px_-4px_rgba(0,0,0,0.04)]">
+                    <div className="flex items-start justify-between mb-8">
+                      <p className="text-sm font-medium text-slate-500">{s.label}</p>
+                      <Icon className="w-5 h-5 text-slate-400" />
+                    </div>
+                    <div className="flex items-end justify-between">
+                      <h3 className="text-3xl font-semibold text-slate-900 tracking-tight">{s.value}</h3>
+                      {s.trend && (
+                        <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md mb-1">
+                          {s.trend}
+                        </span>
+                      )}
                     </div>
                   </div>
-                </motion.div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
 
-          {/* Recent Signups */}
-          <div className="rounded-2xl border border-border overflow-hidden bg-card dark:bg-card/40 dark:backdrop-blur-xl shadow-sm">
-            <div className="border-b border-border/50 bg-muted/20 dark:bg-transparent px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg bg-indigo-100 dark:bg-indigo-500/15 flex items-center justify-center">
-                  <Users className="w-4.5 h-4.5 text-indigo-600 dark:text-indigo-400" />
-                </div>
-                <div>
-                  <h3 className="text-foreground font-semibold text-[15px]">Recent Signups</h3>
-                  <p className="text-muted-foreground text-xs">Latest user registrations</p>
-                </div>
+            {/* ── RECENT SIGNUPS TABLE ── */}
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-semibold text-slate-900 tracking-tight">Recent Signups</h2>
+                <Link href="/admin/users">
+                  <Button variant="ghost" className="text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg h-9 px-3">
+                    View all users <ArrowUpRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </Link>
               </div>
-              <Link href="/admin/users">
-                <Button variant="ghost" size="sm" className="text-xs hover:bg-muted w-full sm:w-auto">
-                  View All Users
-                  <ArrowUpRight className="w-3.5 h-3.5 ml-1.5" />
-                </Button>
-              </Link>
-            </div>
-            <div className="overflow-x-auto">
-              <div className="divide-y divide-border/50 min-w-[500px]">
-                {data.recentSignups.map((user: any, index: number) => {
-                  const statusInfo = STATUS_LABELS[user.status as keyof typeof STATUS_LABELS];
-                  return (
-                    <motion.div
-                      key={user.id}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05, duration: 0.3 }}
-                      className="flex items-center justify-between px-6 py-4 hover:bg-muted/30 dark:hover:bg-white/[0.02] transition-colors group"
-                    >
-                      <div className="flex items-center gap-4 min-w-0 pr-4">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-100 to-violet-100 dark:from-indigo-500/20 dark:to-violet-500/20 border border-indigo-200 dark:border-indigo-500/10 flex items-center justify-center shrink-0 text-sm font-bold text-indigo-700 dark:text-indigo-300 group-hover:scale-105 transition-transform">
-                          {(user.firstName?.[0] || user.email[0]).toUpperCase()}
+
+              <div className="bg-white border border-slate-200 rounded-2xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.02)] overflow-hidden">
+                {/* Table Header */}
+                <div className="grid grid-cols-12 gap-4 px-6 py-3 border-b border-slate-200 bg-slate-50/50">
+                  <div className="col-span-5 text-xs font-medium text-slate-500 uppercase tracking-wider">User</div>
+                  <div className="col-span-3 text-xs font-medium text-slate-500 uppercase tracking-wider">Joined</div>
+                  <div className="col-span-4 text-xs font-medium text-slate-500 uppercase tracking-wider text-right">Status</div>
+                </div>
+
+                {/* Table Body */}
+                <div className="divide-y divide-slate-100">
+                  {data.recentSignups.map((user: any) => {
+                    const statusInfo = STATUS_LABELS[user.status as keyof typeof STATUS_LABELS];
+                    return (
+                      <div key={user.id} className="grid grid-cols-12 gap-4 px-6 py-4 items-center hover:bg-slate-50/50 transition-colors">
+                        
+                        <div className="col-span-5 flex items-center gap-3 min-w-0">
+                          <div className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0 text-sm font-semibold text-slate-700">
+                            {(user.firstName?.[0] || user.email[0]).toUpperCase()}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold text-slate-900 truncate">
+                              {user.firstName} {user.lastName}
+                            </p>
+                            <p className="text-xs text-slate-500 truncate">{user.email}</p>
+                          </div>
                         </div>
-                        <div className="min-w-0">
-                          <p className="text-sm font-semibold text-foreground truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                            {user.firstName} {user.lastName}
-                          </p>
-                          <p className="text-xs text-muted-foreground truncate mt-0.5">{user.email}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-4 shrink-0">
-                        <span className="text-xs font-medium text-muted-foreground">
+
+                        <div className="col-span-3 text-sm text-slate-600 font-medium">
                           {new Date(user.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                        </span>
-                        <Badge className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 border-none shadow-sm ${statusInfo.color}`}>
-                          {statusInfo.label}
-                        </Badge>
+                        </div>
+
+                        <div className="col-span-4 flex justify-end">
+                          <div className={cn(
+                            "inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-semibold uppercase tracking-wider border",
+                            user.status === "ACTIVE" ? "bg-emerald-50 text-emerald-700 border-emerald-200" :
+                            user.status === "PENDING" ? "bg-amber-50 text-amber-700 border-amber-200" :
+                            "bg-slate-50 text-slate-700 border-slate-200"
+                          )}>
+                            {statusInfo.label}
+                          </div>
+                        </div>
+
                       </div>
-                    </motion.div>
-                  );
-                })}
-                {data.recentSignups.length === 0 && (
-                   <div className="text-center py-16">
-                     <div className="w-14 h-14 rounded-2xl bg-muted dark:bg-white/[0.04] flex items-center justify-center mx-auto mb-4 border border-border">
-                       <Users className="w-7 h-7 text-muted-foreground" />
-                     </div>
-                     <p className="text-sm font-medium text-foreground">No recent signups found.</p>
-                     <p className="text-xs text-muted-foreground mt-1">New users will appear here.</p>
-                   </div>
-                )}
+                    );
+                  })}
+
+                  {data.recentSignups.length === 0 && (
+                    <div className="text-center py-12">
+                      <div className="w-12 h-12 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center mx-auto mb-3">
+                        <Search className="w-5 h-5 text-slate-400" />
+                      </div>
+                      <p className="text-sm font-medium text-slate-900">No users found</p>
+                      <p className="text-xs text-slate-500 mt-1">No signups fit the selected criteria.</p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        </>
-      )}
-    </>
+          </>
+        )}
+      </div>
+    </div>
   );
 }

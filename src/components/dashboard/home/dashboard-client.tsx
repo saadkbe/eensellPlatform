@@ -255,10 +255,6 @@ export function DashboardClient({
         </div>
       </motion.div>
 
-      <motion.div variants={itemVariants} className="w-full">
-        <AcceleratorTeaser />
-      </motion.div>
-
       {/* ── Stats Grid ── */}
       <motion.div variants={containerVariants} className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {stats.map((stat: any, i: number) => {
