@@ -47,6 +47,7 @@ model User {
   sessions       UserSession[]
   activities     UserActivity[]
   chatUsages     ChatUsage[]
+  dailyProgresses DailyProgress[]
 
   @@index([clerkId])
   @@index([status])
@@ -313,4 +314,29 @@ model CampaignSnapshot {
   campaign          Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
 
   @@unique([campaignId, date])
+}
+
+model DailyProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      String   // "YYYY-MM-DD"
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, date])
+}
+
+model WeeklyChallenge {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  reward      String?
+  deadline    DateTime
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isActive, deadline])
 }

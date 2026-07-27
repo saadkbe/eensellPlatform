@@ -1,9 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
-import { BookOpen, Trophy, TrendingUp, FileText } from "lucide-react";
 import { db } from "@/lib/db";
 import { DashboardClient } from "@/components/dashboard/home/dashboard-client";
-
-import { getLeaderboard } from "@/actions/user.actions";
 
 function getGreeting(): string {
   const hour = new Date().getHours();
@@ -15,41 +12,63 @@ function getGreeting(): string {
 export default async function DashboardPage() {
   const clerkUser = await currentUser();
   const firstName = clerkUser?.firstName || "there";
+  const userId = clerkUser?.id || "";
 
-  // Fetch data
-  const dbUser = await db.user.findUnique({
-    where: { clerkId: clerkUser?.id || "" },
-    include: { progress: { include: { lesson: { include: { module: true } } } } },
-  });
-
-  const [totalModules, totalLessons, announcements, upcomingCall, totalResources, leaderboard] = await Promise.all([
+  // Fetch all required data in parallel
+  const [
+    dbUser,
+    totalModules,
+    totalLessons,
+    upcomingCall,
+    activeCampaign,
+    dailyProgresses,
+    weeklyChallenge,
+    recentActivity,
+  ] = await Promise.all([
+    db.user.findUnique({
+      where: { clerkId: userId },
+      include: { progress: { include: { lesson: { include: { module: true } } } } },
+    }),
     db.module.count({ where: { isPublished: true } }),
     db.lesson.count({ where: { isPublished: true } }),
-    db.announcement.findMany({
-      where: { isPublished: true },
-      orderBy: { createdAt: "desc" },
-      take: 3,
-    }),
     db.liveCall.findFirst({
       where: { scheduledAt: { gte: new Date() }, isCompleted: false },
       orderBy: { scheduledAt: "asc" },
     }),
-    db.resource.count(),
-    getLeaderboard(),
+    db.campaign.findFirst({
+      where: { status: "ACTIVE" },
+      orderBy: { startDate: "desc" },
+    }),
+    db.user.findUnique({
+      where: { clerkId: userId },
+    }).then(u => {
+      if (!u) return [];
+      return db.dailyProgress.findMany({
+        where: { userId: u.id, completed: true },
+        orderBy: { date: "desc" },
+      });
+    }),
+    db.weeklyChallenge.findFirst({
+      where: { isActive: true },
+      orderBy: { deadline: "asc" },
+    }),
+    // Fetch recent completions by other users to power "Recent Activity"
+    db.progress.findMany({
+      where: { isCompleted: true },
+      include: { user: true, lesson: true },
+      orderBy: { watchedAt: "desc" },
+      take: 5,
+    }),
   ]);
 
   const completedLessons = dbUser?.progress.filter((p) => p.isCompleted).length || 0;
   const progressPercent = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
-  const recentlyWatched = dbUser?.progress
-    .sort((a, b) => b.watchedAt.getTime() - a.watchedAt.getTime())
-    .slice(0, 5) || [];
 
-  // Find the most recent non-completed lesson for "Continue Learning"
+  // Find the next incomplete lesson for "Today's Mission" and "Continue Learning"
   const inProgressLesson = dbUser?.progress
     .filter((p) => !p.isCompleted)
     .sort((a, b) => b.watchedAt.getTime() - a.watchedAt.getTime())[0];
 
-  // Find next incomplete lesson if no in-progress exists
   const continueLesson = inProgressLesson?.lesson;
   const continueModule = inProgressLesson?.lesson?.module;
 
@@ -57,17 +76,15 @@ export default async function DashboardPage() {
     <DashboardClient
       firstName={firstName}
       greeting={getGreeting()}
-      totalModules={totalModules}
       completedLessons={completedLessons}
-      progressPercent={progressPercent}
-      totalResources={totalResources}
       continueLesson={continueLesson}
       continueModule={continueModule}
       totalLessons={totalLessons}
-      announcements={announcements}
       upcomingCall={upcomingCall}
-      recentlyWatched={recentlyWatched}
-      leaderboard={leaderboard}
+      activeCampaign={activeCampaign}
+      dailyProgresses={dailyProgresses}
+      weeklyChallenge={weeklyChallenge}
+      recentActivity={recentActivity}
     />
   );
 }
