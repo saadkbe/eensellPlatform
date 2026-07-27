@@ -201,21 +201,21 @@ export default function AdminResourcesPage() {
   return (
     <div className="space-y-8 pb-8">
       {/* ── Premium Header ── */}
-      <div className="relative overflow-hidden rounded-2xl border border-white/[0.06] p-8 sm:p-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.08] via-transparent to-violet-500/[0.05]" />
-        <div className="absolute -top-32 -right-32 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] pointer-events-none" />
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-500/10 via-background to-background border border-border p-8 sm:p-10 shadow-sm">
+        <div className="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-l from-emerald-500/5 to-transparent pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-48 h-48 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/3 w-32 h-32 bg-violet-500/10 rounded-full blur-2xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-xs font-medium mb-4 border border-emerald-500/20">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-medium mb-4 border border-emerald-500/20">
               <FolderOpen className="w-3.5 h-3.5" />
               <span>Resource Library</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-2">
+            <h1 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight mb-2">
               Resources
             </h1>
-            <p className="text-white/40 text-base max-w-xl">
+            <p className="text-muted-foreground text-base max-w-xl">
               Manage PDFs, templates, prompts, and links available to your
               students.
             </p>
@@ -223,15 +223,15 @@ export default function AdminResourcesPage() {
           <div className="shrink-0">
             <Dialog open={createOpen} onOpenChange={setCreateOpen}>
               <DialogTrigger
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 Add Resource
               </DialogTrigger>
-              <DialogContent className="bg-[#12131a] border-white/[0.08] text-white sm:max-w-lg">
+              <DialogContent className="sm:max-w-lg">
                 <DialogHeader>
                   <DialogTitle>Create New Resource</DialogTitle>
-                  <DialogDescription className="text-white/40">
+                  <DialogDescription>
                     Add a downloadable resource or link for your students.
                   </DialogDescription>
                 </DialogHeader>
@@ -239,60 +239,50 @@ export default function AdminResourcesPage() {
                 <div className="space-y-5 py-2">
                   {/* Title */}
                   <div className="space-y-2">
-                    <Label htmlFor="res-title" className="text-white/40">Title</Label>
+                    <Label htmlFor="res-title">Title</Label>
                     <Input
                       id="res-title"
                       placeholder="e.g. ChatGPT Prompt Library"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      className="bg-white/[0.02] border-white/[0.06] text-white placeholder:text-white/40"
                     />
                   </div>
 
                   {/* Description */}
                   <div className="space-y-2">
-                    <Label htmlFor="res-desc" className="text-white/40">Description</Label>
+                    <Label htmlFor="res-desc">Description</Label>
                     <Textarea
                       id="res-desc"
                       placeholder="Brief description of this resource..."
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       rows={3}
-                      className="bg-white/[0.02] border-white/[0.06] text-white placeholder:text-white/40"
                     />
                   </div>
 
                   {/* Type */}
                   <div className="space-y-2">
-                    <Label className="text-white/40">Type</Label>
+                    <Label>Type</Label>
                     <Select value={type} onValueChange={(val) => val && setType(val)}>
-                      <SelectTrigger className="w-full bg-white/[0.02] border-white/[0.06] text-white">
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select type" />
                       </SelectTrigger>
-                      <SelectContent className="bg-[#12131a] border-white/[0.08] text-white">
+                      <SelectContent>
                         <SelectItem value="pdf">
-                          <span className="flex items-center gap-2">
-                            <FileText className="w-4 h-4 text-red-500" />
-                            PDF Document
-                          </span>
+                          <FileText className="w-4 h-4 text-red-500" />
+                          PDF Document
                         </SelectItem>
                         <SelectItem value="template">
-                          <span className="flex items-center gap-2">
-                            <LayoutTemplate className="w-4 h-4 text-blue-500" />
-                            Template
-                          </span>
+                          <LayoutTemplate className="w-4 h-4 text-blue-500" />
+                          Template
                         </SelectItem>
                         <SelectItem value="prompt">
-                          <span className="flex items-center gap-2">
-                            <Sparkles className="w-4 h-4 text-violet-500" />
-                            Prompt
-                          </span>
+                          <Sparkles className="w-4 h-4 text-violet-500" />
+                          Prompt
                         </SelectItem>
                         <SelectItem value="link">
-                          <span className="flex items-center gap-2">
-                            <Link2 className="w-4 h-4 text-emerald-500" />
-                            External Link
-                          </span>
+                          <Link2 className="w-4 h-4 text-emerald-500" />
+                          External Link
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -300,7 +290,7 @@ export default function AdminResourcesPage() {
 
                   {/* File Upload or URL */}
                   <div className="space-y-2">
-                    <Label className="text-white/40">
+                    <Label>
                       {type === "link" ? "URL" : "File Upload"}
                     </Label>
                     {type === "link" ? (
@@ -308,7 +298,6 @@ export default function AdminResourcesPage() {
                         placeholder="https://example.com/resource"
                         value={fileUrl}
                         onChange={(e) => setFileUrl(e.target.value)}
-                        className="bg-white/[0.02] border-white/[0.06] text-white placeholder:text-white/40"
                       />
                     ) : (
                       <div className="space-y-3">
@@ -318,10 +307,10 @@ export default function AdminResourcesPage() {
                               <FileText className="w-4 h-4 text-emerald-500" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-white truncate">
+                              <p className="text-sm font-medium text-foreground truncate">
                                 File uploaded successfully
                               </p>
-                              <p className="text-xs text-white/40 truncate">
+                              <p className="text-xs text-muted-foreground truncate">
                                 {fileUrl}
                               </p>
                             </div>
@@ -329,7 +318,7 @@ export default function AdminResourcesPage() {
                               variant="ghost"
                               size="sm"
                               onClick={() => setFileUrl("")}
-                              className="text-white/40 hover:text-destructive shrink-0"
+                              className="text-muted-foreground hover:text-destructive shrink-0"
                             >
                               Remove
                             </Button>
@@ -349,7 +338,7 @@ export default function AdminResourcesPage() {
                                 "bg-primary text-primary-foreground hover:bg-primary/90 text-sm font-medium px-4 py-2 rounded-lg",
                               container: "w-full",
                               allowedContent:
-                                "text-white/40 text-xs",
+                                "text-muted-foreground text-xs",
                             }}
                           />
                         )}
@@ -366,7 +355,6 @@ export default function AdminResourcesPage() {
                       resetForm();
                     }}
                     disabled={isPending}
-                    className="border-white/[0.06] bg-transparent text-white hover:bg-white/[0.02]"
                   >
                     Cancel
                   </Button>
@@ -397,8 +385,8 @@ export default function AdminResourcesPage() {
             label: "Total",
             value: stats.total,
             icon: Package,
-            color: "text-white",
-            bg: "bg-white/[0.04]",
+            color: "text-foreground",
+            bg: "bg-muted",
           },
           {
             label: "PDFs",
@@ -433,7 +421,7 @@ export default function AdminResourcesPage() {
           return (
             <Card
               key={stat.label}
-              className="bg-white/[0.02] backdrop-blur-xl border-white/[0.06] hover:border-emerald-500/20 transition-all duration-300 group"
+              className="bg-card/40 backdrop-blur-xl border-border hover:border-emerald-500/20 transition-all duration-300 group hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgba(255,255,255,0.02)]"
             >
               <CardContent className="p-4 flex items-center gap-3">
                 <div
@@ -442,10 +430,10 @@ export default function AdminResourcesPage() {
                   <Icon className={`w-5 h-5 ${stat.color}`} />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-white tracking-tight">
+                  <p className="text-2xl font-bold text-foreground tracking-tight">
                     {stat.value}
                   </p>
-                  <p className="text-xs font-medium text-white/40">
+                  <p className="text-xs font-medium text-muted-foreground">
                     {stat.label}
                   </p>
                 </div>
@@ -458,19 +446,19 @@ export default function AdminResourcesPage() {
       {/* ── Search & Filter Bar ── */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="Search resources..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 bg-white/[0.02] border-white/[0.06] text-white placeholder:text-white/40"
+            className="pl-9"
           />
         </div>
         <Select value={filterType} onValueChange={(val) => val && setFilterType(val)}>
-          <SelectTrigger className="w-full sm:w-44 bg-white/[0.02] border-white/[0.06] text-white">
+          <SelectTrigger className="w-full sm:w-44">
             <SelectValue placeholder="Filter by type" />
           </SelectTrigger>
-          <SelectContent className="bg-[#12131a] border-white/[0.08] text-white">
+          <SelectContent>
             <SelectItem value="all">All Types</SelectItem>
             <SelectItem value="pdf">PDF</SelectItem>
             <SelectItem value="template">Template</SelectItem>
@@ -481,13 +469,13 @@ export default function AdminResourcesPage() {
       </div>
 
       {/* ── Resources Table ── */}
-      <Card className="bg-white/[0.02] backdrop-blur-xl border-white/[0.06] overflow-hidden">
-        <CardHeader className="border-b border-white/[0.04] bg-white/[0.02] pb-4">
+      <Card className="bg-card/40 backdrop-blur-xl border-border overflow-hidden shadow-sm">
+        <CardHeader className="border-b border-border/50 bg-muted/20 pb-4">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-white text-lg font-semibold flex items-center gap-2">
+            <CardTitle className="text-foreground text-lg font-semibold flex items-center gap-2">
               <FolderOpen className="w-5 h-5 text-emerald-500" />
               All Resources
-              <Badge variant="secondary" className="ml-2 text-xs bg-white/[0.04] text-white hover:bg-white/[0.06] border-none">
+              <Badge variant="secondary" className="ml-2 text-xs">
                 {filteredResources.length}
               </Badge>
             </CardTitle>
@@ -496,22 +484,22 @@ export default function AdminResourcesPage() {
         <CardContent className="p-0">
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20">
-              <Loader2 className="w-8 h-8 animate-spin text-white/40 mb-3" />
-              <p className="text-sm text-white/40">
+              <Loader2 className="w-8 h-8 animate-spin text-muted-foreground mb-3" />
+              <p className="text-sm text-muted-foreground">
                 Loading resources...
               </p>
             </div>
           ) : filteredResources.length === 0 ? (
             <div className="text-center py-16">
-              <div className="w-16 h-16 rounded-full bg-white/[0.04] flex items-center justify-center mx-auto mb-4 border border-white/[0.06]">
-                <FolderOpen className="w-8 h-8 text-white/40" />
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4 border border-border">
+                <FolderOpen className="w-8 h-8 text-muted-foreground" />
               </div>
-              <p className="text-sm font-medium text-white">
+              <p className="text-sm font-medium text-foreground">
                 {searchQuery || filterType !== "all"
                   ? "No resources match your filters"
                   : "No resources yet"}
               </p>
-              <p className="text-xs text-white/40 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 {searchQuery || filterType !== "all"
                   ? "Try adjusting your search or filter criteria."
                   : "Create your first resource to get started."}
@@ -520,16 +508,16 @@ export default function AdminResourcesPage() {
           ) : (
             <Table>
               <TableHeader>
-                <TableRow className="hover:bg-transparent border-white/[0.04]">
-                  <TableHead className="w-[35%] text-white/40">Title</TableHead>
-                  <TableHead className="w-[12%] text-white/40">Type</TableHead>
-                  <TableHead className="hidden md:table-cell w-[30%] text-white/40">
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="w-[35%]">Title</TableHead>
+                  <TableHead className="w-[12%]">Type</TableHead>
+                  <TableHead className="hidden md:table-cell w-[30%]">
                     Description
                   </TableHead>
-                  <TableHead className="hidden sm:table-cell w-[13%] text-white/40">
+                  <TableHead className="hidden sm:table-cell w-[13%]">
                     Date
                   </TableHead>
-                  <TableHead className="w-[10%] text-right text-white/40">Actions</TableHead>
+                  <TableHead className="w-[10%] text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -537,15 +525,15 @@ export default function AdminResourcesPage() {
                   const typeInfo = TYPE_CONFIG[resource.type] ?? {
                     label: resource.type,
                     icon: FileText,
-                    color: "text-white/40",
-                    bg: "bg-white/[0.04]",
+                    color: "text-muted-foreground",
+                    bg: "bg-muted",
                   };
                   const TypeIcon = typeInfo.icon;
 
                   return (
                     <TableRow
                       key={resource.id}
-                      className="group hover:bg-white/[0.03] border-white/[0.04] transition-colors"
+                      className="group hover:bg-muted/30 transition-colors"
                     >
                       {/* Title */}
                       <TableCell>
@@ -558,7 +546,7 @@ export default function AdminResourcesPage() {
                             />
                           </div>
                           <div className="min-w-0">
-                            <p className="text-sm font-semibold text-white truncate group-hover:text-emerald-500 transition-colors">
+                            <p className="text-sm font-semibold text-foreground truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                               {resource.title}
                             </p>
                             {resource.fileUrl && (
@@ -566,7 +554,7 @@ export default function AdminResourcesPage() {
                                 href={resource.fileUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 text-[11px] text-white/40 hover:text-primary transition-colors mt-0.5"
+                                className="inline-flex items-center gap-1 text-[11px] text-muted-foreground hover:text-primary transition-colors mt-0.5"
                               >
                                 <ExternalLink className="w-3 h-3" />
                                 Open file
@@ -588,14 +576,14 @@ export default function AdminResourcesPage() {
 
                       {/* Description */}
                       <TableCell className="hidden md:table-cell">
-                        <p className="text-sm text-white/40 truncate max-w-xs">
+                        <p className="text-sm text-muted-foreground truncate max-w-xs">
                           {resource.description || "—"}
                         </p>
                       </TableCell>
 
                       {/* Date */}
                       <TableCell className="hidden sm:table-cell">
-                        <div className="flex items-center gap-1.5 text-xs text-white/40">
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                           <Calendar className="w-3 h-3" />
                           {new Date(resource.createdAt).toLocaleDateString(
                             "en-US",
@@ -613,7 +601,7 @@ export default function AdminResourcesPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="text-white/40 hover:text-destructive hover:bg-destructive/10 transition-all opacity-0 group-hover:opacity-100"
+                          className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all opacity-0 group-hover:opacity-100"
                           onClick={() => {
                             setDeleteTarget(resource);
                             setDeleteOpen(true);
@@ -633,12 +621,12 @@ export default function AdminResourcesPage() {
 
       {/* ── Delete Confirmation Dialog ── */}
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <DialogContent className="bg-[#12131a] border-white/[0.08] text-white sm:max-w-sm">
+        <DialogContent className="sm:max-w-sm">
           <DialogHeader>
             <DialogTitle>Delete Resource</DialogTitle>
-            <DialogDescription className="text-white/40">
+            <DialogDescription>
               Are you sure you want to delete{" "}
-              <span className="font-semibold text-white">
+              <span className="font-semibold text-foreground">
                 {deleteTarget?.title}
               </span>
               ? This action cannot be undone.
@@ -652,7 +640,6 @@ export default function AdminResourcesPage() {
                 setDeleteTarget(null);
               }}
               disabled={isDeleting}
-              className="border-white/[0.06] bg-transparent text-white hover:bg-white/[0.02]"
             >
               Cancel
             </Button>

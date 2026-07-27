@@ -9,20 +9,19 @@ export default async function AdminPostsPage() {
 
   return (
     <div className="space-y-6 pb-8">
-      <div className="relative overflow-hidden rounded-2xl border border-white/[0.06] p-8 sm:p-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-500/[0.08] via-transparent to-violet-500/[0.05]" />
-        <div className="absolute -top-32 -right-32 w-64 h-64 bg-violet-500/10 rounded-full blur-[80px] pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-violet-500/8 rounded-full blur-[60px] pointer-events-none" />
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+      {/* Premium Header */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-violet-500/10 via-background to-background border border-border p-8 sm:p-10 shadow-sm">
+        <div className="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-l from-violet-500/5 to-transparent pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-48 h-48 bg-violet-500/20 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 text-violet-400 text-xs font-semibold mb-4 border border-violet-500/20 backdrop-blur-sm">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 text-violet-500 text-xs font-medium mb-4 border border-violet-500/20">
             <PenLine className="w-3.5 h-3.5" />
             <span>Content Management</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-2">
+          <h1 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight mb-2">
             Community Posts
           </h1>
-          <p className="text-white/40 text-sm sm:text-base max-w-xl leading-relaxed">
+          <p className="text-muted-foreground text-base max-w-xl">
             Create rich announcements with formatted text, images, videos, and links. Posts appear in the Community Hub for all users.
           </p>
         </div>

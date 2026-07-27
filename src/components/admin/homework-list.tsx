@@ -71,13 +71,13 @@ export function HomeworkList({
       </div>
 
       {initialHomeworks.length === 0 ? (
-        <Card className="bg-white/[0.02] border-white/[0.06] shadow-sm rounded-2xl">
+        <Card className="bg-card border-border shadow-sm">
           <CardContent className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-white/[0.04] flex items-center justify-center mb-4">
-              <FileText className="w-8 h-8 text-white/40" />
+            <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mb-4">
+              <FileText className="w-8 h-8 text-muted-foreground" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-1">No submissions found</h3>
-            <p className="text-sm text-white/40 max-w-sm">
+            <h3 className="text-lg font-semibold text-foreground mb-1">No submissions found</h3>
+            <p className="text-sm text-muted-foreground max-w-sm">
               {isAll ? "No homework has been submitted yet." : "You're all caught up! No pending homework to review."}
             </p>
           </CardContent>
@@ -85,48 +85,48 @@ export function HomeworkList({
       ) : (
         <div className="grid grid-cols-1 gap-4">
           {initialHomeworks.map((hw) => (
-            <Card key={hw.id} className="bg-white/[0.02] border-white/[0.06] shadow-sm rounded-2xl overflow-hidden">
+            <Card key={hw.id} className="bg-card border-border shadow-sm overflow-hidden">
               <CardContent className="p-0">
                 <div className="flex flex-col md:flex-row md:items-center p-5 gap-5">
                   
                   {/* User Info */}
                   <div className="flex items-center gap-4 min-w-[200px]">
                     {hw.user.imageUrl ? (
-                      <img src={hw.user.imageUrl} alt={hw.user.firstName || "User"} className="w-12 h-12 rounded-full border border-white/[0.06]" />
+                      <img src={hw.user.imageUrl} alt={hw.user.firstName || "User"} className="w-12 h-12 rounded-full border border-border" />
                     ) : (
-                      <div className="w-12 h-12 rounded-full bg-indigo-500/15 flex items-center justify-center text-indigo-400 font-bold border border-indigo-500/20">
+                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold border border-primary/20">
                         {hw.user.firstName?.charAt(0) || hw.user.email.charAt(0)}
                       </div>
                     )}
                     <div>
-                      <p className="font-semibold text-white text-sm">
+                      <p className="font-semibold text-foreground text-sm">
                         {hw.user.firstName} {hw.user.lastName}
                       </p>
-                      <p className="text-xs text-white/40 truncate max-w-[150px]">
+                      <p className="text-xs text-muted-foreground truncate max-w-[150px]">
                         {hw.user.email}
                       </p>
                     </div>
                   </div>
 
                   {/* Homework Details */}
-                  <div className="flex-1 min-w-0 border-l border-white/[0.04] pl-5 md:py-2">
+                  <div className="flex-1 min-w-0 border-l border-border pl-5 md:py-2">
                     <div className="flex items-center gap-2 mb-1">
-                      <Badge variant="outline" className="text-[10px] font-medium bg-white/[0.04] border-white/[0.08]">
+                      <Badge variant="outline" className="text-[10px] font-medium bg-muted/50 border-border/50">
                         {hw.lesson.module.title}
                       </Badge>
                       {hw.status === "PENDING" && <Badge className="bg-amber-500 hover:bg-amber-500/80 text-white text-[10px]">Pending</Badge>}
                       {hw.status === "APPROVED" && <Badge className="bg-emerald-500 hover:bg-emerald-500/80 text-white text-[10px]">Approved</Badge>}
                       {hw.status === "REJECTED" && <Badge className="bg-red-500 hover:bg-red-500/80 text-white text-[10px]">Rejected</Badge>}
                     </div>
-                    <h4 className="font-semibold text-white text-sm truncate">
+                    <h4 className="font-semibold text-foreground text-sm truncate">
                       {hw.lesson.title}
                     </h4>
                     <div className="flex items-center gap-3 mt-2">
-                      <p className="text-xs text-white/40 flex items-center gap-1">
+                      <p className="text-xs text-muted-foreground flex items-center gap-1">
                         <Clock className="w-3.5 h-3.5" />
                         {hw.createdAt.toLocaleDateString()}
                       </p>
-                      <a href={hw.fileUrl} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-indigo-400 hover:underline flex items-center gap-1">
+                      <a href={hw.fileUrl} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-primary hover:underline flex items-center gap-1">
                         <ExternalLink className="w-3.5 h-3.5" /> View PDF
                       </a>
                     </div>
@@ -139,12 +139,12 @@ export function HomeworkList({
                         <DialogTrigger render={<Button size="sm" className="w-full md:w-auto" />}>
                           Review Submission
                         </DialogTrigger>
-                        <DialogContent className="sm:max-w-md bg-[#0a0b10] border-white/[0.06] text-white">
+                        <DialogContent className="sm:max-w-md">
                           <DialogHeader>
                             <DialogTitle>Review Homework</DialogTitle>
                           </DialogHeader>
                           <div className="space-y-4 py-4">
-                            <div className="p-4 bg-white/[0.02] rounded-lg border border-white/[0.06]">
+                            <div className="p-4 bg-muted/30 rounded-lg border border-border/50">
                               <p className="text-sm font-semibold mb-2">Submission Document</p>
                               <a href={hw.fileUrl} target="_blank" rel="noopener noreferrer">
                                 <Button variant="outline" className="w-full gap-2">
@@ -160,7 +160,6 @@ export function HomeworkList({
                                 value={feedback}
                                 onChange={(e) => setFeedback(e.target.value)}
                                 rows={3}
-                                className="bg-white/[0.04] border-white/[0.08] text-white"
                               />
                             </div>
 
@@ -187,9 +186,9 @@ export function HomeworkList({
                     ) : (
                        <div className="text-right">
                          {hw.feedback && (
-                           <div className="mb-2 p-2 bg-white/[0.02] rounded-lg border border-white/[0.06] max-w-[250px] text-left">
-                             <p className="text-[10px] font-bold uppercase text-white/40 mb-0.5">Your Feedback</p>
-                             <p className="text-xs text-white line-clamp-2">{hw.feedback}</p>
+                           <div className="mb-2 p-2 bg-muted/50 rounded-lg border border-border max-w-[250px] text-left">
+                             <p className="text-[10px] font-bold uppercase text-muted-foreground mb-0.5">Your Feedback</p>
+                             <p className="text-xs text-foreground line-clamp-2">{hw.feedback}</p>
                            </div>
                          )}
                          <Button variant="outline" size="sm" onClick={() => { setReviewDialog(hw.id); setFeedback(hw.feedback || ""); }}>
