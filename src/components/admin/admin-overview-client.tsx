@@ -179,7 +179,7 @@ export function AdminOverviewClient() {
   return (
     <div className="bg-[#FAFAFA] min-h-screen text-slate-900 pb-24">
       {/* ── HEADER ── */}
-      <div className="max-w-7xl mx-auto px-6 pt-10 pb-8 flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200/60 mb-8">
+      <div className="w-full px-6 pt-10 pb-8 flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200/60 mb-8">
         <div>
           <h1 className="text-3xl font-semibold tracking-tight text-slate-900 mb-1">
             Overview
@@ -218,7 +218,7 @@ export function AdminOverviewClient() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="w-full px-6">
         {loading ? (
            <div className="flex flex-col items-center justify-center py-32">
              <Loader2 className="w-8 h-8 animate-spin text-slate-300 mb-4" />

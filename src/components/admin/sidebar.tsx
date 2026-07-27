@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UserButton, SignOutButton } from "@clerk/nextjs";
 import {
-  BarChart3, Users, Clock, GraduationCap,
+  BarChart3, Users, Clock, GraduationCap, UserCheck,
   TrendingUp, Mail, Menu, X, Shield, LogOut,
   FolderOpen, PenLine, Video, FileCheck, Target, MoreHorizontal
 } from "lucide-react";
@@ -30,6 +30,7 @@ const navSections: NavSection[] = [
     label: "Users",
     items: [
       { title: "All Users", href: "/admin/users", icon: Users },
+      { title: "Active Users", href: "/admin/active-users", icon: UserCheck },
       { title: "Pending", href: "/admin/pending", icon: Clock },
       { title: "Emails", href: "/admin/emails", icon: Mail },
     ],

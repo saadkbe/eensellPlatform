@@ -57,11 +57,11 @@ export function LeaderboardWidget({ users }: { users: LeaderboardUser[] }) {
                 "border-border/50 bg-muted/30 hover:bg-muted/50"
               } transition-colors group`}
             >
-              <div className="flex items-center gap-4">
-                <div className="flex items-center justify-center w-8 font-bold text-base text-muted-foreground">
+              <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 mr-2">
+                <div className="flex items-center justify-center w-6 sm:w-8 font-bold text-sm sm:text-base text-muted-foreground shrink-0">
                   {isTop3 ? medals[index] : `#${index + 1}`}
                 </div>
-                <Avatar className={`w-12 h-12 border-2 shadow-md ${
+                <Avatar className={`w-10 h-10 sm:w-12 sm:h-12 border-2 shadow-md shrink-0 ${
                   index === 0 ? "border-yellow-500/50" :
                   index === 1 ? "border-zinc-400/50" :
                   index === 2 ? "border-amber-600/50" :
@@ -72,18 +72,18 @@ export function LeaderboardWidget({ users }: { users: LeaderboardUser[] }) {
                     {user.firstName?.charAt(0) || "U"}
                   </AvatarFallback>
                 </Avatar>
-                <div>
-                  <p className={`font-bold text-base truncate max-w-[140px] sm:max-w-[180px] ${isTop3 ? "text-foreground" : "text-foreground/80"}`}>
+                <div className="flex-1 min-w-0">
+                  <p className={`font-bold text-sm sm:text-base truncate ${isTop3 ? "text-foreground" : "text-foreground/80"}`}>
                     {user.firstName} {user.lastName}
                   </p>
-                  <p className="text-[13px] font-medium text-muted-foreground mt-0.5">
+                  <p className="text-xs sm:text-[13px] font-medium text-muted-foreground mt-0.5 truncate">
                     {user.xp >= 1000 ? "Grandmaster" : user.xp >= 500 ? "Master" : user.xp >= 200 ? "Elite" : user.xp >= 50 ? "Scholar" : "Novice"}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-background/40 rounded-xl border border-border/50 shadow-inner">
-                <Star className={`w-4 h-4 ${isTop3 ? "text-amber-500 fill-amber-500 drop-shadow-[0_0_5px_rgba(251,191,36,0.6)]" : "text-muted-foreground"}`} />
-                <span className={`font-mono text-base font-bold tracking-tight ${isTop3 ? "text-amber-600 dark:text-amber-400" : "text-foreground/80"}`}>
+              <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-background/40 rounded-xl border border-border/50 shadow-inner shrink-0">
+                <Star className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isTop3 ? "text-amber-500 fill-amber-500 drop-shadow-[0_0_5px_rgba(251,191,36,0.6)]" : "text-muted-foreground"}`} />
+                <span className={`font-mono text-sm sm:text-base font-bold tracking-tight ${isTop3 ? "text-amber-600 dark:text-amber-400" : "text-foreground/80"}`}>
                   {user.xp}
                 </span>
               </div>
