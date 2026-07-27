@@ -208,9 +208,9 @@ export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: bool
   return (
     <>
       {/* Mobile header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-2 bg-background/95 backdrop-blur-xl border-b border-border">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-4 bg-background/95 backdrop-blur-xl border-b border-border">
         <div className="flex items-center">
-          <img src="/logo.png" alt="Eensell University" className="h-12 w-auto object-contain origin-left scale-[1.3] dark:brightness-0 dark:invert" />
+          <img src="/logo.png" alt="Eensell University" className="h-10 w-auto object-contain origin-left scale-[1.3] dark:brightness-0 dark:invert" />
         </div>
         <Button
           variant="ghost"
