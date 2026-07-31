@@ -52,6 +52,7 @@ model User {
   @@index([clerkId])
   @@index([status])
   @@index([role])
+  @@index([status, role])
 }
 
 model Notification {
@@ -105,6 +106,7 @@ model Lesson {
   homeworks Homework[]
 
   @@index([moduleId, order])
+  @@index([isPublished, createdAt])
 }
 
 model Progress {

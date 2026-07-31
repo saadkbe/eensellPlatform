@@ -3,6 +3,7 @@
 import { db } from "@/lib/db";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { unstable_cache } from "next/cache";
 
 // Get the current user from DB
 export async function getCurrentUser() {
@@ -30,7 +31,26 @@ export async function getUserById(id: string) {
   });
 }
 
-// Sync Clerk user to database (fallback for webhook)
+// ─── FAST PATH: lightweight user lookup for layout/page rendering ───
+// Does a simple READ (findUnique). Only falls back to the full
+// syncUserToDB upsert if the user doesn't exist in DB yet (first login).
+// This replaces the old pattern of calling syncUserToDB on every navigation.
+export async function getOrCreateUser() {
+  const clerkUser = await currentUser();
+  if (!clerkUser) return null;
+
+  // Fast path: user already exists in DB (99% of requests)
+  const existingUser = await db.user.findUnique({
+    where: { clerkId: clerkUser.id },
+  });
+
+  if (existingUser) return existingUser;
+
+  // Slow path: first-ever login — do the full sync
+  return syncUserToDB();
+}
+
+// Sync Clerk user to database (only needed on first login or explicit sync)
 export async function syncUserToDB() {
   const clerkUser = await currentUser();
   if (!clerkUser) return null;
@@ -57,7 +77,16 @@ export async function syncUserToDB() {
     },
   });
 
-  // Sync back to Clerk if the session token is missing the correct role/status, OR missing name
+  // Sync metadata to Clerk — fire-and-forget (don't block page rendering)
+  syncClerkMetadata(user, clerkUser).catch((e) =>
+    console.error("Background Clerk metadata sync error:", e)
+  );
+
+  return user;
+}
+
+// Non-blocking Clerk metadata sync
+async function syncClerkMetadata(user: any, clerkUser: any) {
   try {
     const { sessionClaims } = await auth();
     const clerkRole = (sessionClaims?.metadata as any)?.role;
@@ -66,7 +95,7 @@ export async function syncUserToDB() {
     const { clerkClient } = await import("@clerk/nextjs/server");
     const client = await clerkClient();
 
-    // 1. Sync Role/Status Metadata
+    // Sync Role/Status Metadata
     if (clerkRole !== user.role || clerkStatus !== user.status) {
       await client.users.updateUserMetadata(user.clerkId, {
         publicMetadata: {
@@ -76,7 +105,7 @@ export async function syncUserToDB() {
       });
     }
 
-    // 2. Sync Name back to Clerk if they skipped onboarding (Clerk name is empty, but DB has it)
+    // Sync Name back to Clerk if needed
     if (!clerkUser.firstName && user.firstName) {
       await client.users.updateUser(user.clerkId, {
         firstName: user.firstName,
@@ -86,8 +115,6 @@ export async function syncUserToDB() {
   } catch (e) {
     console.error("Error syncing Clerk metadata:", e);
   }
-
-  return user;
 }
 
 // Get user's progress
@@ -230,21 +257,25 @@ export async function updateUserGoals(goals: string) {
   return { success: true };
 }
 
-// Get top 10 leaderboard
-export async function getLeaderboard() {
-  return db.user.findMany({
-    where: { 
-      status: "ACTIVE",
-      role: { not: "ADMIN" }
-    },
-    select: {
-      id: true,
-      firstName: true,
-      lastName: true,
-      imageUrl: true,
-      xp: true,
-    },
-    orderBy: { xp: "desc" },
-    take: 10,
-  });
-}
+// Get top 10 leaderboard (cached 30s — same for all users)
+export const getLeaderboard = unstable_cache(
+  async () => {
+    return db.user.findMany({
+      where: { 
+        status: "ACTIVE",
+        role: { not: "ADMIN" }
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        imageUrl: true,
+        xp: true,
+      },
+      orderBy: { xp: "desc" },
+      take: 10,
+    });
+  },
+  ["leaderboard-top-10"],
+  { revalidate: 30 }
+);

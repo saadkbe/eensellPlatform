@@ -7,13 +7,13 @@ import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-sans",
 });
 
 const cairo = Cairo({
   subsets: ["arabic"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-arabic",
 });
 
@@ -106,9 +106,6 @@ export default function RootLayout({
         <head>
           <link rel="preconnect" href="https://flagcdn.com" />
           <link rel="dns-prefetch" href="https://flagcdn.com" />
-          <link rel="preconnect" href="https://github.com" />
-          <link rel="preconnect" href="https://cdn.simpleicons.org" />
-
         </head>
         <body className={`${inter.variable} ${cairo.variable} font-sans antialiased`}>
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />

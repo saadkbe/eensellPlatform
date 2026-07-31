@@ -24,12 +24,12 @@ const isDashboardRoute = createRouteMatcher(["/dashboard(.*)"]);
 const isPendingRoute = createRouteMatcher(["/pending"]);
 
 export default clerkMiddleware(async (auth, req) => {
-  const { userId, sessionClaims } = await auth();
-
-  // Allow public routes
+  // Allow public routes immediately — no auth overhead
   if (isPublicRoute(req)) {
     return NextResponse.next();
   }
+
+  const { userId, sessionClaims } = await auth();
 
   // If not logged in, redirect to sign-in
   if (!userId) {

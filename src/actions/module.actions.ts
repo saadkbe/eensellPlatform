@@ -3,6 +3,7 @@
 import { db } from "@/lib/db";
 import { getCurrentUser } from "./user.actions";
 import { revalidatePath } from "next/cache";
+import { unstable_cache } from "next/cache";
 
 // Check if current user is admin
 async function requireAdmin() {
@@ -193,20 +194,24 @@ export async function reorderModules(
 // LESSON ACTIONS
 // =====================
 
-// Check if there is a new lesson published in the last 7 days
-export async function getHasNewLesson() {
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-  
-  const newLessonCount = await db.lesson.count({
-    where: {
-      isPublished: true,
-      createdAt: { gte: sevenDaysAgo },
-    },
-  });
+// Check if there is a new lesson published in the last 7 days (cached 60s)
+export const getHasNewLesson = unstable_cache(
+  async () => {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    
+    const newLessonCount = await db.lesson.count({
+      where: {
+        isPublished: true,
+        createdAt: { gte: sevenDaysAgo },
+      },
+    });
 
-  return newLessonCount > 0;
-}
+    return newLessonCount > 0;
+  },
+  ["has-new-lesson"],
+  { revalidate: 60 }
+);
 
 // Get lesson with module context
 export async function getLesson(lessonId: string) {

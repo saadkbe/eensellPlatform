@@ -1,6 +1,6 @@
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { TopBar } from "@/components/dashboard/topbar";
-import { syncUserToDB } from "@/actions/user.actions";
+import { getOrCreateUser } from "@/actions/user.actions";
 import { getHasNewLesson } from "@/actions/module.actions";
 import { redirect } from "next/navigation";
 
@@ -14,7 +14,11 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await syncUserToDB();
+  // Run user lookup and new lesson check IN PARALLEL (not sequentially)
+  const [user, hasNewLesson] = await Promise.all([
+    getOrCreateUser(),
+    getHasNewLesson(),
+  ]);
   
   // Securely enforce pending status based on the database (truth) rather than just the cached Clerk token
   if (user && user.role !== "ADMIN" && (user.status === "PENDING" || user.status === "REJECTED" || user.status === "SUSPENDED")) {
@@ -24,8 +28,6 @@ export default async function DashboardLayout({
   if (user && !user.onboardingCompleted) {
     redirect("/onboarding");
   }
-
-  const hasNewLesson = await getHasNewLesson();
 
   return (
     <div className="min-h-screen bg-background">
