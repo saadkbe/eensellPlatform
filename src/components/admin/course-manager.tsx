@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { createModule, createLesson, deleteModule, deleteLesson, updateModule, updateLesson, createResource } from "@/actions/module.actions";
+import { createModule, createLesson, deleteModule, deleteLesson, updateModule, updateLesson, createResource, reorderModules, reorderLessons } from "@/actions/module.actions";
 import { toast } from "sonner";
-import { Plus, Trash2, BookOpen, PlayCircle, ChevronDown, ChevronRight, Eye, EyeOff, FileText, Paperclip, X, ImageIcon, FileCheck } from "lucide-react";
+import { Plus, Trash2, BookOpen, PlayCircle, ChevronDown, ChevronRight, Eye, EyeOff, FileText, Paperclip, X, ImageIcon, FileCheck, ArrowUp, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -159,6 +159,64 @@ export function CourseManager({ initialModules }: { initialModules: Module[] }) 
     });
   };
 
+  const handleMoveModule = (index: number, direction: 'up' | 'down') => {
+    if (direction === 'up' && index === 0) return;
+    if (direction === 'down' && index === modules.length - 1) return;
+
+    const newModules = [...modules];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    const temp = newModules[index];
+    newModules[index] = newModules[targetIndex];
+    newModules[targetIndex] = temp;
+
+    const ordered = newModules.map((m, i) => ({ id: m.id, order: i }));
+    
+    setModules(newModules);
+    
+    startTransition(async () => {
+      try {
+        await reorderModules(ordered);
+        toast.success("Modules reordered");
+      } catch {
+        toast.error("Failed to reorder modules");
+      }
+    });
+  };
+
+  const handleMoveLesson = (moduleId: string, lessonIndex: number, direction: 'up' | 'down') => {
+    const moduleIndex = modules.findIndex(m => m.id === moduleId);
+    if (moduleIndex === -1) return;
+    
+    const module = modules[moduleIndex];
+    if (direction === 'up' && lessonIndex === 0) return;
+    if (direction === 'down' && lessonIndex === module.lessons.length - 1) return;
+
+    const newLessons = [...module.lessons];
+    const targetIndex = direction === 'up' ? lessonIndex - 1 : lessonIndex + 1;
+
+    const temp = newLessons[lessonIndex];
+    newLessons[lessonIndex] = newLessons[targetIndex];
+    newLessons[targetIndex] = temp;
+
+    const ordered = newLessons.map((l, i) => ({ id: l.id, order: i }));
+
+    setModules(prev => {
+      const next = [...prev];
+      next[moduleIndex] = { ...module, lessons: newLessons };
+      return next;
+    });
+
+    startTransition(async () => {
+      try {
+        await reorderLessons(ordered);
+        toast.success("Lessons reordered");
+      } catch {
+        toast.error("Failed to reorder lessons");
+      }
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -260,6 +318,14 @@ export function CourseManager({ initialModules }: { initialModules: Module[] }) 
                     </div>
                   </button>
                   <div className="flex items-center gap-1">
+                    <div className="flex flex-col mr-2 border-r border-border/50 pr-2">
+                      <Button variant="ghost" size="icon" className="h-4 w-6 text-muted-foreground hover:text-primary" onClick={() => handleMoveModule(i, 'up')} disabled={isPending || i === 0}>
+                        <ArrowUp className="w-3 h-3" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-4 w-6 text-muted-foreground hover:text-primary" onClick={() => handleMoveModule(i, 'down')} disabled={isPending || i === modules.length - 1}>
+                        <ArrowDown className="w-3 h-3" />
+                      </Button>
+                    </div>
                     <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10" onClick={() => { setThumbnailDialogOpen(mod.id); setThumbnailUrl(mod.imageUrl || ""); }} disabled={isPending} title="Edit Thumbnail">
                       <ImageIcon className="w-4 h-4" />
                     </Button>
@@ -288,6 +354,14 @@ export function CourseManager({ initialModules }: { initialModules: Module[] }) 
                           </Badge>
                         </div>
                         <div className="flex items-center gap-1 shrink-0">
+                          <div className="flex flex-col mr-2 border-r border-border/50 pr-2">
+                            <Button variant="ghost" size="icon" className="h-4 w-5 text-muted-foreground hover:text-primary" onClick={() => handleMoveLesson(mod.id, li, 'up')} disabled={isPending || li === 0}>
+                              <ArrowUp className="w-3 h-3" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-4 w-5 text-muted-foreground hover:text-primary" onClick={() => handleMoveLesson(mod.id, li, 'down')} disabled={isPending || li === mod.lessons.length - 1}>
+                              <ArrowDown className="w-3 h-3" />
+                            </Button>
+                          </div>
                           <Button variant="ghost" size="icon" title="Toggle Homework Requirement" className="h-7 w-7 text-muted-foreground hover:text-foreground" onClick={() => handleToggleHomeworkLesson(les.id, mod.id, les.requiresHomework)} disabled={isPending}>
                             <FileCheck className={cn("w-4 h-4", les.requiresHomework ? "text-amber-500" : "text-muted-foreground")} />
                           </Button>
