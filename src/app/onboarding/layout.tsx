@@ -21,13 +21,7 @@ export default async function OnboardingLayout({
     redirect("/sign-in");
   }
 
-  // If user is not ACTIVE and not ADMIN, redirect to pending
-  if (
-    user.role !== "ADMIN" &&
-    (user.status === "PENDING" || user.status === "REJECTED" || user.status === "SUSPENDED")
-  ) {
-    redirect("/pending");
-  }
+  // (Removed check: allow PENDING users to do onboarding first)
 
   // If onboarding is already complete, go to dashboard
   if (user.onboardingCompleted) {
