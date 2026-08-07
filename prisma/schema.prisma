@@ -32,6 +32,7 @@ model User {
   role      UserRole   @default(PENDING_USER)
   status    UserStatus @default(PENDING)
   onboardingCompleted Boolean @default(false)
+  hasSeenWalkthrough  Boolean @default(false)
   goals     String?
   xp        Int        @default(0)
   createdAt DateTime   @default(now())
@@ -41,7 +42,7 @@ model User {
   phone              String?
   goal               String?   // "learning_ai" | "freelancer" | "agency" | "exploring" | "automations"
   experienceLevel    String?   // "beginner" | "intermediate" | "advanced"
-  weeklyHours        Int?      // hours per week they can dedicate
+  weeklyHours        String?   // e.g., "1-5h", "5-10h"
   incomeGoal         String?   // "$1K-$3K" | "$3K-$5K" | "$5K-$10K" | "$10K+"
   onboardingStep     Int       @default(1)  // tracks last completed step (1-7) for resume
   challengeStartDate DateTime? // when the 60-day challenge begins for this user

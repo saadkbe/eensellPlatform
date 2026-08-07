@@ -43,7 +43,7 @@ export function StepCompletion({
     canvas.height = window.innerHeight
     
     const particles: any[] = []
-    const colors = ["#FFD700", "#9333EA", "#06B6D4"] // Gold, Purple, Cyan
+    const colors = ["#FFD700", "#F59E0B", "#06B6D4"] // Gold, orange, Cyan
     
     // Create particles
     for (let i = 0; i < 150; i++) {
@@ -163,7 +163,7 @@ export function StepCompletion({
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
                 <span className="text-zinc-400">Welcome to </span>
                 <br className="md:hidden" />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-cyan-400 to-amber-400 animate-pulse">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-cyan-400 to-amber-400 animate-pulse">
                     The Ecosystem
                 </span>
                 <span className="text-zinc-400">, {firstName}</span>
@@ -182,12 +182,12 @@ export function StepCompletion({
         >
             {/* 1. Your Roadmap */}
             <motion.div variants={itemVariants}>
-                <Card className="bg-[#18181B] border-[#27272A] h-full hover:border-purple-500/50 transition-colors duration-300">
+                <Card className="bg-[#18181B] border-[#27272A] h-full hover:border-orange-500/50 transition-colors duration-300">
                     <CardContent className="p-6 flex flex-col h-full justify-between">
                         <div>
                             <div className="flex items-center space-x-3 mb-4">
-                                <div className="p-2 rounded-lg bg-purple-500/10">
-                                    <Map className="w-6 h-6 text-purple-400" />
+                                <div className="p-2 rounded-lg bg-orange-500/10">
+                                    <Map className="w-6 h-6 text-orange-400" />
                                 </div>
                                 <h3 className="text-xl font-semibold text-zinc-100">Your Roadmap</h3>
                             </div>
@@ -270,7 +270,7 @@ export function StepCompletion({
             {/* 5. Founder's Note */}
             <motion.div variants={itemVariants} className="md:col-span-2">
                 <Card className="bg-gradient-to-br from-[#18181B] to-[#121214] border-[#27272A] relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-32 bg-purple-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+                    <div className="absolute top-0 right-0 p-32 bg-orange-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                     <CardContent className="p-8 md:p-12">
                         <h3 className="text-sm font-semibold tracking-widest text-zinc-500 uppercase mb-6">A Note from the Founder</h3>
                         <p className="text-2xl md:text-3xl font-handwritten text-zinc-200 leading-relaxed tracking-wide">
@@ -291,13 +291,13 @@ export function StepCompletion({
         >
             <div className="relative group rounded-full">
                 {/* Animated gradient border glow */}
-                <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-600 via-cyan-600 to-amber-600 opacity-70 blur group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
+                <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-orange-600 via-cyan-600 to-amber-600 opacity-70 blur group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
                 
                 <Button 
                     onClick={onComplete}
                     className="relative bg-[#09090B] text-zinc-100 hover:bg-[#18181B] hover:text-white border border-zinc-800 text-lg md:text-xl py-8 px-12 rounded-full font-semibold transition-all duration-300 flex items-center space-x-3 group"
                 >
-                    <span>Enter the Dashboard</span>
+                    <span>Join the Community</span>
                     <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
                 </Button>
             </div>

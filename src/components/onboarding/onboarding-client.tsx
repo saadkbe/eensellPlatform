@@ -110,8 +110,8 @@ export function OnboardingClient({
         try {
           await saveOnboardingStep(step, data);
           if (step === 7) {
-            // Completion — redirect to dashboard
-            window.location.href = "/dashboard";
+            // Completion — redirect to dashboard community
+            window.location.href = "/dashboard/community";
           } else {
             setCurrentStep(step + 1);
           }
@@ -170,7 +170,7 @@ export function OnboardingClient({
                       scaleX: i + 1 <= currentStep ? 1 : 0,
                       backgroundColor:
                         i + 1 <= currentStep
-                          ? "#8B5CF6"
+                          ? "#F59E0B"
                           : "rgba(255,255,255,0.08)",
                     }}
                     transition={{
@@ -184,10 +184,13 @@ export function OnboardingClient({
               </div>
             ))}
           </div>
-          <div className="flex justify-between mt-2">
-            <span className="text-[11px] text-white/30 font-medium tracking-wider uppercase">
-              The Eensell Journey
-            </span>
+          <div className="flex justify-between items-center mt-3">
+            <div className="flex items-center gap-3">
+              <img src="/logo.png" alt="Eensell" className="h-4 w-auto object-contain brightness-0 invert opacity-60" />
+              <span className="text-[11px] text-white/30 font-medium tracking-wider uppercase">
+                The Eensell Journey
+              </span>
+            </div>
             <span className="text-[11px] text-white/30 font-medium">
               {currentStep} / {TOTAL_STEPS}
             </span>
@@ -394,7 +397,7 @@ export function OnboardingClient({
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              className="w-8 h-8 border-2 border-white/20 border-t-purple-500 rounded-full"
+              className="w-8 h-8 border-2 border-white/20 border-t-orange-500 rounded-full"
             />
           </motion.div>
         )}

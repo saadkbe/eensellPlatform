@@ -1,5 +1,6 @@
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { TopBar } from "@/components/dashboard/topbar";
+import { WalkthroughProvider } from "@/components/dashboard/walkthrough-provider";
 import { getOrCreateUser } from "@/actions/user.actions";
 import { getHasNewLesson } from "@/actions/module.actions";
 import { redirect } from "next/navigation";
@@ -34,6 +35,7 @@ export default async function DashboardLayout({
       <DashboardSidebar hasNewLesson={hasNewLesson} />
       <MainLayoutWrapper>
         <TopBar />
+        {user && <WalkthroughProvider hasSeenWalkthrough={user.hasSeenWalkthrough} />}
         <div className="flex-1 p-4 sm:p-6 lg:p-8 w-full">
           <PageTransition>
             {children}

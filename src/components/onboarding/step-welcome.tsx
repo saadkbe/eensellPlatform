@@ -33,7 +33,7 @@ export function StepWelcome({
     canvas.height = window.innerHeight;
 
     const particles: any[] = [];
-    const colors = ["#FFD700", "#9333EA", "#06B6D4"]; // Gold, Purple, Cyan
+    const colors = ["#FFD700", "#F59E0B", "#06B6D4"]; // Gold, orange, Cyan
 
     // Create particles
     for (let i = 0; i < 150; i++) {
@@ -125,8 +125,8 @@ export function StepWelcome({
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="mb-8"
         >
-          <div className="relative group rounded-full p-[1px] bg-gradient-to-r from-purple-500/50 via-cyan-500/50 to-purple-500/50">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 via-cyan-500 to-purple-500 blur-md opacity-30 group-hover:opacity-60 transition-opacity duration-500 animate-pulse" />
+          <div className="relative group rounded-full p-[1px] bg-gradient-to-r from-orange-500/50 via-cyan-500/50 to-orange-500/50">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500 via-cyan-500 to-orange-500 blur-md opacity-30 group-hover:opacity-60 transition-opacity duration-500 animate-pulse" />
             <div className="relative px-6 py-2 bg-black/80 backdrop-blur-xl rounded-full border border-white/10 flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#06B6D4] animate-pulse" />
               <span className="text-sm font-medium tracking-wide text-zinc-200">
@@ -199,7 +199,7 @@ export function StepWelcome({
               />
               <defs>
                 <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#9333EA" />
+                  <stop offset="0%" stopColor="#F59E0B" />
                   <stop offset="100%" stopColor="#06B6D4" />
                 </linearGradient>
               </defs>

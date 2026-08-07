@@ -331,3 +331,53 @@
     }
   }
 }
+/* Driver.js Custom Styling */
+.eensell-driver-popover {
+  background-color: #09090b !important;
+  color: #fafafa !important;
+  border: 1px solid #27272a !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5) !important;
+}
+.eensell-driver-popover .driver-popover-title {
+  color: #fafafa !important;
+  font-weight: 600 !important;
+  font-size: 1.125rem !important;
+  margin-bottom: 0.5rem !important;
+}
+.eensell-driver-popover .driver-popover-description {
+  color: #a1a1aa !important;
+  font-size: 0.875rem !important;
+  line-height: 1.5 !important;
+}
+.eensell-driver-popover .driver-popover-footer button {
+  background-color: #f59e0b !important;
+  color: #000000 !important;
+  border-radius: 0.5rem !important;
+  border: none !important;
+  padding: 0.5rem 1rem !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+  transition: all 0.2s !important;
+}
+.eensell-driver-popover .driver-popover-footer button:hover {
+  background-color: #d97706 !important;
+}
+.eensell-driver-popover .driver-popover-footer .driver-popover-prev-btn {
+  background-color: #27272a !important;
+  color: #fafafa !important;
+}
+.eensell-driver-popover .driver-popover-footer .driver-popover-prev-btn:hover {
+  background-color: #3f3f46 !important;
+}
+.eensell-driver-popover .driver-popover-footer .driver-popover-close-btn {
+  background-color: transparent !important;
+  color: #a1a1aa !important;
+}
+.eensell-driver-popover .driver-popover-footer .driver-popover-close-btn:hover {
+  color: #fafafa !important;
+}
+.eensell-driver-popover .driver-popover-progress-text {
+  color: #71717a !important;
+  font-size: 0.75rem !important;
+}

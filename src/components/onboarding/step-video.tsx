@@ -47,7 +47,7 @@ export function StepVideo({
           className="relative w-full"
         >
           {/* Premium Glow Behind Video */}
-          <div className="absolute -inset-4 bg-gradient-to-r from-purple-500/20 via-cyan-500/20 to-purple-500/20 blur-2xl rounded-[3rem] opacity-50" />
+          <div className="absolute -inset-4 bg-gradient-to-r from-orange-500/20 via-cyan-500/20 to-orange-500/20 blur-2xl rounded-[3rem] opacity-50" />
           
           <div className="relative aspect-video w-full rounded-2xl md:rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl bg-black">
             <iframe

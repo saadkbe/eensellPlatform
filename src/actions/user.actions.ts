@@ -258,6 +258,17 @@ export async function updateUserGoals(goals: string) {
 }
 
 // Get top 10 leaderboard (cached 30s — same for all users)
+export async function completeWalkthrough() {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  await db.user.update({
+    where: { clerkId: userId },
+    data: { hasSeenWalkthrough: true },
+  });
+
+  return { success: true };
+}
 export const getLeaderboard = unstable_cache(
   async () => {
     return db.user.findMany({

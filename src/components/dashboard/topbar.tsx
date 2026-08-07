@@ -94,7 +94,7 @@ export function TopBar() {
           )}
         </div>
 
-        <div className="hidden md:flex items-center relative">
+        <div id="tour-topbar-search" className="hidden md:flex items-center relative">
           <CommandMenu />
         </div>
         
@@ -113,7 +113,9 @@ export function TopBar() {
           <MessageSquare className="w-5 h-5" />
         </Link>
 
-        <NotificationBell />
+        <div id="tour-topbar-notifications">
+          <NotificationBell />
+        </div>
       </div>
     </div>
   );

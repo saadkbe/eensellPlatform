@@ -107,6 +107,7 @@ function SidebarContent({
                 return (
                   <Link
                     key={item.href}
+                    id={item.href === "/dashboard" ? "tour-sidebar-dashboard" : item.href === "/dashboard/modules" ? "tour-sidebar-modules" : item.href === "/dashboard/community" ? "tour-sidebar-community" : undefined}
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
