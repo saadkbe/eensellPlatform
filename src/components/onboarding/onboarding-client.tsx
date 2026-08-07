@@ -29,7 +29,7 @@ interface OnboardingUser {
   phone: string | null;
   goal: string | null;
   experienceLevel: string | null;
-  weeklyHours: number | null;
+  weeklyHours: string | null;
   incomeGoal: string | null;
   missions: Array<{
     id: string;
