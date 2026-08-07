@@ -22,7 +22,9 @@ export function PendingList({ initialUsers }: { initialUsers: PendingUser[] }) {
         await approveUser(userId);
         setUsers((prev) => prev.filter((u) => u.id !== userId));
         toast.success("User approved and email sent!");
-      } catch { toast.error("Failed to approve"); }
+      } catch (e: any) { 
+        toast.error(`Failed to approve: ${e.message}`); 
+      }
     });
   };
 

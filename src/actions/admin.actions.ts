@@ -54,15 +54,21 @@ export async function getPendingUsers() {
 
 // Approve a user
 export async function approveUser(userId: string) {
-  await requireAdmin();
+  let user;
+  try {
+    await requireAdmin();
 
-  const user = await db.user.update({
-    where: { id: userId },
-    data: {
-      status: "ACTIVE",
-      role: "ACTIVE_USER",
-    },
-  });
+    user = await db.user.update({
+      where: { id: userId },
+      data: {
+        status: "ACTIVE",
+        role: "ACTIVE_USER",
+      },
+    });
+  } catch (error: any) {
+    console.error("[approveUser] Core failure:", error);
+    throw new Error(`Core failure: ${error.message}`);
+  }
 
   // Update Clerk user metadata
   try {
