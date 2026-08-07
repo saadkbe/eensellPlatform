@@ -29,6 +29,18 @@ const studentAuth = async () => {
 };
 
 export const ourFileRouter = {
+  // Profile image for onboarding (any logged-in student)
+  profileImage: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
+    .middleware(async () => {
+      const user = await studentAuth();
+      if (!user) throw new UploadThingError("Unauthorized");
+      return { userId: user.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Profile image upload complete for userId:", metadata.userId);
+      return { uploadedBy: metadata.userId, url: file.ufsUrl };
+    }),
+
   // Define a route for uploading module images
   moduleImage: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
     .middleware(async () => {

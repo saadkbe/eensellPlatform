@@ -1,0 +1,342 @@
+"use client";
+
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  Brain, Laptop, Building2, Compass, Zap, Camera, Phone, 
+  ArrowRight, Loader2, Check 
+} from "lucide-react";
+import { useUploadThing } from "@/lib/uploadthing";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import Image from "next/image";
+
+// Helper to map icon names from config to Lucide icons
+const IconMap: Record<string, React.ElementType> = {
+  Brain,
+  Laptop,
+  Building2,
+  Compass,
+  Zap,
+};
+
+interface StepProfileProps {
+  currentImageUrl: string | null;
+  currentFirstName: string | null;
+  currentLastName: string | null;
+  goalsConfig: Array<{ value: string; label: string; icon: string; description: string }>;
+  experienceLevelsConfig: Array<{ value: string; label: string; description: string }>;
+  incomeGoalsConfig: Array<{ value: string; label: string }>;
+  onNext: (data: Record<string, unknown>) => void;
+  onSkip: () => void;
+}
+
+export function StepProfile({
+  currentImageUrl,
+  currentFirstName,
+  currentLastName,
+  goalsConfig,
+  experienceLevelsConfig,
+  incomeGoalsConfig,
+  onNext,
+  onSkip,
+}: StepProfileProps) {
+  // Form State
+  const [imageUrl, setImageUrl] = useState<string | null>(currentImageUrl);
+  const [phone, setPhone] = useState("");
+  const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
+  const [selectedExperience, setSelectedExperience] = useState<string | null>(null);
+  const [selectedHours, setSelectedHours] = useState<string | null>(null);
+  const [selectedIncome, setSelectedIncome] = useState<string | null>(null);
+
+  const hoursOptions = ["1-5h", "5-10h", "10-20h", "20h+"];
+
+  // UploadThing hook
+  const { startUpload, isUploading } = useUploadThing("profileImage", {
+    onClientUploadComplete: (res) => {
+      if (res && res.length > 0) {
+        setImageUrl(res[0].url);
+        toast.success("Profile photo updated!");
+      }
+    },
+    onUploadError: (error) => {
+      toast.error(`Upload failed: ${error.message}`);
+    },
+  });
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Show optimistic preview
+    const previewUrl = URL.createObjectURL(file);
+    setImageUrl(previewUrl);
+
+    // Start actual upload
+    await startUpload([file]);
+  };
+
+  const handleContinue = () => {
+    if (!selectedGoal) {
+      toast.error("Please select a primary goal to continue.");
+      return;
+    }
+
+    onNext({
+      imageUrl,
+      phone,
+      goal: selectedGoal,
+      experienceLevel: selectedExperience,
+      weeklyHours: selectedHours,
+      incomeGoal: selectedIncome,
+    });
+  };
+
+  // Animation variants
+  const containerVariants: import("framer-motion").Variants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 },
+    },
+  };
+
+  const itemVariants: import("framer-motion").Variants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } },
+  };
+
+  return (
+    <div className="min-h-screen w-full flex flex-col items-center py-12 px-4 sm:px-6 bg-background onboarding-bg text-foreground overflow-x-hidden">
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        className="max-w-3xl w-full flex flex-col gap-12 pb-24"
+      >
+        {/* Header */}
+        <motion.div variants={itemVariants} className="text-center space-y-2">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
+            Build Your Profile
+          </h1>
+          <p className="text-zinc-400">
+            Tell us about yourself to personalize The Eensell Journey.
+          </p>
+        </motion.div>
+
+        {/* Avatar Upload */}
+        <motion.div variants={itemVariants} className="flex flex-col items-center gap-4">
+          <div className="relative group">
+            <div className={cn(
+              "w-28 h-28 rounded-full flex items-center justify-center overflow-hidden border-2 transition-colors duration-300 bg-zinc-900",
+              isUploading ? "border-purple-500 opacity-50" : "border-zinc-800 group-hover:border-zinc-600"
+            )}>
+              {imageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={imageUrl} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-3xl text-zinc-500 uppercase">
+                  {currentFirstName?.[0] || ""}{currentLastName?.[0] || ""}
+                </span>
+              )}
+            </div>
+            
+            <label className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 rounded-full cursor-pointer transition-opacity duration-300">
+              {isUploading ? (
+                <Loader2 className="w-6 h-6 text-white animate-spin" />
+              ) : (
+                <>
+                  <Camera className="w-6 h-6 text-white mb-1" />
+                  <span className="text-[10px] font-medium text-white uppercase tracking-wider">Upload</span>
+                </>
+              )}
+              <input 
+                type="file" 
+                accept="image/*" 
+                className="hidden" 
+                onChange={handleImageChange}
+                disabled={isUploading}
+              />
+            </label>
+          </div>
+          <div className="text-center">
+            <p className="text-white font-medium">
+              {currentFirstName} {currentLastName}
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Phone Number */}
+        <motion.div variants={itemVariants} className="space-y-4">
+          <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+            <Phone className="w-5 h-5 text-zinc-400" />
+            Phone Number <span className="text-zinc-500 text-sm font-normal">(Optional)</span>
+          </h2>
+          <div className="relative max-w-sm">
+            <Input
+              type="tel"
+              placeholder="+212 6XX XXX XXX"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-600 focus-visible:ring-purple-500 h-12 pl-4"
+            />
+          </div>
+        </motion.div>
+
+        {/* Goals (Required) */}
+        <motion.div variants={itemVariants} className="space-y-4">
+          <h2 className="text-lg font-semibold text-white">
+            What is your primary goal? <span className="text-purple-400 text-sm font-normal">*</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {goalsConfig.map((goal) => {
+              const Icon = IconMap[goal.icon] || Compass;
+              const isSelected = selectedGoal === goal.value;
+              return (
+                <div
+                  key={goal.value}
+                  onClick={() => setSelectedGoal(goal.value)}
+                  className={cn(
+                    "relative p-5 rounded-2xl border cursor-pointer transition-all duration-300 overflow-hidden",
+                    isSelected 
+                      ? "border-purple-500 bg-purple-500/10" 
+                      : "border-zinc-800 bg-card hover:border-zinc-700 hover:bg-zinc-900"
+                  )}
+                >
+                  <div className="flex items-start gap-4 relative z-10">
+                    <div className={cn(
+                      "p-2 rounded-xl",
+                      isSelected ? "bg-purple-500 text-white" : "bg-zinc-800 text-zinc-400"
+                    )}>
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className={cn("font-medium mb-1", isSelected ? "text-purple-100" : "text-zinc-200")}>
+                        {goal.label}
+                      </h3>
+                      <p className="text-sm text-zinc-500 leading-relaxed">
+                        {goal.description}
+                      </p>
+                    </div>
+                  </div>
+                  {isSelected && (
+                    <motion.div layoutId="goal-glow" className="absolute inset-0 bg-purple-500/5 blur-xl pointer-events-none" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </motion.div>
+
+        {/* Experience Level */}
+        <motion.div variants={itemVariants} className="space-y-4">
+          <h2 className="text-lg font-semibold text-white">
+            Current experience level <span className="text-zinc-500 text-sm font-normal">(Optional)</span>
+          </h2>
+          <div className="flex flex-col md:flex-row p-1 bg-zinc-900/80 rounded-2xl border border-zinc-800 relative">
+            {experienceLevelsConfig.map((exp) => {
+              const isSelected = selectedExperience === exp.value;
+              return (
+                <button
+                  key={exp.value}
+                  onClick={() => setSelectedExperience(exp.value)}
+                  className="relative flex-1 py-3 px-4 rounded-xl text-sm font-medium transition-colors z-10"
+                >
+                  {isSelected && (
+                    <motion.div
+                      layoutId="exp-active"
+                      className="absolute inset-0 bg-zinc-800 border border-zinc-700 rounded-xl"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                  <span className={cn("relative z-20 block mb-1", isSelected ? "text-white" : "text-zinc-400 hover:text-zinc-300")}>
+                    {exp.label}
+                  </span>
+                  <span className={cn("relative z-20 block text-xs font-normal", isSelected ? "text-zinc-300" : "text-zinc-600")}>
+                    {exp.description}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </motion.div>
+
+        {/* Time Commitment */}
+        <motion.div variants={itemVariants} className="space-y-4">
+          <h2 className="text-lg font-semibold text-white">
+            Time you can commit weekly <span className="text-zinc-500 text-sm font-normal">(Optional)</span>
+          </h2>
+          <div className="flex flex-wrap gap-3">
+            {hoursOptions.map((hours) => {
+              const isSelected = selectedHours === hours;
+              return (
+                <button
+                  key={hours}
+                  onClick={() => setSelectedHours(hours)}
+                  className={cn(
+                    "px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border",
+                    isSelected 
+                      ? "bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.2)]" 
+                      : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200"
+                  )}
+                >
+                  {hours}
+                </button>
+              );
+            })}
+          </div>
+        </motion.div>
+
+        {/* Income Goals */}
+        <motion.div variants={itemVariants} className="space-y-4">
+          <h2 className="text-lg font-semibold text-white">
+            Target monthly income <span className="text-zinc-500 text-sm font-normal">(Optional)</span>
+          </h2>
+          <div className="grid grid-cols-2 gap-3">
+            {incomeGoalsConfig.map((income) => {
+              const isSelected = selectedIncome === income.value;
+              return (
+                <button
+                  key={income.value}
+                  onClick={() => setSelectedIncome(income.value)}
+                  className={cn(
+                    "p-4 rounded-xl text-sm font-medium transition-all duration-300 border text-center flex flex-col items-center justify-center gap-2",
+                    isSelected 
+                      ? "bg-zinc-800 border-zinc-500 text-white" 
+                      : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200"
+                  )}
+                >
+                  {income.label}
+                  {isSelected && <Check className="w-4 h-4 text-white" />}
+                </button>
+              );
+            })}
+          </div>
+        </motion.div>
+
+        {/* Footer Actions */}
+        <motion.div variants={itemVariants} className="pt-8 flex flex-col items-center gap-6">
+          <Button
+            onClick={handleContinue}
+            disabled={!selectedGoal}
+            size="lg"
+            className="w-full max-w-sm h-14 rounded-full bg-white text-black hover:bg-zinc-200 text-lg font-medium group transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Continue
+            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </Button>
+          
+          <button 
+            onClick={onSkip}
+            className="text-zinc-500 hover:text-zinc-300 text-sm font-medium transition-colors underline-offset-4 hover:underline"
+          >
+            Skip for now
+          </button>
+        </motion.div>
+
+      </motion.div>
+    </div>
+  );
+}

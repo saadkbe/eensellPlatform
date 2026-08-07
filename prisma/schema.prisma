@@ -37,6 +37,16 @@ model User {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 
+  // ── Expanded onboarding profile fields ──
+  phone              String?
+  goal               String?   // "learning_ai" | "freelancer" | "agency" | "exploring" | "automations"
+  experienceLevel    String?   // "beginner" | "intermediate" | "advanced"
+  weeklyHours        Int?      // hours per week they can dedicate
+  incomeGoal         String?   // "$1K-$3K" | "$3K-$5K" | "$5K-$10K" | "$10K+"
+  onboardingStep     Int       @default(1)  // tracks last completed step (1-7) for resume
+  challengeStartDate DateTime? // when the 60-day challenge begins for this user
+  videoWatchTime     Int       @default(0)  // seconds of welcome video watched
+
   progress       Progress[]
   dailyGoals     Goal[]
   communityPosts CommunityPost[]
@@ -48,6 +58,8 @@ model User {
   activities     UserActivity[]
   chatUsages     ChatUsage[]
   dailyProgresses DailyProgress[]
+  missions       Mission[]
+  weeklySchedules WeeklySchedule[]
 
   @@index([clerkId])
   @@index([status])
@@ -341,4 +353,65 @@ model WeeklyChallenge {
   updatedAt   DateTime @updatedAt
 
   @@index([isActive, deadline])
+}
+
+// ══════════════════════════════════════════════
+// The Eensell Journey — Onboarding Models
+// ══════════════════════════════════════════════
+
+// Admin-managed configuration for each onboarding step
+model OnboardingConfig {
+  id         String   @id @default(cuid())
+  stepNumber Int      @unique    // 1-7
+  title      String
+  subtitle   String?
+  isActive   Boolean  @default(true)
+  metadata   String?  // JSON blob for step-specific config (video URL, messages, etc.)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// Roadmap milestones displayed in Step 4
+model RoadmapMilestone {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  icon        String?    // emoji or lucide icon name
+  weekStart   Int        // e.g., week 1
+  weekEnd     Int        // e.g., week 2
+  order       Int        @default(0)
+  phase       String     // "learn_ai" | "build_skills" | "build_offer" | "build_portfolio" | "first_client" | "scale_business"
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([order])
+}
+
+// Student's weekly learning schedule commitment (Step 5)
+model WeeklySchedule {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dayOfWeek Int      // 0=Sunday, 1=Monday, ..., 6=Saturday
+  timeBlock String   // "morning" | "afternoon" | "evening"
+  createdAt DateTime @default(now())
+
+  @@unique([userId, dayOfWeek])
+}
+
+// Student missions auto-generated during onboarding (Step 6)
+model Mission {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  type        String   // "watch_welcome" | "complete_profile" | "join_community" | "first_lesson"
+  isCompleted Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId, isCompleted])
 }

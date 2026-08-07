@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Inter, Cairo } from "next/font/google";
+import { Inter, Cairo, Caveat, Aref_Ruqaa } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
@@ -15,6 +15,18 @@ const cairo = Cairo({
   subsets: ["arabic"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-arabic",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-handwritten",
+});
+
+const arefRuqaa = Aref_Ruqaa({
+  subsets: ["arabic"],
+  weight: ["400", "700"],
+  variable: "--font-arabic-hand",
 });
 
 export const metadata: Metadata = {
@@ -107,7 +119,7 @@ export default function RootLayout({
           <link rel="preconnect" href="https://flagcdn.com" />
           <link rel="dns-prefetch" href="https://flagcdn.com" />
         </head>
-        <body className={`${inter.variable} ${cairo.variable} font-sans antialiased`}>
+        <body className={`${inter.variable} ${cairo.variable} ${caveat.variable} ${arefRuqaa.variable} font-sans antialiased`}>
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
           <ActivityTracker />
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>

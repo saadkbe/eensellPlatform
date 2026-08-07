@@ -1,0 +1,202 @@
+"use client";
+
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Sun, CloudSun, Moon } from "lucide-react";
+
+interface Schedule {
+  dayOfWeek: number;
+  timeBlock: string;
+}
+
+interface StepScheduleProps {
+  existingSchedules: Schedule[];
+  onNext: (schedules: Schedule[]) => void;
+  onSkip: () => void;
+}
+
+const DAYS = [
+  { id: 0, label: "Sunday" },
+  { id: 1, label: "Monday" },
+  { id: 2, label: "Tuesday" },
+  { id: 3, label: "Wednesday" },
+  { id: 4, label: "Thursday" },
+  { id: 5, label: "Friday" },
+  { id: 6, label: "Saturday" },
+];
+
+const TIME_BLOCKS = [
+  { id: "morning", label: "Morning", sublabel: "6AM-12PM", icon: Sun },
+  { id: "afternoon", label: "Afternoon", sublabel: "12PM-6PM", icon: CloudSun },
+  { id: "evening", label: "Evening", sublabel: "6PM-12AM", icon: Moon },
+];
+
+export function StepSchedule({ existingSchedules, onNext, onSkip }: StepScheduleProps) {
+  const [schedules, setSchedules] = useState<Schedule[]>(existingSchedules || []);
+
+  const committedDaysCount = new Set(schedules.map((s) => s.dayOfWeek)).size;
+
+  const toggleDay = (dayId: number) => {
+    setSchedules((prev) => {
+      const hasDay = prev.some((s) => s.dayOfWeek === dayId);
+      if (hasDay) {
+        return prev.filter((s) => s.dayOfWeek !== dayId);
+      } else {
+        return [...prev, { dayOfWeek: dayId, timeBlock: "morning" }];
+      }
+    });
+  };
+
+  const setTimeBlock = (dayId: number, blockId: string) => {
+    setSchedules((prev) => {
+      const existing = prev.find((s) => s.dayOfWeek === dayId);
+      if (existing) {
+        return prev.map((s) => (s.dayOfWeek === dayId ? { ...s, timeBlock: blockId } : s));
+      }
+      return [...prev, { dayOfWeek: dayId, timeBlock: blockId }];
+    });
+  };
+
+  return (
+    <div className="w-full max-w-3xl mx-auto py-12 px-4 sm:px-6">
+      <div className="text-center mb-10">
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl mb-4"
+        >
+          Commit to the Journey
+        </motion.h1>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1 }}
+          className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-primary/10 text-primary font-medium"
+        >
+          <span>You&apos;ve committed to</span>
+          <motion.span
+            key={committedDaysCount}
+            initial={{ y: -10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="mx-1 text-lg font-bold"
+          >
+            {committedDaysCount}
+          </motion.span>
+          <span>days this week</span>
+        </motion.div>
+      </div>
+
+      <div className="space-y-4 mb-12">
+        {DAYS.map((day, index) => {
+          const isSelected = schedules.some((s) => s.dayOfWeek === day.id);
+          const currentBlock = schedules.find((s) => s.dayOfWeek === day.id)?.timeBlock;
+
+          return (
+            <motion.div
+              key={day.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+              className={cn(
+                "rounded-xl border border-[#27272A] bg-[#18181B] overflow-hidden transition-all duration-300",
+                isSelected && "border-l-4 border-l-primary bg-[#1f1f23]"
+              )}
+            >
+              <div
+                className="p-4 sm:p-5 flex items-center justify-between cursor-pointer"
+                onClick={() => toggleDay(day.id)}
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className={cn(
+                      "w-5 h-5 rounded-md border flex items-center justify-center transition-colors",
+                      isSelected
+                        ? "bg-primary border-primary text-primary-foreground"
+                        : "border-muted-foreground"
+                    )}
+                  >
+                    {isSelected && (
+                      <motion.svg
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="w-3.5 h-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={3}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </motion.svg>
+                    )}
+                  </div>
+                  <span className={cn("font-medium text-lg", isSelected ? "text-foreground" : "text-muted-foreground")}>
+                    {day.label}
+                  </span>
+                </div>
+                {isSelected && currentBlock && (
+                  <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-md hidden sm:block">
+                    {TIME_BLOCKS.find(t => t.id === currentBlock)?.label}
+                  </span>
+                )}
+              </div>
+
+              <AnimatePresence>
+                {isSelected && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="p-4 sm:p-5 pt-0 border-t border-[#27272A] flex flex-col sm:flex-row gap-3">
+                      {TIME_BLOCKS.map((block) => {
+                        const BlockIcon = block.icon;
+                        const isBlockSelected = currentBlock === block.id;
+
+                        return (
+                          <button
+                            key={block.id}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setTimeBlock(day.id, block.id);
+                            }}
+                            className={cn(
+                              "flex-1 flex flex-col items-center justify-center gap-2 p-3 rounded-lg border transition-all",
+                              isBlockSelected
+                                ? "bg-primary/10 border-primary/50 text-primary"
+                                : "bg-transparent border-[#27272A] text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                            )}
+                          >
+                            <BlockIcon className="w-5 h-5" />
+                            <div className="text-center">
+                              <div className="text-sm font-medium">{block.label}</div>
+                              <div className="text-xs opacity-70">{block.sublabel}</div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      <div className="flex flex-col items-center gap-4">
+        <Button onClick={() => onNext(schedules)} size="lg" className="w-full sm:w-auto min-w-[240px]">
+          Lock In My Schedule
+        </Button>
+        <button
+          onClick={onSkip}
+          className="text-sm text-muted-foreground hover:text-foreground transition-colors underline-offset-4 hover:underline"
+        >
+          Skip for now
+        </button>
+      </div>
+    </div>
+  );
+}
