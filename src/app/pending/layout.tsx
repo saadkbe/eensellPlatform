@@ -8,9 +8,7 @@ export default async function PendingLayout({
 }) {
   const user = await syncUserToDB();
   
-  if (user && !user.onboardingCompleted) {
-    redirect("/onboarding");
-  }
+  // Allow them to stay on the pending page to wait for approval
 
   return <>{children}</>;
 }

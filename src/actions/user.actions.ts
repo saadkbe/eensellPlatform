@@ -257,6 +257,19 @@ export async function updateUserGoals(goals: string) {
   return { success: true };
 }
 
+// Check user status (lightweight poll)
+export async function checkUserStatus() {
+  const { userId } = await auth();
+  if (!userId) return null;
+
+  const user = await db.user.findUnique({
+    where: { clerkId: userId },
+    select: { status: true },
+  });
+
+  return user?.status || null;
+}
+
 // Get top 10 leaderboard (cached 30s — same for all users)
 export async function completeWalkthrough() {
   const { userId } = await auth();

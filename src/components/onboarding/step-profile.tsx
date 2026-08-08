@@ -199,24 +199,24 @@ export function StepProfile({
                   key={goal.value}
                   onClick={() => setSelectedGoal(goal.value)}
                   className={cn(
-                    "relative p-5 rounded-2xl border cursor-pointer transition-all duration-300 overflow-hidden",
+                    "relative p-5 rounded-2xl border cursor-pointer transition-all duration-300 overflow-hidden group hover:-translate-y-1 hover:shadow-lg hover:shadow-orange-500/5",
                     isSelected 
                       ? "border-orange-500 bg-orange-500/10" 
-                      : "border-zinc-800 bg-zinc-900/50 hover:border-zinc-700 hover:bg-zinc-900"
+                      : "border-zinc-800 bg-zinc-900/50 hover:border-orange-500/30 hover:bg-zinc-800/50"
                   )}
                 >
                   <div className="flex items-start gap-4 relative z-10">
                     <div className={cn(
-                      "p-2 rounded-xl",
-                      isSelected ? "bg-orange-500 text-white" : "bg-zinc-800 text-zinc-400"
+                      "p-2 rounded-xl transition-colors duration-300",
+                      isSelected ? "bg-orange-500 text-white" : "bg-zinc-800 text-zinc-400 group-hover:bg-zinc-700 group-hover:text-zinc-300"
                     )}>
                       <Icon className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className={cn("font-medium mb-1", isSelected ? "text-orange-100" : "text-zinc-200")}>
+                      <h3 className={cn("font-medium mb-1 transition-colors duration-300", isSelected ? "text-orange-100" : "text-zinc-200 group-hover:text-white")}>
                         {goal.label}
                       </h3>
-                      <p className="text-sm text-zinc-500 leading-relaxed">
+                      <p className="text-sm text-zinc-500 leading-relaxed group-hover:text-zinc-400 transition-colors duration-300">
                         {goal.description}
                       </p>
                     </div>
@@ -224,6 +224,13 @@ export function StepProfile({
                   {isSelected && (
                     <motion.div layoutId="goal-glow" className="absolute inset-0 bg-orange-500/5 blur-xl pointer-events-none" />
                   )}
+                  {/* Subtle radio indicator to make it obviously selectable */}
+                  <div className={cn(
+                    "absolute top-5 right-5 w-5 h-5 rounded-full border flex items-center justify-center transition-all duration-300",
+                    isSelected ? "border-orange-500 bg-orange-500" : "border-zinc-700 bg-zinc-900 group-hover:border-orange-500/50"
+                  )}>
+                    {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
+                  </div>
                 </div>
               );
             })}
@@ -235,26 +242,29 @@ export function StepProfile({
           <h2 className="text-lg font-semibold text-white">
             Current experience level <span className="text-zinc-500 text-sm font-normal">(Optional)</span>
           </h2>
-          <div className="flex flex-col md:flex-row p-1 bg-zinc-900/80 rounded-2xl border border-zinc-800 relative">
+          <div className="flex flex-col md:flex-row p-1.5 bg-zinc-900/80 rounded-2xl border border-zinc-800 relative gap-1">
             {experienceLevelsConfig.map((exp) => {
               const isSelected = selectedExperience === exp.value;
               return (
                 <button
                   key={exp.value}
                   onClick={() => setSelectedExperience(exp.value)}
-                  className="relative flex-1 py-3 px-4 rounded-xl text-sm font-medium transition-colors z-10"
+                  className={cn(
+                    "relative flex-1 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-200 z-10 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-orange-500",
+                    !isSelected && "hover:bg-zinc-800/60"
+                  )}
                 >
                   {isSelected && (
                     <motion.div
                       layoutId="exp-active"
-                      className="absolute inset-0 bg-zinc-800 border border-zinc-700 rounded-xl"
+                      className="absolute inset-0 bg-zinc-800 border border-zinc-700 rounded-xl shadow-md"
                       transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                     />
                   )}
-                  <span className={cn("relative z-20 block mb-1", isSelected ? "text-white" : "text-zinc-400 hover:text-zinc-300")}>
+                  <span className={cn("relative z-20 block mb-1 font-semibold", isSelected ? "text-white" : "text-zinc-400 hover:text-zinc-300")}>
                     {exp.label}
                   </span>
-                  <span className={cn("relative z-20 block text-xs font-normal", isSelected ? "text-zinc-300" : "text-zinc-600")}>
+                  <span className={cn("relative z-20 block text-xs font-normal", isSelected ? "text-zinc-300" : "text-zinc-500")}>
                     {exp.description}
                   </span>
                 </button>

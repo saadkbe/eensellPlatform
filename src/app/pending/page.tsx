@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useRef } from "react";
 import { SignOutButton } from "@clerk/nextjs";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -12,6 +12,9 @@ import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 import { Navbar } from "@/components/landing/Navbar";
 import { toast } from "sonner";
+import confetti from "canvas-confetti";
+import { useRouter } from "next/navigation";
+import { checkUserStatus } from "@/actions/user.actions";
 
 /* ──────────────────────────────────────────
    Animation Variants
@@ -48,14 +51,69 @@ function WhatsAppIcon({ className }: { className?: string }) {
    ────────────────────────────────────────── */
 
 function PendingContent() {
+  const router = useRouter();
   const { t, language, dir, isRTL } = useLanguage();
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [showStickyCta, setShowStickyCta] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [isApproved, setIsApproved] = useState(false);
 
   /** Tri-lingual text helper */
   const tx = (ar: string, fr: string, en: string) =>
     language === "ar" ? ar : language === "fr" ? fr : en;
+
+  /* ── Auto-Refresh Polling ── */
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    const checkStatus = async () => {
+      try {
+        const status = await checkUserStatus();
+        if (status === "ACTIVE") {
+          setIsApproved(true);
+          clearInterval(interval);
+          
+          // Trigger confetti animation
+          const duration = 3000;
+          const end = Date.now() + duration;
+
+          const frame = () => {
+            confetti({
+              particleCount: 5,
+              angle: 60,
+              spread: 55,
+              origin: { x: 0 },
+              colors: ['#F59E0B', '#10B981', '#ffffff']
+            });
+            confetti({
+              particleCount: 5,
+              angle: 120,
+              spread: 55,
+              origin: { x: 1 },
+              colors: ['#F59E0B', '#10B981', '#ffffff']
+            });
+
+            if (Date.now() < end) {
+              requestAnimationFrame(frame);
+            }
+          };
+          frame();
+
+          toast.success(tx("تمت الموافقة! جاري التحويل...", "Approuvé ! Redirection...", "Approved! Redirecting..."));
+
+          // Redirect to onboarding after animation
+          setTimeout(() => {
+            router.push("/onboarding");
+          }, 3500);
+        }
+      } catch (e) {
+        console.error("Failed to poll status", e);
+      }
+    };
+
+    interval = setInterval(checkStatus, 5000);
+    return () => clearInterval(interval);
+  }, [router, tx]);
 
   /* ── WhatsApp (unchanged) ── */
   const whatsappNumber = "212666065608";
