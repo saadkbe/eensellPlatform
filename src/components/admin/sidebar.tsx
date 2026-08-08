@@ -23,6 +23,7 @@ const navSections: NavSection[] = [
     items: [
       { title: "Dashboard", href: "/admin", icon: BarChart3 },
       { title: "Analytics", href: "/admin/analytics", icon: TrendingUp },
+      { title: "Referrals", href: "/admin/referrals", icon: Target },
       { title: "Admin Tracking", href: "/admin/tracking", icon: Target },
     ],
   },

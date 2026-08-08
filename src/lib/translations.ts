@@ -219,8 +219,10 @@ export const translations = {
     nav_live_calls: "المكالمات المباشرة",
     nav_goals: "الأهداف",
     nav_chat: "Nexus AI",
-    nav_career: "المسار المهني",
+    // Grow Section
+    nav_career: "مسار التطور",
     nav_settings: "الإعدادات",
+    nav_referrals: "الإحالة والأرباح",
     nav_admin: "لوحة التحكم",
     nav_account: "الحساب",
     nav_manage_profile: "إدارة الملف الشخصي",
@@ -493,8 +495,10 @@ export const translations = {
     nav_live_calls: "Appels en direct",
     nav_goals: "Objectifs",
     nav_chat: "Nexus AI",
+    // Grow Section
     nav_career: "Parcours",
     nav_settings: "Paramètres",
+    nav_referrals: "Parrainer & Gagner",
     nav_admin: "Panneau Admin",
     nav_account: "Compte",
     nav_manage_profile: "Gérer le profil",
@@ -767,8 +771,10 @@ export const translations = {
     nav_live_calls: "Live Calls",
     nav_goals: "Goals",
     nav_chat: "Nexus AI",
+    // Grow Section
     nav_career: "Career Paths",
     nav_settings: "Settings",
+    nav_referrals: "Refer & Earn",
     nav_admin: "Admin Panel",
     nav_account: "Account",
     nav_manage_profile: "Manage profile",

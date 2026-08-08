@@ -62,6 +62,14 @@ model User {
   missions       Mission[]
   weeklySchedules WeeklySchedule[]
 
+  // ── Referral System ──
+  referralCode   String?   @unique
+  referredBy     Referral? @relation("Referred")
+  referrals      Referral[] @relation("Referrer")
+  referralClicks ReferralClick[]
+  withdrawals    WithdrawalRequest[]
+  payoutInfo     PayoutInfo?
+
   @@index([clerkId])
   @@index([status])
   @@index([role])
@@ -415,4 +423,67 @@ model Mission {
   updatedAt   DateTime @updatedAt
 
   @@index([userId, isCompleted])
+}
+
+// ----------------------------------------------
+// Referral & Rewards System
+// ----------------------------------------------
+
+model Referral {
+  id               String   @id @default(cuid())
+  referrerId       String
+  referrer         User     @relation("Referrer", fields: [referrerId], references: [id], onDelete: Cascade)
+  referredUserId   String   @unique
+  referredUser     User     @relation("Referred", fields: [referredUserId], references: [id], onDelete: Cascade)
+  status           String   @default("PENDING") // PENDING, SUCCESSFUL, REJECTED
+  commissionAmount Int      @default(50)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([referrerId])
+  @@index([status])
+}
+
+model ReferralClick {
+  id         String   @id @default(cuid())
+  referrerId String
+  referrer   User     @relation(fields: [referrerId], references: [id], onDelete: Cascade)
+  ipHash     String?
+  createdAt  DateTime @default(now())
+
+  @@index([referrerId])
+}
+
+model WithdrawalRequest {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount      Int
+  status      String   @default("PENDING") // PENDING, PROCESSING, PAID, REJECTED, CANCELLED
+  payoutInfo  Json     // Snapshot of payout details at time of request
+  adminNote   String?
+  processedBy String?  
+  processedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model PayoutInfo {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bankName    String
+  accountName String
+  rib         String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SystemSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
 }

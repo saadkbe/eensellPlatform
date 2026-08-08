@@ -4,6 +4,13 @@ import { db } from "@/lib/db";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { unstable_cache } from "next/cache";
+import { cookies } from "next/headers";
+
+function generateReferralCode(firstName: string | null, email: string) {
+  const base = (firstName || email.split("@")[0]).toUpperCase().replace(/[^A-Z0-9]/g, "").substring(0, 4);
+  const random = Math.floor(1000 + Math.random() * 9000);
+  return `${base}${random}`;
+}
 
 // Get the current user from DB
 export async function getCurrentUser() {
@@ -58,24 +65,96 @@ export async function syncUserToDB() {
   const email = clerkUser.emailAddresses[0]?.emailAddress;
   if (!email) return null;
 
-  const user = await db.user.upsert({
-    where: { email },
-    update: {
-      clerkId: clerkUser.id,
-      firstName: clerkUser.firstName || undefined,
-      lastName: clerkUser.lastName || undefined,
-      imageUrl: clerkUser.imageUrl || undefined,
-    },
-    create: {
-      clerkId: clerkUser.id,
-      email,
-      firstName: clerkUser.firstName,
-      lastName: clerkUser.lastName,
-      imageUrl: clerkUser.imageUrl,
-      role: "PENDING_USER",
-      status: "PENDING",
-    },
-  });
+  // Generate a code for new users
+  let referralCode = generateReferralCode(clerkUser.firstName, email);
+
+  // Check for referral cookie
+  const cookieStore = await cookies();
+  const refCookie = cookieStore.get("eensell_ref")?.value;
+  let referrerId: string | undefined;
+
+  if (refCookie) {
+    try {
+      const referrer = await db.user.findUnique({ where: { referralCode: refCookie } });
+      if (referrer) {
+        referrerId = referrer.id;
+      }
+    } catch (e) {
+      console.error("Error finding referrer:", e);
+    }
+  }
+
+  let user;
+  let retries = 0;
+  
+  while (retries < 3) {
+    try {
+      user = await db.user.upsert({
+        where: { email },
+        update: {
+          clerkId: clerkUser.id,
+          firstName: clerkUser.firstName || undefined,
+          lastName: clerkUser.lastName || undefined,
+          imageUrl: clerkUser.imageUrl || undefined,
+        },
+        create: {
+          clerkId: clerkUser.id,
+          email,
+          firstName: clerkUser.firstName,
+          lastName: clerkUser.lastName,
+          imageUrl: clerkUser.imageUrl,
+          role: "PENDING_USER",
+          status: "PENDING",
+          referralCode,
+        },
+      });
+      break; // Success
+    } catch (e: any) {
+      if (e.code === "P2002" && retries < 2) {
+        // Unique constraint violation (likely referralCode collision), generate a new one and retry
+        referralCode = generateReferralCode(clerkUser.firstName, email);
+        retries++;
+      } else {
+        console.error("Failed to sync user:", e);
+        // Fallback to updating only if create fails due to a weird race condition
+        const existing = await db.user.findUnique({ where: { email } });
+        if (existing) {
+          user = await db.user.update({
+            where: { email },
+            data: { clerkId: clerkUser.id }
+          });
+          break;
+        }
+        throw e;
+      }
+    }
+  }
+
+  if (!user) return null;
+
+  // If this was a new registration and they have a valid referrer, attribute it
+  // We check if the cookie existed and we haven't already attributed this user
+  if (referrerId) {
+    // Only create referral if it doesn't already exist for this user
+    const existingReferral = await db.referral.findUnique({
+      where: { referredUserId: user.id }
+    });
+
+    if (!existingReferral && user.id !== referrerId) { // prevent self referral just in case
+      // Get current commission rate or default to 50
+      const commissionSetting = await db.systemSetting.findUnique({ where: { key: "COMMISSION_RATE" }});
+      const commissionAmount = commissionSetting ? parseInt(commissionSetting.value) : 50;
+
+      await db.referral.create({
+        data: {
+          referrerId,
+          referredUserId: user.id,
+          status: "PENDING",
+          commissionAmount,
+        }
+      });
+    }
+  }
 
   // Sync metadata to Clerk — fire-and-forget (don't block page rendering)
   syncClerkMetadata(user, clerkUser).catch((e) =>

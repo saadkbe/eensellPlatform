@@ -65,6 +65,24 @@ export async function approveUser(userId: string) {
         role: "ACTIVE_USER",
       },
     });
+
+    try {
+      // Handle Referral Commission
+      const pendingReferral = await db.referral.findUnique({
+        where: { referredUserId: userId }
+      });
+
+      if (pendingReferral && pendingReferral.status === "PENDING") {
+        await db.referral.update({
+          where: { id: pendingReferral.id },
+          data: { status: "SUCCESSFUL" }
+        });
+      }
+    } catch (referralError) {
+      console.error("[approveUser] Failed to update referral status:", referralError);
+      // We don't throw here, as the primary user approval succeeded.
+    }
+
   } catch (error: any) {
     console.error("[approveUser] Core failure:", error);
     throw new Error(`Core failure: ${error.message}`);

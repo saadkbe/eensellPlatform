@@ -32,6 +32,7 @@ import { cn } from "@/lib/utils";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 import { LeaderboardWidget } from "../leaderboard-widget";
 import { AcceleratorTeaser } from "./accelerator-teaser";
+import { ReferralPromoModal } from "../referrals/referral-promo-modal";
 
 // Animation Variants
 const containerVariants = {
@@ -171,6 +172,8 @@ export function DashboardClient({
       animate="show"
       className="space-y-6 pb-12"
     >
+      <ReferralPromoModal />
+
       {/* ── Welcome Banner ── */}
       <motion.div 
         variants={itemVariants} 
@@ -253,6 +256,33 @@ export function DashboardClient({
             </Link>
           </motion.div>
         </div>
+      </motion.div>
+
+      {/* ── Referral CTA Banner ── */}
+      <motion.div variants={itemVariants}>
+        <Link href="/dashboard/referrals" className="block">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 p-1 group transition-all hover:scale-[1.01] hover:shadow-xl hover:shadow-orange-500/20">
+            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
+            <div className="relative flex flex-col sm:flex-row items-center justify-between gap-4 bg-background/95 backdrop-blur-sm rounded-xl px-6 py-5 border border-white/10">
+              <div className="flex items-center gap-4 text-center sm:text-left">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-orange-500/10 text-2xl border border-orange-500/20 group-hover:scale-110 transition-transform">
+                  💰
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-foreground group-hover:text-orange-500 transition-colors">
+                    Refer & Earn
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-0.5">
+                    Earn <span className="font-bold text-foreground">50 MAD</span> for every successful referral!
+                  </p>
+                </div>
+              </div>
+              <Button variant="secondary" className="w-full sm:w-auto shrink-0 font-semibold gap-2 bg-orange-500 text-white hover:bg-orange-600 border-none group-hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] transition-all">
+                Get Your Link <ArrowRight className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        </Link>
       </motion.div>
 
       {/* ── Stats Grid ── */}

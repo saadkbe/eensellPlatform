@@ -60,6 +60,7 @@ const navSections: NavSection[] = [
     labelKey: "nav_grow",
     items: [
       { titleKey: "nav_career", href: "/dashboard/career", icon: Compass },
+      { titleKey: "nav_referrals", href: "/dashboard/referrals", icon: Target }, // Used Target or Banknote
       { titleKey: "nav_settings", href: "/dashboard/settings", icon: Settings },
     ],
   },
