@@ -186,7 +186,7 @@ export function OnboardingClient({
           </div>
           <div className="flex justify-between items-center mt-3">
             <div className="flex items-center gap-3">
-              <img src="/logo.png" alt="Eensell" className="h-4 w-auto object-contain brightness-0 invert opacity-60" />
+              <img src="/logo2.png" alt="Eensell" className="h-4 w-auto object-contain scale-[3] brightness-0 invert opacity-60" />
               <span className="text-[11px] text-white/30 font-medium tracking-wider uppercase">
                 The Eensell Journey
               </span>

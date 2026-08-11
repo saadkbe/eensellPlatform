@@ -82,7 +82,7 @@ export default function AiUgcPage() {
       <nav className="border-b border-white/5 bg-[#030303]/80 backdrop-blur-xl sticky top-0 z-40">
         <div className="container max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center">
-            <img src="/logo.png" alt="Eensell University" className="h-14 sm:h-18 w-auto object-contain brightness-0 invert" />
+            <img src="/logo2.png" alt="Eensell University" className="h-14 sm:h-18 w-auto object-contain scale-[3] brightness-0 invert" />
           </Link>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
             <Link href="#opportunity" className="hover:text-white transition-colors">Opportunity</Link>
@@ -568,7 +568,7 @@ export default function AiUgcPage() {
       <footer className="border-t border-white/10 py-12 bg-[#030303]">
         <div className="container max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <Link href="/" className="flex items-center">
-            <img src="/logo.png" alt="Eensell University" className="h-12 w-auto object-contain brightness-0 invert" />
+            <img src="/logo2.png" alt="Eensell University" className="h-12 w-auto object-contain scale-[3] brightness-0 invert" />
           </Link>
           <p className="text-zinc-600 text-sm">© {new Date().getFullYear()} Eensell University. All rights reserved.</p>
         </div>

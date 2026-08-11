@@ -26,7 +26,7 @@ export default function SignUpPage() {
       >
         {/* Logo */}
         <Link href="/" className="mb-8">
-          <img src="/logo.png" alt="Eensell University" className="h-16 w-auto object-contain scale-[1.5] brightness-0 invert" />
+          <img src="/logo2.png" alt="Eensell University" className="h-16 w-auto object-contain scale-[3] brightness-0 invert" />
         </Link>
 
         {/* Motivational Slogan */}
