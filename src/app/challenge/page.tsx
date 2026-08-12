@@ -1,55 +1,20 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
+
 import Image from "next/image";
 import Link from "next/link";
 import { HeroSection } from "@/components/landing/v2/HeroSection";
 import { Navbar } from "@/components/landing/v2/Navbar";
 import { UgcSection } from "@/components/landing/v2/UgcSection";
 
-// Dynamically import below-the-fold sections for performance
-const ProofSection = dynamic(() =>
-  import("@/components/landing/v2/ProofSection").then((mod) => mod.ProofSection)
-);
-const ProblemSection = dynamic(() =>
-  import("@/components/landing/v2/ProblemSection").then(
-    (mod) => mod.ProblemSection
-  )
-);
-const DemandSection = dynamic(() =>
-  import("@/components/landing/v2/DemandSection").then(
-    (mod) => mod.DemandSection
-  )
-);
-const CommunitySection = dynamic(() =>
-  import("@/components/landing/v2/CommunitySection").then(
-    (mod) => mod.CommunitySection
-  )
-);
-const BlueprintSection = dynamic(() =>
-  import("@/components/landing/v2/BlueprintSection").then(
-    (mod) => mod.BlueprintSection
-  )
-);
-const ArsenalSection = dynamic(() =>
-  import("@/components/landing/v2/ArsenalSection").then(
-    (mod) => mod.ArsenalSection
-  )
-);
-const TestimonialsSection = dynamic(() =>
-  import("@/components/landing/v2/TestimonialsSection").then(
-    (mod) => mod.TestimonialsSection
-  )
-);
-const UrgencySection = dynamic(() =>
-  import("@/components/landing/v2/UrgencySection").then(
-    (mod) => mod.UrgencySection
-  )
-);
-const FaqSection = dynamic(() =>
-  import("@/components/landing/v2/FaqSection").then(
-    (mod) => mod.FaqSection
-  )
-);
+import { ProofSection } from "@/components/landing/v2/ProofSection";
+import { ProblemSection } from "@/components/landing/v2/ProblemSection";
+import { DemandSection } from "@/components/landing/v2/DemandSection";
+import { CommunitySection } from "@/components/landing/v2/CommunitySection";
+import { BlueprintSection } from "@/components/landing/v2/BlueprintSection";
+import { ArsenalSection } from "@/components/landing/v2/ArsenalSection";
+import { TestimonialsSection } from "@/components/landing/v2/TestimonialsSection";
+import { UrgencySection } from "@/components/landing/v2/UrgencySection";
+import { FaqSection } from "@/components/landing/v2/FaqSection";
 
 export const metadata: Metadata = {
   title: "60-Day AI Automation Challenge | Eensell University",

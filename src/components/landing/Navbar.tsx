@@ -43,7 +43,8 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
               alt="Eensell University"
               width={360}
               height={80}
-              className="h-10 sm:h-12 md:h-16 lg:h-20 w-auto object-contain scale-[3] transition-all duration-300"
+              priority
+              className="h-10 sm:h-12 md:h-16 lg:h-20 w-auto object-contain scale-[3] brightness-0 dark:invert transition-all duration-300"
             />
           </Link>
         </div>
