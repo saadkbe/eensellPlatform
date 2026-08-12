@@ -83,13 +83,13 @@ export function Navbar() {
           </div>
           <div className="flex items-center gap-4 border-l border-[#262626] pl-6">
             <Link
-              href="/login"
+              href="/sign-in"
               className="text-sm font-medium text-zinc-300 hover:text-white transition-colors"
             >
               Sign In
             </Link>
             <Link
-              href="/signup"
+              href="/sign-up"
               className="text-sm font-bold bg-orange-500 text-white px-5 py-2 rounded-full hover:bg-orange-600 transition-all shadow-[0_0_15px_rgba(249,115,22,0.4)] hover:shadow-[0_0_25px_rgba(249,115,22,0.6)]"
             >
               Sign Up
@@ -121,13 +121,13 @@ export function Navbar() {
           ))}
           <div className="flex flex-col gap-3 mt-4">
             <Link
-              href="/login"
+              href="/sign-in"
               className="w-full text-center py-3 text-sm font-medium text-white border border-[#262626] rounded-xl"
             >
               Sign In
             </Link>
             <Link
-              href="/signup"
+              href="/sign-up"
               className="w-full text-center py-3 text-sm font-bold bg-orange-500 text-white rounded-xl shadow-[0_0_15px_rgba(249,115,22,0.4)]"
             >
               Sign Up
