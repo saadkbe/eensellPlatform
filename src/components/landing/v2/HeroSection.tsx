@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Play } from "lucide-react";
 
 export function HeroSection() {
   return (
@@ -36,15 +35,13 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="w-full mb-12 relative"
         >
-          {/* Video Player Placeholder */}
-          <div className="relative aspect-video w-full rounded-2xl bg-[#171717] border border-[#262626] shadow-[0_0_80px_rgba(249,115,22,0.15)] overflow-hidden group cursor-pointer flex items-center justify-center">
-            {/* Play Button */}
-            <div className="w-20 h-20 bg-orange-500 rounded-full flex items-center justify-center text-white transition-transform group-hover:scale-110 group-hover:bg-orange-400 z-10 shadow-lg">
-              <Play className="w-8 h-8 ml-2 fill-current" />
-            </div>
-
-            {/* Optional Overlay for better look */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#171717]/80 to-transparent pointer-events-none" />
+          <div className="relative aspect-video w-full rounded-2xl bg-[#171717] border border-[#262626] shadow-[0_0_80px_rgba(249,115,22,0.15)] overflow-hidden">
+            <iframe 
+              src="https://player.vimeo.com/video/1217583296?autoplay=1&muted=0&title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479"
+              className="absolute top-0 left-0 w-full h-full"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+              title="Challenge VSL"
+            ></iframe>
           </div>
         </motion.div>
 
