@@ -89,7 +89,7 @@ function SidebarContent({
         <img
           src="/logo2.png"
           alt="Eensell University"
-          className="h-18 sm:h-22 w-auto object-contain origin-center scale-[3] dark:brightness-0 dark:invert my-1"
+          className="h-18 sm:h-22 w-auto object-contain origin-center scale-[3] brightness-0 dark:invert my-1"
         />
       </div>
 
@@ -212,7 +212,7 @@ export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: bool
       {/* Mobile header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-4 bg-background/95 backdrop-blur-xl border-b border-border">
         <div className="flex items-center">
-          <img src="/logo2.png" alt="Eensell University" className="h-10 w-auto object-contain origin-left scale-[3] dark:brightness-0 dark:invert" />
+          <img src="/logo2.png" alt="Eensell University" className="h-10 w-auto object-contain origin-left scale-[3] brightness-0 dark:invert" />
         </div>
         <Button
           variant="ghost"
