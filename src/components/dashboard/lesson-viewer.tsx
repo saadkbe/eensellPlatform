@@ -61,8 +61,23 @@ export function LessonViewer({
   const getEmbedUrl = (url: string | null) => {
     if (!url) return null;
     try {
-      const vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
-      if (vimeoMatch && vimeoMatch[1]) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+      const vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?(\d+)(?:\/([a-zA-Z0-9]+))?/);
+      if (vimeoMatch && vimeoMatch[1]) {
+        let embedUrl = `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+        if (vimeoMatch[2]) {
+          embedUrl += `?h=${vimeoMatch[2]}`;
+        } else {
+          try {
+            const urlObj = new URL(url.startsWith('http') ? url : `https://${url}`);
+            if (urlObj.searchParams.has('h')) {
+              embedUrl += `?h=${urlObj.searchParams.get('h')}`;
+            }
+          } catch (e) {
+            // ignore URL parsing errors
+          }
+        }
+        return embedUrl;
+      }
       
       const ytMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
       if (ytMatch && ytMatch[1]) return `https://www.youtube.com/embed/${ytMatch[1]}`;
