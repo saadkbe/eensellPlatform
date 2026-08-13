@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { PlayCircle } from "lucide-react";
 
 export function ArsenalSection() {
   const containerVariants = {
@@ -168,6 +169,68 @@ export function ArsenalSection() {
               <p className="text-zinc-400">Accès direct l network dial drari li kay9ado w kaybi3o kol nhar.</p>
             </div>
           </motion.div>
+        </motion.div>
+
+        {/* Modules List Grid */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-24 pt-16 border-t border-[#262626] relative"
+        >
+          {/* Subtle background glow */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-64 bg-orange-500/5 blur-[120px] rounded-full pointer-events-none" />
+
+          <div className="text-center mb-12 relative z-10">
+            <h3 className="text-3xl font-bold text-white mb-4">
+              Chno Kayan F L'Programme <span className="text-[#f97316]">Exactement:</span>
+            </h3>
+            <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              20 module kamil bach tbda w tmétrizi l'IA w t-monétiser les compétences dialk mn nhar lwel.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
+            {[
+              "Building an AI Business From Scratch",
+              "AI Ads Video Generation",
+              "AI Client Acquisition & Outreach",
+              "AI Foundations & Opportunity Mindset",
+              "AI-Powered Freelancing",
+              "AI SaaS & Startup Ideas",
+              "AI Tools Mastery",
+              "AI Video Editing & Cinematic Content",
+              "AI Chatbots & AI Agents",
+              "AI Productivity & Life Systems",
+              "Personal Branding With AI",
+              "AI Money-Making Opportunities",
+              "AI Content Creation Systems",
+              "AI Automation & Workflows",
+              "AI Website & Landing Page Creation",
+              "Viral AI Short-Form Content",
+              "AI Marketing & Copywriting",
+              "AI Prompt Engineering Mastery",
+              "Future AI Trends & Emerging Opportunities",
+              "AI E-commerce & Digital Products"
+            ].map((mod, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: (i % 4) * 0.1 }}
+                className="group flex items-start gap-4 p-5 rounded-2xl bg-[#171717]/40 border border-[#262626] hover:border-[#f97316]/40 hover:bg-[#171717] hover:shadow-[0_0_30px_rgba(249,115,22,0.1)] transition-all duration-300"
+              >
+                <div className="mt-0.5 shrink-0 h-7 w-7 rounded-full bg-orange-500/10 flex items-center justify-center border border-orange-500/20 group-hover:bg-orange-500 group-hover:border-orange-500 transition-colors duration-300">
+                  <PlayCircle className="w-4 h-4 text-orange-500 group-hover:text-white transition-colors duration-300" />
+                </div>
+                <p className="text-sm font-medium text-zinc-300 group-hover:text-white transition-colors leading-snug">
+                  {mod}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>

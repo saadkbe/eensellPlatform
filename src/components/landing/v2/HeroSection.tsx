@@ -37,10 +37,10 @@ export function HeroSection() {
         >
           <div className="relative aspect-video w-full rounded-2xl bg-[#171717] border border-[#262626] shadow-[0_0_80px_rgba(249,115,22,0.15)] overflow-hidden">
             <iframe 
-              src="https://player.vimeo.com/video/1217583296?autoplay=1&muted=0&title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479"
+              src="https://player.vimeo.com/video/1217870233?autoplay=1&muted=0&title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479&dnt=1&rel=0"
               className="absolute top-0 left-0 w-full h-full"
               allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
-              title="Challenge VSL"
+              title="Challenge VSL Version 2"
             ></iframe>
           </div>
         </motion.div>
