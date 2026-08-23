@@ -8,7 +8,7 @@ import { CHALLENGE_DAYS } from '@/data/challenge-roadmap';
 export async function getChallengeProgress(userId: string) {
   try {
     const user = await db.user.findUnique({
-      where: { id: userId },
+      where: { clerkId: userId },
       select: {
         challengeStartDate: true,
         challengeDayCompletions: {
@@ -82,8 +82,18 @@ export async function getChallengeDays(userId?: string) {
       return challengeDays.map(day => ({ ...day, isCompleted: false }));
     }
 
+    // userId here is clerkId, resolve to internal CUID
+    const user = await db.user.findUnique({
+      where: { clerkId: userId },
+      select: { id: true }
+    });
+
+    if (!user) {
+      return challengeDays.map(day => ({ ...day, isCompleted: false }));
+    }
+
     const completions = await db.challengeDayCompletion.findMany({
-      where: { userId },
+      where: { userId: user.id },
       select: { challengeDayId: true }
     });
 

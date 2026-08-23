@@ -31,8 +31,8 @@ export default async function ChallengePage() {
   if (!dbUser) return redirect("/sign-in");
 
   const [challengeDays, progress] = await Promise.all([
-    getChallengeDays(dbUser.id),
-    getChallengeProgress(dbUser.id)
+    getChallengeDays(clerkUser.id),
+    getChallengeProgress(clerkUser.id)
   ]);
 
   return (
