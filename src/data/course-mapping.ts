@@ -42,15 +42,6 @@ export const COURSE_CATEGORIES: CourseCategory[] = [
   {
     id: "course-3",
     code: "M3",
-    title: "AI Content & Video Creation",
-    description: "Build high-velocity content systems — from viral short-form to cinematic AI video production.",
-    icon: "Video",
-    color: "from-pink-500 to-rose-500",
-    moduleOrders: [4, 5, 6, 13], // Content Creation + Viral Short-Form + Ads Video + Video Editing
-  },
-  {
-    id: "course-4",
-    code: "M4",
     title: "AI Automation & Workflows",
     description: "Build powerful automations with Make.com, AI chatbots, WhatsApp bots, and intelligent AI agents.",
     icon: "Zap",
@@ -58,49 +49,58 @@ export const COURSE_CATEGORIES: CourseCategory[] = [
     moduleOrders: [2, 7], // AI Automation & Workflows + AI Chatbots & AI Agents
   },
   {
+    id: "course-4",
+    code: "M4",
+    title: "AI Website & Landing Page Creation",
+    description: "Learn how to build high-converting websites and landing pages using AI.",
+    icon: "LayoutTemplate",
+    color: "from-pink-500 to-rose-500",
+    moduleOrders: [3], // AI Website & Landing Page Creation
+  },
+  {
     id: "course-5",
     code: "M5",
-    title: "AI Content & Marketing Systems",
-    description: "Master AI-powered copywriting, direct-response marketing, and personal brand building.",
-    icon: "Megaphone",
+    title: "AI Content & Video Creation",
+    description: "Build high-velocity content systems — from viral short-form to cinematic AI video production.",
+    icon: "Video",
     color: "from-emerald-500 to-teal-500",
-    moduleOrders: [16, 10], // AI Marketing & Copywriting + Personal Branding
+    moduleOrders: [4, 5, 6, 13], // Content Creation + Viral Short-Form + Ads Video + Video Editing
   },
   {
     id: "course-6",
     code: "M6",
-    title: "Building an AI Business",
-    description: "Set up your AI business from scratch — legal, pricing, structure, and scalable product ideas.",
-    icon: "Building2",
+    title: "AI Content & Marketing Systems",
+    description: "Master AI-powered copywriting, direct-response marketing, and personal brand building.",
+    icon: "Megaphone",
     color: "from-indigo-500 to-blue-600",
-    moduleOrders: [8, 12], // Building AI Business + AI SaaS & Startup Ideas
+    moduleOrders: [16, 10], // AI Marketing & Copywriting + Personal Branding
   },
   {
     id: "course-7",
     code: "M7",
-    title: "AI Client Acquisition & Outreach",
-    description: "Learn cold outreach, lead scraping, freelancing strategies, and close your first paying client.",
-    icon: "Users",
+    title: "Building an AI Business",
+    description: "Set up your AI business from scratch — legal, pricing, structure, and scalable product ideas.",
+    icon: "Building2",
     color: "from-sky-500 to-blue-500",
-    moduleOrders: [9, 11], // Client Acquisition + Freelancing
+    moduleOrders: [8, 12], // Building AI Business + AI SaaS & Startup Ideas
   },
   {
     id: "course-8",
     code: "M8",
-    title: "AI Monetization & E-Commerce",
-    description: "Discover fast-cash AI services, build online stores, create digital products, and launch landing pages.",
-    icon: "DollarSign",
+    title: "AI Client Acquisition & Outreach",
+    description: "Learn cold outreach, lead scraping, freelancing strategies, and close your first paying client.",
+    icon: "Users",
     color: "from-green-500 to-emerald-600",
-    moduleOrders: [15, 18, 3], // Money-Making + E-commerce + Website & Landing Pages
+    moduleOrders: [9, 11], // Client Acquisition + Freelancing
   },
   {
     id: "course-9",
     code: "M9",
-    title: "AI Productivity & Future Trends",
-    description: "Optimize your life with AI productivity systems and stay ahead with emerging AI trends.",
+    title: "AI Monetization & Future Trends",
+    description: "Discover fast-cash AI services, e-commerce, productivity systems, and stay ahead with emerging AI trends.",
     icon: "Rocket",
     color: "from-fuchsia-500 to-purple-500",
-    moduleOrders: [14, 19], // Productivity & Life Systems + Future AI Trends
+    moduleOrders: [15, 18, 14, 19], // Money-Making + E-commerce + Productivity + Trends
   },
 ];
 

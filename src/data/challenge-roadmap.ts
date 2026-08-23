@@ -129,7 +129,7 @@ export const CHALLENGE_DAYS: ChallengeDayData[] = [
     phase: "learn_ai",
     missionTitle: "Map Your First Workflow",
     missionDescription: "Identify a repetitive task and map out how AI could automate it.",
-    courseCode: "M4",
+    courseCode: "M3",
     lessonOrder: 0,
     moduleOrder: 2
   },
@@ -208,7 +208,7 @@ export const CHALLENGE_DAYS: ChallengeDayData[] = [
     phase: "build_skills",
     missionTitle: "Build a Landing Page Fast",
     missionDescription: "Use an AI website builder to generate a landing page for your offer.",
-    courseCode: "M8",
+    courseCode: "M4",
     lessonOrder: 0,
     moduleOrder: 3
   },
