@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { DashboardClient } from "@/components/dashboard/home/dashboard-client";
 import { getLeaderboard } from "@/actions/user.actions";
+import { getChallengeProgress } from "@/actions/challenge.actions";
 
 function getGreeting(): string {
   const hour = new Date().getHours();
@@ -24,6 +25,7 @@ export default async function DashboardPage() {
     totalResources,
     leaderboard,
     recentProgress,
+    challengeProgress,
   ] = await Promise.all([
     db.user.findUnique({
       where: { clerkId: userId || "" },
@@ -54,6 +56,7 @@ export default async function DashboardPage() {
       take: 5,
       include: { lesson: { include: { module: true } } },
     }),
+    getChallengeProgress(userId || ""),
   ]);
 
   const firstName = dbUser?.firstName || "there";
@@ -85,6 +88,7 @@ export default async function DashboardPage() {
       upcomingCall={upcomingCall}
       recentlyWatched={recentProgress}
       leaderboard={leaderboard}
+      challengeProgress={challengeProgress}
     />
   );
 }

@@ -61,6 +61,7 @@ model User {
   dailyProgresses DailyProgress[]
   missions       Mission[]
   weeklySchedules WeeklySchedule[]
+  challengeDayCompletions ChallengeDayCompletion[]
 
   // ── Referral System ──
   referralCode   String?   @unique
@@ -486,4 +487,47 @@ model SystemSetting {
   id    String @id @default(cuid())
   key   String @unique
   value String
+}
+
+// ══════════════════════════════════════════════
+// 60-Day Challenge — Structured Roadmap
+// ══════════════════════════════════════════════
+
+model ChallengeDay {
+  id          String   @id @default(cuid())
+  dayNumber   Int      @unique  // 1-60
+  title       String   // e.g., "Build Your First Offer"
+  description String?
+  phase       String   // "learn_ai" | "build_skills" | "build_offer" | "build_portfolio" | "first_client" | "scale_business"
+  missionTitle       String   // actionable task for the day
+  missionDescription String?
+
+  // Link to existing lesson (optional — some days may be action-only)
+  lessonId    String?
+  moduleId    String?  // denormalized for quick course lookup
+
+  order       Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  completions ChallengeDayCompletion[]
+
+  @@index([dayNumber])
+  @@index([phase])
+  @@index([lessonId])
+}
+
+model ChallengeDayCompletion {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  challengeDayId String
+  challengeDay   ChallengeDay @relation(fields: [challengeDayId], references: [id], onDelete: Cascade)
+
+  completedAt DateTime @default(now())
+
+  @@unique([userId, challengeDayId])
+  @@index([userId])
 }

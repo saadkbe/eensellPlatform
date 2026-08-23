@@ -1,112 +1,57 @@
 import { db } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
+import { getChallengeDays, getChallengeProgress } from "@/actions/challenge.actions";
 import {
-  Compass,
+  Target,
   CheckCircle2,
   Lock,
-  Heart,
   ArrowRight,
-  Target,
-  Award,
-  DollarSign,
   Clock,
-  Globe,
-  TrendingUp,
+  Award,
+  CalendarDays
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
-export default async function CareerPage() {
+export default async function ChallengePage() {
   const clerkUser = await currentUser();
+  if (!clerkUser) return redirect("/sign-in");
 
-  const [modules, userProgress] = await Promise.all([
-    db.module.findMany({
-      orderBy: { order: "asc" },
-      include: {
-        lessons: {
-          where: { isPublished: true },
-          select: { id: true, moduleId: true },
-        },
-      },
-    }),
-    clerkUser
-      ? db.progress.findMany({
-          where: { user: { clerkId: clerkUser.id }, isCompleted: true },
-          select: { lessonId: true },
-        })
-      : [],
-  ]);
-
-  const completedLessonIds = new Set(userProgress.map((p) => p.lessonId));
-
-  const { COURSE_CATEGORIES } = await import("@/data/course-mapping");
-
-  let firstInProgressFound = false;
-  let completedCoursesCount = 0;
-
-  const steps = COURSE_CATEGORIES.map((course) => {
-    let status: "completed" | "in-progress" | "locked" = "locked";
-
-    // Gather all lessons for this course
-    const courseModules = modules.filter(m => course.moduleOrders.includes(m.order));
-    const allLessons = courseModules.flatMap(m => m.lessons);
-    
-    // Find first module that has an image for cover fallback
-    const firstModuleWithImg = courseModules.find(m => m.imageUrl);
-    const imageUrl = firstModuleWithImg?.imageUrl || `/modules/${course.code.toLowerCase()}.png`;
-
-    const completedLessonsCount = allLessons.filter((l) => completedLessonIds.has(l.id)).length;
-    
-    // Logic for determining step status
-    if (allLessons.length > 0 && completedLessonsCount === allLessons.length) {
-      status = "completed";
-      completedCoursesCount++;
-    } else if (completedLessonsCount > 0) {
-      status = "in-progress";
-      firstInProgressFound = true;
-    } else if (!firstInProgressFound) {
-      // The first course with 0 lessons completed becomes 'in-progress'
-      status = "in-progress";
-      firstInProgressFound = true;
-    }
-
-    const nextLesson = allLessons.find((l) => !completedLessonIds.has(l.id)) || allLessons[0];
-
-    return { 
-      id: course.id,
-      title: `${course.code} — ${course.title}`,
-      description: course.description,
-      imageUrl,
-      status, 
-      nextLesson 
-    };
+  const dbUser = await db.user.findUnique({
+    where: { clerkId: clerkUser.id },
+    select: { id: true },
   });
 
-  const progressPercent = Math.round((completedCoursesCount / 9) * 100);
+  if (!dbUser) return redirect("/sign-in");
+
+  const [challengeDays, progress] = await Promise.all([
+    getChallengeDays(dbUser.id),
+    getChallengeProgress(dbUser.id)
+  ]);
 
   return (
     <div className="space-y-6 pb-10">
-      {/* ── Emotional Hero ── */}
+      {/* ── Hero ── */}
       <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-card via-card to-primary/5 p-7 sm:p-9">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_hsl(var(--primary)/0.08),transparent_70%)] pointer-events-none" />
         <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10 max-w-2xl">
           <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 mb-4 text-xs">
-            <Compass className="w-3 h-3 mr-1" />
-            Ultimate AI Entrepreneur Roadmap
+            <Target className="w-3 h-3 mr-1" />
+            60-Day Challenge
           </Badge>
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight mb-3 leading-tight">
-            You're not looking for a job. <br />
-            <span className="text-primary">You're building an empire.</span>
+            Your Blueprint to <span className="text-primary">Success</span>
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-lg">
-            This roadmap tracks your actual progress through the Eensell University curriculum. 
-            Complete modules, unlock new skills, and scale your income.
+            Follow this 60-day roadmap to build your AI skills, craft your offer, and land your first clients. 
+            Complete missions daily to stay on track.
           </p>
         </div>
       </div>
@@ -120,32 +65,42 @@ export default async function CareerPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-lg font-bold flex items-center gap-2">
-                    <Target className="w-5 h-5 text-primary" />
-                    Master Curriculum
+                    <CalendarDays className="w-5 h-5 text-primary" />
+                    Daily Missions
                   </CardTitle>
                   <CardDescription className="mt-1 text-xs max-w-md">
-                    Follow the modules in order to build your AI skillset.
+                    Complete your daily tasks to progress through the challenge.
                   </CardDescription>
                 </div>
                 <div className="text-right hidden sm:block">
                   <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
                     Overall Progress
                   </span>
-                  <p className="text-lg font-bold text-primary">{progressPercent}%</p>
+                  <p className="text-lg font-bold text-primary">{progress.progressPercent}%</p>
                 </div>
               </div>
             </CardHeader>
             <CardContent className="p-6">
               <div className="relative pl-7 sm:pl-9 border-l-2 border-muted space-y-8 py-2">
-                {steps.map((step, idx) => {
+                {challengeDays.map((day) => {
+                  let status: "completed" | "current" | "locked" = "locked";
+                  
+                  if (day.isCompleted) {
+                    status = "completed";
+                  } else if (day.dayNumber <= progress.currentDay) {
+                    status = "current";
+                  } else {
+                    status = "locked";
+                  }
+
                   let icon, borderCol, textCol, cardBg;
 
-                  if (step.status === "completed") {
+                  if (status === "completed") {
                     icon = <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
                     borderCol = "border-emerald-500/20";
                     textCol = "text-emerald-500";
                     cardBg = "bg-card hover:shadow-md";
-                  } else if (step.status === "in-progress") {
+                  } else if (status === "current") {
                     icon = (
                       <div className="w-5 h-5 rounded-full border-[3px] border-primary bg-background shadow-[0_0_10px_hsl(var(--primary)/0.4)] animate-pulse" />
                     );
@@ -160,7 +115,7 @@ export default async function CareerPage() {
                   }
 
                   return (
-                    <div key={step.id} className="relative group">
+                    <div key={day.id} className="relative group">
                       {/* Timeline node */}
                       <div className="absolute -left-[33px] sm:-left-[41px] top-4 flex items-center justify-center bg-background rounded-full p-0.5">
                         {icon}
@@ -178,61 +133,54 @@ export default async function CareerPage() {
                           <h3
                             className={cn(
                               "font-semibold text-sm",
-                              step.status === "locked" ? "text-muted-foreground" : "text-foreground"
+                              status === "locked" ? "text-muted-foreground" : "text-foreground"
                             )}
                           >
                             <span className="text-muted-foreground/60 mr-1.5">
-                              {String(idx + 1).padStart(2, "0")}.
+                              Day {day.dayNumber}.
                             </span>
-                            {step.title}
+                            {day.title}
                           </h3>
-                          {step.status === "completed" && (
+                          {status === "completed" && (
                             <Badge className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 text-[9px] shrink-0">
                               Done
                             </Badge>
                           )}
-                          {step.status === "in-progress" && (
+                          {status === "current" && (
                             <Badge className="bg-primary/10 text-primary border-primary/20 text-[9px] shrink-0">
-                              Next Up
+                              Action Required
                             </Badge>
                           )}
-                          {step.status === "locked" && (
+                          {status === "locked" && (
                             <Badge className="bg-muted text-muted-foreground border-transparent text-[9px] shrink-0">
-                              Locked
+                              Upcoming
                             </Badge>
                           )}
                         </div>
 
-                        {step.description && (
-                          <p className="text-xs text-muted-foreground leading-relaxed mb-3">
-                            {step.description}
-                          </p>
-                        )}
-
-                        {!step.nextLesson && step.status === "locked" && (
-                          <div className="flex items-start gap-2 p-3 rounded-lg bg-muted/30 border border-border/50 mt-4">
-                            <Clock className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
-                            <p className="text-[11px] text-foreground/80 italic leading-snug">
-                              This module is currently in production and dropping soon.
+                        <div className="mt-3 space-y-3">
+                          <div>
+                            <p className="text-xs font-medium text-foreground mb-1 flex items-center gap-1.5">
+                              <Target className="w-3.5 h-3.5 text-primary" />
+                              {day.missionTitle}
                             </p>
+                            {day.missionDescription && (
+                              <p className="text-xs text-muted-foreground leading-relaxed pl-5">
+                                {day.missionDescription}
+                              </p>
+                            )}
                           </div>
-                        )}
+                        </div>
 
-                        {step.status === "in-progress" && step.nextLesson && (
-                          <Link href={`/dashboard/modules/${step.nextLesson.moduleId}/${step.nextLesson.id}`}>
+                        {status === "current" && day.lessonId && day.moduleId && (
+                          <Link href={`/dashboard/modules/${day.moduleId}/${day.lessonId}`}>
                             <Button
                               size="sm"
                               className="mt-4 gap-2 text-xs h-8 shadow-md shadow-primary/15"
                             >
-                              Start Learning <ArrowRight className="w-3 h-3" />
+                              Open Lesson <ArrowRight className="w-3 h-3" />
                             </Button>
                           </Link>
-                        )}
-                        
-                        {step.status === "in-progress" && !step.nextLesson && (
-                           <div className="mt-4 text-xs text-amber-500 font-medium">
-                             Lessons are currently being added...
-                           </div>
                         )}
                       </div>
                     </div>
@@ -245,19 +193,19 @@ export default async function CareerPage() {
 
         {/* Sidebar (1 col) */}
         <div className="space-y-5">
-          {/* Income Projection */}
+          {/* Progress Card */}
           <Card className="bg-card/50 border-border shadow-sm overflow-hidden">
             <CardHeader className="pb-3 border-b border-border/50">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                <DollarSign className="w-4 h-4 text-emerald-500" />
-                Income Potential
+                <Target className="w-4 h-4 text-emerald-500" />
+                Challenge Status
               </CardTitle>
             </CardHeader>
             <CardContent className="p-5 space-y-5">
               <div>
-                <p className="text-3xl font-bold text-foreground">5K – 30K MAD</p>
+                <p className="text-3xl font-bold text-foreground">Day {progress.currentDay}</p>
                 <p className="text-[10px] text-emerald-500 font-medium mt-1">
-                  Monthly income potential
+                  Current day in your 60-day journey
                 </p>
               </div>
 
@@ -265,32 +213,22 @@ export default async function CareerPage() {
 
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-foreground">{progress.completedDays} Days</p>
+                    <p className="text-[10px] text-muted-foreground">Successfully completed</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center border border-amber-500/20">
                     <Clock className="w-4 h-4 text-amber-500" />
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-foreground">3–6 Months</p>
-                    <p className="text-[10px] text-muted-foreground">Estimated completion time</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-                    <Globe className="w-4 h-4 text-blue-500" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-medium text-foreground">Work From Anywhere</p>
-                    <p className="text-[10px] text-muted-foreground">Location independence</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center border border-purple-500/20">
-                    <TrendingUp className="w-4 h-4 text-purple-500" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-medium text-foreground">High Demand</p>
-                    <p className="text-[10px] text-muted-foreground">AI skills are highly sought after</p>
+                    <p className="text-xs font-medium text-foreground">{progress.remainingDays} Days</p>
+                    <p className="text-[10px] text-muted-foreground">Remaining in challenge</p>
                   </div>
                 </div>
               </div>
@@ -303,30 +241,21 @@ export default async function CareerPage() {
               <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center mb-3 border border-amber-500/20 text-amber-500">
                 <Award className="w-5 h-5" />
               </div>
-              <h3 className="text-sm font-bold text-foreground mb-1">Eensell Certified</h3>
+              <h3 className="text-sm font-bold text-foreground mb-1">Challenge Completion</h3>
               <p className="text-[11px] text-muted-foreground leading-relaxed mb-3">
-                Complete all {modules.length} modules to earn your Eensell AI Mastery certification.
+                Complete all 60 days to unlock your final reward and build a sustainable AI business.
               </p>
               <div className="w-full bg-muted h-1.5 rounded-full">
                 <div
                   className="bg-amber-500 h-1.5 rounded-full transition-all duration-500"
-                  style={{ width: `${progressPercent}%` }}
+                  style={{ width: `${progress.progressPercent}%` }}
                 />
               </div>
               <p className="text-[10px] text-muted-foreground mt-2">
-                {completedCoursesCount} of 9 courses complete
+                {progress.progressPercent}% complete
               </p>
             </CardContent>
           </Card>
-
-          {/* Emotional Quote */}
-          <div className="p-5 rounded-xl bg-muted/30 border border-border">
-            <p className="text-xs text-foreground/80 italic leading-relaxed">
-              "The best time to start was yesterday. The second best time is right now. Every expert
-              was once a beginner who refused to quit."
-            </p>
-            <p className="text-[10px] text-muted-foreground mt-2 font-medium">— Eensell Team</p>
-          </div>
         </div>
       </div>
     </div>

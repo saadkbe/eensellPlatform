@@ -242,8 +242,18 @@ export async function markLessonComplete(lessonId: string) {
     });
   }
 
+  // Auto-complete any linked challenge day
+  try {
+    const { autoCompleteChallengeForLesson } = await import("./challenge.actions");
+    await autoCompleteChallengeForLesson(user.id, lessonId);
+  } catch (e) {
+    // Non-critical — don't block lesson completion
+    console.warn("[markLessonComplete] challenge auto-complete failed:", e);
+  }
+
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/modules");
+  revalidatePath("/dashboard/challenge");
   
   return result;
 }

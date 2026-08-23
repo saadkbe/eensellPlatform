@@ -33,6 +33,7 @@ import { useLanguage } from "@/components/landing/LanguageProvider";
 import { LeaderboardWidget } from "../leaderboard-widget";
 import { AcceleratorTeaser } from "./accelerator-teaser";
 import { ReferralPromoModal } from "../referrals/referral-promo-modal";
+import { HeroSection } from "./hero-section";
 
 // Animation Variants
 const containerVariants = {
@@ -78,6 +79,7 @@ export function DashboardClient({
   upcomingCall,
   recentlyWatched,
   leaderboard,
+  challengeProgress,
 }: any) {
   const { t } = useLanguage();
   const circumference = 2 * Math.PI * 54;
@@ -175,87 +177,12 @@ export function DashboardClient({
       <ReferralPromoModal />
 
       {/* ── Welcome Banner ── */}
-      <motion.div 
-        variants={itemVariants} 
-        className="relative overflow-hidden rounded-3xl border border-orange-500/30 p-8 sm:p-10 shadow-2xl"
-        style={{
-          backgroundImage: `url('/welcome-bg.svg')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
-      >
-        {/* Dark Overlay for Text Legibility */}
-        <div className="absolute inset-0 bg-black/40 pointer-events-none" />
-
-        {/* Animated Grid */}
-        <div 
-          className="absolute inset-0 opacity-[0.07] pointer-events-none"
-          style={{
-            backgroundImage: `linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)`,
-            backgroundSize: '40px 40px',
-          }}
+      <motion.div variants={itemVariants}>
+        <HeroSection 
+          firstName={firstName}
+          greeting={greeting}
+          challengeProgress={challengeProgress}
         />
-
-        {/* Floating Accents */}
-        <motion.div 
-          animate={{ y: [0, -10, 0], opacity: [0.4, 0.8, 0.4] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-12 left-1/4 w-2.5 h-2.5 rounded-full bg-orange-400 shadow-[0_0_20px_rgba(251,146,60,0.9)]"
-        />
-        <motion.div 
-          animate={{ y: [0, 15, 0], opacity: [0.3, 0.7, 0.3] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute bottom-16 right-1/3 w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.9)]"
-        />
-
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
-          <div className="max-w-xl">
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-6 shadow-lg"
-            >
-              <Sparkles className="w-4 h-4 text-orange-400" />
-              <span className="text-sm font-semibold text-orange-100">{greeting}</span>
-            </motion.div>
-            
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-100 to-amber-200 tracking-tight mb-4"
-            >
-              {t("dash_welcome_back")}, {firstName}
-            </motion.h1>
-            
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="text-base sm:text-lg text-slate-200 leading-relaxed font-light"
-            >
-              {t("dash_welcome_sub")}
-            </motion.p>
-          </div>
-          
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5, type: "spring" }}
-            className="shrink-0"
-          >
-            <Link href="/dashboard/modules">
-              <Button className="group relative h-14 px-8 bg-white text-black hover:bg-slate-100 rounded-2xl font-bold text-lg shadow-[0_0_40px_rgba(251,146,60,0.3)] transition-all hover:scale-105 hover:shadow-[0_0_60px_rgba(251,146,60,0.5)] border-0 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
-                <span className="relative flex items-center gap-3">
-                  <PlayCircle className="w-5 h-5 text-orange-600" />
-                  {t("dash_resume_journey")}
-                </span>
-              </Button>
-            </Link>
-          </motion.div>
-        </div>
       </motion.div>
 
       {/* ── Referral CTA Banner ── */}

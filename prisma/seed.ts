@@ -233,6 +233,58 @@ async function main() {
   }
   console.log("✅ Roadmap milestones seeded (6 phases)");
 
+  // =============================================
+  // THE 60-DAY CHALLENGE — Days & Missions
+  // =============================================
+  
+  // We need to resolve module and lesson IDs dynamically
+  const { CHALLENGE_DAYS } = await import("../src/data/challenge-roadmap");
+  
+  for (const day of CHALLENGE_DAYS) {
+    let resolvedModuleId = null;
+    let resolvedLessonId = null;
+
+    if (day.moduleOrder !== null) {
+      const module = await prisma.module.findFirst({
+        where: { order: day.moduleOrder },
+        include: { lessons: { orderBy: { order: "asc" } } }
+      });
+
+      if (module) {
+        resolvedModuleId = module.id;
+        if (day.lessonOrder !== null && module.lessons.length > day.lessonOrder) {
+          resolvedLessonId = module.lessons[day.lessonOrder].id;
+        }
+      }
+    }
+
+    await prisma.challengeDay.upsert({
+      where: { dayNumber: day.dayNumber },
+      update: {
+        title: day.title,
+        description: day.description,
+        phase: day.phase,
+        missionTitle: day.missionTitle,
+        missionDescription: day.missionDescription,
+        lessonId: resolvedLessonId,
+        moduleId: resolvedModuleId,
+      },
+      create: {
+        dayNumber: day.dayNumber,
+        title: day.title,
+        description: day.description,
+        phase: day.phase,
+        missionTitle: day.missionTitle,
+        missionDescription: day.missionDescription,
+        lessonId: resolvedLessonId,
+        moduleId: resolvedModuleId,
+        order: day.dayNumber,
+        isPublished: true,
+      }
+    });
+  }
+  console.log("✅ 60-Day Challenge days seeded with lesson links");
+
   console.log("🎉 Seeding complete!");
 }
 

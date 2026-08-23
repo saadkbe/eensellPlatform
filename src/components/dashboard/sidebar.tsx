@@ -43,7 +43,8 @@ const navSections: NavSection[] = [
     labelKey: "nav_learn",
     items: [
       { titleKey: "nav_dashboard", href: "/dashboard", icon: LayoutDashboard },
-      { titleKey: "nav_modules", href: "/dashboard/modules", icon: BookOpen },
+      { titleKey: "AI Library" as any, href: "/dashboard/modules", icon: BookOpen },
+      { titleKey: "60-Day Challenge" as any, href: "/dashboard/challenge", icon: Target },
       { titleKey: "nav_resources", href: "/dashboard/resources", icon: FolderOpen },
     ],
   },

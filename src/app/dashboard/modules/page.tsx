@@ -1,12 +1,20 @@
 import { db } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
-import { BookOpen, Lock, PlayCircle, CheckCircle2, Clock } from "lucide-react";
+import { 
+  BookOpen, Lock, PlayCircle, CheckCircle2, Clock, 
+  Brain, Wand2, Video, Zap, Megaphone, Building2, Users, DollarSign, Rocket
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
+import { COURSE_CATEGORIES } from "@/data/course-mapping";
+
+const iconMap: Record<string, any> = {
+  Brain, Wand2, Video, Zap, Megaphone, Building2, Users, DollarSign, Rocket
+};
 
 export const dynamic = "force-dynamic";
 
@@ -42,10 +50,10 @@ export default async function ModulesPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
-          Course Modules
+          AI Library
         </h1>
         <p className="text-muted-foreground mt-1 text-sm sm:text-base">
-          Explore all available modules and track your progress.
+          Explore all available courses and track your progress.
         </p>
       </div>
 
@@ -58,39 +66,48 @@ export default async function ModulesPage() {
         <p className="text-sm font-medium">New videos are currently being uploaded! Check back soon for more content.</p>
       </div>
 
-      {/* Modules Grid */}
-      {modules.length === 0 ? (
+      {/* Courses Grid */}
+      {COURSE_CATEGORIES.length === 0 ? (
         <div className="text-center py-20">
           <div className="w-16 h-16 rounded-2xl bg-card border border-border flex items-center justify-center mx-auto mb-4">
             <BookOpen className="w-7 h-7 text-muted-foreground" />
           </div>
-          <h2 className="text-lg font-semibold text-foreground mb-1">No modules yet</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-1">No courses yet</h2>
           <p className="text-sm text-muted-foreground">
-            Course modules will appear here once published.
+            Course library will appear here once published.
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
-          {modules.map((module, index) => {
-            // For unpublished modules, they are "locked" and "upcoming"
-            if (!module.isPublished) {
+          {COURSE_CATEGORIES.map((course, index) => {
+            const courseModules = modules
+              .filter((m) => course.moduleOrders.includes(m.order))
+              .sort((a, b) => a.order - b.order);
+
+            const isPublished = courseModules.some((m) => m.isPublished);
+
+            const courseImageUrl = courseModules.find((m) => m.imageUrl)?.imageUrl;
+            const IconComponent = iconMap[course.icon] || BookOpen;
+
+            // For unpublished courses, they are "locked" and "upcoming"
+            if (!isPublished) {
               return (
-                <div key={`upcoming-${module.id}`}>
+                <div key={`upcoming-${course.id}`}>
                   <Card className="bg-black border-border/40 transition-all duration-500 group h-full overflow-hidden flex flex-col shadow-xl hover:shadow-2xl rounded-3xl p-0 gap-0 relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/[0.02] to-white/[0.05] pointer-events-none z-0" />
                     
                     {/* Full Bleed Image Cover with Smooth Black Fade */}
                     <div className="w-full relative bg-black overflow-hidden shrink-0 z-10 flex items-center justify-center">
-                      {module.imageUrl ? (
+                      {courseImageUrl ? (
                         <img 
-                          src={module.imageUrl} 
-                          alt={module.title}
+                          src={courseImageUrl} 
+                          alt={course.title}
                           className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
                         />
                       ) : (
                         <div className="w-full aspect-[16/9] bg-neutral-950 flex flex-col items-center justify-center opacity-40 group-hover:scale-105 transition-transform duration-700 ease-out relative">
                           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
-                          <BookOpen className="w-12 h-12 text-neutral-500 mb-2" />
+                          <IconComponent className="w-12 h-12 text-neutral-500 mb-2" />
                         </div>
                       )}
                       
@@ -100,7 +117,7 @@ export default async function ModulesPage() {
                       {/* Floating Badges on Image */}
                       <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
                         <span className="px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-xs font-black text-white uppercase tracking-widest border border-white/20 shadow-2xl">
-                          MOD {String(index + 1).padStart(2, "0")}
+                          {course.code}
                         </span>
                         <Badge className="bg-amber-500 hover:bg-amber-400 text-white border-transparent text-xs shadow-[0_0_20px_rgba(245,158,11,0.5)] backdrop-blur-md font-black tracking-wider px-3 py-1 rounded-xl">
                           <Lock className="w-3.5 h-3.5 mr-1.5" />
@@ -111,10 +128,10 @@ export default async function ModulesPage() {
 
                     <CardContent className="p-5 sm:p-6 pt-2 flex flex-col flex-1 z-20 bg-black">
                       <h3 className="text-lg sm:text-xl font-black text-white mb-2 tracking-tight leading-tight">
-                        {module.title}
+                        {course.title}
                       </h3>
                       <p className="text-xs sm:text-sm text-slate-400/90 line-clamp-2 mb-6 leading-relaxed font-normal">
-                        {module.description || "This module is currently in production and will be dropping soon. Stay tuned!"}
+                        {course.description || "This course is currently in production and will be dropping soon. Stay tuned!"}
                       </p>
 
                       <div className="mt-auto pt-4 border-t border-white/10">
@@ -133,9 +150,12 @@ export default async function ModulesPage() {
               );
             }
 
-            // Published modules logic
-            const totalLessons = module.lessons.length;
-            const completedCount = module.lessons.filter((l) =>
+            // Published courses logic
+            const courseLessons = courseModules.flatMap((m) =>
+              m.lessons.map((l) => ({ ...l, moduleId: m.id }))
+            );
+            const totalLessons = courseLessons.length;
+            const completedCount = courseLessons.filter((l) =>
               completedLessonIds.has(l.id)
             ).length;
             const percent =
@@ -143,8 +163,8 @@ export default async function ModulesPage() {
                 ? Math.round((completedCount / totalLessons) * 100)
                 : 0;
             const isCompleted = percent === 100 && totalLessons > 0;
-            const firstLessonId = module.lessons[0]?.id;
-            const totalDuration = module.lessons.reduce(
+            const firstLesson = courseLessons[0];
+            const totalDuration = courseLessons.reduce(
               (sum, l) => sum + (l.duration || 0),
               0
             );
@@ -152,10 +172,10 @@ export default async function ModulesPage() {
 
             return (
               <Link
-                key={module.id}
+                key={course.id}
                 href={
-                  firstLessonId
-                    ? `/dashboard/modules/${module.id}/${firstLessonId}`
+                  firstLesson
+                    ? `/dashboard/modules/${firstLesson.moduleId}/${firstLesson.id}`
                     : "#"
                 }
                 className="block h-full group"
@@ -165,16 +185,16 @@ export default async function ModulesPage() {
                     
                     {/* Full Bleed Image Cover with Smooth Black Fade */}
                     <div className="w-full relative bg-black overflow-hidden shrink-0 z-10 flex items-center justify-center">
-                      {module.imageUrl ? (
+                      {courseImageUrl ? (
                         <img 
-                          src={module.imageUrl} 
-                          alt={module.title}
+                          src={courseImageUrl} 
+                          alt={course.title}
                           className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
                         />
                       ) : (
                         <div className="w-full aspect-[16/9] bg-neutral-950 flex flex-col items-center justify-center group-hover:scale-105 transition-transform duration-700 ease-out relative overflow-hidden">
                           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-                          <BookOpen className="w-12 h-12 text-neutral-800 relative z-10" />
+                          <IconComponent className="w-12 h-12 text-neutral-800 relative z-10" />
                         </div>
                       )}
                       
@@ -184,7 +204,7 @@ export default async function ModulesPage() {
                       {/* Floating Badges on Image */}
                       <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
                         <span className="px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-xs font-black text-white uppercase tracking-widest border border-white/20 shadow-2xl">
-                          MOD {String(index + 1).padStart(2, "0")}
+                          {course.code}
                         </span>
                         {isCompleted ? (
                           <Badge className="bg-emerald-500 hover:bg-emerald-400 text-white border-transparent text-xs shadow-[0_0_20px_rgba(16,185,129,0.5)] backdrop-blur-md font-black tracking-wider px-3 py-1 rounded-xl">
@@ -208,11 +228,11 @@ export default async function ModulesPage() {
                   <CardContent className="p-5 sm:p-6 pt-2 flex flex-col flex-1 z-20 bg-black">
                     {/* Title & description */}
                     <h3 className="text-lg sm:text-xl font-black text-white mb-2 group-hover:text-primary transition-colors tracking-tight leading-tight">
-                      {module.title}
+                      {course.title}
                     </h3>
-                    {module.description && (
+                    {course.description && (
                       <p className="text-xs sm:text-sm text-slate-300/90 line-clamp-2 mb-5 leading-relaxed font-normal">
-                        {module.description}
+                        {course.description}
                       </p>
                     )}
 
@@ -220,7 +240,7 @@ export default async function ModulesPage() {
                     <div className="flex items-center gap-3 text-xs font-bold text-slate-200 mb-6 mt-auto pt-1">
                       <span className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1 rounded-xl shadow-inner">
                         <PlayCircle className="w-3.5 h-3.5 text-primary" />
-                        {totalLessons} lessons
+                        {completedCount} / {totalLessons} lessons
                       </span>
                       {durationMin > 0 && (
                         <span className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1 rounded-xl shadow-inner">
@@ -253,3 +273,4 @@ export default async function ModulesPage() {
     </div>
   );
 }
+
