@@ -42,6 +42,13 @@ export async function createCampaign(data: {
   });
 }
 
+export async function endActiveCampaign() {
+  await db.campaign.updateMany({
+    where: { status: "ACTIVE" },
+    data: { status: "COMPLETED" },
+  });
+}
+
 export async function computeTodayStats(campaignId: string, startDate: Date) {
   const todayStart = startOfDay(new Date());
   const todayEnd = endOfDay(new Date());

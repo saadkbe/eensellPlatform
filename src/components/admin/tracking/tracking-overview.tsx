@@ -34,14 +34,30 @@ export function TrackingOverview({ campaign, paidStudents, revenue, daysRemainin
             Track the performance of your current enrollment campaign in real time.
           </p>
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="bg-card border border-border/60 px-4 py-2 rounded-xl flex items-center gap-2 shadow-sm shrink-0"
-        >
-          <Calendar className="w-4 h-4 text-brand" />
-          <span className="text-sm font-bold">{format(new Date(), "MMMM d, yyyy")}</span>
-        </motion.div>
+        <div className="flex items-center gap-3">
+          <motion.button
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            onClick={async () => {
+              if (confirm("Are you sure you want to end this campaign?")) {
+                const { endActiveCampaign } = await import("@/app/admin/tracking/actions");
+                await endActiveCampaign();
+                window.location.reload();
+              }
+            }}
+            className="bg-destructive hover:bg-destructive/90 text-destructive-foreground px-4 py-2 rounded-xl text-sm font-bold shadow-sm transition-colors"
+          >
+            End Campaign
+          </motion.button>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-card border border-border/60 px-4 py-2 rounded-xl flex items-center gap-2 shadow-sm shrink-0"
+          >
+            <Calendar className="w-4 h-4 text-brand" />
+            <span className="text-sm font-bold">{format(new Date(), "MMMM d, yyyy")}</span>
+          </motion.div>
+        </div>
       </div>
 
       {/* Current Campaign Card */}

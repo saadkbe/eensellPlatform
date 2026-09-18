@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { format, parseISO } from "date-fns";
-import { CheckCircle2, Clock } from "lucide-react";
 
 interface SnapshotData {
   date: string;
@@ -36,24 +35,15 @@ export function DailyTrackerTable({ snapshots, studentGoal }: { snapshots: Snaps
           <thead className="bg-muted/50 text-xs uppercase text-muted-foreground font-bold tracking-wider border-b border-border/50">
             <tr>
               <th className="px-6 py-4">Date</th>
-              <th className="px-6 py-4">New Accounts</th>
-              <th className="px-6 py-4">Pending</th>
-              <th className="px-6 py-4">Paid Students</th>
-              <th className="px-6 py-4">Activated</th>
+              <th className="px-6 py-4">Accounts Created</th>
+              <th className="px-6 py-4">Accounts Paid</th>
               <th className="px-6 py-4">Revenue</th>
-              <th className="px-6 py-4">Running Total</th>
-              <th className="px-6 py-4">Remaining</th>
-              <th className="px-6 py-4 text-center">Status</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border/30">
             {sorted.map((row, index) => {
               const previousRow = sorted[index + 1];
               const dailyPaidStudents = previousRow ? row.paidStudents - previousRow.paidStudents : row.paidStudents;
-              const dailyActivated = previousRow ? row.activatedAccounts - previousRow.activatedAccounts : row.activatedAccounts;
-
-              const remaining = Math.max(studentGoal - row.paidStudents, 0);
-              const isGoalMet = row.paidStudents >= studentGoal;
 
               return (
                 <tr key={row.date} className="hover:bg-muted/20 transition-colors">
@@ -61,28 +51,15 @@ export function DailyTrackerTable({ snapshots, studentGoal }: { snapshots: Snaps
                     {format(parseISO(row.date), "dd MMM")}
                   </td>
                   <td className="px-6 py-4 font-medium text-purple-500">{row.newAccounts}</td>
-                  <td className="px-6 py-4 font-medium text-amber-500">{row.pendingPayments}</td>
                   <td className="px-6 py-4 font-medium text-brand">{dailyPaidStudents}</td>
-                  <td className="px-6 py-4 font-medium text-blue-500">{dailyActivated}</td>
                   <td className="px-6 py-4 font-bold text-emerald-500">{row.revenue.toLocaleString()} MAD</td>
-                  <td className="px-6 py-4 font-bold text-foreground">{row.runningTotal.toLocaleString()} MAD</td>
-                  <td className="px-6 py-4 font-medium text-muted-foreground">{remaining}</td>
-                  <td className="px-6 py-4">
-                    <div className="flex justify-center">
-                      {isGoalMet ? (
-                        <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                      ) : (
-                        <Clock className="w-5 h-5 text-muted-foreground/50" />
-                      )}
-                    </div>
-                  </td>
                 </tr>
               );
             })}
             
             {sorted.length === 0 && (
               <tr>
-                <td colSpan={9} className="px-6 py-12 text-center text-muted-foreground">
+                <td colSpan={4} className="px-6 py-12 text-center text-muted-foreground">
                   No tracking data available yet. Data will appear after the first daily snapshot.
                 </td>
               </tr>
