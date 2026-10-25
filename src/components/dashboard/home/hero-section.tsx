@@ -1,10 +1,15 @@
 "use client";
 
+import { useState, useTransition } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Target, Clock, Zap } from "lucide-react";
+import { ArrowRight, Sparkles, Target, Clock, Zap, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useLanguage } from "@/components/landing/LanguageProvider";
+import { getRoadmapDay } from "@/data/roadmap-data";
+import { toggleDayCompletion } from "@/actions/challenge.actions";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 interface HeroSectionProps {
   firstName: string;
@@ -18,25 +23,70 @@ export function HeroSection({
   challengeProgress,
 }: HeroSectionProps) {
   const { t } = useLanguage();
-  
-  // Calculate Challenge Metrics
-  const completedDays = challengeProgress?.completedDays || 0;
-  const progressPercent = Math.round((completedDays / 60) * 100);
-  const currentPhase = challengeProgress?.currentPhase || "Phase 1";
-  
-  const todaysChallengeDay = challengeProgress?.todaysChallengeDay;
-  const currentMission = todaysChallengeDay?.missionTitle || "Continue your learning journey";
-  const daysRemaining = 60 - completedDays;
-  const dayNumber = todaysChallengeDay?.dayNumber || completedDays + 1;
+  const [isPending, startTransition] = useTransition();
 
-  // Generate ASCII progress bar
-  const totalBars = 20;
-  const filledBars = Math.round((progressPercent / 100) * totalBars);
-  const progressBar = "█".repeat(filledBars) + "░".repeat(totalBars - filledBars);
+  // Completed days array
+  const initialCompletedDays: number[] = Array.isArray(challengeProgress?.completedDays)
+    ? challengeProgress.completedDays
+    : typeof challengeProgress?.completedDays === "number"
+    ? Array.from({ length: challengeProgress.completedDays }, (_, i) => i + 1)
+    : [];
 
-  const ctaLink = todaysChallengeDay?.lessonId && todaysChallengeDay?.moduleId 
-    ? `/dashboard/modules/${todaysChallengeDay.moduleId}/${todaysChallengeDay.lessonId}` 
-    : "/dashboard/challenge";
+  const [completedList, setCompletedList] = useState<number[]>(initialCompletedDays);
+
+  const completedDays = completedList.length;
+  const progressPercent = Math.min(100, Math.round((completedDays / 60) * 100));
+
+  // Determine current day (first uncompleted day, 1..60)
+  const completedSet = new Set(completedList);
+  let currentDay = 1;
+  for (let d = 1; d <= 60; d++) {
+    if (!completedSet.has(d)) {
+      currentDay = d;
+      break;
+    }
+  }
+  if (completedDays >= 60) currentDay = 60;
+
+  const isTodayCompleted = completedSet.has(currentDay);
+  const roadmapDay = getRoadmapDay(currentDay);
+  const currentMission = roadmapDay?.title || "Continue your 60-day challenge journey";
+  const currentPhase = roadmapDay?.phaseName || "Phase 1: Setup";
+  const estimatedTime = roadmapDay?.estimatedTime || "25m";
+  const daysRemaining = Math.max(0, 60 - completedDays);
+
+  // Generate Segmented Progress Bar (20 segments)
+  const totalSegments = 20;
+  const activeSegments = Math.round((progressPercent / 100) * totalSegments);
+
+  const handleToggleCurrentDay = () => {
+    const targetDay = currentDay;
+    const isAlreadyCompleted = completedSet.has(targetDay);
+
+    // Optimistic UI
+    if (isAlreadyCompleted) {
+      setCompletedList((prev) => prev.filter((d) => d !== targetDay));
+    } else {
+      setCompletedList((prev) => [...prev, targetDay].sort((a, b) => a - b));
+    }
+
+    startTransition(async () => {
+      try {
+        const result = await toggleDayCompletion(targetDay);
+        if (result.success) {
+          setCompletedList(result.completedDays);
+          if (result.isCompleted) {
+            toast.success(`Day ${targetDay} completed! +50 XP awarded 🔥`);
+          } else {
+            toast.info(`Day ${targetDay} marked uncompleted (-50 XP)`);
+          }
+        }
+      } catch (error) {
+        setCompletedList(initialCompletedDays);
+        toast.error("Failed to update challenge progress.");
+      }
+    });
+  };
 
   return (
     <motion.div 
@@ -46,9 +96,9 @@ export function HeroSection({
       className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#0a0b10] shadow-2xl"
     >
       {/* Background Gradients & Meshes */}
-      <div className="absolute inset-0 bg-gradient-to-br from-orange-500/[0.05] via-transparent to-amber-500/[0.05]" />
-      <div className="absolute -top-40 -right-40 w-96 h-96 bg-orange-500/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute top-20 left-1/2 w-64 h-64 bg-amber-500/10 rounded-full blur-[80px] pointer-events-none -translate-x-1/2" />
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.05] via-transparent to-teal-500/[0.05]" />
+      <div className="absolute -top-40 -right-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-20 left-1/2 w-64 h-64 bg-teal-500/10 rounded-full blur-[80px] pointer-events-none -translate-x-1/2" />
       
       {/* Linear Style Grid Overlay */}
       <div 
@@ -59,79 +109,138 @@ export function HeroSection({
         }}
       />
 
-      <div className="relative z-10 p-8 sm:p-12 lg:p-14 flex flex-col md:flex-row gap-10 md:gap-16">
+      <div className="relative z-10 p-6 sm:p-10 lg:p-12 flex flex-col md:flex-row gap-8 md:gap-12">
         
         {/* Left Column: Greeting & Challenge Progress */}
-        <div className="flex-1 flex flex-col">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-md mb-6 w-fit">
-            <Sparkles className="w-3.5 h-3.5 text-orange-400" />
-            <span className="text-xs font-semibold text-white/80">{greeting}</span>
+        <div className="flex-1 flex flex-col justify-between">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-md mb-4 w-fit">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="text-xs font-semibold text-white/80">{greeting}</span>
+            </div>
+            
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-6">
+              Welcome back, {firstName} 👋
+            </h1>
           </div>
-          
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-8">
-            Welcome back, {firstName} 👋
-          </h1>
 
-          <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6 sm:p-8 backdrop-blur-sm">
+          <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5 sm:p-6 backdrop-blur-sm">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4">
               <div>
-                <h2 className="text-lg font-bold text-white mb-1 uppercase tracking-wider">60 DAYS CHALLENGE</h2>
+                <h2 className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-1">
+                  60-DAY SPRINT STATUS
+                </h2>
                 <div className="flex items-center gap-2 text-sm">
-                  <span className="text-orange-400 font-bold">DAY {dayNumber} / 60</span>
+                  <span className="text-white font-bold font-mono">DAY {currentDay} / 60</span>
                   <span className="text-white/40">•</span>
-                  <span className="text-white/60">{completedDays} days completed</span>
+                  <span className="text-slate-400">{completedDays} days completed</span>
                 </div>
               </div>
               <div className="text-right">
-                <span className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-400">
+                <span className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300 font-mono">
                   {progressPercent}%
                 </span>
               </div>
             </div>
 
-            <div className="font-mono text-sm tracking-widest text-orange-500/80 mb-4 overflow-hidden truncate">
-              {progressBar}
+            {/* Segmented bar */}
+            <div className="flex items-center gap-1.5 w-full mb-4">
+              {Array.from({ length: totalSegments }).map((_, index) => {
+                const isCompleted = index < activeSegments;
+                const isCurrent = index === activeSegments;
+                return (
+                  <div
+                    key={index}
+                    className={cn(
+                      "h-2 rounded-full flex-1 transition-all duration-300",
+                      isCompleted
+                        ? "bg-gradient-to-r from-emerald-500 to-teal-400 shadow-[0_0_8px_rgba(16,185,129,0.4)]"
+                        : isCurrent
+                        ? "bg-emerald-400/40 border border-emerald-400 animate-pulse"
+                        : "bg-white/[0.06]"
+                    )}
+                  />
+                );
+              })}
             </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs font-semibold text-white/40 uppercase tracking-widest">
-                <Clock className="w-3.5 h-3.5" />
+            <div className="flex items-center justify-between text-xs font-semibold">
+              <div className="flex items-center gap-1.5 text-white/50 uppercase tracking-wider text-[11px]">
+                <Clock className="w-3.5 h-3.5 text-slate-400" />
                 {daysRemaining} DAYS REMAINING
               </div>
-              <div className="text-xs font-bold px-2 py-1 bg-white/5 rounded-md text-white/70 uppercase">
+              <div className="text-[11px] font-bold px-2.5 py-1 bg-white/5 rounded-md text-emerald-400/90 border border-emerald-500/10">
                 {currentPhase}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Right Column: Today's Focus & CTA */}
+        {/* Right Column: Today's Focus & Action */}
         <div className="flex-1 flex flex-col justify-end">
-          <div className="flex flex-col h-full justify-between bg-gradient-to-br from-orange-500/[0.05] to-transparent border border-orange-500/[0.1] rounded-2xl p-6 sm:p-8">
+          <div className="flex flex-col h-full justify-between bg-gradient-to-br from-emerald-500/[0.04] to-transparent border border-emerald-500/[0.12] rounded-2xl p-6 sm:p-7">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Zap className="w-4 h-4 text-amber-400" />
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider">Today's Mission</h3>
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <div className="flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-emerald-400" />
+                  <h3 className="text-xs font-bold text-white uppercase tracking-wider">Today&apos;s Mission</h3>
+                </div>
+                <span className="text-[11px] font-semibold text-slate-400 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
+                  Day {currentDay} of 60
+                </span>
               </div>
               
-              <p className="text-xl sm:text-2xl font-bold text-white mb-3 leading-tight line-clamp-2">
+              <p className="text-lg sm:text-xl font-bold text-white mb-2 leading-snug line-clamp-2">
                 {currentMission}
               </p>
+
+              {roadmapDay?.summary && (
+                <p className="text-xs text-slate-400 mb-4 line-clamp-2 leading-relaxed">
+                  {roadmapDay.summary}
+                </p>
+              )}
               
-              <div className="flex items-center gap-2 text-sm text-white/60 mb-8">
-                <Target className="w-4 h-4" />
-                <span>Estimated time: 15-20 mins</span>
+              <div className="flex items-center gap-2 text-xs text-slate-400 mb-6">
+                <Target className="w-4 h-4 text-emerald-400" />
+                <span>Estimated time: {estimatedTime} • XP Reward: +50 XP</span>
               </div>
             </div>
 
-            <Link href={ctaLink} className="mt-auto">
-              <Button className="w-full sm:w-auto h-14 px-8 bg-orange-500 text-white hover:bg-orange-600 rounded-xl font-bold text-base shadow-[0_0_30px_rgba(249,115,22,0.3)] transition-all hover:scale-105 group border-0">
-                <span className="flex items-center gap-3">
-                  Start Mission
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </span>
+            <div className="flex flex-col sm:flex-row items-center gap-3 mt-auto">
+              <Link href="/dashboard/challenge" className="w-full sm:w-auto flex-1">
+                <Button className="w-full h-11 px-5 bg-emerald-500 text-slate-950 hover:bg-emerald-400 rounded-xl font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all hover:scale-[1.02] group border-0">
+                  <span className="flex items-center justify-center gap-2">
+                    Open 60-Day Roadmap
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </Button>
+              </Link>
+
+              <Button
+                type="button"
+                onClick={handleToggleCurrentDay}
+                disabled={isPending}
+                variant="outline"
+                className={cn(
+                  "w-full sm:w-auto h-11 px-4 rounded-xl font-bold text-xs border transition-all gap-2",
+                  isTodayCompleted
+                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20"
+                    : "bg-white/[0.03] border-white/10 hover:bg-white/[0.06] text-white"
+                )}
+              >
+                {isTodayCompleted ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <span>Completed ✓</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4 text-amber-400" />
+                    <span>Mark Day {currentDay} Done (+50 XP)</span>
+                  </>
+                )}
               </Button>
-            </Link>
+            </div>
           </div>
         </div>
         

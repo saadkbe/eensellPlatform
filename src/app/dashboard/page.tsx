@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { DashboardClient } from "@/components/dashboard/home/dashboard-client";
 import { getLeaderboard } from "@/actions/user.actions";
-import { getChallengeProgress } from "@/actions/challenge.actions";
+import { getUserChallengeProgress } from "@/actions/challenge.actions";
 
 export const dynamic = "force-dynamic";
 
@@ -56,7 +56,7 @@ export default async function DashboardPage() {
       take: 5,
       include: { lesson: { include: { module: true } } },
     }),
-    getChallengeProgress(userId || ""),
+    getUserChallengeProgress(),
   ]);
 
   const firstName = dbUser?.firstName || "there";

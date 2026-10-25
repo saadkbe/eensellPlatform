@@ -175,6 +175,167 @@ export async function completeChallengeDay(challengeDayId: string) {
   }
 }
 
+export async function getUserChallengeProgress() {
+  try {
+    const user = await getCurrentUser();
+    if (!user) {
+      return {
+        completedDays: [] as number[],
+        totalCompleted: 0,
+        progressPercentage: 0,
+        currentDay: 1,
+        userXp: 0,
+      };
+    }
+
+    const completions = await db.challengeDayCompletion.findMany({
+      where: { userId: user.id },
+      include: {
+        challengeDay: {
+          select: { dayNumber: true },
+        },
+      },
+    });
+
+    const completedDays = completions
+      .map((c: any) => c.challengeDay.dayNumber)
+      .sort((a: number, b: number) => a - b);
+    const totalCompleted = completedDays.length;
+    const progressPercentage = Math.min(100, Math.round((totalCompleted / 60) * 100));
+
+    const completedSet = new Set(completedDays);
+    let currentDay = 1;
+    for (let d = 1; d <= 60; d++) {
+      if (!completedSet.has(d)) {
+        currentDay = d;
+        break;
+      }
+    }
+    if (totalCompleted >= 60) {
+      currentDay = 60;
+    }
+
+    return {
+      completedDays,
+      totalCompleted,
+      progressPercentage,
+      currentDay,
+      userXp: user.xp || 0,
+    };
+  } catch (error) {
+    console.error('[GET_USER_CHALLENGE_PROGRESS]', error);
+    return {
+      completedDays: [] as number[],
+      totalCompleted: 0,
+      progressPercentage: 0,
+      currentDay: 1,
+      userXp: 0,
+    };
+  }
+}
+
+export async function toggleDayCompletion(dayNumber: number) {
+  try {
+    const user = await getCurrentUser();
+    if (!user) {
+      throw new Error('Unauthorized');
+    }
+
+    // Find challengeDay by dayNumber or create if missing
+    let challengeDay = await db.challengeDay.findUnique({
+      where: { dayNumber },
+    });
+
+    if (!challengeDay) {
+      challengeDay = await db.challengeDay.create({
+        data: {
+          dayNumber,
+          title: `Day ${dayNumber}`,
+          missionTitle: `Day ${dayNumber} Mission`,
+          phase: dayNumber <= 10 ? 'learn_ai' : dayNumber <= 25 ? 'build_agent' : dayNumber <= 40 ? 'portfolio' : 'client_outreach',
+        },
+      });
+    }
+
+    // Check if user has already completed this day
+    const existing = await db.challengeDayCompletion.findUnique({
+      where: {
+        userId_challengeDayId: {
+          userId: user.id,
+          challengeDayId: challengeDay.id,
+        },
+      },
+    });
+
+    let isCompleted = false;
+
+    if (existing) {
+      // Unmark: delete completion and decrement XP by 50 (floor at 0)
+      await db.challengeDayCompletion.delete({
+        where: { id: existing.id },
+      });
+
+      const currentXp = user.xp || 0;
+      const newXp = Math.max(0, currentXp - 50);
+
+      await db.user.update({
+        where: { id: user.id },
+        data: { xp: newXp },
+      });
+
+      isCompleted = false;
+    } else {
+      // Mark complete: create completion and increment XP by 50
+      await db.challengeDayCompletion.create({
+        data: {
+          userId: user.id,
+          challengeDayId: challengeDay.id,
+        },
+      });
+
+      await db.user.update({
+        where: { id: user.id },
+        data: { xp: { increment: 50 } },
+      });
+
+      isCompleted = true;
+    }
+
+    revalidatePath('/dashboard');
+    revalidatePath('/dashboard/challenge');
+
+    // Retrieve fresh progress state
+    const completions = await db.challengeDayCompletion.findMany({
+      where: { userId: user.id },
+      include: {
+        challengeDay: {
+          select: { dayNumber: true },
+        },
+      },
+    });
+
+    const completedDays = completions
+      .map((c: any) => c.challengeDay.dayNumber)
+      .sort((a: number, b: number) => a - b);
+
+    const freshUser = await db.user.findUnique({
+      where: { id: user.id },
+      select: { xp: true },
+    });
+
+    return {
+      success: true,
+      completedDays,
+      totalCompleted: completedDays.length,
+      updatedXp: freshUser?.xp || 0,
+      isCompleted,
+    };
+  } catch (error) {
+    console.error('[TOGGLE_DAY_COMPLETION]', error);
+    throw error;
+  }
+}
+
 export async function getChallengeDayByLessonId(lessonId: string) {
   try {
     const challengeDay = await db.challengeDay.findFirst({
