@@ -1,15 +1,33 @@
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { DashboardClient } from "@/components/dashboard/home/dashboard-client";
+import { getLeaderboard } from "@/actions/user.actions";
 import { getChallengeProgress } from "@/actions/challenge.actions";
 
 export const dynamic = "force-dynamic";
 
+function getGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 18) return "Good afternoon";
+  return "Good evening";
+}
+
 export default async function DashboardPage() {
   const { userId } = await auth();
 
-  // Parallel database lookups
-  const [dbUser, upcomingCall, challengeProgress] = await Promise.all([
+  // Fire queries in parallel
+  const [
+    dbUser,
+    totalModules,
+    totalLessons,
+    announcements,
+    upcomingCall,
+    totalResources,
+    leaderboard,
+    recentProgress,
+    challengeProgress,
+  ] = await Promise.all([
     db.user.findUnique({
       where: { clerkId: userId || "" },
       include: {
@@ -17,30 +35,35 @@ export default async function DashboardPage() {
           where: { isCompleted: true },
           select: { id: true },
         },
-        referrals: {
-          where: { status: "SUCCESSFUL" },
-          select: { commissionAmount: true },
-        },
       },
+    }),
+    db.module.count({ where: { isPublished: true } }),
+    db.lesson.count({ where: { isPublished: true } }),
+    db.announcement.findMany({
+      where: { isPublished: true },
+      orderBy: { createdAt: "desc" },
+      take: 3,
     }),
     db.liveCall.findFirst({
       where: { scheduledAt: { gte: new Date() }, isCompleted: false },
       orderBy: { scheduledAt: "asc" },
     }),
+    db.resource.count(),
+    getLeaderboard(),
+    db.progress.findMany({
+      where: { user: { clerkId: userId || "" } },
+      orderBy: { watchedAt: "desc" },
+      take: 5,
+      include: { lesson: { include: { module: true } } },
+    }),
     getChallengeProgress(userId || ""),
   ]);
 
-  const firstName = dbUser?.firstName || "Member";
-  const userTier = dbUser?.tier || "FREE_LIBRARY";
-  const userRole = dbUser?.role || "ACTIVE_USER";
-  const userXp = dbUser?.xp || 12450;
+  const firstName = dbUser?.firstName || "there";
+  const completedLessons = dbUser?.progress.length || 0;
+  const progressPercent = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
 
-  // Calculate real referral balance or provide default cohort baseline
-  const actualReferralEarnings =
-    dbUser?.referrals?.reduce((acc, r) => acc + (r.commissionAmount || 50), 0) || 0;
-  const referralEarnings = actualReferralEarnings > 0 ? actualReferralEarnings : 2400;
-
-  // Most recent in-progress lesson for quick jump
+  // Find the most recent non-completed lesson for "Continue Learning"
   const inProgressResult = await db.progress.findFirst({
     where: { user: { clerkId: userId || "" }, isCompleted: false },
     orderBy: { watchedAt: "desc" },
@@ -53,14 +76,20 @@ export default async function DashboardPage() {
   return (
     <DashboardClient
       firstName={firstName}
-      userTier={userTier}
-      userRole={userRole}
-      userXp={userXp}
-      referralEarnings={referralEarnings}
-      upcomingCall={upcomingCall}
-      challengeProgress={challengeProgress}
+      greeting={getGreeting()}
+      totalModules={totalModules}
+      completedLessons={completedLessons}
+      progressPercent={progressPercent}
+      totalResources={totalResources}
       continueLesson={continueLesson}
       continueModule={continueModule}
+      totalLessons={totalLessons}
+      announcements={announcements}
+      upcomingCall={upcomingCall}
+      recentlyWatched={recentProgress}
+      leaderboard={leaderboard}
+      challengeProgress={challengeProgress}
+      userTier={dbUser?.tier}
     />
   );
 }
