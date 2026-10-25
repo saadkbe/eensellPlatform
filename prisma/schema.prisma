@@ -22,6 +22,11 @@ enum UserStatus {
   REJECTED
 }
 
+enum MembershipTier {
+  FREE_LIBRARY
+  UNIVERSITY_V2
+}
+
 model User {
   id        String     @id @default(cuid())
   clerkId   String     @unique
@@ -31,6 +36,7 @@ model User {
   imageUrl  String?
   role      UserRole   @default(PENDING_USER)
   status    UserStatus @default(PENDING)
+  tier      MembershipTier @default(FREE_LIBRARY)
   onboardingCompleted Boolean @default(false)
   hasSeenWalkthrough  Boolean @default(false)
   goals     String?
@@ -74,6 +80,7 @@ model User {
   @@index([clerkId])
   @@index([status])
   @@index([role])
+  @@index([tier])
   @@index([status, role])
 }
 

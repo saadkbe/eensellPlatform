@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UserButton, SignOutButton, useUser } from "@clerk/nextjs";
-import { LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
@@ -16,8 +15,11 @@ import {
   Shield,
   MessageSquare,
   Target,
-  Compass,
-  Bot,
+  FileText,
+  Wrench,
+  Share2,
+  Sparkles,
+  LogOut,
   MoreHorizontal,
 } from "lucide-react";
 import { useState } from "react";
@@ -27,61 +29,98 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 import { TranslationKey } from "@/lib/translations";
 
-/* ── Mobile Bottom Nav Tabs ── */
-const bottomNavItems = [
-  { labelKey: "nav_dashboard" as TranslationKey, href: "/dashboard", icon: LayoutDashboard },
-  { labelKey: "nav_modules" as TranslationKey, href: "/dashboard/modules", icon: BookOpen },
-  { labelKey: "nav_community" as TranslationKey, href: "/dashboard/community", icon: MessageSquare },
-  { labelKey: "nav_live_calls" as TranslationKey, href: "/dashboard/live-calls", icon: Video },
-];
+export interface DashboardSidebarProps {
+  hasNewLesson?: boolean;
+  userTier?: "FREE_LIBRARY" | "UNIVERSITY_V2" | string;
+  userRole?: "ADMIN" | "ACTIVE_USER" | "PENDING_USER" | string;
+}
 
-type NavItem = { titleKey: TranslationKey; href: string; icon: any };
-type NavSection = { labelKey: TranslationKey; items: NavItem[] };
+type NavItem = {
+  title: string;
+  titleKey?: TranslationKey;
+  href: string;
+  icon: any;
+};
 
-const navSections: NavSection[] = [
+type NavSection = {
+  label: string;
+  labelKey?: TranslationKey;
+  items: NavItem[];
+};
+
+/* ── Navigation definitions for UNIVERSITY_V2 and ADMIN ── */
+const v2NavSections: NavSection[] = [
   {
+    label: "LEARN",
     labelKey: "nav_learn",
     items: [
-      { titleKey: "nav_dashboard", href: "/dashboard", icon: LayoutDashboard },
-      { titleKey: "AI Library" as any, href: "/dashboard/modules", icon: BookOpen },
-      { titleKey: "60-Day Challenge" as any, href: "/dashboard/challenge", icon: Target },
-      { titleKey: "nav_resources", href: "/dashboard/resources", icon: FolderOpen },
+      { title: "Dashboard", titleKey: "nav_dashboard", href: "/dashboard", icon: LayoutDashboard },
+      { title: "AI Library", titleKey: "nav_modules", href: "/dashboard/modules", icon: BookOpen },
+      { title: "60-Day Roadmap", href: "/dashboard/challenge", icon: Target },
     ],
   },
   {
-    labelKey: "nav_engage",
+    label: "BUILD & EARN",
     items: [
-      { titleKey: "nav_community", href: "/dashboard/community", icon: MessageSquare },
-      { titleKey: "nav_live_calls", href: "/dashboard/live-calls", icon: Video },
-      { titleKey: "nav_goals", href: "/dashboard/goals", icon: Target },
-      { titleKey: "nav_chat", href: "/dashboard/chat", icon: Bot },
+      { title: "Resources & Blueprints", titleKey: "nav_resources", href: "/dashboard/resources", icon: FolderOpen },
+      { title: "Documentation", href: "/dashboard/documentation", icon: FileText },
+      { title: "Deals & Tools", href: "/dashboard/tools", icon: Wrench },
     ],
   },
   {
-    labelKey: "nav_grow",
+    label: "COMMUNITY & ACCOUNT",
     items: [
-      { titleKey: "nav_career", href: "/dashboard/career", icon: Compass },
-      { titleKey: "nav_referrals", href: "/dashboard/referrals", icon: Target }, // Used Target or Banknote
-      { titleKey: "nav_settings", href: "/dashboard/settings", icon: Settings },
+      { title: "Community & Wins", titleKey: "nav_community", href: "/dashboard/community", icon: MessageSquare },
+      { title: "Live Coaching Calls", titleKey: "nav_live_calls", href: "/dashboard/live-calls", icon: Video },
+      { title: "Refer & Earn", titleKey: "nav_referrals", href: "/dashboard/referrals", icon: Share2 },
+      { title: "Settings", titleKey: "nav_settings", href: "/dashboard/settings", icon: Settings },
     ],
   },
 ];
 
-// Extracted as a top-level component to satisfy React 19's static-components rule
+/* ── Navigation definitions for FREE_LIBRARY members ── */
+const freeLibraryNavSections: NavSection[] = [
+  {
+    label: "AI LIBRARY",
+    items: [
+      { title: "AI Library", titleKey: "nav_modules", href: "/dashboard/modules", icon: BookOpen },
+      { title: "Refer & Earn", titleKey: "nav_referrals", href: "/dashboard/referrals", icon: Share2 },
+      { title: "Settings", titleKey: "nav_settings", href: "/dashboard/settings", icon: Settings },
+    ],
+  },
+];
+
+/* ── Mobile Bottom Navigation items ── */
+const v2BottomNavItems = [
+  { label: "Dashboard", labelKey: "nav_dashboard" as TranslationKey, href: "/dashboard", icon: LayoutDashboard },
+  { label: "AI Library", labelKey: "nav_modules" as TranslationKey, href: "/dashboard/modules", icon: BookOpen },
+  { label: "Community", labelKey: "nav_community" as TranslationKey, href: "/dashboard/community", icon: MessageSquare },
+  { label: "Live Calls", labelKey: "nav_live_calls" as TranslationKey, href: "/dashboard/live-calls", icon: Video },
+];
+
+const freeBottomNavItems = [
+  { label: "AI Library", labelKey: "nav_modules" as TranslationKey, href: "/dashboard/modules", icon: BookOpen },
+  { label: "Refer & Earn", labelKey: "nav_referrals" as TranslationKey, href: "/dashboard/referrals", icon: Share2 },
+  { label: "Settings", labelKey: "nav_settings" as TranslationKey, href: "/dashboard/settings", icon: Settings },
+];
+
 function SidebarContent({
   pathname,
   setMobileOpen,
   isAdmin,
+  isFreeLibrary,
   isActive,
   hasNewLesson,
 }: {
   pathname: string;
   setMobileOpen: (open: boolean) => void;
   isAdmin: boolean;
+  isFreeLibrary: boolean;
   isActive: (href: string) => boolean;
   hasNewLesson: boolean;
 }) {
   const { t, dir } = useLanguage();
+  const sections = isFreeLibrary ? freeLibraryNavSections : v2NavSections;
 
   return (
     <div className="flex flex-col h-full" dir={dir}>
@@ -94,12 +133,12 @@ function SidebarContent({
         />
       </div>
 
-      {/* Navigation with sections */}
+      {/* Navigation Sections */}
       <nav className="flex-1 px-4 py-6 space-y-6 overflow-y-auto no-scrollbar">
-        {navSections.map((section) => (
-          <div key={section.labelKey}>
+        {sections.map((section, sIndex) => (
+          <div key={section.label || sIndex}>
             <p className="px-4 mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground/60">
-              {t(section.labelKey)}
+              {section.labelKey ? t(section.labelKey) : section.label}
             </p>
             <div className="space-y-1">
               {section.items.map((item) => {
@@ -109,7 +148,15 @@ function SidebarContent({
                 return (
                   <Link
                     key={item.href}
-                    id={item.href === "/dashboard" ? "tour-sidebar-dashboard" : item.href === "/dashboard/modules" ? "tour-sidebar-modules" : item.href === "/dashboard/community" ? "tour-sidebar-community" : undefined}
+                    id={
+                      item.href === "/dashboard"
+                        ? "tour-sidebar-dashboard"
+                        : item.href === "/dashboard/modules"
+                        ? "tour-sidebar-modules"
+                        : item.href === "/dashboard/community"
+                        ? "tour-sidebar-community"
+                        : undefined
+                    }
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
@@ -136,10 +183,12 @@ function SidebarContent({
                           active ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground"
                         )}
                       />
-                      <span>{t(item.titleKey)}</span>
+                      <span>{item.titleKey ? t(item.titleKey) : item.title}</span>
                     </div>
-                    {item.titleKey === "nav_modules" && hasNewLesson && (
-                      <span className="bg-foreground text-background text-[11px] font-bold px-2 py-0.5 rounded mx-2">{t("nav_new_lesson")}</span>
+                    {item.href === "/dashboard/modules" && hasNewLesson && (
+                      <span className="bg-foreground text-background text-[11px] font-bold px-2 py-0.5 rounded mx-2">
+                        {t("nav_new_lesson")}
+                      </span>
                     )}
                     {active && (
                       <div className="absolute inset-0 rounded-lg bg-white/10 pointer-events-none" />
@@ -166,6 +215,32 @@ function SidebarContent({
         )}
       </nav>
 
+      {/* Upgrade Banner for FREE_LIBRARY members */}
+      {isFreeLibrary && (
+        <div className="mx-4 mb-4 p-4 rounded-2xl bg-gradient-to-b from-primary/15 via-primary/5 to-card border border-primary/25 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-primary/20 rounded-full blur-2xl pointer-events-none -mr-8 -mt-8" />
+          <div className="flex items-center gap-2 mb-1.5 relative z-10">
+            <div className="w-6 h-6 rounded-lg bg-primary/20 flex items-center justify-center text-primary shrink-0">
+              <Sparkles className="w-3.5 h-3.5" />
+            </div>
+            <h4 className="text-xs font-bold text-foreground tracking-tight">
+              Unlock Eensell University V2
+            </h4>
+          </div>
+          <p className="text-[11px] text-muted-foreground mb-3 leading-relaxed relative z-10">
+            Get the 60-Day Roadmap, Make.com Blueprints, and Weekly Live Calls.
+          </p>
+          <Link href="/upgrade" onClick={() => setMobileOpen(false)} className="block relative z-10">
+            <Button
+              size="sm"
+              className="w-full text-xs font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20"
+            >
+              Upgrade for 499 MAD
+            </Button>
+          </Link>
+        </div>
+      )}
+
       {/* User section */}
       <div className="px-5 py-5 border-t border-border mt-auto">
         <div className="flex flex-col gap-4">
@@ -184,7 +259,10 @@ function SidebarContent({
             <ThemeToggle />
           </div>
           <SignOutButton>
-            <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-foreground hover:bg-secondary text-base py-6">
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-muted-foreground hover:text-foreground hover:bg-secondary text-base py-6"
+            >
               <LogOut className={cn("w-5 h-5", dir === "rtl" ? "ml-3" : "mr-3")} />
               {t("nav_logout")}
             </Button>
@@ -195,13 +273,22 @@ function SidebarContent({
   );
 }
 
-export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: boolean }) {
+export function DashboardSidebar({
+  hasNewLesson = false,
+  userTier,
+  userRole,
+}: DashboardSidebarProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user } = useUser();
   const { dir, t } = useLanguage();
 
-  const isAdmin = user?.publicMetadata?.role === "ADMIN";
+  const effectiveRole = userRole || (user?.publicMetadata?.role as string) || "PENDING_USER";
+  const isAdmin = effectiveRole === "ADMIN";
+  const effectiveTier = userTier || (user?.publicMetadata?.tier as string) || "FREE_LIBRARY";
+  const isFreeLibrary = !isAdmin && effectiveTier === "FREE_LIBRARY";
+
+  const bottomNavItems = isFreeLibrary ? freeBottomNavItems : v2BottomNavItems;
 
   const isActive = (href: string) => {
     if (href === "/dashboard") return pathname === "/dashboard";
@@ -213,7 +300,11 @@ export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: bool
       {/* Mobile header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-4 bg-background/95 backdrop-blur-xl border-b border-border">
         <div className="flex items-center">
-          <img src="/logo2.png" alt="Eensell University" className="h-10 w-auto object-contain origin-left scale-[3] brightness-0 dark:invert" />
+          <img
+            src="/logo2.png"
+            alt="Eensell University"
+            className="h-10 w-auto object-contain origin-left scale-[3] brightness-0 dark:invert"
+          />
         </div>
         <Button
           variant="ghost"
@@ -226,9 +317,11 @@ export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: bool
       </div>
 
       {/* Mobile Bottom Navigation Bar */}
-      <div className={cn(
-        "lg:hidden fixed bottom-4 left-4 right-4 z-50 bg-background/80 backdrop-blur-2xl border border-border shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-3xl safe-area-pb",
-      )}>
+      <div
+        className={cn(
+          "lg:hidden fixed bottom-4 left-4 right-4 z-50 bg-background/80 backdrop-blur-2xl border border-border shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-3xl safe-area-pb"
+        )}
+      >
         <div className="flex items-center justify-around px-2 py-2">
           {bottomNavItems.map((item) => {
             const Icon = item.icon;
@@ -259,8 +352,13 @@ export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: bool
                   </>
                 )}
                 <Icon className={cn("w-5 h-5 transition-all duration-300", active && "scale-110 mb-0.5")} />
-                <span className={cn("text-[10px] font-semibold leading-tight", active ? "text-primary" : "text-muted-foreground")}>
-                  {t(item.labelKey)}
+                <span
+                  className={cn(
+                    "text-[10px] font-semibold leading-tight",
+                    active ? "text-primary" : "text-muted-foreground"
+                  )}
+                >
+                  {item.labelKey ? t(item.labelKey) : item.label}
                 </span>
               </Link>
             );
@@ -292,12 +390,16 @@ export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: bool
               animate={{ x: 0 }}
               exit={{ x: -320 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className={cn("lg:hidden fixed top-0 z-50 w-[320px] h-screen bg-card border-border", dir === "rtl" ? "right-0 border-l" : "left-0 border-r")}
+              className={cn(
+                "lg:hidden fixed top-0 z-50 w-[320px] h-screen bg-card border-border",
+                dir === "rtl" ? "right-0 border-l" : "left-0 border-r"
+              )}
             >
               <SidebarContent
                 pathname={pathname}
                 setMobileOpen={setMobileOpen}
                 isAdmin={isAdmin}
+                isFreeLibrary={isFreeLibrary}
                 isActive={isActive}
                 hasNewLesson={hasNewLesson}
               />
@@ -307,11 +409,17 @@ export function DashboardSidebar({ hasNewLesson = false }: { hasNewLesson?: bool
       </AnimatePresence>
 
       {/* Desktop sidebar */}
-      <aside className={cn("hidden lg:flex lg:flex-col fixed top-0 h-screen w-[320px] bg-card border-border z-30", dir === "rtl" ? "right-0 border-l" : "left-0 border-r")}>
+      <aside
+        className={cn(
+          "hidden lg:flex lg:flex-col fixed top-0 h-screen w-[320px] bg-card border-border z-30",
+          dir === "rtl" ? "right-0 border-l" : "left-0 border-r"
+        )}
+      >
         <SidebarContent
           pathname={pathname}
           setMobileOpen={setMobileOpen}
           isAdmin={isAdmin}
+          isFreeLibrary={isFreeLibrary}
           isActive={isActive}
           hasNewLesson={hasNewLesson}
         />

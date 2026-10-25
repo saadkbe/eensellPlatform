@@ -1,17 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { CHALLENGE_TESTIMONIALS } from "@/data/challenge-testimonials";
 
-const testimonials = [
-  {
-    id: 1,
-    video: "/FEEDBACK1.mp4",
-  },
-  {
-    id: 2,
-    video: "/FEEDBACK2.mp4",
-  },
-];
+// Shared with the redesigned /60dayschallenge page.
+const testimonials = CHALLENGE_TESTIMONIALS;
 
 export function TestimonialsSection() {
   return (

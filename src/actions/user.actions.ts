@@ -51,7 +51,15 @@ export async function getOrCreateUser() {
     where: { clerkId: clerkUser.id },
   });
 
-  if (existingUser) return existingUser;
+  if (existingUser) {
+    const currentTierClaim = (clerkUser.publicMetadata as any)?.tier;
+    if (currentTierClaim !== existingUser.tier) {
+      syncClerkMetadata(existingUser, clerkUser).catch((e) =>
+        console.error("Background Clerk tier sync error:", e)
+      );
+    }
+    return existingUser;
+  }
 
   // Slow path: first-ever login — do the full sync
   return syncUserToDB();
@@ -105,6 +113,7 @@ export async function syncUserToDB() {
           imageUrl: clerkUser.imageUrl,
           role: "PENDING_USER",
           status: "PENDING",
+          tier: "FREE_LIBRARY",
           referralCode,
         },
       });
@@ -170,16 +179,18 @@ async function syncClerkMetadata(user: any, clerkUser: any) {
     const { sessionClaims } = await auth();
     const clerkRole = (sessionClaims?.metadata as any)?.role;
     const clerkStatus = (sessionClaims?.metadata as any)?.status;
+    const clerkTier = (sessionClaims?.metadata as any)?.tier;
 
     const { clerkClient } = await import("@clerk/nextjs/server");
     const client = await clerkClient();
 
-    // Sync Role/Status Metadata
-    if (clerkRole !== user.role || clerkStatus !== user.status) {
+    // Sync Role/Status/Tier Metadata
+    if (clerkRole !== user.role || clerkStatus !== user.status || clerkTier !== user.tier) {
       await client.users.updateUserMetadata(user.clerkId, {
         publicMetadata: {
           role: user.role,
           status: user.status,
+          tier: user.tier || "FREE_LIBRARY",
         }
       });
     }

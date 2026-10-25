@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 const isPublicRoute = createRouteMatcher([
   "/",
   "/challenge(.*)",
+  "/60dayschallenge(.*)",
   "/ai-ugc(.*)",
   "/sign-in(.*)",
   "/sign-up(.*)",
@@ -13,6 +14,7 @@ const isPublicRoute = createRouteMatcher([
   "/privacy(.*)",
   "/refund(.*)",
   "/contact(.*)",
+  "/upgrade(.*)",
 ]);
 
 // Admin-only routes
@@ -21,13 +23,30 @@ const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 // Dashboard routes (active users only)
 const isDashboardRoute = createRouteMatcher(["/dashboard(.*)"]);
 
+const V2_ONLY_ROUTES = [
+  "/dashboard/challenge",
+  "/dashboard/resources",
+  "/dashboard/community",
+  "/dashboard/live-calls",
+  "/dashboard/career",
+  "/dashboard/goals",
+  "/dashboard/chat",
+];
+
 // Pending route
 const isPendingRoute = createRouteMatcher(["/pending"]);
 
 export default clerkMiddleware(async (auth, req) => {
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set("x-pathname", req.nextUrl.pathname);
+
   // Allow public routes immediately — no auth overhead
   if (isPublicRoute(req)) {
-    return NextResponse.next();
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
   }
 
   const { userId, sessionClaims } = await auth();
@@ -39,16 +58,21 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.redirect(signInUrl);
   }
 
-  // Get user role from session claims metadata
+  // Get user role, status, and tier from session claims metadata
   const userRole = (sessionClaims?.metadata as { role?: string })?.role;
   const userStatus = (sessionClaims?.metadata as { status?: string })?.status;
+  const userTier = (sessionClaims?.metadata as { tier?: string })?.tier;
 
   // Admin routes — only admin can access
   if (isAdminRoute(req)) {
     if (userRole !== "ADMIN") {
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
-    return NextResponse.next();
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
   }
 
   // Dashboard routes — only active users and admins
@@ -56,9 +80,24 @@ export default clerkMiddleware(async (auth, req) => {
     if (userStatus === "PENDING" || userStatus === "REJECTED" || userStatus === "SUSPENDED") {
       return NextResponse.redirect(new URL("/pending", req.url));
     }
+
+    // Fast tier check at proxy level if tier claim is present
+    if (userRole !== "ADMIN" && userTier === "FREE_LIBRARY") {
+      const pathname = req.nextUrl.pathname;
+      const isExactDashboard = pathname === "/dashboard" || pathname === "/dashboard/";
+      const isV2Route = V2_ONLY_ROUTES.some((route) => pathname.startsWith(route));
+      if (isExactDashboard || isV2Route) {
+        return NextResponse.redirect(new URL("/dashboard/modules?upgrade=true", req.url));
+      }
+    }
+
     // If no status set yet (new user), we let them pass to the dashboard.
     // The dashboard/layout.tsx will verify their actual database status and redirect if necessary.
-    return NextResponse.next();
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
   }
 
   // Pending route — if user is actually active, redirect to dashboard
@@ -66,10 +105,18 @@ export default clerkMiddleware(async (auth, req) => {
     if (userStatus === "ACTIVE" || userRole === "ADMIN") {
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
-    return NextResponse.next();
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
   }
 
-  return NextResponse.next();
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 });
 
 export const config = {
