@@ -164,7 +164,7 @@ export function DashboardClient({
       variants={containerVariants}
       initial="hidden"
       animate="show"
-      className="space-y-6 sm:space-y-8 pb-16 max-w-7xl mx-auto"
+      className="space-y-6 sm:space-y-8 pb-16 w-full"
     >
       <ReferralPromoModal />
 
