@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Search, Calendar, ChevronRight, HelpCircle, MessageSquare, ChevronDown } from "lucide-react";
 import { useLanguage } from "@/components/landing/LanguageProvider";
-import { Language } from "@/lib/translations";
+import { Language, TranslationKey } from "@/lib/translations";
 import { NotificationBell } from "./notification-bell";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,19 @@ const languages: { code: Language; label: string; flagUrl: string }[] = [
   { code: "en", label: "English", flagUrl: "https://flagcdn.com/us.svg" },
 ];
 
+const ROUTE_NAME_MAP: Record<string, TranslationKey> = {
+  dashboard: "nav_dashboard",
+  challenge: "nav_challenge",
+  modules: "nav_modules",
+  resources: "nav_resources",
+  "live-calls": "nav_live_calls",
+  community: "nav_community",
+  referrals: "nav_referrals",
+  settings: "nav_settings",
+  documentation: "nav_documentation",
+  tools: "nav_tools",
+};
+
 export function TopBar() {
   const pathname = usePathname();
   const [currentDate, setCurrentDate] = useState("");
@@ -31,20 +44,24 @@ export function TopBar() {
 
   // Render date client-side only to avoid hydration mismatch
   useEffect(() => {
+    const locale = language === "ar" ? "ar-MA" : language === "fr" ? "fr-FR" : "en-US";
     setCurrentDate(
-      new Date().toLocaleDateString("en-US", {
+      new Date().toLocaleDateString(locale, {
         weekday: "long",
         month: "short",
         day: "numeric",
       })
     );
-  }, []);
+  }, [language]);
   
-  // Basic breadcrumb generation, ignoring long database IDs
+  // Breadcrumbs with dynamic translation support
   const paths = pathname.split('/').filter(Boolean).filter(p => !p.match(/^[a-z0-9]{20,}$/i));
   const breadcrumbs = paths.map((path, index) => {
     const isLast = index === paths.length - 1;
-    const title = path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, ' ');
+    const title = ROUTE_NAME_MAP[path]
+      ? t(ROUTE_NAME_MAP[path])
+      : path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, ' ');
+
     return (
       <div key={path} className="flex items-center text-sm">
         {index > 0 && <ChevronRight className="w-4 h-4 mx-2 text-muted-foreground shrink-0" />}

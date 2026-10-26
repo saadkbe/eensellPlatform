@@ -120,7 +120,7 @@ export function HeroSection({
             </div>
             
             <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-6">
-              Welcome back, {firstName} 👋
+              {t("dash_welcome_back")}, {firstName} 👋
             </h1>
           </div>
 
@@ -128,12 +128,12 @@ export function HeroSection({
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4">
               <div>
                 <h2 className="text-xs font-bold text-amber-400 uppercase tracking-widest mb-1">
-                  60-DAY SPRINT STATUS
+                  {t("roadmap_hero_badge")}
                 </h2>
                 <div className="flex items-center gap-2 text-sm">
                   <span className="text-white font-bold font-mono">DAY {currentDay} / 60</span>
                   <span className="text-white/40">•</span>
-                  <span className="text-slate-400">{completedDays} days completed</span>
+                  <span className="text-slate-400">{completedDays} {t("dash_days")} {t("roadmap_stat_finished")}</span>
                 </div>
               </div>
               <div className="text-right">
@@ -167,7 +167,7 @@ export function HeroSection({
             <div className="flex items-center justify-between text-xs font-semibold">
               <div className="flex items-center gap-1.5 text-white/50 uppercase tracking-wider text-[11px]">
                 <Clock className="w-3.5 h-3.5 text-slate-400" />
-                {daysRemaining} DAYS REMAINING
+                {daysRemaining} {t("dash_days")}
               </div>
               <div className="text-[11px] font-bold px-2.5 py-1 bg-amber-500/10 rounded-md text-amber-400 border border-amber-500/20">
                 {currentPhase}
@@ -183,10 +183,10 @@ export function HeroSection({
               <div className="flex items-center justify-between gap-2 mb-3">
                 <div className="flex items-center gap-2">
                   <Zap className="w-4 h-4 text-amber-400" />
-                  <h3 className="text-xs font-bold text-white uppercase tracking-wider">Today&apos;s Mission</h3>
+                  <h3 className="text-xs font-bold text-white uppercase tracking-wider">{t("dash_missions")}</h3>
                 </div>
                 <span className="text-[11px] font-semibold text-amber-300 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20">
-                  Day {currentDay} of 60
+                  {t("roadmap_day")} {currentDay} / 60
                 </span>
               </div>
               

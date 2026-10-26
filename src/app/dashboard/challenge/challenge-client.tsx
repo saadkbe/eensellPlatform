@@ -25,6 +25,7 @@ import { ROADMAP_DAYS, ROADMAP_PHASES, RoadmapDay, RoadmapPhase } from "@/data/r
 import { toggleDayCompletion } from "@/actions/challenge.actions";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/components/landing/LanguageProvider";
 
 interface ChallengeClientProps {
   initialCompletedDays: number[];
@@ -35,6 +36,7 @@ export function ChallengeClient({
   initialCompletedDays,
   initialUserXp,
 }: ChallengeClientProps) {
+  const { t, dir, isRTL } = useLanguage();
   const [completedDays, setCompletedDays] = useState<number[]>(initialCompletedDays);
   const [userXp, setUserXp] = useState<number>(initialUserXp);
   const [selectedPhase, setSelectedPhase] = useState<string>("all");
@@ -125,13 +127,13 @@ export function ChallengeClient({
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-950/20 border border-slate-950/25 text-slate-950 text-xs font-black tracking-wide uppercase mb-4 backdrop-blur-md">
               <Zap className="w-3.5 h-3.5 fill-slate-950" />
-              60-Day AI Agency Sprint
+              {t("roadmap_hero_badge")}
             </div>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-tight mb-3">
-              Your 60-Day <span className="text-white drop-shadow-sm">Mastery Roadmap</span>
+              {t("roadmap_hero_title")}
             </h1>
             <p className="text-sm sm:text-base text-slate-950/85 font-medium leading-relaxed max-w-xl">
-              From zero to a cash-flowing AI Automation Agency. Complete one high-impact milestone daily to systematically build, launch, and scale.
+              {t("roadmap_hero_sub")}
             </p>
           </div>
 
@@ -140,23 +142,23 @@ export function ChallengeClient({
             <div className="flex-1 lg:flex-none p-4 sm:p-5 rounded-2xl bg-slate-950/30 border border-white/20 backdrop-blur-xl min-w-[130px] shadow-lg">
               <div className="flex items-center gap-2 text-amber-200 text-xs font-bold uppercase tracking-wider mb-1">
                 <Target className="w-3.5 h-3.5 text-amber-300" />
-                Progress
+                {t("roadmap_stat_progress")}
               </div>
               <p className="text-2xl sm:text-3xl font-black text-white font-mono">
                 {totalCompleted} <span className="text-sm text-amber-200/70 font-normal">/ 60</span>
               </p>
-              <p className="text-[11px] text-white font-bold mt-0.5">{progressPercentage}% Finished</p>
+              <p className="text-[11px] text-white font-bold mt-0.5">{progressPercentage}% {t("roadmap_stat_finished")}</p>
             </div>
 
             <div className="flex-1 lg:flex-none p-4 sm:p-5 rounded-2xl bg-slate-950/30 border border-white/20 backdrop-blur-xl min-w-[130px] shadow-lg">
               <div className="flex items-center gap-2 text-amber-200 text-xs font-bold uppercase tracking-wider mb-1">
                 <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                Total XP
+                {t("roadmap_stat_xp")}
               </div>
               <p className="text-2xl sm:text-3xl font-black text-white font-mono">
                 {userXp.toLocaleString()}
               </p>
-              <p className="text-[11px] text-white font-bold mt-0.5">+50 XP Per Day</p>
+              <p className="text-[11px] text-white font-bold mt-0.5">{t("roadmap_stat_per_day")}</p>
             </div>
 
             <div className="flex-1 lg:flex-none p-4 sm:p-5 rounded-2xl bg-slate-950/30 border border-white/20 backdrop-blur-xl min-w-[130px] shadow-lg">
@@ -225,7 +227,7 @@ export function ChallengeClient({
           )}
         >
           <Layers className="w-3.5 h-3.5" />
-          <span>All Days (60)</span>
+          <span>{t("roadmap_phase_all")}</span>
         </button>
 
         {ROADMAP_PHASES.map((phase) => {

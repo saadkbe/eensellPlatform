@@ -56,19 +56,21 @@ const v2NavSections: NavSection[] = [
     items: [
       { title: "Dashboard", titleKey: "nav_dashboard", href: "/dashboard", icon: LayoutDashboard },
       { title: "AI Library", titleKey: "nav_modules", href: "/dashboard/modules", icon: BookOpen },
-      { title: "60-Day Roadmap", href: "/dashboard/challenge", icon: Target },
+      { title: "60-Day Roadmap", titleKey: "nav_challenge", href: "/dashboard/challenge", icon: Target },
     ],
   },
   {
     label: "BUILD & EARN",
+    labelKey: "nav_build_earn",
     items: [
       { title: "Resources & Blueprints", titleKey: "nav_resources", href: "/dashboard/resources", icon: FolderOpen },
-      { title: "Documentation", href: "/dashboard/documentation", icon: FileText },
-      { title: "Deals & Tools", href: "/dashboard/tools", icon: Wrench },
+      { title: "Documentation", titleKey: "nav_documentation", href: "/dashboard/documentation", icon: FileText },
+      { title: "Deals & Tools", titleKey: "nav_tools", href: "/dashboard/tools", icon: Wrench },
     ],
   },
   {
     label: "COMMUNITY & ACCOUNT",
+    labelKey: "nav_community_account",
     items: [
       { title: "Community & Wins", titleKey: "nav_community", href: "/dashboard/community", icon: MessageSquare },
       { title: "Live Coaching Calls", titleKey: "nav_live_calls", href: "/dashboard/live-calls", icon: Video },

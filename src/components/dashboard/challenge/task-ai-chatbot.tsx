@@ -28,6 +28,7 @@ import { submitTaskReport } from "@/actions/report.actions";
 import { askTaskAiCoach } from "@/actions/task-ai.actions";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/components/landing/LanguageProvider";
 
 interface TaskAiChatbotProps {
   currentDayNumber?: number;
@@ -82,6 +83,7 @@ function RenderFormattedText({ content }: { content: string }) {
 }
 
 export function TaskAiChatbot({ currentDayNumber = 1 }: TaskAiChatbotProps) {
+  const { t, dir, isRTL } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<"chat" | "report">("chat");
   const [inputText, setInputText] = useState("");
@@ -227,15 +229,15 @@ export function TaskAiChatbot({ currentDayNumber = 1 }: TaskAiChatbotProps) {
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               onClick={() => setIsOpen(true)}
-              className="flex items-center gap-3 px-5 py-3.5 rounded-full bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 text-slate-950 font-black text-sm shadow-[0_8px_30px_rgba(245,158,11,0.5)] hover:shadow-[0_8px_36px_rgba(245,158,11,0.65)] border border-amber-300/40 transition-all cursor-pointer group"
+              className="flex items-center gap-2.5 px-5 py-3.5 rounded-full bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 text-white font-black text-sm shadow-[0_8px_30px_rgba(245,158,11,0.5)] hover:shadow-[0_8px_36px_rgba(245,158,11,0.65)] border border-amber-300/40 transition-all cursor-pointer group"
             >
               <div className="relative flex items-center justify-center">
-                <Bot className="w-5 h-5 fill-slate-950" />
+                <Bot className="w-5 h-5 text-white" />
                 <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-slate-950 animate-ping" />
                 <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-slate-950" />
               </div>
-              <span className="tracking-wide">
-                Day {roadmap.dayNumber} AI Task Coach
+              <span className="tracking-wide text-white font-bold text-sm">
+                {t("bot_ask_me")}
               </span>
             </motion.button>
           </motion.div>
@@ -250,6 +252,7 @@ export function TaskAiChatbot({ currentDayNumber = 1 }: TaskAiChatbotProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.92 }}
             transition={{ type: "spring", stiffness: 360, damping: 28 }}
+            dir={dir}
             className="fixed bottom-6 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[480px] max-h-[660px] h-[84vh] flex flex-col rounded-3xl bg-[#0B0D13] border border-amber-500/40 shadow-[0_16px_60px_rgba(0,0,0,0.7)] overflow-hidden backdrop-blur-2xl"
           >
             {/* Header */}
@@ -283,7 +286,7 @@ export function TaskAiChatbot({ currentDayNumber = 1 }: TaskAiChatbotProps) {
                   )}
                 >
                   <AlertCircle className="w-3.5 h-3.5" />
-                  <span>{mode === "report" ? "Back to Chat" : "Report Problem"}</span>
+                  <span>{mode === "report" ? t("bot_back_chat") : t("bot_report_problem")}</span>
                 </button>
 
                 <button
@@ -304,7 +307,7 @@ export function TaskAiChatbot({ currentDayNumber = 1 }: TaskAiChatbotProps) {
                   <div className="flex items-center gap-2 mb-1.5">
                     <ShieldAlert className="w-5 h-5 text-rose-400" />
                     <span className="text-sm font-black uppercase tracking-wider text-rose-300">
-                      Report a Task Blocker
+                      {t("bot_report_blocker")}
                     </span>
                   </div>
                   <p className="text-xs sm:text-sm text-rose-200/90 leading-relaxed">
@@ -314,22 +317,26 @@ export function TaskAiChatbot({ currentDayNumber = 1 }: TaskAiChatbotProps) {
 
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
-                    Category
+                    {t("bot_category")}
                   </label>
                   <div className="grid grid-cols-3 gap-2">
-                    {(["PROBLEM", "QUESTION", "FEEDBACK"] as const).map((t) => (
+                    {(["PROBLEM", "QUESTION", "FEEDBACK"] as const).map((cat) => (
                       <button
-                        key={t}
+                        key={cat}
                         type="button"
-                        onClick={() => setReportType(t)}
+                        onClick={() => setReportType(cat)}
                         className={cn(
                           "py-2.5 rounded-xl text-xs font-black tracking-wider transition-all border cursor-pointer",
-                          reportType === t
+                          reportType === cat
                             ? "bg-amber-500 text-slate-950 border-amber-400 shadow-md"
                             : "bg-white/[0.03] text-slate-400 border-white/[0.06] hover:bg-white/[0.06]"
                         )}
                       >
-                        {t}
+                        {cat === "PROBLEM"
+                          ? t("bot_problem")
+                          : cat === "QUESTION"
+                          ? t("bot_question")
+                          : t("bot_feedback")}
                       </button>
                     ))}
                   </div>
@@ -355,14 +362,14 @@ export function TaskAiChatbot({ currentDayNumber = 1 }: TaskAiChatbotProps) {
                     className="flex-1 h-12 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-sm shadow-md border-0 gap-2 cursor-pointer"
                   >
                     <Send className="w-4 h-4" />
-                    <span>{isReportSubmitting ? "Submitting Ticket..." : "Submit to Admin Panel"}</span>
+                    <span>{isReportSubmitting ? "..." : t("bot_submit")}</span>
                   </Button>
                   <Button
                     variant="ghost"
                     onClick={() => setMode("chat")}
                     className="h-12 rounded-xl text-sm font-bold text-slate-400 hover:text-white cursor-pointer"
                   >
-                    Cancel
+                    {t("bot_cancel")}
                   </Button>
                 </div>
               </div>
@@ -482,7 +489,7 @@ export function TaskAiChatbot({ currentDayNumber = 1 }: TaskAiChatbotProps) {
                     className="px-3 py-1.5 rounded-xl text-xs font-bold bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white transition-all whitespace-nowrap border border-white/[0.08] cursor-pointer flex items-center gap-1.5"
                   >
                     <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
-                    <span>How to do Step 1?</span>
+                    <span>{t("bot_step1")}</span>
                   </button>
 
                   <button
@@ -491,7 +498,7 @@ export function TaskAiChatbot({ currentDayNumber = 1 }: TaskAiChatbotProps) {
                     className="px-3 py-1.5 rounded-xl text-xs font-bold bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white transition-all whitespace-nowrap border border-white/[0.08] cursor-pointer flex items-center gap-1.5"
                   >
                     <HelpCircle className="w-3.5 h-3.5 text-sky-400" />
-                    <span>Common pitfalls</span>
+                    <span>{t("bot_pitfalls")}</span>
                   </button>
 
                   <button
@@ -500,7 +507,7 @@ export function TaskAiChatbot({ currentDayNumber = 1 }: TaskAiChatbotProps) {
                     className="px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 transition-all whitespace-nowrap border border-rose-500/30 cursor-pointer flex items-center gap-1.5"
                   >
                     <AlertCircle className="w-3.5 h-3.5 text-rose-400" />
-                    <span>Report blocker</span>
+                    <span>{t("bot_report_problem")}</span>
                   </button>
                 </div>
 
@@ -516,7 +523,7 @@ export function TaskAiChatbot({ currentDayNumber = 1 }: TaskAiChatbotProps) {
                         handleSendMessage();
                       }
                     }}
-                    placeholder={`Ask AI Coach about Day ${roadmap.dayNumber}...`}
+                    placeholder={t("bot_placeholder")}
                     disabled={isAiLoading}
                     className="flex-1 bg-[#131622] border border-white/15 rounded-xl px-4 py-3 text-sm sm:text-base text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-500/60 transition-colors"
                   />
