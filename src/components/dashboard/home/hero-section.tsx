@@ -95,10 +95,10 @@ export function HeroSection({
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#0a0b10] shadow-2xl"
     >
-      {/* Background Gradients & Meshes */}
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.05] via-transparent to-teal-500/[0.05]" />
-      <div className="absolute -top-40 -right-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute top-20 left-1/2 w-64 h-64 bg-teal-500/10 rounded-full blur-[80px] pointer-events-none -translate-x-1/2" />
+      {/* Background Gradients & Meshes - Orangish Yellow Accents */}
+      <div className="absolute inset-0 bg-gradient-to-br from-amber-500/[0.06] via-transparent to-orange-500/[0.06]" />
+      <div className="absolute -top-40 -right-40 w-96 h-96 bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-20 left-1/2 w-64 h-64 bg-orange-500/10 rounded-full blur-[80px] pointer-events-none -translate-x-1/2" />
       
       {/* Linear Style Grid Overlay */}
       <div 
@@ -114,9 +114,9 @@ export function HeroSection({
         {/* Left Column: Greeting & Challenge Progress */}
         <div className="flex-1 flex flex-col justify-between">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-md mb-4 w-fit">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-xs font-semibold text-white/80">{greeting}</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 backdrop-blur-md mb-4 w-fit">
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <span className="text-xs font-semibold text-amber-200/90">{greeting}</span>
             </div>
             
             <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-6">
@@ -127,7 +127,7 @@ export function HeroSection({
           <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-5 sm:p-6 backdrop-blur-sm">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4">
               <div>
-                <h2 className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-1">
+                <h2 className="text-xs font-bold text-amber-400 uppercase tracking-widest mb-1">
                   60-DAY SPRINT STATUS
                 </h2>
                 <div className="flex items-center gap-2 text-sm">
@@ -137,13 +137,13 @@ export function HeroSection({
                 </div>
               </div>
               <div className="text-right">
-                <span className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300 font-mono">
+                <span className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-orange-400 font-mono">
                   {progressPercent}%
                 </span>
               </div>
             </div>
 
-            {/* Segmented bar */}
+            {/* Segmented bar in glowing orangish yellow */}
             <div className="flex items-center gap-1.5 w-full mb-4">
               {Array.from({ length: totalSegments }).map((_, index) => {
                 const isCompleted = index < activeSegments;
@@ -154,9 +154,9 @@ export function HeroSection({
                     className={cn(
                       "h-2 rounded-full flex-1 transition-all duration-300",
                       isCompleted
-                        ? "bg-gradient-to-r from-emerald-500 to-teal-400 shadow-[0_0_8px_rgba(16,185,129,0.4)]"
+                        ? "bg-gradient-to-r from-amber-500 to-orange-400 shadow-[0_0_8px_rgba(245,158,11,0.5)]"
                         : isCurrent
-                        ? "bg-emerald-400/40 border border-emerald-400 animate-pulse"
+                        ? "bg-amber-400/40 border border-amber-400 animate-pulse"
                         : "bg-white/[0.06]"
                     )}
                   />
@@ -169,7 +169,7 @@ export function HeroSection({
                 <Clock className="w-3.5 h-3.5 text-slate-400" />
                 {daysRemaining} DAYS REMAINING
               </div>
-              <div className="text-[11px] font-bold px-2.5 py-1 bg-white/5 rounded-md text-emerald-400/90 border border-emerald-500/10">
+              <div className="text-[11px] font-bold px-2.5 py-1 bg-amber-500/10 rounded-md text-amber-400 border border-amber-500/20">
                 {currentPhase}
               </div>
             </div>
@@ -178,14 +178,14 @@ export function HeroSection({
 
         {/* Right Column: Today's Focus & Action */}
         <div className="flex-1 flex flex-col justify-end">
-          <div className="flex flex-col h-full justify-between bg-gradient-to-br from-emerald-500/[0.04] to-transparent border border-emerald-500/[0.12] rounded-2xl p-6 sm:p-7">
+          <div className="flex flex-col h-full justify-between bg-gradient-to-br from-amber-500/[0.05] to-transparent border border-amber-500/[0.15] rounded-2xl p-6 sm:p-7">
             <div>
               <div className="flex items-center justify-between gap-2 mb-3">
                 <div className="flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-emerald-400" />
+                  <Zap className="w-4 h-4 text-amber-400" />
                   <h3 className="text-xs font-bold text-white uppercase tracking-wider">Today&apos;s Mission</h3>
                 </div>
-                <span className="text-[11px] font-semibold text-slate-400 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.06]">
+                <span className="text-[11px] font-semibold text-amber-300 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20">
                   Day {currentDay} of 60
                 </span>
               </div>
@@ -201,17 +201,17 @@ export function HeroSection({
               )}
               
               <div className="flex items-center gap-2 text-xs text-slate-400 mb-6">
-                <Target className="w-4 h-4 text-emerald-400" />
+                <Target className="w-4 h-4 text-amber-400" />
                 <span>Estimated time: {estimatedTime} • XP Reward: +50 XP</span>
               </div>
             </div>
 
             <div className="flex flex-col sm:flex-row items-center gap-3 mt-auto">
               <Link href="/dashboard/challenge" className="w-full sm:w-auto flex-1">
-                <Button className="w-full h-11 px-5 bg-emerald-500 text-slate-950 hover:bg-emerald-400 rounded-xl font-bold text-xs shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all hover:scale-[1.02] group border-0">
+                <Button className="w-full h-11 px-5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs shadow-[0_0_20px_rgba(245,158,11,0.35)] transition-all hover:scale-[1.02] group border-0 rounded-xl">
                   <span className="flex items-center justify-center gap-2">
                     Open 60-Day Roadmap
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-slate-950" />
                   </span>
                 </Button>
               </Link>
@@ -224,13 +224,13 @@ export function HeroSection({
                 className={cn(
                   "w-full sm:w-auto h-11 px-4 rounded-xl font-bold text-xs border transition-all gap-2",
                   isTodayCompleted
-                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20"
+                    ? "bg-amber-500/15 border-amber-500/30 text-amber-400 hover:bg-amber-500/25"
                     : "bg-white/[0.03] border-white/10 hover:bg-white/[0.06] text-white"
                 )}
               >
                 {isTodayCompleted ? (
                   <>
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <CheckCircle2 className="w-4 h-4 text-amber-400" />
                     <span>Completed ✓</span>
                   </>
                 ) : (

@@ -28,7 +28,7 @@ export const ROADMAP_PHASES: RoadmapPhase[] = [
     dayRange: "Days 1–10",
     startDay: 1,
     endDay: 10,
-    color: "#10B981", // Emerald
+    color: "#F59E0B", // Amber / Orangish Yellow
   },
   {
     id: "phase-2",

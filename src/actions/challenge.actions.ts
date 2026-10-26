@@ -348,35 +348,7 @@ export async function getChallengeDayByLessonId(lessonId: string) {
   }
 }
 
-export async function autoCompleteChallengeForLesson(userId: string, lessonId: string) {
-  try {
-    const challengeDay = await db.challengeDay.findFirst({
-      where: { lessonId }
-    });
-
-    if (challengeDay) {
-      await db.challengeDayCompletion.upsert({
-        where: {
-          userId_challengeDayId: {
-            userId,
-            challengeDayId: challengeDay.id
-          }
-        },
-        update: {},
-        create: {
-          userId,
-          challengeDayId: challengeDay.id,
-        }
-      });
-
-      revalidatePath('/dashboard');
-      revalidatePath('/dashboard/challenge');
-      return true;
-    }
-
-    return false;
-  } catch (error) {
-    console.error('[AUTO_COMPLETE_CHALLENGE_FOR_LESSON]', error);
-    return false;
-  }
+export async function autoCompleteChallengeForLesson(_userId: string, _lessonId: string) {
+  // Roadmap days are tracked through conscious mission checklist toggling in V2
+  return false;
 }

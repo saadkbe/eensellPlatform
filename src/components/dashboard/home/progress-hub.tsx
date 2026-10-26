@@ -16,13 +16,13 @@ interface ProgressHubProps {
 }
 
 export function ProgressHub({
-  completedDays = 8,
+  completedDays = 0,
   totalDays = 60,
   currentPhaseName = "Phase 1 — Technical Foundations",
-  activeDayNumber = 9,
-  userXp = 12450,
-  referralEarnings = 2400,
-  tierStatus = "V2 Founding Member",
+  activeDayNumber = 1,
+  userXp = 0,
+  referralEarnings = 0,
+  tierStatus = "University V2 Member",
   activeLessonUrl = "/dashboard/challenge",
 }: ProgressHubProps) {
   const percentage = Math.min(100, Math.round((completedDays / totalDays) * 100));
@@ -37,9 +37,9 @@ export function ProgressHub({
       value: `${completedDays} / ${totalDays}`,
       subtext: "Challenge Days",
       icon: CheckCircle2,
-      iconColor: "text-emerald-400",
-      iconBg: "bg-emerald-500/10",
-      borderColor: "border-emerald-500/20",
+      iconColor: "text-amber-400",
+      iconBg: "bg-amber-500/10",
+      borderColor: "border-amber-500/20",
     },
     {
       label: "Earned Platform XP",
@@ -55,18 +55,18 @@ export function ProgressHub({
       value: `${referralEarnings.toLocaleString()} MAD`,
       subtext: "Available for Payout",
       icon: Wallet,
-      iconColor: "text-blue-400",
-      iconBg: "bg-blue-500/10",
-      borderColor: "border-blue-500/20",
+      iconColor: "text-orange-400",
+      iconBg: "bg-orange-500/10",
+      borderColor: "border-orange-500/20",
     },
     {
       label: "Community Rank",
       value: tierStatus,
       subtext: "Verified Access",
       icon: ShieldCheck,
-      iconColor: "text-emerald-400",
-      iconBg: "bg-emerald-500/10",
-      borderColor: "border-emerald-500/20",
+      iconColor: "text-amber-400",
+      iconBg: "bg-amber-500/10",
+      borderColor: "border-amber-500/20",
     },
   ];
 
@@ -75,14 +75,14 @@ export function ProgressHub({
       {/* ── Main Linear Roadmap Progress Card ── */}
       <div className="rounded-2xl bg-[#0F1117] border border-white/[0.06] p-5 sm:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.3)] relative overflow-hidden backdrop-blur-xl">
         {/* Subtle ambient gradient glow */}
-        <div className="absolute top-0 left-1/3 w-64 h-32 bg-emerald-500/[0.04] rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-1/3 w-64 h-32 bg-amber-500/[0.05] rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 space-y-4">
           {/* Top Row: Sprint Info, Day Count & Badge */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+                <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
                   Current Sprint:
                 </span>
                 <span className="text-xs font-semibold text-white/90">
@@ -95,7 +95,7 @@ export function ProgressHub({
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-bold text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.2)]">
+              <div className="px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-xs font-bold text-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.2)]">
                 {percentage}% Completed
               </div>
               <Link href={activeLessonUrl}>
@@ -110,7 +110,7 @@ export function ProgressHub({
             </div>
           </div>
 
-          {/* Continuous Glowing Neon Emerald Segmented Progress Bar */}
+          {/* Continuous Glowing Neon Orangish-Yellow Segmented Progress Bar */}
           <div className="space-y-1.5 pt-1">
             <div className="flex items-center gap-1.5 w-full">
               {Array.from({ length: totalSegments }).map((_, index) => {
@@ -121,9 +121,9 @@ export function ProgressHub({
                     key={index}
                     className={`h-2.5 rounded-full flex-1 transition-all duration-500 ${
                       isCompleted
-                        ? "bg-gradient-to-r from-emerald-500 to-teal-400 shadow-[0_0_8px_rgba(16,185,129,0.4)]"
+                        ? "bg-gradient-to-r from-amber-500 to-orange-400 shadow-[0_0_8px_rgba(245,158,11,0.5)]"
                         : isCurrent
-                        ? "bg-emerald-400/40 border border-emerald-400 animate-pulse"
+                        ? "bg-amber-400/40 border border-amber-400 animate-pulse"
                         : "bg-white/[0.04] border border-white/[0.04]"
                     }`}
                   />

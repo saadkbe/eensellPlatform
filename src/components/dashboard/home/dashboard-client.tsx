@@ -137,8 +137,8 @@ export function DashboardClient({
       label: t("dash_completed_label"),
       value: completedLessons,
       icon: Trophy,
-      color: "#10B981",
-      bgColor: "rgba(16,185,129,0.12)",
+      color: "#F59E0B",
+      bgColor: "rgba(245,158,11,0.12)",
       subtext: t("dash_completed_subtext"),
     },
     {
@@ -274,8 +274,8 @@ export function DashboardClient({
                     {/* Content */}
                     <div className="p-5 sm:p-6 flex-1 flex flex-col justify-center">
                       <div className="flex items-center gap-2 text-primary mb-2">
-                        <PlayCircle className="w-4 h-4 animate-pulse text-emerald-500" />
-                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-500">{t("dash_continue_watching")}</span>
+                        <PlayCircle className="w-4 h-4 animate-pulse text-amber-500" />
+                        <span className="text-xs font-bold uppercase tracking-wider text-amber-500">{t("dash_continue_watching")}</span>
                       </div>
                       
                       <h4 className="text-xl sm:text-2xl font-bold text-foreground mb-2 leading-tight group-hover:text-primary transition-colors">
@@ -374,8 +374,8 @@ export function DashboardClient({
                       />
                       <defs>
                         <linearGradient id="progressRingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="#10B981" />
-                          <stop offset="100%" stopColor="#06B6D4" />
+                          <stop offset="0%" stopColor="#F59E0B" />
+                          <stop offset="100%" stopColor="#FB923C" />
                         </linearGradient>
                       </defs>
                     </svg>
@@ -447,7 +447,7 @@ export function DashboardClient({
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
               {[
                 { title: t("dash_community"), desc: t("dash_network_grow"), href: "/dashboard/community", icon: Users, color: "text-blue-500", bg: "bg-blue-500/10" },
-                { title: t("dash_missions"), desc: t("dash_track_objectives"), href: "/dashboard/goals", icon: Target, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+                { title: t("dash_missions"), desc: t("dash_track_objectives"), href: "/dashboard/goals", icon: Target, color: "text-amber-500", bg: "bg-amber-500/10" },
                 { title: t("dash_career_path"), desc: t("dash_map_future"), href: "/dashboard/career", icon: Compass, color: "text-purple-500", bg: "bg-purple-500/10" },
                 { title: t("dash_vault"), desc: t("dash_access_resources"), href: "/dashboard/resources", icon: FileText, color: "text-amber-500", bg: "bg-amber-500/10" },
               ].map((item) => {
@@ -477,10 +477,10 @@ export function DashboardClient({
               <CardHeader className="py-3.5 px-5 border-b border-border/40">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-foreground text-sm font-bold flex items-center gap-2">
-                    <BarChart3 className="w-4 h-4 text-emerald-500" />
+                    <BarChart3 className="w-4 h-4 text-amber-500" />
                     <span>{t("dash_activity_log")}</span>
                   </CardTitle>
-                  <Link href="/dashboard/modules" className="text-xs font-semibold text-emerald-500 hover:text-emerald-600 flex items-center gap-1">
+                  <Link href="/dashboard/modules" className="text-xs font-semibold text-amber-500 hover:text-amber-600 flex items-center gap-1">
                     <span>{t("dash_view_all")}</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </Link>
@@ -501,7 +501,7 @@ export function DashboardClient({
                         className="flex items-center gap-3 p-3 rounded-xl bg-muted/20 hover:bg-muted/40 border border-border/30 transition-all group"
                       >
                         <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
-                          p.isCompleted ? "bg-emerald-500/10 text-emerald-500" : "bg-blue-500/10 text-blue-500"
+                          p.isCompleted ? "bg-amber-500/10 text-amber-500" : "bg-blue-500/10 text-blue-500"
                         }`}>
                           {p.isCompleted ? <CheckCircle2 className="w-4 h-4" /> : <PlayCircle className="w-4 h-4" />}
                         </div>

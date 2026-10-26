@@ -63,6 +63,7 @@ export async function approveUser(userId: string) {
       data: {
         status: "ACTIVE",
         role: "ACTIVE_USER",
+        tier: "UNIVERSITY_V2",
       },
     });
 
@@ -95,6 +96,7 @@ export async function approveUser(userId: string) {
       publicMetadata: {
         role: "ACTIVE_USER",
         status: "ACTIVE",
+        tier: "UNIVERSITY_V2",
       },
     });
   } catch (error) {

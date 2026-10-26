@@ -82,8 +82,8 @@ export function WeeklyOfficeHours({ upcomingCall }: WeeklyOfficeHoursProps) {
       {/* Top Header */}
       <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-            <Video className="w-3.5 h-3.5 text-emerald-400" />
+          <div className="w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center">
+            <Video className="w-3.5 h-3.5 text-amber-400" />
           </div>
           <div>
             <h4 className="text-xs font-bold text-white uppercase tracking-wider">
@@ -92,8 +92,8 @@ export function WeeklyOfficeHours({ upcomingCall }: WeeklyOfficeHoursProps) {
           </div>
         </div>
 
-        <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-bold text-emerald-400">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+        <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-bold text-amber-400">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
           <span>UPCOMING</span>
         </span>
       </div>
@@ -145,7 +145,7 @@ export function WeeklyOfficeHours({ upcomingCall }: WeeklyOfficeHoursProps) {
             >
               <Button
                 size="sm"
-                className="w-full h-9 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all gap-1.5 shadow-sm"
+                className="w-full h-9 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 transition-all gap-1.5 shadow-sm"
               >
                 <Radio className="w-3.5 h-3.5 animate-pulse" />
                 <span>Join Live Session</span>
@@ -164,7 +164,7 @@ export function WeeklyOfficeHours({ upcomingCall }: WeeklyOfficeHoursProps) {
               size="sm"
               className="w-full h-9 rounded-xl text-xs font-bold bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white border-white/[0.08] transition-all gap-1.5"
             >
-              <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+              <Calendar className="w-3.5 h-3.5 text-amber-400" />
               <span>Add to Google Calendar</span>
             </Button>
           </a>

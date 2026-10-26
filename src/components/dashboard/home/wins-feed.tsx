@@ -13,7 +13,7 @@ export function WinsFeed() {
       actionBadge: "Closed 15,000 MAD Client",
       actionType: "DEAL CLOSED",
       time: "2h ago",
-      badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+      badgeColor: "bg-amber-500/10 text-amber-400 border-amber-500/20",
     },
     {
       id: "w2",
@@ -23,7 +23,7 @@ export function WinsFeed() {
       actionBadge: "Deployed 1st WhatsApp Bot",
       actionType: "BLUEPRINT LIVE",
       time: "4h ago",
-      badgeColor: "bg-teal-500/10 text-teal-400 border-teal-500/20",
+      badgeColor: "bg-orange-500/10 text-orange-400 border-orange-500/20",
     },
     {
       id: "w3",
@@ -33,7 +33,7 @@ export function WinsFeed() {
       actionBadge: "Signed 8,000 MAD/mo Retainer",
       actionType: "RETAINER WIN",
       time: "7h ago",
-      badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+      badgeColor: "bg-amber-500/10 text-amber-400 border-amber-500/20",
     },
     {
       id: "w4",
@@ -52,8 +52,8 @@ export function WinsFeed() {
       {/* Header */}
       <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-            <Trophy className="w-3.5 h-3.5 text-emerald-400" />
+          <div className="w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center">
+            <Trophy className="w-3.5 h-3.5 text-amber-400" />
           </div>
           <div>
             <h4 className="text-xs font-bold text-white uppercase tracking-wider">
@@ -63,7 +63,7 @@ export function WinsFeed() {
         </div>
         <Link
           href="/dashboard/community"
-          className="text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1"
+          className="text-[11px] font-semibold text-amber-400 hover:text-amber-300 transition-colors flex items-center gap-1"
         >
           <span>Feed</span>
           <ArrowRight className="w-3 h-3" />

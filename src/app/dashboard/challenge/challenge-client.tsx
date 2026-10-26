@@ -110,18 +110,18 @@ export function ChallengeClient({
     <div className="space-y-8 pb-16 w-full">
       {/* ── Top Hero / Milestone Banner ── */}
       <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#0A0B10] p-6 sm:p-10 shadow-2xl">
-        {/* Glow Effects */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-emerald-500/[0.08] rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-teal-500/[0.05] rounded-full blur-[100px] pointer-events-none" />
+        {/* Glow Effects - Orangish Yellow */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-500/[0.08] rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-orange-500/[0.05] rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold tracking-wide uppercase mb-4 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold tracking-wide uppercase mb-4 shadow-[0_0_15px_rgba(245,158,11,0.15)]">
               <Zap className="w-3.5 h-3.5" />
               60-Day AI Agency Sprint
             </div>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight mb-3">
-              Your 60-Day <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-500">Mastery Roadmap</span>
+              Your 60-Day <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-orange-400">Mastery Roadmap</span>
             </h1>
             <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-xl">
               From zero to a cash-flowing AI Automation Agency. Complete one high-impact milestone daily to systematically build, launch, and scale.
@@ -132,13 +132,13 @@ export function ChallengeClient({
           <div className="flex flex-wrap lg:flex-nowrap gap-3 sm:gap-4 shrink-0 w-full lg:w-auto">
             <div className="flex-1 lg:flex-none p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-md min-w-[130px]">
               <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">
-                <Target className="w-3.5 h-3.5 text-emerald-400" />
+                <Target className="w-3.5 h-3.5 text-amber-400" />
                 Progress
               </div>
               <p className="text-2xl sm:text-3xl font-black text-white font-mono">
                 {totalCompleted} <span className="text-sm text-slate-500 font-normal">/ 60</span>
               </p>
-              <p className="text-[11px] text-emerald-400 font-bold mt-0.5">{progressPercentage}% Finished</p>
+              <p className="text-[11px] text-amber-400 font-bold mt-0.5">{progressPercentage}% Finished</p>
             </div>
 
             <div className="flex-1 lg:flex-none p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-md min-w-[130px]">
@@ -165,11 +165,11 @@ export function ChallengeClient({
           </div>
         </div>
 
-        {/* ── Linear Segmented Neon Progress Bar ── */}
+        {/* ── Linear Segmented Neon Orangish-Yellow Progress Bar ── */}
         <div className="mt-8 pt-6 border-t border-white/[0.06] space-y-3">
           <div className="flex items-center justify-between text-xs">
             <span className="font-semibold text-slate-300">
-              Overall Roadmap Completion: <strong className="text-emerald-400">{progressPercentage}% Completed</strong> (Day {currentDay} / 60)
+              Overall Roadmap Completion: <strong className="text-amber-400">{progressPercentage}% Completed</strong> (Day {currentDay} / 60)
             </span>
             <span className="text-slate-400 font-mono text-[11px]">
               {60 - totalCompleted} days remaining
@@ -186,9 +186,9 @@ export function ChallengeClient({
                   className={cn(
                     "h-2.5 rounded-full flex-1 transition-all duration-500",
                     isCompleted
-                      ? "bg-gradient-to-r from-emerald-500 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
+                      ? "bg-gradient-to-r from-amber-500 to-orange-400 shadow-[0_0_10px_rgba(245,158,11,0.5)]"
                       : isCurrent
-                      ? "bg-emerald-400/40 border border-emerald-400 animate-pulse"
+                      ? "bg-amber-400/40 border border-amber-400 animate-pulse"
                       : "bg-white/[0.04] border border-white/[0.04]"
                   )}
                 />
@@ -213,7 +213,7 @@ export function ChallengeClient({
           className={cn(
             "px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-2 border",
             selectedPhase === "all"
-              ? "bg-emerald-500 text-slate-950 border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+              ? "bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 border-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.3)] font-black"
               : "bg-white/[0.03] text-slate-300 border-white/[0.06] hover:bg-white/[0.06]"
           )}
         >
@@ -231,7 +231,7 @@ export function ChallengeClient({
               className={cn(
                 "px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-2 border",
                 isActive
-                  ? "bg-emerald-500 text-slate-950 border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                  ? "bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 border-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.3)] font-black"
                   : "bg-white/[0.03] text-slate-300 border-white/[0.06] hover:bg-white/[0.06]"
               )}
             >
@@ -260,9 +260,9 @@ export function ChallengeClient({
               className={cn(
                 "overflow-hidden transition-all duration-300 rounded-2xl border",
                 isCurrent
-                  ? "bg-[#0F1117] border-emerald-500/50 shadow-[0_0_25px_rgba(16,185,129,0.15)] ring-1 ring-emerald-500/30"
+                  ? "bg-[#0F1117] border-amber-500/50 shadow-[0_0_25px_rgba(245,158,11,0.15)] ring-1 ring-amber-500/30"
                   : isCompleted
-                  ? "bg-card/40 border-emerald-500/20 backdrop-blur-md opacity-90 hover:opacity-100"
+                  ? "bg-card/40 border-amber-500/20 backdrop-blur-md opacity-90 hover:opacity-100"
                   : "bg-[#0B0C10]/80 border-white/[0.06] hover:border-white/[0.12] backdrop-blur-md"
               )}
             >
@@ -277,9 +277,9 @@ export function ChallengeClient({
                       className={cn(
                         "mt-1 w-7 h-7 rounded-xl flex items-center justify-center transition-all duration-200 shrink-0 border",
                         isCompleted
-                          ? "bg-emerald-500 border-emerald-400 text-slate-950 shadow-[0_0_12px_rgba(16,185,129,0.4)]"
+                          ? "bg-gradient-to-r from-amber-500 to-orange-500 border-amber-400 text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.4)]"
                           : isCurrent
-                          ? "bg-white/[0.04] border-emerald-400/60 text-slate-400 hover:border-emerald-400 hover:bg-emerald-500/10"
+                          ? "bg-white/[0.04] border-amber-400/60 text-slate-400 hover:border-amber-400 hover:bg-amber-500/10"
                           : "bg-white/[0.02] border-white/[0.1] text-slate-500 hover:border-white/30"
                       )}
                     >
@@ -292,7 +292,7 @@ export function ChallengeClient({
 
                     <div className="space-y-1.5 flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-mono text-xs font-black text-emerald-400">
+                        <span className="font-mono text-xs font-black text-amber-400">
                           DAY {day.dayNumber}
                         </span>
                         <span className="text-white/20">•</span>
@@ -301,17 +301,17 @@ export function ChallengeClient({
                         </span>
                         <span className="text-white/20">•</span>
                         <div className="flex items-center gap-1 text-[11px] text-slate-400 font-medium">
-                          <Clock className="w-3 h-3" />
+                          <Clock className="w-3 h-3 text-amber-400" />
                           <span>{day.estimatedTime}</span>
                         </div>
 
                         {isCurrent && (
-                          <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/30 text-[10px] font-bold uppercase tracking-wider animate-pulse">
+                          <Badge className="bg-amber-500/15 text-amber-400 border-amber-500/30 text-[10px] font-bold uppercase tracking-wider animate-pulse">
                             Active Mission
                           </Badge>
                         )}
                         {isCompleted && (
-                          <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 text-[10px] font-semibold">
+                          <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 text-[10px] font-semibold">
                             +50 XP Earned
                           </Badge>
                         )}
@@ -368,10 +368,10 @@ export function ChallengeClient({
                         <div>
                           <div className="flex items-center justify-between mb-2">
                             <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                              <Target className="w-3.5 h-3.5 text-emerald-400" />
+                              <Target className="w-3.5 h-3.5 text-amber-400" />
                               Required Deliverables & Checklist
                             </h4>
-                            <span className="text-[11px] font-mono text-emerald-400">
+                            <span className="text-[11px] font-mono text-amber-400">
                               Reward: +{day.xpReward} XP
                             </span>
                           </div>
@@ -383,7 +383,7 @@ export function ChallengeClient({
                                 className={cn(
                                   "flex items-start gap-3 p-3 rounded-xl border text-xs sm:text-sm transition-colors",
                                   isCompleted
-                                    ? "bg-emerald-500/[0.03] border-emerald-500/10 text-slate-300"
+                                    ? "bg-amber-500/[0.03] border-amber-500/10 text-slate-300"
                                     : "bg-white/[0.02] border-white/[0.04] text-slate-300"
                                 )}
                               >
@@ -410,7 +410,7 @@ export function ChallengeClient({
                               "w-full sm:w-auto h-9 px-5 rounded-xl text-xs font-bold transition-all border-0",
                               isCompleted
                                 ? "bg-white/[0.06] hover:bg-white/[0.1] text-slate-300"
-                                : "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                                : "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.3)]"
                             )}
                           >
                             {isCompleted ? "Unmark Day" : `Complete Day ${day.dayNumber} (+50 XP)`}

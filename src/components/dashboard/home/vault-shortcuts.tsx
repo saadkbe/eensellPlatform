@@ -11,9 +11,9 @@ export function VaultShortcuts() {
       tag: "AUTOMATION",
       href: "/dashboard/resources",
       icon: Bot,
-      color: "text-emerald-400",
-      bg: "bg-emerald-500/10",
-      border: "border-emerald-500/20",
+      color: "text-amber-400",
+      bg: "bg-amber-500/10",
+      border: "border-amber-500/20",
     },
     {
       title: "High-Ticket Client Proposal",
@@ -41,7 +41,7 @@ export function VaultShortcuts() {
     <div className="space-y-3">
       <div className="flex items-center justify-between px-1">
         <div className="flex items-center gap-2">
-          <FolderDown className="w-4 h-4 text-emerald-400" />
+          <FolderDown className="w-4 h-4 text-amber-400" />
           <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
             Quick Vault Shortcuts
           </h4>
@@ -66,12 +66,12 @@ export function VaultShortcuts() {
                   <span className="text-[9px] font-bold text-slate-400 tracking-wider bg-white/[0.04] px-1.5 py-0.5 rounded border border-white/[0.04]">
                     {item.tag}
                   </span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-400 transition-colors" />
                 </div>
               </div>
 
               <div>
-                <h5 className="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors line-clamp-1">
+                <h5 className="text-sm font-bold text-white group-hover:text-amber-400 transition-colors line-clamp-1">
                   {item.title}
                 </h5>
                 <p className="text-xs text-slate-400 mt-0.5 line-clamp-1">
