@@ -125,11 +125,11 @@ function SidebarContent({
   return (
     <div className="flex flex-col h-full" dir={dir}>
       {/* Logo */}
-      <div className="flex justify-center items-center px-4 py-6 border-b border-border">
+      <div className="flex justify-center items-center px-4 py-4 sm:py-5 border-b border-border">
         <img
           src="/logo2.png"
           alt="Eensell University"
-          className="h-18 sm:h-22 w-auto object-contain origin-center scale-[3] brightness-0 dark:invert my-1"
+          className="h-12 sm:h-14 w-auto object-contain origin-center scale-[2.2] brightness-0 dark:invert my-1"
         />
       </div>
 
@@ -160,7 +160,7 @@ function SidebarContent({
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      "flex justify-between items-center px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 group relative",
+                      "flex justify-between items-center px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative",
                       active
                         ? "text-primary-foreground bg-primary"
                         : "text-muted-foreground hover:text-foreground hover:bg-secondary"
@@ -386,12 +386,12 @@ export function DashboardSidebar({
               className="lg:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
             />
             <motion.aside
-              initial={{ x: -280 }}
+              initial={{ x: -270 }}
               animate={{ x: 0 }}
-              exit={{ x: -320 }}
+              exit={{ x: -270 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
               className={cn(
-                "lg:hidden fixed top-0 z-50 w-[320px] h-screen bg-card border-border",
+                "lg:hidden fixed top-0 z-50 w-[270px] h-screen bg-card border-border",
                 dir === "rtl" ? "right-0 border-l" : "left-0 border-r"
               )}
             >
@@ -411,7 +411,7 @@ export function DashboardSidebar({
       {/* Desktop sidebar */}
       <aside
         className={cn(
-          "hidden lg:flex lg:flex-col fixed top-0 h-screen w-[320px] bg-card border-border z-30",
+          "hidden lg:flex lg:flex-col fixed top-0 h-screen w-[270px] bg-card border-border z-30",
           dir === "rtl" ? "right-0 border-l" : "left-0 border-r"
         )}
       >

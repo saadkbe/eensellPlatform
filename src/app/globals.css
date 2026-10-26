@@ -108,9 +108,21 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    font-size: 14.5px;
+  }
+  @media (min-width: 1024px) {
+    html {
+      font-size: 14.25px;
+    }
+  }
+  @media (min-width: 1680px) {
+    html {
+      font-size: 15px;
+    }
+  }
   html, body {
-    overflow-x: hidden;
-    position: relative;
+    overflow-x: clip;
     max-width: 100vw;
   }
   body {

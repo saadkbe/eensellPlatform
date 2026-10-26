@@ -46,7 +46,7 @@ function RenderFormattedText({ content }: { content: string }) {
   const lines = content.split("\n");
 
   return (
-    <div className="space-y-2 text-sm leading-relaxed text-slate-200">
+    <div className="space-y-2.5 text-[15px] sm:text-base leading-relaxed text-slate-100">
       {lines.map((line, idx) => {
         if (!line.trim()) {
           return <div key={idx} className="h-1.5" />;
@@ -68,14 +68,14 @@ function RenderFormattedText({ content }: { content: string }) {
         // Bullet point styling
         if (line.trim().startsWith("•") || line.trim().startsWith("-")) {
           return (
-            <div key={idx} className="flex items-start gap-2 pl-1.5 text-slate-300">
+            <div key={idx} className="flex items-start gap-2.5 pl-1.5 text-slate-200">
               <span className="text-amber-400 font-bold shrink-0 mt-0.5">•</span>
-              <span>{formattedLine}</span>
+              <span className="leading-relaxed">{formattedLine}</span>
             </div>
           );
         }
 
-        return <p key={idx}>{formattedLine}</p>;
+        return <p key={idx} className="leading-relaxed">{formattedLine}</p>;
       })}
     </div>
   );
@@ -392,27 +392,27 @@ export function TaskAiChatbot({ currentDayNumber = 1 }: TaskAiChatbotProps) {
                             </div>
 
                             <div>
-                              <h4 className="text-base sm:text-lg font-black text-white leading-snug">
+                              <h4 className="text-base sm:text-xl font-black text-white leading-snug">
                                 {roadmap.title}
                               </h4>
-                              <p className="text-sm text-slate-300/90 mt-2 leading-relaxed">
+                              <p className="text-sm sm:text-[15px] text-slate-200 mt-2.5 leading-relaxed font-normal">
                                 {roadmap.summary}
                               </p>
                             </div>
 
                             {/* Checklist Box */}
-                            <div className="space-y-2 pt-1">
-                              <span className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-                                <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
+                            <div className="space-y-2.5 pt-1.5">
+                              <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                                <CheckCircle2 className="w-4 h-4 text-amber-400" />
                                 Core Deliverables Checklist:
                               </span>
-                              <div className="space-y-1.5">
+                              <div className="space-y-2">
                                 {roadmap.deliverables.map((item, idx) => (
                                   <div
                                     key={idx}
-                                    className="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05] text-xs sm:text-sm text-slate-200"
+                                    className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.04] border border-white/[0.07] text-sm sm:text-[15px] text-slate-100"
                                   >
-                                    <span className="flex h-5 w-5 rounded-md bg-amber-500/20 text-amber-400 items-center justify-center text-[10px] font-mono font-bold shrink-0 mt-0.5">
+                                    <span className="flex h-5 w-5 rounded-md bg-amber-500/20 text-amber-400 items-center justify-center text-xs font-mono font-bold shrink-0 mt-0.5">
                                       {idx + 1}
                                     </span>
                                     <span className="leading-relaxed">{item}</span>
@@ -447,7 +447,7 @@ export function TaskAiChatbot({ currentDayNumber = 1 }: TaskAiChatbotProps) {
                       >
                         <div
                           className={cn(
-                            "p-4 rounded-2xl break-words shadow-sm text-sm",
+                            "p-4 sm:p-5 rounded-2xl break-words shadow-sm text-[15px] sm:text-base",
                             m.sender === "user"
                               ? "bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-bold rounded-tr-none"
                               : m.isReportConfirmation
@@ -518,7 +518,7 @@ export function TaskAiChatbot({ currentDayNumber = 1 }: TaskAiChatbotProps) {
                     }}
                     placeholder={`Ask AI Coach about Day ${roadmap.dayNumber}...`}
                     disabled={isAiLoading}
-                    className="flex-1 bg-[#131622] border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-500/60 transition-colors"
+                    className="flex-1 bg-[#131622] border border-white/15 rounded-xl px-4 py-3 text-sm sm:text-base text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-500/60 transition-colors"
                   />
                   <Button
                     onClick={() => handleSendMessage()}

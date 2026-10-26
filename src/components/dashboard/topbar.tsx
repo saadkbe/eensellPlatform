@@ -56,7 +56,7 @@ export function TopBar() {
   });
 
   return (
-    <div className="sticky top-16 lg:top-0 z-30 w-full flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3.5 bg-card/95 backdrop-blur-md border-b border-border transition-all duration-300 shadow-sm">
+    <div className="sticky top-16 lg:top-0 z-40 w-full flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3.5 bg-card/90 backdrop-blur-xl border-b border-border transition-all duration-300 shadow-sm">
       <div className="flex items-center">
         {breadcrumbs.length > 0 ? breadcrumbs : <span className="text-foreground font-bold text-xl sm:text-2xl tracking-tight">{t("topbar_home")}</span>}
       </div>

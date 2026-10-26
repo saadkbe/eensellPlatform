@@ -65,7 +65,7 @@ export default async function DashboardLayout({
       <MainLayoutWrapper>
         <TopBar />
         {dbUser && <WalkthroughProvider hasSeenWalkthrough={dbUser.hasSeenWalkthrough} />}
-        <div className="flex-1 px-4 sm:px-6 lg:px-8 py-6 w-full">
+        <div className="flex-1 px-3 sm:px-5 lg:px-6 py-5 w-full">
           <PageTransition>
             {children}
           </PageTransition>
