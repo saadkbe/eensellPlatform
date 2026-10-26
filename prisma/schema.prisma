@@ -68,6 +68,7 @@ model User {
   missions       Mission[]
   weeklySchedules WeeklySchedule[]
   challengeDayCompletions ChallengeDayCompletion[]
+  taskReports    TaskReport[]
 
   // ── Referral System ──
   referralCode   String?   @unique
@@ -537,4 +538,33 @@ model ChallengeDayCompletion {
 
   @@unique([userId, challengeDayId])
   @@index([userId])
+}
+
+// ══════════════════════════════════════════════
+// Task & Problem Reports (Interactive Chatbot)
+// ══════════════════════════════════════════════
+
+enum ReportStatus {
+  PENDING
+  IN_REVIEW
+  RESOLVED
+}
+
+model TaskReport {
+  id         String       @id @default(cuid())
+  userId     String
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dayNumber  Int
+  taskTitle  String
+  type       String       @default("PROBLEM") // "PROBLEM" | "QUESTION" | "FEEDBACK"
+  message    String
+  status     ReportStatus @default(PENDING)
+  adminNotes String?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([dayNumber])
+  @@index([createdAt])
 }

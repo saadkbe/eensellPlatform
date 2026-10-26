@@ -8,6 +8,8 @@ import { headers } from "next/headers";
 
 import { PageTransition } from "@/components/page-transition";
 import { MainLayoutWrapper } from "@/components/dashboard/main-layout-wrapper";
+import { getUserChallengeProgress } from "@/actions/challenge.actions";
+import { TaskAiChatbot } from "@/components/dashboard/challenge/task-ai-chatbot";
 
 export const dynamic = 'force-dynamic';
 
@@ -26,11 +28,12 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Run user lookup, new lesson check, and headers lookup in parallel
-  const [dbUser, hasNewLesson, headerList] = await Promise.all([
+  // Run user lookup, new lesson check, challenge progress, and headers lookup in parallel
+  const [dbUser, hasNewLesson, headerList, challengeProgress] = await Promise.all([
     getOrCreateUser(),
     getHasNewLesson(),
     headers(),
+    getUserChallengeProgress(),
   ]);
   
   // Securely enforce pending status based on the database (truth) rather than just the cached Clerk token
@@ -67,6 +70,7 @@ export default async function DashboardLayout({
             {children}
           </PageTransition>
         </div>
+        <TaskAiChatbot currentDayNumber={challengeProgress?.currentDay || 1} />
       </MainLayoutWrapper>
     </div>
   );

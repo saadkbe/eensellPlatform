@@ -108,70 +108,77 @@ export function ChallengeClient({
 
   return (
     <div className="space-y-8 pb-16 w-full">
-      {/* ── Top Hero / Milestone Banner ── */}
-      <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#0A0B10] p-6 sm:p-10 shadow-2xl">
-        {/* Glow Effects - Orangish Yellow */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-500/[0.08] rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-orange-500/[0.05] rounded-full blur-[100px] pointer-events-none" />
+      {/* ── Top Hero / Milestone Banner in Orangish-Yellow Accent ── */}
+      <div className="relative overflow-hidden rounded-3xl border border-amber-400/40 bg-gradient-to-br from-amber-500 via-amber-600 to-orange-600 p-6 sm:p-10 shadow-2xl shadow-amber-500/20 text-slate-950">
+        {/* Subtle mesh & glow highlights */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/[0.12] rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-black/[0.15] rounded-full blur-[80px] pointer-events-none" />
+        <div 
+          className="absolute inset-0 opacity-[0.05] pointer-events-none"
+          style={{
+            backgroundImage: `linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)`,
+            backgroundSize: '28px 28px',
+          }}
+        />
 
         <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold tracking-wide uppercase mb-4 shadow-[0_0_15px_rgba(245,158,11,0.15)]">
-              <Zap className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-950/20 border border-slate-950/25 text-slate-950 text-xs font-black tracking-wide uppercase mb-4 backdrop-blur-md">
+              <Zap className="w-3.5 h-3.5 fill-slate-950" />
               60-Day AI Agency Sprint
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight mb-3">
-              Your 60-Day <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-orange-400">Mastery Roadmap</span>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-tight mb-3">
+              Your 60-Day <span className="text-white drop-shadow-sm">Mastery Roadmap</span>
             </h1>
-            <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-xl">
+            <p className="text-sm sm:text-base text-slate-950/85 font-medium leading-relaxed max-w-xl">
               From zero to a cash-flowing AI Automation Agency. Complete one high-impact milestone daily to systematically build, launch, and scale.
             </p>
           </div>
 
           {/* Quick Stats Badges */}
           <div className="flex flex-wrap lg:flex-nowrap gap-3 sm:gap-4 shrink-0 w-full lg:w-auto">
-            <div className="flex-1 lg:flex-none p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-md min-w-[130px]">
-              <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">
-                <Target className="w-3.5 h-3.5 text-amber-400" />
+            <div className="flex-1 lg:flex-none p-4 sm:p-5 rounded-2xl bg-slate-950/30 border border-white/20 backdrop-blur-xl min-w-[130px] shadow-lg">
+              <div className="flex items-center gap-2 text-amber-200 text-xs font-bold uppercase tracking-wider mb-1">
+                <Target className="w-3.5 h-3.5 text-amber-300" />
                 Progress
               </div>
               <p className="text-2xl sm:text-3xl font-black text-white font-mono">
-                {totalCompleted} <span className="text-sm text-slate-500 font-normal">/ 60</span>
+                {totalCompleted} <span className="text-sm text-amber-200/70 font-normal">/ 60</span>
               </p>
-              <p className="text-[11px] text-amber-400 font-bold mt-0.5">{progressPercentage}% Finished</p>
+              <p className="text-[11px] text-white font-bold mt-0.5">{progressPercentage}% Finished</p>
             </div>
 
-            <div className="flex-1 lg:flex-none p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-md min-w-[130px]">
-              <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <div className="flex-1 lg:flex-none p-4 sm:p-5 rounded-2xl bg-slate-950/30 border border-white/20 backdrop-blur-xl min-w-[130px] shadow-lg">
+              <div className="flex items-center gap-2 text-amber-200 text-xs font-bold uppercase tracking-wider mb-1">
+                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                 Total XP
               </div>
               <p className="text-2xl sm:text-3xl font-black text-white font-mono">
                 {userXp.toLocaleString()}
               </p>
-              <p className="text-[11px] text-amber-400 font-bold mt-0.5">+50 XP Per Day</p>
+              <p className="text-[11px] text-white font-bold mt-0.5">+50 XP Per Day</p>
             </div>
 
-            <div className="flex-1 lg:flex-none p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-md min-w-[130px]">
-              <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">
-                <Flame className="w-3.5 h-3.5 text-orange-400" />
+            <div className="flex-1 lg:flex-none p-4 sm:p-5 rounded-2xl bg-slate-950/30 border border-white/20 backdrop-blur-xl min-w-[130px] shadow-lg">
+              <div className="flex items-center gap-2 text-amber-200 text-xs font-bold uppercase tracking-wider mb-1">
+                <Flame className="w-3.5 h-3.5 text-amber-300" />
                 Active Focus
               </div>
               <p className="text-2xl sm:text-3xl font-black text-white font-mono">
                 Day {currentDay}
               </p>
-              <p className="text-[11px] text-slate-400 font-medium mt-0.5">Next Milestone</p>
+              <p className="text-[11px] text-white font-bold mt-0.5">Next Milestone</p>
             </div>
           </div>
         </div>
 
-        {/* ── Linear Segmented Neon Orangish-Yellow Progress Bar ── */}
-        <div className="mt-8 pt-6 border-t border-white/[0.06] space-y-3">
+        {/* ── Linear Segmented High-Contrast Progress Bar ── */}
+        <div className="mt-8 pt-6 border-t border-slate-950/15 space-y-3">
           <div className="flex items-center justify-between text-xs">
-            <span className="font-semibold text-slate-300">
-              Overall Roadmap Completion: <strong className="text-amber-400">{progressPercentage}% Completed</strong> (Day {currentDay} / 60)
+            <span className="font-bold text-slate-950">
+              Overall Roadmap Completion: <strong className="text-white drop-shadow-sm">{progressPercentage}% Completed</strong> (Day {currentDay} / 60)
             </span>
-            <span className="text-slate-400 font-mono text-[11px]">
+            <span className="text-slate-950 font-mono text-[11px] font-bold">
               {60 - totalCompleted} days remaining
             </span>
           </div>
@@ -186,17 +193,17 @@ export function ChallengeClient({
                   className={cn(
                     "h-2.5 rounded-full flex-1 transition-all duration-500",
                     isCompleted
-                      ? "bg-gradient-to-r from-amber-500 to-orange-400 shadow-[0_0_10px_rgba(245,158,11,0.5)]"
+                      ? "bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]"
                       : isCurrent
-                      ? "bg-amber-400/40 border border-amber-400 animate-pulse"
-                      : "bg-white/[0.04] border border-white/[0.04]"
+                      ? "bg-slate-950 border border-white animate-pulse"
+                      : "bg-slate-950/25 border border-slate-950/10"
                   )}
                 />
               );
             })}
           </div>
 
-          <div className="flex justify-between items-center text-[10px] font-mono text-slate-400 pt-1">
+          <div className="flex justify-between items-center text-[10px] font-mono text-slate-950/80 font-bold pt-1">
             <span>Phase 1: Foundation (1–10)</span>
             <span>Phase 2: Core Builds (11–25)</span>
             <span>Phase 3: Acquisition (26–40)</span>
