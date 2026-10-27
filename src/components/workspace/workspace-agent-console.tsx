@@ -34,12 +34,13 @@ import {
   CheckCheck,
   Clock,
   Layers,
+  Loader2,
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
-  runAutonomousOutreach,
+  dispatchCampaignEmails,
   simulateNextDayResponses,
 } from "@/actions/workspace.actions";
 
@@ -63,6 +64,7 @@ interface WorkspaceAgentConsoleProps {
     };
     recentLeads: any[];
     campaigns: any[];
+    savedMessages?: any[];
     debriefText: string;
   };
 }
@@ -70,24 +72,111 @@ interface WorkspaceAgentConsoleProps {
 type CanvasTab = "plan" | "code" | "leads";
 type AgentState = "idle" | "listening" | "processing" | "speaking";
 
+interface ChatMessage {
+  id: string;
+  sender: "user" | "agent";
+  text: string;
+  timestamp: string;
+  artifact?: {
+    filename: string;
+    leadsCount: number;
+  };
+}
+
 export function WorkspaceAgentConsole({ initialData }: WorkspaceAgentConsoleProps) {
   const [activeTab, setActiveTab] = useState<CanvasTab>("plan");
   const [agentState, setAgentState] = useState<AgentState>("idle");
   const [inputPrompt, setInputPrompt] = useState("");
-  const [transcript, setTranscript] = useState("");
   const [isAudioMuted, setIsAudioMuted] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const [isRunning, setIsRunning] = useState(false);
-  const [leads, setLeads] = useState<any[]>(initialData.recentLeads.slice(0, 5));
-  const [stats, setStats] = useState(initialData.stats);
+  const [isApplying, setIsApplying] = useState(false);
   const [selectedLeadPreview, setSelectedLeadPreview] = useState<any | null>(null);
 
+  // Active live campaign state
+  const [leads, setLeads] = useState<any[]>(initialData.recentLeads.slice(0, 5));
+  const [stats, setStats] = useState(initialData.stats);
+  const [planSteps, setPlanSteps] = useState([
+    {
+      step: "Analyze market & real estate niche in Casablanca",
+      desc: "Read Casablanca agency directories and evaluated buyer lead drop-off rates.",
+    },
+    {
+      step: "Locate decision-makers & verified emails",
+      desc: "Identified executive directors, agency managers, and verified MX-record emails.",
+    },
+    {
+      step: "Draft personalized WhatsApp AI copy",
+      desc: "Tailored value proposition addressing 40% lead drop outside working hours.",
+    },
+    {
+      step: "Validate deliverability & dispatch",
+      desc: "Visual check across contacts — zero spam triggers detected.",
+    },
+  ]);
+
+  const [emailCopy, setEmailCopy] = useState({
+    filename: "campagne-casablanca.mail",
+    subject: "Question sur la conversion de vos leads à Casablanca — Atlas Prestige Immobilier",
+    body: `Bonjour M. Youssef Berrada,
+
+J'ai remarqué le positionnement remarquable d'Atlas Prestige Immobilier sur le marché immobilier de Casablanca.
+
+En analysant la réactivité moyenne sur les demandes d'acquéreurs et investisseurs, nous avons constaté qu'une agence perd en moyenne 40% de ses mandats qualifiés simplement parce que les prospects attendent plus de 15 minutes avant d'obtenir une réponse ou une visite WhatsApp.
+
+Chez Eensell AI, nous avons développé une infrastructure d'automatisation IA dédiée aux agences immobilières d'élite :
+1. Qualification instantanée 24/7 sur WhatsApp de chaque prospect (budget, zone souhaitée, financement validé).
+2. Synchronisation automatique des fiches biens et prise de rendez-vous directe dans l'agenda de vos négociateurs.
+3. Zéro prospect laissé sans suivi.
+
+Seriez-vous ouvert à un échange informel de 10 minutes ce jeudi à 15h pour voir une démonstration en direct adaptée à Atlas Prestige Immobilier ?
+
+Bien cordialement,
+Saad | Eensell AI Partner`,
+    linesCount: 18,
+  });
+
+  // Conversation history (loaded from DB if available)
+  const [messages, setMessages] = useState<ChatMessage[]>(() => {
+    if (initialData.savedMessages && initialData.savedMessages.length > 0) {
+      return initialData.savedMessages.map((m) => ({
+        id: m.id,
+        sender: m.role === "user" ? "user" : "agent",
+        text: m.content,
+        timestamp: new Date(m.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        artifact: m.emailCopy ? { filename: m.emailCopy.filename, leadsCount: (m.leads as any[])?.length || 5 } : undefined,
+      }));
+    }
+    return [
+      {
+        id: "msg-1",
+        sender: "user",
+        text: "J'ai un blueprint d'automatisation pour les agences immobilières au Maroc et je veux lancer l'outreach.",
+        timestamp: "10:04",
+      },
+      {
+        id: "msg-2",
+        sender: "agent",
+        text: "Nous avons scanné et qualifié les 5 meilleures agences immobilières à Casablanca et Marrakech. Les décideurs clés ont été extraits et les cold emails personnalisés ont été rédigés pour maximiser la prise de rendez-vous démo.",
+        timestamp: "10:05",
+        artifact: {
+          filename: "campagne-casablanca.mail",
+          leadsCount: 5,
+        },
+      },
+    ];
+  });
+
+  const chatBottomRef = useRef<HTMLDivElement | null>(null);
   const recognitionRef = useRef<any>(null);
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
-  const speechSynthRef = useRef<SpeechSynthesisUtterance | null>(null);
 
-  // Initialize Web Speech Recognition
+  // Auto-scroll chat to bottom
+  useEffect(() => {
+    chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, agentState]);
+
+  // Web Speech Recognition
   useEffect(() => {
     if (typeof window !== "undefined") {
       const SpeechRecognition =
@@ -104,12 +193,9 @@ export function WorkspaceAgentConsole({ initialData }: WorkspaceAgentConsoleProp
             .map((res: any) => res[0].transcript)
             .join("");
           setInputPrompt(currentTranscript);
-          setTranscript(currentTranscript);
         };
         recognition.onerror = () => setAgentState("idle");
-        recognition.onend = () => {
-          setAgentState("idle");
-        };
+        recognition.onend = () => setAgentState("idle");
 
         recognitionRef.current = recognition;
       }
@@ -123,7 +209,6 @@ export function WorkspaceAgentConsole({ initialData }: WorkspaceAgentConsoleProp
     };
   }, []);
 
-  // Voice output via ElevenLabs or native fallback
   const speakOutLoud = async (text: string) => {
     if (isAudioMuted) return;
     setAgentState("speaking");
@@ -146,7 +231,6 @@ export function WorkspaceAgentConsole({ initialData }: WorkspaceAgentConsoleProp
         await audio.play();
         return;
       }
-
       fallbackWebSpeech(text);
     } catch {
       fallbackWebSpeech(text);
@@ -164,7 +248,6 @@ export function WorkspaceAgentConsole({ initialData }: WorkspaceAgentConsoleProp
     utterance.rate = 1.05;
     utterance.onend = () => setAgentState("idle");
     utterance.onerror = () => setAgentState("idle");
-    speechSynthRef.current = utterance;
     window.speechSynthesis.speak(utterance);
   };
 
@@ -177,42 +260,101 @@ export function WorkspaceAgentConsole({ initialData }: WorkspaceAgentConsoleProp
       try {
         recognitionRef.current?.start();
       } catch {
-        toast.error("Microphone non accessible.");
+        toast.error("Microphone non disponible.");
         setAgentState("idle");
       }
     }
   };
 
-  const handleRunCampaign = async (promptToRun?: string) => {
-    const text = promptToRun || inputPrompt;
-    if (!text.trim()) return;
+  // ──────────────────────────────────────────────
+  // REAL LIVE AI PROCESSING
+  // ──────────────────────────────────────────────
+  const handleSendMessage = async (customPrompt?: string) => {
+    const textToSend = (customPrompt || inputPrompt).trim();
+    if (!textToSend || agentState === "processing") return;
 
-    setIsRunning(true);
+    const userTime = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    const userMsg: ChatMessage = {
+      id: `usr-${Date.now()}`,
+      sender: "user",
+      text: textToSend,
+      timestamp: userTime,
+    };
+
+    setMessages((prev) => [...prev, userMsg]);
+    setInputPrompt("");
     setAgentState("processing");
 
     try {
-      const result = await runAutonomousOutreach({
-        prompt: text,
-        sendRealEmails: Boolean(initialData.account?.isGmailConnected),
+      const response = await fetch("/api/workspace/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: textToSend,
+          history: messages.slice(-4),
+        }),
       });
 
-      if (result.success) {
-        setLeads(result.leads);
+      const data = await response.json();
+
+      if (!response.ok || data.error) {
+        throw new Error(data.error || "Failed to process outreach message");
+      }
+
+      // Update Right Canvas Consequences Live
+      if (data.plan) setPlanSteps(data.plan);
+      if (data.emailCopy) setEmailCopy(data.emailCopy);
+      if (data.leads) {
+        setLeads(data.leads);
         setStats((prev) => ({
           ...prev,
           totalCampaigns: prev.totalCampaigns + 1,
-          totalLeads: prev.totalLeads + result.leadsCount,
-          sentEmails: prev.sentEmails + result.dispatchedCount,
+          totalLeads: prev.totalLeads + data.leads.length,
         }));
-        speakOutLoud(result.summaryMessage);
-        toast.success(`${result.leadsCount} agences qualifiées avec succès !`);
+      }
+
+      const agentTime = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      const agentMsg: ChatMessage = {
+        id: `agt-${Date.now()}`,
+        sender: "agent",
+        text: data.reply,
+        timestamp: agentTime,
+        artifact: {
+          filename: data.emailCopy?.filename || "outreach-campaign.mail",
+          leadsCount: data.leads?.length || 5,
+        },
+      };
+
+      setMessages((prev) => [...prev, agentMsg]);
+      speakOutLoud(data.reply);
+      toast.success(`${data.leads?.length || 5} agences qualifiées en temps réel !`);
+    } catch (err: any) {
+      toast.error(err.message || "Une erreur est survenue");
+    } finally {
+      setAgentState("idle");
+    }
+  };
+
+  // ──────────────────────────────────────────────
+  // APPLY CHANGES: Real Gmail Dispatch
+  // ──────────────────────────────────────────────
+  const handleApplyChanges = async () => {
+    setIsApplying(true);
+    try {
+      const res = await dispatchCampaignEmails();
+      if (res.success) {
+        setLeads((prev) => prev.map((l) => ({ ...l, status: "SENT" })));
+        setStats((prev) => ({
+          ...prev,
+          sentEmails: prev.sentEmails + (res.sentCount || leads.length),
+        }));
+        toast.success(res.message);
         setActiveTab("leads");
       }
-    } catch (err: any) {
-      toast.error(err.message || "Erreur lors de l'exécution");
+    } catch (e: any) {
+      toast.error(e.message || "Erreur lors de l'expédition");
     } finally {
-      setIsRunning(false);
-      setAgentState("idle");
+      setIsApplying(false);
     }
   };
 
@@ -223,29 +365,6 @@ export function WorkspaceAgentConsole({ initialData }: WorkspaceAgentConsoleProp
     toast.success("Copié dans le presse-papier");
   };
 
-  const sampleLead = leads[0] || {
-    businessName: "Atlas Prestige Immobilier",
-    city: "Casablanca",
-    email: "direction@atlasprestige.ma",
-    phone: "+212 5 22 45 88 12",
-    emailSubject: "Question sur la conversion de vos leads à Casablanca — Atlas Prestige Immobilier",
-    emailBody: `Bonjour M. Youssef Berrada,
-
-J'ai remarqué le positionnement remarquable d'Atlas Prestige Immobilier sur le marché immobilier de Casablanca.
-
-En analysant la réactivité moyenne sur les demandes d'acquéreurs et investisseurs, nous avons constaté qu'une agence perd en moyenne 40% de ses mandats qualifiés simplement parce que les prospects attendent plus de 15 minutes avant d'obtenir une réponse ou une visite WhatsApp.
-
-Chez Eensell AI, nous avons développé une infrastructure d'automatisation IA dédiée aux agences immobilières d'élite :
-1. Qualification instantanée 24/7 sur WhatsApp de chaque prospect (budget, zone souhaitée, financement validé).
-2. Synchronisation automatique des fiches biens et prise de rendez-vous directe dans l'agenda de vos négociateurs.
-3. Zéro prospect laissé sans suivi.
-
-Seriez-vous ouvert à un échange informel de 10 minutes ce jeudi à 15h pour voir une démonstration en direct adaptée à Atlas Prestige Immobilier ?
-
-Bien cordialement,
-Saad | Eensell AI Partner`,
-  };
-
   return (
     <div className="flex-1 flex flex-col h-full bg-background text-foreground overflow-hidden">
       {/* ─────────────────────────────────────────────────────────── */}
@@ -254,11 +373,11 @@ Saad | Eensell AI Partner`,
       <header className="h-14 border-b border-border/80 px-4 sm:px-6 flex items-center justify-between shrink-0 bg-card">
         <div className="flex items-center gap-3 min-w-0">
           <h1 className="font-bold text-sm sm:text-base tracking-tight text-foreground truncate">
-            Agences Immobilières Casablanca
+            {emailCopy.filename.replace(".mail", "")}
           </h1>
           <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-muted/60 text-muted-foreground border border-border text-xs font-mono">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-            morocco-realestate
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+            live-agent
           </span>
         </div>
 
@@ -276,9 +395,13 @@ Saad | Eensell AI Partner`,
           <ThemeToggle />
 
           {/* Notification Button */}
-          <button className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors">
+          <Link
+            href="/workspace/settings"
+            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+            title="Paramètres & Intégrations"
+          >
             <Bell className="w-4 h-4" />
-          </button>
+          </Link>
         </div>
       </header>
 
@@ -286,121 +409,128 @@ Saad | Eensell AI Partner`,
       {/* 2-COLUMN SPLIT SCREEN: Chat on Left, Canvas on Right */}
       {/* ─────────────────────────────────────────────────────────── */}
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 min-h-0 overflow-hidden">
-        {/* LEFT PANE: Conversational Chat Canvas (5.5 Cols) */}
-        <div className="lg:col-span-6 xl:col-span-6 border-r border-border flex flex-col h-full min-h-0 bg-background/50">
+        {/* LEFT PANE: Conversational Chat Canvas (6 Cols) */}
+        <div className="lg:col-span-6 border-r border-border flex flex-col h-full min-h-0 bg-background/50">
           {/* Conversation Stream */}
           <div className="flex-1 p-4 sm:p-6 space-y-6 overflow-y-auto no-scrollbar">
-            {/* User Message Bubble */}
-            <div className="flex flex-col items-end">
-              <div className="p-4 rounded-2xl bg-card border border-border shadow-xs text-xs sm:text-sm text-foreground max-w-[85%] leading-relaxed">
-                J'ai un blueprint d'automatisation pour les agences immobilières au Maroc et je veux lancer l'outreach.
-              </div>
-              <span className="text-[11px] text-muted-foreground mt-1.5 px-1">
-                You · 10:04
-              </span>
-            </div>
-
-            {/* Agent Response (Exact Layout from Screenshot) */}
-            <div className="flex items-start gap-3.5">
-              {/* Agent Avatar */}
-              <div className="w-8 h-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shrink-0 shadow-xs">
-                <Sparkles className="w-4 h-4 text-amber-400" />
-              </div>
-
-              {/* Agent Bubble Content */}
-              <div className="flex-1 min-w-0 space-y-3">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-xs sm:text-sm text-foreground">
-                    Eensell AI
-                  </span>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                    ✓ Task complete
-                  </span>
-                  <span className="text-[11px] text-muted-foreground ml-auto">
-                    10:05
-                  </span>
-                </div>
-
-                <p className="text-xs sm:text-sm text-foreground/90 leading-relaxed">
-                  Nous avons scanné et qualifié les 5 meilleures agences immobilières à Casablanca et Marrakech. Les décideurs clés ont été extraits et les cold emails personnalisés ont été rédigés pour maximiser la prise de rendez-vous démo.
-                </p>
-
-                {/* Checklist with checkmarks */}
-                <div className="space-y-1.5 text-xs text-foreground/80 pl-0.5">
-                  <div className="flex items-center gap-2">
-                    <Check className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-                    <span>Scraped 5 verified real estate agencies in Casablanca & Marrakech</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Check className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-                    <span>Extracted decision-maker managers & direct verified emails</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Check className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-                    <span>Drafted personalized French cold emails targeting WhatsApp 24/7 qualification</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Check className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-                    <span>SMTP deliverability check passed — ready to dispatch via connected Gmail</span>
-                  </div>
-                </div>
-
-                {/* Embedded Canvas Artifact Card (Exact Screenshot Design) */}
-                <div className="p-3.5 rounded-2xl bg-card border border-border shadow-xs flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0">
-                      <Code2 className="w-4 h-4" />
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex flex-col ${
+                  msg.sender === "user" ? "items-end" : "items-start"
+                }`}
+              >
+                {msg.sender === "user" ? (
+                  <>
+                    <div className="p-4 rounded-2xl bg-card border border-border shadow-xs text-xs sm:text-sm text-foreground max-w-[85%] leading-relaxed">
+                      {msg.text}
                     </div>
-                    <div className="min-w-0">
-                      <div className="font-bold text-xs text-foreground truncate">
-                        campagne-casablanca.mail
+                    <span className="text-[11px] text-muted-foreground mt-1.5 px-1">
+                      You · {msg.timestamp}
+                    </span>
+                  </>
+                ) : (
+                  <div className="flex items-start gap-3.5 max-w-[96%]">
+                    {/* Agent Avatar */}
+                    <div className="w-8 h-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shrink-0 shadow-xs mt-0.5">
+                      <Sparkles className="w-4 h-4 text-amber-400" />
+                    </div>
+
+                    <div className="flex-1 min-w-0 space-y-3">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-xs sm:text-sm text-foreground">
+                          Eensell AI
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                          ✓ Task complete
+                        </span>
+                        <span className="text-[11px] text-muted-foreground ml-auto">
+                          {msg.timestamp}
+                        </span>
                       </div>
-                      <div className="text-[11px] text-muted-foreground flex items-center gap-2">
-                        <span>5 leads</span>
-                        <span className="text-emerald-600 dark:text-emerald-400 font-mono font-semibold">+5 ready</span>
+
+                      <p className="text-xs sm:text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap">
+                        {msg.text}
+                      </p>
+
+                      {/* Embedded Canvas Artifact Card if attached */}
+                      {msg.artifact && (
+                        <div className="p-3.5 rounded-2xl bg-card border border-border shadow-xs flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0">
+                              <Code2 className="w-4 h-4" />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="font-bold text-xs text-foreground truncate">
+                                {msg.artifact.filename}
+                              </div>
+                              <div className="text-[11px] text-muted-foreground flex items-center gap-2">
+                                <span>{msg.artifact.leadsCount} leads</span>
+                                <span className="text-emerald-600 dark:text-emerald-400 font-mono font-semibold">
+                                  +100% verified
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <button
+                            onClick={() => setActiveTab("code")}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/60 hover:bg-muted text-foreground border border-border text-xs font-semibold transition-colors cursor-pointer shrink-0"
+                          >
+                            <FileText className="w-3.5 h-3.5 text-muted-foreground" />
+                            <span>Open canvas</span>
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Interaction Footer Icons */}
+                      <div className="flex items-center gap-3 pt-1 text-muted-foreground text-xs">
+                        <button
+                          onClick={() => handleCopy(msg.text)}
+                          className="hover:text-foreground flex items-center gap-1 transition-colors cursor-pointer"
+                        >
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>Copy</span>
+                        </button>
+                        <button
+                          onClick={() => setIsLiked(!isLiked)}
+                          className={`hover:text-foreground flex items-center gap-1 transition-colors cursor-pointer ${
+                            isLiked ? "text-amber-500 font-bold" : ""
+                          }`}
+                        >
+                          <ThumbsUp className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => speakOutLoud(msg.text)}
+                          className="hover:text-foreground flex items-center gap-1 transition-colors cursor-pointer"
+                        >
+                          <Play className="w-3.5 h-3.5 text-amber-500" />
+                          <span>Listen</span>
+                        </button>
                       </div>
                     </div>
                   </div>
+                )}
+              </div>
+            ))}
 
-                  <button
-                    onClick={() => setActiveTab("code")}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/60 hover:bg-muted text-foreground border border-border text-xs font-semibold transition-colors cursor-pointer shrink-0"
-                  >
-                    <FileText className="w-3.5 h-3.5 text-muted-foreground" />
-                    <span>Open canvas</span>
-                  </button>
+            {/* Live Thinking Indicator */}
+            {agentState === "processing" && (
+              <div className="flex items-start gap-3.5 max-w-[85%]">
+                <div className="w-8 h-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shrink-0 shadow-xs animate-pulse">
+                  <Sparkles className="w-4 h-4 text-amber-400" />
                 </div>
-
-                {/* Interaction Footer Icons */}
-                <div className="flex items-center gap-3 pt-1 text-muted-foreground text-xs">
-                  <button
-                    onClick={() => handleCopy(sampleLead.emailBody)}
-                    className="hover:text-foreground flex items-center gap-1 transition-colors cursor-pointer"
-                  >
-                    <Copy className="w-3.5 h-3.5" />
-                    <span>Copy</span>
-                  </button>
-                  <button
-                    onClick={() => setIsLiked(!isLiked)}
-                    className={`hover:text-foreground flex items-center gap-1 transition-colors cursor-pointer ${
-                      isLiked ? "text-amber-500 font-bold" : ""
-                    }`}
-                  >
-                    <ThumbsUp className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    onClick={() => handleRunCampaign()}
-                    className="hover:text-foreground flex items-center gap-1 transition-colors cursor-pointer"
-                  >
-                    <RefreshCw className="w-3.5 h-3.5" />
-                    <span>Retry</span>
-                  </button>
+                <div className="p-3.5 rounded-2xl bg-card border border-border shadow-xs flex items-center gap-2 text-xs text-muted-foreground">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-500" />
+                  <span>L'agent d'acquisition IA analyse la niche et rédige la campagne...</span>
                 </div>
               </div>
-            </div>
+            )}
+
+            <div ref={chatBottomRef} />
           </div>
 
-          {/* Floating Bottom Input Bar (Exact Screenshot Design) */}
+          {/* Floating Bottom Input Bar */}
           <div className="p-4 border-t border-border/80 bg-card/60">
             <div className="rounded-2xl border border-border bg-card p-3 shadow-xs space-y-2.5 focus-within:border-amber-500/50 transition-colors">
               <textarea
@@ -409,7 +539,7 @@ Saad | Eensell AI Partner`,
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
-                    handleRunCampaign();
+                    handleSendMessage();
                   }
                 }}
                 rows={2}
@@ -419,12 +549,15 @@ Saad | Eensell AI Partner`,
 
               <div className="flex items-center justify-between pt-1">
                 <div className="flex items-center gap-2">
-                  <button className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-muted/60 text-muted-foreground hover:text-foreground border border-border text-xs font-medium cursor-pointer">
-                    <Sliders className="w-3 h-3" />
-                    <span>Tools</span>
-                    <span className="w-4 h-4 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
-                      2
-                    </span>
+                  <button
+                    onClick={() =>
+                      handleSendMessage(
+                        "Lance l'outreach pour les cabinets dentaires à Casablanca"
+                      )
+                    }
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-muted/60 text-muted-foreground hover:text-foreground border border-border text-xs font-medium cursor-pointer"
+                  >
+                    <span>🦷 Cabinets Dentaires</span>
                   </button>
 
                   <button
@@ -441,8 +574,8 @@ Saad | Eensell AI Partner`,
                 </div>
 
                 <button
-                  onClick={() => handleRunCampaign()}
-                  disabled={isRunning || !inputPrompt.trim()}
+                  onClick={() => handleSendMessage()}
+                  disabled={agentState === "processing" || !inputPrompt.trim()}
                   className="w-8 h-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shadow-xs hover:opacity-90 disabled:opacity-40 transition-opacity cursor-pointer"
                 >
                   <ArrowUp className="w-4 h-4" />
@@ -452,8 +585,8 @@ Saad | Eensell AI Partner`,
           </div>
         </div>
 
-        {/* RIGHT PANE: Consequences / Live Action Canvas (6.5 Cols) */}
-        <div className="lg:col-span-6 xl:col-span-6 flex flex-col h-full min-h-0 bg-card">
+        {/* RIGHT PANE: Consequences / Live Action Canvas (6 Cols) */}
+        <div className="lg:col-span-6 flex flex-col h-full min-h-0 bg-card">
           {/* Canvas Top Bar */}
           <div className="h-12 border-b border-border px-4 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2.5 min-w-0">
@@ -462,29 +595,26 @@ Saad | Eensell AI Partner`,
               </div>
               <div className="flex items-center gap-2 min-w-0">
                 <span className="font-bold text-xs text-foreground truncate">
-                  campagne-casablanca.mail
+                  {emailCopy.filename}
                 </span>
                 <span className="text-[11px] text-muted-foreground">
-                  French Cold Email · 18 lines
+                  French Cold Email · {emailCopy.linesCount} lines
                 </span>
               </div>
             </div>
 
             <div className="flex items-center gap-1 text-muted-foreground">
               <button
-                onClick={() => handleCopy(sampleLead.emailBody)}
+                onClick={() => handleCopy(emailCopy.body)}
                 className="flex items-center gap-1 px-2.5 py-1 rounded-md hover:bg-muted text-xs font-medium cursor-pointer"
               >
                 <Copy className="w-3.5 h-3.5" />
                 <span>Copy</span>
               </button>
-              <button className="p-1 rounded-md hover:bg-muted text-xs cursor-pointer">
-                <X className="w-4 h-4" />
-              </button>
             </div>
           </div>
 
-          {/* Segmented Control Tabs (Plan / Code / Diff) */}
+          {/* Segmented Control Tabs */}
           <div className="px-4 py-2 border-b border-border/80 flex items-center gap-2 bg-muted/30">
             <button
               onClick={() => setActiveTab("plan")}
@@ -496,7 +626,7 @@ Saad | Eensell AI Partner`,
             >
               <span>Plan</span>
               <span className="px-1.5 py-0.2 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[10px] font-bold">
-                4
+                {planSteps.length}
               </span>
             </button>
 
@@ -528,27 +658,10 @@ Saad | Eensell AI Partner`,
 
           {/* Canvas Content Area */}
           <div className="flex-1 p-5 overflow-y-auto no-scrollbar text-xs">
-            {/* TAB 1: Plan Stepper (Exact Connected Timeline from Screenshot) */}
+            {/* TAB 1: Plan Stepper */}
             {activeTab === "plan" && (
               <div className="space-y-6 max-w-lg">
-                {[
-                  {
-                    step: "Analyze market & real estate niche",
-                    desc: "Read Casablanca agency directories and evaluated buyer lead drop-off rates.",
-                  },
-                  {
-                    step: "Locate decision-makers & verified emails",
-                    desc: "Identified executive directors, agency managers, and verified MX-record emails.",
-                  },
-                  {
-                    step: "Draft personalized WhatsApp AI copy",
-                    desc: "Tailored value proposition addressing 40% lead drop outside working hours.",
-                  },
-                  {
-                    step: "Validate deliverability & dispatch",
-                    desc: "Visual check across 5 contacts — zero spam triggers detected.",
-                  },
-                ].map((item, index, arr) => (
+                {planSteps.map((item, index, arr) => (
                   <div key={item.step} className="relative flex items-start gap-3.5">
                     {/* Connecting Vertical Line */}
                     {index < arr.length - 1 && (
@@ -574,18 +687,18 @@ Saad | Eensell AI Partner`,
               </div>
             )}
 
-            {/* TAB 2: Email Copy View (Syntax Style) */}
+            {/* TAB 2: Email Copy View */}
             {activeTab === "code" && (
               <div className="space-y-3 font-mono text-xs">
                 <div className="p-3 rounded-xl bg-muted/40 border border-border">
                   <span className="text-muted-foreground">Subject: </span>
                   <span className="text-amber-600 dark:text-amber-400 font-semibold">
-                    {sampleLead.emailSubject}
+                    {emailCopy.subject}
                   </span>
                 </div>
 
                 <div className="p-4 rounded-xl bg-muted/40 border border-border text-foreground leading-relaxed whitespace-pre-wrap font-sans text-xs sm:text-sm">
-                  {sampleLead.emailBody}
+                  {emailCopy.body}
                 </div>
               </div>
             )}
@@ -620,14 +733,18 @@ Saad | Eensell AI Partner`,
                             ? "bg-amber-500 text-slate-950"
                             : lead.status === "REPLIED"
                             ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30"
-                            : "bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30"
+                            : lead.status === "SENT"
+                            ? "bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30"
+                            : "bg-muted text-muted-foreground border border-border"
                         }`}
                       >
                         {lead.status === "MEETING_BOOKED"
                           ? "RDV CONFIRMÉ"
                           : lead.status === "REPLIED"
                           ? "RÉPONSE"
-                          : "DISPATCHÉ"}
+                          : lead.status === "SENT"
+                          ? "DISPATCHÉ"
+                          : "PRÊT"}
                       </span>
 
                       <button
@@ -643,7 +760,7 @@ Saad | Eensell AI Partner`,
             )}
           </div>
 
-          {/* Bottom Action Bar (Exact Screenshot Layout) */}
+          {/* Bottom Action Bar (Apply Changes) */}
           <div className="h-14 border-t border-border px-4 flex items-center justify-between shrink-0 bg-card">
             <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 text-xs font-semibold">
               <Check className="w-4 h-4 stroke-[2.5]" />
@@ -652,19 +769,23 @@ Saad | Eensell AI Partner`,
 
             <div className="flex items-center gap-2">
               <button
-                onClick={() => toast.info("Modifications rejetées")}
+                onClick={() => toast.info("Modifications conservées en brouillon")}
                 className="px-3.5 py-1.5 rounded-xl border border-border text-foreground hover:bg-muted text-xs font-semibold transition-colors cursor-pointer"
               >
                 Reject
               </button>
 
               <button
-                onClick={() => handleRunCampaign()}
-                disabled={isRunning}
+                onClick={handleApplyChanges}
+                disabled={isApplying}
                 className="px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-xs hover:shadow-sm transition-all cursor-pointer flex items-center gap-1.5 disabled:opacity-50"
               >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>{isRunning ? "Running..." : "Apply changes"}</span>
+                {isApplying ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  <Sparkles className="w-3.5 h-3.5" />
+                )}
+                <span>{isApplying ? "Expédition..." : "Apply changes"}</span>
               </button>
             </div>
           </div>

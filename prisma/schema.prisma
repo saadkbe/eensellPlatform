@@ -74,6 +74,7 @@ model User {
   workspaceAccount   WorkspaceAccount?
   workspaceLeads     WorkspaceLead[]
   workspaceCampaigns WorkspaceCampaign[]
+  workspaceMessages  WorkspaceMessage[]
 
   // ── Referral System ──
   referralCode   String?   @unique
@@ -588,6 +589,7 @@ model WorkspaceAccount {
   agencyName       String?  // Agency / brand name
   elevenLabsApiKey String?
   voiceId          String?  @default("21m00Tcm4TlvDq8ikWAM") // Default ElevenLabs voice (Rachel)
+  outscraperApiKey String?
   isGmailConnected Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
@@ -657,5 +659,20 @@ model WorkspaceLead {
   @@index([campaignId])
   @@index([status])
   @@index([email])
+}
+
+model WorkspaceMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      String   // "user" | "assistant"
+  content   String
+  plan      Json?    // Array of steps [{ step: string, desc: string }]
+  emailCopy Json?    // { subject: string, body: string, filename: string }
+  leads     Json?    // Array of leads generated in this message
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
 }
 

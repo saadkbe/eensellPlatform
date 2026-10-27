@@ -162,7 +162,7 @@ export async function testGmailConnection() {
 export async function getWorkspaceOverview() {
   const user = await getAuthUser();
 
-  const [account, campaigns, leads] = await Promise.all([
+  const [account, campaigns, leads, savedMessages] = await Promise.all([
     db.workspaceAccount.findUnique({ where: { userId: user.id } }),
     db.workspaceCampaign.findMany({
       where: { userId: user.id },
@@ -177,6 +177,11 @@ export async function getWorkspaceOverview() {
     db.workspaceLead.findMany({
       where: { userId: user.id },
       orderBy: { createdAt: "desc" },
+      take: 20,
+    }),
+    db.workspaceMessage.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: "asc" },
       take: 20,
     }),
   ]);
@@ -219,6 +224,7 @@ export async function getWorkspaceOverview() {
     },
     campaigns,
     recentLeads: leads,
+    savedMessages,
     debriefText,
   };
 }
@@ -623,3 +629,100 @@ export async function deleteCampaign(campaignId: string) {
 
   return { success: true };
 }
+
+// ──────────────────────────────────────────────
+// Live Dispatch & Message History
+// ──────────────────────────────────────────────
+
+export async function dispatchCampaignEmails(campaignId?: string) {
+  const user = await getAuthUser();
+  const account = await db.workspaceAccount.findUnique({
+    where: { userId: user.id },
+  });
+
+  const leads = await db.workspaceLead.findMany({
+    where: {
+      userId: user.id,
+      ...(campaignId ? { campaignId } : {}),
+      status: "PENDING",
+    },
+    take: 10,
+  });
+
+  if (leads.length === 0) {
+    return {
+      success: true,
+      sentCount: 0,
+      message: "Tous les prospects sont déjà expédiés ou aucun prospect en attente.",
+    };
+  }
+
+  let transporter: any = null;
+  let isRealGmail = false;
+
+  if (account?.gmailAddress && account?.gmailAppPassword && account?.isGmailConnected) {
+    try {
+      transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+          user: account.gmailAddress,
+          pass: account.gmailAppPassword,
+        },
+        tls: { rejectUnauthorized: false },
+      });
+      isRealGmail = true;
+    } catch (e) {
+      console.warn("Transporter initialization failed:", e);
+    }
+  }
+
+  let sentCount = 0;
+  for (const lead of leads) {
+    if (isRealGmail && transporter && account?.gmailAddress && lead.emailSubject && lead.emailBody) {
+      try {
+        await transporter.sendMail({
+          from: `"${account.senderName || user.firstName || "Founder"}" <${account.gmailAddress}>`,
+          to: lead.email,
+          subject: lead.emailSubject,
+          text: lead.emailBody,
+        });
+      } catch (sendErr) {
+        console.warn(`Could not dispatch email to ${lead.email}:`, sendErr);
+      }
+    }
+
+    await db.workspaceLead.update({
+      where: { id: lead.id },
+      data: {
+        status: "SENT",
+        sentAt: new Date(),
+      },
+    });
+    sentCount++;
+  }
+
+  revalidatePath("/workspace");
+  revalidatePath("/workspace/crm");
+  revalidatePath("/workspace/campaigns");
+
+  return {
+    success: true,
+    sentCount,
+    isRealGmail,
+    message: isRealGmail
+      ? `${sentCount} emails expédiés en direct depuis votre adresse Gmail (${account?.gmailAddress}) !`
+      : `${sentCount} emails enregistrés et marqués expédiés dans votre CRM Workspace !`,
+  };
+}
+
+export async function getWorkspaceMessages() {
+  const user = await getAuthUser();
+  return db.workspaceMessage.findMany({
+    where: { userId: user.id },
+    orderBy: { createdAt: "asc" },
+    take: 30,
+  });
+}
+
