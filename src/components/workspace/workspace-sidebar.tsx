@@ -48,19 +48,18 @@ export function WorkspaceSidebar() {
   const content = (
     <div className="flex flex-col h-full bg-card border-r border-border text-foreground select-none">
       {/* Workspace Brand Header */}
-      <div className="p-4 border-b border-border/80 flex items-center justify-between">
-        <Link href="/workspace" className="flex items-center gap-2.5 min-w-0">
-          <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0">
-            <Sparkles className="w-4 h-4 text-amber-500" />
-          </div>
-          <div className="flex flex-col min-w-0">
-            <span className="font-bold text-sm tracking-tight truncate leading-tight">
-              Eensell Workspace
-            </span>
-            <span className="text-[11px] text-muted-foreground truncate">
-              Personal workspace
-            </span>
-          </div>
+      <div className="px-4 py-4 border-b border-border/80 flex items-center justify-between">
+        <Link href="/workspace" className="flex items-center w-full">
+          <img
+            src="/workspace-logo-cropped.png"
+            alt="Eensell Workspace"
+            className="h-7 w-auto object-contain dark:hidden"
+          />
+          <img
+            src="/workspace-logo-cropped-white.png"
+            alt="Eensell Workspace"
+            className="h-7 w-auto object-contain hidden dark:block"
+          />
         </Link>
       </div>
 
@@ -171,9 +170,18 @@ export function WorkspaceSidebar() {
           {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
 
-        <span className="font-bold text-xs tracking-tight text-foreground">
-          Eensell Workspace
-        </span>
+        <div className="flex items-center">
+          <img
+            src="/workspace-logo-cropped.png"
+            alt="Eensell Workspace"
+            className="h-6 w-auto object-contain dark:hidden"
+          />
+          <img
+            src="/workspace-logo-cropped-white.png"
+            alt="Eensell Workspace"
+            className="h-6 w-auto object-contain hidden dark:block"
+          />
+        </div>
 
         <Link
           href="/dashboard"
