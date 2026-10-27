@@ -370,6 +370,19 @@ export const translations = {
     bot_pitfalls: "أخطاء شائعة",
     bot_step1: "كيف أنفذ الخطوة 1؟",
     bot_placeholder: "اسأل المدرب الذكي عن مهمة اليوم...",
+
+    // Share Win to Community
+    win_modal_title: "تم إنجاز المحطة بنجاح! 🏆",
+    win_modal_xp: "تم كسب +50 نقطة XP",
+    win_modal_sub: "ألهم زملاءك في الأكاديمية! مشاركة إنجازاتك اليومية تصنع التزاماً حقيقياً وتحفز الجميع نحو النجاح ومضاعفة النتائج.",
+    win_modal_note_label: "أضف ملاحظة أو درساً تعلمته اليوم (اختياري):",
+    win_modal_note_placeholder: "مثال: قمت بربط الـ Webhook مع Make.com بنجاح! واجهت تحدياً بسيطاً في التحقق وحللته فوراً.",
+    win_modal_btn_share: "نشر الإنجاز في المجتمع وإلهام الآخرين 🚀",
+    win_modal_btn_sharing: "جاري النشر في المجتمع...",
+    win_modal_btn_shared: "تم النشر في المجتمع بنجاح! 🔥",
+    win_modal_btn_view_community: "عرض المنشور في المجتمع",
+    win_modal_btn_skip: "مواصلة العمل",
+    win_card_share_btn: "مشاركة الإنجاز",
   },
 
   fr: {
@@ -739,6 +752,19 @@ export const translations = {
     bot_pitfalls: "Pièges courants",
     bot_step1: "Comment faire l'étape 1 ?",
     bot_placeholder: "Posez votre question au coach...",
+
+    // Share Win to Community
+    win_modal_title: "Étape Complétée avec Succès ! 🏆",
+    win_modal_xp: "+50 XP Gagnés",
+    win_modal_sub: "Inspirez la communauté ! Partager vos réussites quotidiennes crée de la motivation et renforce votre engagement vers la réussite.",
+    win_modal_note_label: "Ajoutez une note ou une leçon apprise (optionnel) :",
+    win_modal_note_placeholder: "ex: J'ai connecté le webhook WhatsApp à Make.com ! Un petit bug de token résolu en 15 minutes.",
+    win_modal_btn_share: "Publier dans la communauté & Inspirer 🚀",
+    win_modal_btn_sharing: "Publication en cours...",
+    win_modal_btn_shared: "Succès partagé dans la communauté ! 🔥",
+    win_modal_btn_view_community: "Voir la publication",
+    win_modal_btn_skip: "Continuer à bâtir",
+    win_card_share_btn: "Partager",
   },
 
   en: {
@@ -1108,5 +1134,18 @@ export const translations = {
     bot_pitfalls: "Common Pitfalls",
     bot_step1: "How to do Step 1?",
     bot_placeholder: "Ask AI Coach about today's task...",
+
+    // Share Win to Community
+    win_modal_title: "Milestone Complete! 🏆",
+    win_modal_xp: "+50 XP Earned",
+    win_modal_sub: "Inspire your fellow agency builders! Sharing your daily milestones creates accountability, unlocks encouragement, and builds massive momentum.",
+    win_modal_note_label: "Add a personal note or lesson (Optional):",
+    win_modal_note_placeholder: "e.g. Just wired up the WhatsApp Cloud API webhook to Make.com! Had a small token verification bug but resolved it within 15 minutes.",
+    win_modal_btn_share: "Post to Community & Inspire Others 🚀",
+    win_modal_btn_sharing: "Publishing to Community...",
+    win_modal_btn_shared: "Win Shared to Community! 🔥",
+    win_modal_btn_view_community: "View Post in Community",
+    win_modal_btn_skip: "Keep Building",
+    win_card_share_btn: "Share Win",
   },
 } as const;

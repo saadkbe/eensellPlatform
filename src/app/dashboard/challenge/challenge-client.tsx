@@ -17,12 +17,20 @@ import {
   Flame,
   Layers,
   ArrowRight,
+  Share2,
+  Trophy,
+  X,
+  MessageSquare,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ROADMAP_DAYS, ROADMAP_PHASES, RoadmapDay, RoadmapPhase } from "@/data/roadmap-data";
+import { Textarea } from "@/components/ui/textarea";
+import Link from "next/link";
+import confetti from "canvas-confetti";
+import { ROADMAP_DAYS, ROADMAP_PHASES, RoadmapDay, RoadmapPhase, getRoadmapDay } from "@/data/roadmap-data";
 import { toggleDayCompletion } from "@/actions/challenge.actions";
+import { shareMilestoneWinToCommunity } from "@/actions/community.actions";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/components/landing/LanguageProvider";
@@ -42,6 +50,14 @@ export function ChallengeClient({
   const [selectedPhase, setSelectedPhase] = useState<string>("all");
   const [expandedDays, setExpandedDays] = useState<Record<number, boolean>>({});
   const [isPending, startTransition] = useTransition();
+
+  // 1-Click "Share Win to Community" Celebration State
+  const [celebrationDay, setCelebrationDay] = useState<number | null>(null);
+  const [reflectionText, setReflectionText] = useState("");
+  const [isSharingWin, setIsSharingWin] = useState(false);
+  const [sharedPostId, setSharedPostId] = useState<string | null>(null);
+
+  const celebrationRoadmap = celebrationDay ? getRoadmapDay(celebrationDay) : null;
 
   const totalCompleted = completedDays.length;
   const progressPercentage = Math.min(100, Math.round((totalCompleted / 60) * 100));
@@ -86,6 +102,21 @@ export function ChallengeClient({
           setUserXp(result.updatedXp);
           if (result.isCompleted) {
             toast.success(`Day ${dayNumber} completed! +50 XP earned 🔥`);
+
+            // Trigger celebratory confetti burst
+            try {
+              confetti({
+                particleCount: 80,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ["#F59E0B", "#F97316", "#10B981", "#3B82F6", "#FFFFFF"],
+              });
+            } catch (e) {}
+
+            // Open 1-Click "Share Win to Community" Modal
+            setCelebrationDay(dayNumber);
+            setReflectionText("");
+            setSharedPostId(null);
           } else {
             toast.info(`Day ${dayNumber} marked uncompleted (-50 XP)`);
           }
@@ -95,6 +126,32 @@ export function ChallengeClient({
         setCompletedDays(initialCompletedDays);
         setUserXp(initialUserXp);
         toast.error("Failed to update challenge progress. Please try again.");
+      }
+    });
+  };
+
+  const openShareModal = (dayNumber: number) => {
+    setCelebrationDay(dayNumber);
+    setReflectionText("");
+    setSharedPostId(null);
+  };
+
+  const handleShareWin = () => {
+    if (!celebrationDay) return;
+    setIsSharingWin(true);
+    startTransition(async () => {
+      try {
+        const res = await shareMilestoneWinToCommunity(celebrationDay, reflectionText);
+        if (res.success) {
+          setSharedPostId(res.postId || "shared");
+          toast.success(t("win_modal_btn_shared"));
+        } else {
+          toast.error("Failed to share win to community");
+        }
+      } catch (e) {
+        toast.error("Error sharing win. Please try again.");
+      } finally {
+        setIsSharingWin(false);
       }
     });
   };
@@ -346,7 +403,19 @@ export function ChallengeClient({
                   </div>
 
                   {/* Right: Expand / Action */}
-                  <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
+                  <div className="flex items-center gap-2.5 shrink-0 self-end sm:self-center">
+                    {isCompleted && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openShareModal(day.dayNumber)}
+                        className="text-xs font-bold text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 border-amber-500/30 h-9 px-3 rounded-xl gap-1.5 cursor-pointer shadow-sm transition-all hover:scale-105"
+                      >
+                        <Share2 className="w-3.5 h-3.5" />
+                        <span>{t("win_card_share_btn")}</span>
+                      </Button>
+                    )}
+
                     <Button
                       variant="ghost"
                       size="sm"
@@ -434,6 +503,146 @@ export function ChallengeClient({
           );
         })}
       </div>
+
+      {/* ── 1-Click "Share Win to Community" Celebration Modal ── */}
+      <AnimatePresence>
+        {celebrationDay !== null && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" dir={dir}>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setCelebrationDay(null)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            />
+
+            {/* Modal Card */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", stiffness: 350, damping: 26 }}
+              className="relative w-full max-w-lg rounded-3xl bg-[#0c0e15] border border-amber-500/40 p-6 sm:p-8 shadow-[0_20px_70px_rgba(0,0,0,0.85)] z-10 overflow-hidden text-slate-100"
+            >
+              {/* Glowing ambient background auras */}
+              <div className="absolute -top-24 -right-24 w-60 h-60 bg-amber-500/20 rounded-full blur-[80px] pointer-events-none" />
+              <div className="absolute -bottom-24 -left-24 w-60 h-60 bg-orange-500/20 rounded-full blur-[80px] pointer-events-none" />
+
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setCelebrationDay(null)}
+                className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="relative z-10 space-y-5">
+                {/* Header Icon + XP Badge */}
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-slate-950 shadow-lg shadow-amber-500/30 shrink-0">
+                    <Trophy className="w-7 h-7 stroke-[2.5]" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-black uppercase tracking-wider">
+                        {t("win_modal_xp")}
+                      </span>
+                      <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
+                    </div>
+                    <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight mt-1">
+                      {t("win_modal_title")}
+                    </h3>
+                  </div>
+                </div>
+
+                {/* Milestone Detail Card */}
+                {celebrationRoadmap && (
+                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] space-y-1.5">
+                    <div className="flex items-center justify-between text-xs text-amber-400 font-bold uppercase tracking-wider">
+                      <span>Day {celebrationRoadmap.dayNumber}</span>
+                      <span>{celebrationRoadmap.phaseShort}</span>
+                    </div>
+                    <p className="text-sm sm:text-base font-bold text-white leading-snug">
+                      {celebrationRoadmap.title}
+                    </p>
+                  </div>
+                )}
+
+                {/* Subtitle Prompt */}
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  {t("win_modal_sub")}
+                </p>
+
+                {/* Optional Reflection Textarea (only if not yet shared) */}
+                {!sharedPostId ? (
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
+                      {t("win_modal_note_label")}
+                    </label>
+                    <Textarea
+                      value={reflectionText}
+                      onChange={(e) => setReflectionText(e.target.value)}
+                      placeholder={t("win_modal_note_placeholder")}
+                      rows={3}
+                      className="w-full bg-[#141724] border-white/15 rounded-2xl text-xs sm:text-sm text-white placeholder:text-slate-500 focus:border-amber-500/50 resize-none p-3.5 leading-relaxed"
+                    />
+                  </div>
+                ) : (
+                  <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 flex items-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                    <span className="text-sm font-bold">
+                      {t("win_modal_btn_shared")}
+                    </span>
+                  </div>
+                )}
+
+                {/* Action Buttons */}
+                <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
+                  {!sharedPostId ? (
+                    <>
+                      <Button
+                        onClick={handleShareWin}
+                        disabled={isSharingWin}
+                        className="w-full sm:flex-1 h-12 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/25 border-0 gap-2 cursor-pointer transition-transform hover:scale-[1.02]"
+                      >
+                        <Flame className="w-4 h-4 fill-slate-950" />
+                        <span>
+                          {isSharingWin ? t("win_modal_btn_sharing") : t("win_modal_btn_share")}
+                        </span>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setCelebrationDay(null)}
+                        className="w-full sm:w-auto h-12 rounded-2xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white cursor-pointer"
+                      >
+                        {t("win_modal_btn_skip")}
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Link href="/dashboard/community" className="w-full sm:flex-1">
+                        <Button className="w-full h-12 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm gap-2 cursor-pointer">
+                          <MessageSquare className="w-4 h-4" />
+                          <span>{t("win_modal_btn_view_community")}</span>
+                        </Button>
+                      </Link>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setCelebrationDay(null)}
+                        className="w-full sm:w-auto h-12 rounded-2xl text-xs sm:text-sm font-bold text-slate-400 hover:text-white cursor-pointer"
+                      >
+                        {t("win_modal_btn_skip")}
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

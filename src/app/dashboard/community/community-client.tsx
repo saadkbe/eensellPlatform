@@ -385,6 +385,15 @@ export function CommunityClient({
                       Pinned
                     </Badge>
                   )}
+                  {post.title.startsWith("🏆") && (
+                    <Badge
+                      variant="secondary"
+                      className="bg-amber-500/15 text-amber-500 border-amber-500/30 text-[10px] px-2 py-0 font-bold tracking-wide uppercase gap-1"
+                    >
+                      <Flame className="w-2.5 h-2.5 text-amber-400" />
+                      Milestone Win
+                    </Badge>
+                  )}
                 </div>
                 <p className="text-xs text-muted-foreground mt-0.5 font-medium">
                   {formatDate(post.createdAt)}

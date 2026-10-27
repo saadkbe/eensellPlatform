@@ -143,6 +143,111 @@ export async function createPost(title: string, content: string) {
   return post;
 }
 
+// Share a 60-Day Roadmap Milestone Win to Community
+export async function shareMilestoneWinToCommunity(
+  dayNumber: number,
+  reflectionText?: string
+) {
+  const user = await getAuthUser();
+  const { getRoadmapDay } = await import("@/data/roadmap-data");
+  const roadmap = getRoadmapDay(dayNumber);
+
+  const title = `🏆 Completed Day ${roadmap.dayNumber}: ${roadmap.title}`;
+
+  // Check if user already shared this milestone recently to prevent accidental duplicates
+  const existingPost = await db.communityPost.findFirst({
+    where: {
+      authorId: user.id,
+      title,
+      createdAt: { gte: new Date(Date.now() - 2 * 60 * 60 * 1000) },
+    },
+  });
+
+  if (existingPost) {
+    return {
+      success: true,
+      post: existingPost,
+      alreadyShared: true,
+      postId: existingPost.id,
+    };
+  }
+
+  const deliverablesHtml = roadmap.deliverables
+    .map((d) => `<li>✅ ${d}</li>`)
+    .join("");
+
+  const formattedReflection =
+    reflectionText && reflectionText.trim()
+      ? `<div style="margin-top: 12px; padding: 12px; background: rgba(245, 158, 11, 0.08); border-left: 3px solid #f59e0b; border-radius: 8px;"><strong>💡 Key Takeaway / Lesson:</strong><p style="margin: 4px 0 0 0;">${reflectionText
+          .trim()
+          .replace(/\n/g, "<br />")}</p></div>`
+      : "";
+
+  const content = `
+    <p>🚀 <strong>Boom! Just crushed Day ${roadmap.dayNumber} in the 60-Day AI Automation Agency Sprint.</strong></p>
+    <p><strong>🎯 Phase:</strong> ${roadmap.phaseName} &bull; <strong>Est. Time:</strong> ${roadmap.estimatedTime}</p>
+    <p><strong>⚡ Core Deliverables Completed:</strong></p>
+    <ul>${deliverablesHtml}</ul>
+    ${formattedReflection}
+    <p style="margin-top: 10px;"><em>+50 XP Claimed! Keep stacking wins, Eensell family! 🔥</em></p>
+  `.trim();
+
+  const post = await db.communityPost.create({
+    data: {
+      title,
+      content,
+      authorId: user.id,
+      isPinned: false,
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          imageUrl: true,
+          role: true,
+        },
+      },
+      reactions: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      },
+      comments: {
+        orderBy: { createdAt: "asc" },
+        include: {
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              imageUrl: true,
+              role: true,
+            },
+          },
+        },
+      },
+      _count: {
+        select: {
+          reactions: true,
+          comments: true,
+        },
+      },
+    },
+  });
+
+  revalidatePath("/dashboard/community");
+  revalidatePath("/dashboard/challenge");
+  return { success: true, post, postId: post.id };
+}
+
 // Toggle pin status (admin-only)
 export async function togglePinPost(postId: string) {
   const user = await getAuthUser();
