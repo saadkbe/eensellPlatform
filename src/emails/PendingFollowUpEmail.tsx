@@ -41,7 +41,7 @@ export const PendingFollowUpEmail = ({
               Vous n'êtes plus qu'à une étape de rejoindre le Challenge de 60 Jours, mais nous avons remarqué que votre inscription est toujours en attente.
             </Text>
             <Text style={text}>
-              Actuellement, vous avez une place réservée pour y accéder à seulement <strong style={highlightText}>200 MAD</strong> (au lieu du tarif normal de 599 MAD). Cependant, il ne nous reste que <strong style={highlightText}>{remainingSpots} places</strong> à ce tarif réduit. Une fois ces dernières places prises, les inscriptions fermeront et le prix remontera à 599 MAD.
+              Actuellement, vous avez une place réservée pour y accéder à seulement <strong style={highlightText}>499 MAD</strong> (au lieu du tarif normal de 999 MAD). Cependant, il ne nous reste que <strong style={highlightText}>{remainingSpots} places</strong> à ce tarif réduit. Une fois ces dernières places prises, les inscriptions fermeront et le prix remontera à 999 MAD.
             </Text>
             <Text style={text}>
               Si vous hésitez encore, nous venons de publier une nouvelle vidéo expliquant étape par étape exactement ce que vous accomplirez lors de ce Challenge de 60 Jours.
@@ -54,7 +54,7 @@ export const PendingFollowUpEmail = ({
               أنت على بعد خطوة واحدة من الانضمام إلى تحدي الـ 60 يومًا، لكننا لاحظنا أن تسجيلك لا يزال قيد الانتظار.
             </Text>
             <Text style={textRtl}>
-              في الوقت الحالي، لديك مكان محجوز للانضمام مقابل <strong style={highlightText}>200 درهم</strong> فقط (بدلاً من السعر العادي 599 درهم). ومع ذلك، لم يتبق لدينا سوى <strong style={highlightText}>{remainingSpots} مقاعد</strong> بهذا السعر المخفض. بمجرد شغل هذه المقاعد الأخيرة، ستُغلق الأبواب وسيعود السعر إلى 599 درهم.
+              في الوقت الحالي، لديك مكان محجوز للانضمام مقابل <strong style={highlightText}>499 درهم</strong> فقط (بدلاً من السعر العادي 999 درهم). ومع ذلك، لم يتبق لدينا سوى <strong style={highlightText}>{remainingSpots} مقاعد</strong> بهذا السعر المخفض. بمجرد شغل هذه المقاعد الأخيرة، ستُغلق الأبواب وسيعود السعر إلى 999 درهم.
             </Text>
             <Text style={textRtl}>
               إذا كنت لا تزال متردداً، فقد أصدرنا للتو مقطع فيديو جديد يشرح خطوة بخطوة ما ستحققه بالضبط داخل تحدي الـ 60 يومًا.
@@ -62,7 +62,7 @@ export const PendingFollowUpEmail = ({
 
             <Section style={buttonContainer}>
               <Button style={button} href={`${baseUrl}/pending`}>
-                Visionner la Vidéo & Réserver ma Place (200 MAD)
+                Visionner la Vidéo & Réserver ma Place (499 MAD)
                 <br />
                 <span style={buttonAr}>شاهد الفيديو واحجز مقعدي</span>
               </Button>

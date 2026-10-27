@@ -65,7 +65,7 @@ export async function GET() {
     }),
   ]);
 
-  const revenue = activeUsers * 200;
+  const revenue = activeUsers * 499;
 
   return NextResponse.json({
     generatedAt: new Date().toISOString(),

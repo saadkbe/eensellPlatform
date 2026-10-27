@@ -70,6 +70,11 @@ model User {
   challengeDayCompletions ChallengeDayCompletion[]
   taskReports    TaskReport[]
 
+  // ── Workspace Ecosystem ──
+  workspaceAccount   WorkspaceAccount?
+  workspaceLeads     WorkspaceLead[]
+  workspaceCampaigns WorkspaceCampaign[]
+
   // ── Referral System ──
   referralCode   String?   @unique
   referredBy     Referral? @relation("Referred")
@@ -568,3 +573,89 @@ model TaskReport {
   @@index([dayNumber])
   @@index([createdAt])
 }
+
+// ══════════════════════════════════════════════
+// Eensell Workspace (Autonomous Client Outreach OS)
+// ══════════════════════════════════════════════
+
+model WorkspaceAccount {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gmailAddress     String?
+  gmailAppPassword String?  // 16-character Google App Password for SMTP dispatch
+  senderName       String?  // Display name (e.g., "Saad from Eensell AI")
+  agencyName       String?  // Agency / brand name
+  elevenLabsApiKey String?
+  voiceId          String?  @default("21m00Tcm4TlvDq8ikWAM") // Default ElevenLabs voice (Rachel)
+  isGmailConnected Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([userId])
+}
+
+enum WorkspaceCampaignStatus {
+  RUNNING
+  COMPLETED
+  PAUSED
+}
+
+model WorkspaceCampaign {
+  id             String                  @id @default(cuid())
+  userId         String
+  user           User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name           String
+  niche          String                  // e.g. "Real Estate Agencies", "Dental Clinics", "E-commerce"
+  targetCity     String                  // e.g. "Casablanca", "Marrakech", "Paris", "Dubai"
+  targetCountry  String                  @default("Morocco")
+  language       String                  @default("fr") // "fr" | "en"
+  status         WorkspaceCampaignStatus @default(RUNNING)
+  leadsCount     Int                     @default(0)
+  repliesCount   Int                     @default(0)
+  meetingsCount  Int                     @default(0)
+  leads          WorkspaceLead[]
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum LeadStatus {
+  PENDING
+  SENT
+  OPENED
+  REPLIED
+  MEETING_BOOKED
+  DECLINED
+}
+
+model WorkspaceLead {
+  id           String             @id @default(cuid())
+  userId       String
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  campaignId   String?
+  campaign     WorkspaceCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  businessName String
+  niche        String
+  city         String
+  country      String             @default("Morocco")
+  website      String?
+  phone        String?
+  email        String
+  status       LeadStatus         @default(PENDING)
+  emailSubject String?
+  emailBody    String?
+  sentAt       DateTime?
+  replyNotes   String?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  @@index([userId])
+  @@index([campaignId])
+  @@index([status])
+  @@index([email])
+}
+

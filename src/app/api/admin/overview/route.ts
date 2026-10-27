@@ -42,7 +42,7 @@ export async function GET(req: Request) {
       }),
     ]);
 
-    const revenue = activeUsers * 200;
+    const revenue = activeUsers * 499;
 
     return NextResponse.json({
       stats: {

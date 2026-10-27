@@ -149,7 +149,7 @@ function PendingContent() {
   const nextSteps = [
     {
       icon: Banknote,
-      title: tx("تحويل 200 درهم", "Transférer 200 MAD", "Transfer 200 MAD"),
+      title: tx("تحويل 499 درهم", "Transférer 499 MAD", "Transfer 499 MAD"),
       desc: tx("عبر CIH Bank أو Wafacash أو Cash Plus", "Via CIH Bank, Wafacash ou Cash Plus", "Via CIH Bank, Wafacash, or Cash Plus"),
     },
     {

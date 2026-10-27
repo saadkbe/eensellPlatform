@@ -78,7 +78,21 @@ export function TopBar() {
         {breadcrumbs.length > 0 ? breadcrumbs : <span className="text-foreground font-bold text-xl sm:text-2xl tracking-tight">{t("topbar_home")}</span>}
       </div>
       
-      <div className="flex items-center gap-4 sm:gap-5">
+      <div className="flex items-center gap-3 sm:gap-4">
+        {/* Eensell Workspace Luxury Black Pill Button */}
+        <Link href="/workspace" className="group shrink-0">
+          <div className="flex items-center gap-2 sm:gap-2.5 h-11 px-3.5 sm:px-5 rounded-full bg-slate-950 hover:bg-black text-white border border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.2)] hover:shadow-[0_0_22px_rgba(245,158,11,0.4)] transition-all font-bold text-xs sm:text-sm cursor-pointer">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500" />
+            </span>
+            <span className="tracking-wide whitespace-nowrap">Eensell Workspace</span>
+            <span className="hidden sm:inline-flex text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold tracking-wider">
+              AI OS
+            </span>
+          </div>
+        </Link>
+
         {/* Language Toggle */}
         <div className="relative">
           <button
