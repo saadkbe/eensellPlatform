@@ -90,30 +90,38 @@ export function WorkspaceInvoicesClient() {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-5xl mx-auto">
-      {/* ── Page Header (Hidden when printing) ── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-border print:hidden">
-        <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20 mb-2">
-            <Receipt className="w-3.5 h-3.5" />
-            <span>Official Client Billing</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight">
-            Agency Invoice & Contract Builder
-          </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Generate and export professional client invoices with Moroccan bank RIB and payment terms.
-          </p>
+    <div className="p-4 sm:p-8 lg:p-12 max-w-5xl mx-auto w-full space-y-6">
+      {/* ── Notion Header (Hidden when printing) ── */}
+      <div className="space-y-3 print:hidden">
+        <div className="flex items-center gap-1.5 text-xs text-[#787774] dark:text-[#9B9A97]">
+          <span>Eensell Workspace</span>
+          <span>/</span>
+          <span className="text-[#37352F] dark:text-[#E6E6E5] font-medium">Invoices & Contracts</span>
         </div>
 
-        <div className="flex items-center gap-2.5">
-          <Button
-            onClick={handlePrint}
-            className="font-bold bg-primary hover:bg-primary/90 text-primary-foreground gap-2 shadow-sm"
-          >
-            <Printer className="w-4 h-4" />
-            <span>Print / Save as PDF</span>
-          </Button>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+          <div className="flex items-center gap-3">
+            <span className="text-3xl select-none">🧾</span>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5]">
+                Agency Invoices & Billing
+              </h1>
+              <p className="text-xs text-[#787774] dark:text-[#9B9A97] mt-0.5">
+                Generate and export professional client invoices with Moroccan bank RIB and payment terms.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={handlePrint}
+              size="sm"
+              className="text-xs font-semibold bg-[#37352F] hover:bg-[#262420] dark:bg-[#E6E6E5] dark:hover:bg-[#FFFFFF] text-[#FFFFFF] dark:text-[#191919] gap-1.5 h-8 px-3 rounded-md shadow-xs cursor-pointer"
+            >
+              <Printer className="w-3.5 h-3.5" />
+              <span>Print / PDF</span>
+            </Button>
+          </div>
         </div>
       </div>
 

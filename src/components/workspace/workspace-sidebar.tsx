@@ -21,72 +21,90 @@ import {
   Menu,
   X,
   TrendingUp,
+  Search,
+  Sun,
+  Moon,
+  ChevronDown,
+  Building2,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
 
-const mainNav = [
-  { title: "Overview & Income", href: "/workspace", icon: LayoutDashboard },
-  { title: "Maps Lead Scraper", href: "/workspace/scraper", icon: MapPin },
-  { title: "Clients & Outreach", href: "/workspace/crm", icon: Users },
-  { title: "Agency Sheets", href: "/workspace/sheets", icon: Table2 },
-  { title: "Email & DM Drafter", href: "/workspace/drafter", icon: Send },
-  { title: "Invoices & Contracts", href: "/workspace/invoices", icon: Receipt },
-  { title: "Notes & Scratchpad", href: "/workspace/notes", icon: StickyNote },
-  { title: "Settings", href: "/workspace/settings", icon: Settings },
+const workspaceNav = [
+  { title: "Overview & Revenue", href: "/workspace", emoji: "🏢" },
+  { title: "Google Maps Scraper", href: "/workspace/scraper", emoji: "📍" },
+  { title: "Clients & CRM", href: "/workspace/crm", emoji: "💼" },
+  { title: "Agency Sheets", href: "/workspace/sheets", emoji: "📊" },
 ];
 
-const quickTools = [
-  { title: "Dental Clinics Casablanca", href: "/workspace/scraper", tag: "casa-dental" },
-  { title: "Real Estate Rabat", href: "/workspace/scraper", tag: "rabat-immo" },
-  { title: "Standard Service Agreement", href: "/workspace/invoices", tag: "invoice-tmp" },
+const outreachNav = [
+  { title: "Email & WhatsApp Drafter", href: "/workspace/drafter", emoji: "✍️" },
+  { title: "Invoices & Contracts", href: "/workspace/invoices", emoji: "🧾" },
+  { title: "Notes & Playbooks", href: "/workspace/notes", emoji: "📝" },
 ];
 
 export function WorkspaceSidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user } = useUser();
+  const { theme, setTheme } = useTheme();
 
   const isActive = (href: string) => {
     if (href === "/workspace") return pathname === "/workspace";
     return pathname.startsWith(href);
   };
 
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    localStorage.setItem("eensell-workspace-theme-preference", nextTheme);
+  };
+
   const content = (
-    <div className="flex flex-col h-full bg-card border-r border-border text-foreground select-none">
-      {/* Workspace Brand Header */}
-      <div className="px-4 py-4 border-b border-border/80 flex items-center justify-between">
-        <Link href="/workspace" className="flex items-center w-full">
-          <img
-            src="/workspace-logo-cropped.png"
-            alt="Eensell Workspace"
-            className="h-7 w-auto object-contain dark:hidden"
-          />
-          <img
-            src="/workspace-logo-cropped-white.png"
-            alt="Eensell Workspace"
-            className="h-7 w-auto object-contain hidden dark:block"
-          />
+    <div className="flex flex-col h-full bg-[#F7F6F3] dark:bg-[#202020] border-r border-[#E9E9E7] dark:border-[#2E2E2E] text-[#37352F] dark:text-[#E6E6E5] select-none text-[13px]">
+      {/* ── Notion Workspace Switcher Header ── */}
+      <div className="p-3 border-b border-[#E9E9E7]/80 dark:border-[#2E2E2E]">
+        <Link
+          href="/workspace"
+          className="flex items-center justify-between p-1.5 rounded-md hover:bg-[#EFEFEE] dark:hover:bg-[#2A2A2A] transition-colors group cursor-pointer"
+        >
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-6 h-6 rounded bg-[#37352F] dark:bg-[#E6E6E5] text-[#FFFFFF] dark:text-[#191919] flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
+              E
+            </div>
+            <div className="flex flex-col min-w-0">
+              <span className="font-semibold text-xs text-[#37352F] dark:text-[#E6E6E5] truncate leading-tight">
+                Eensell Workspace
+              </span>
+              <span className="text-[10px] text-[#787774] dark:text-[#9B9A97] truncate leading-tight">
+                Agency Operating System
+              </span>
+            </div>
+          </div>
+          <ChevronDown className="w-3.5 h-3.5 text-[#787774] dark:text-[#9B9A97] shrink-0" />
         </Link>
       </div>
 
-      {/* Top Scrape Leads Button */}
-      <div className="p-3">
+      {/* ── Quick Search & New Lead Action ── */}
+      <div className="p-3 space-y-2">
         <Link
           href="/workspace/scraper"
-          className="flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xs shadow-xs transition-all"
+          className="flex items-center justify-center gap-2 w-full py-1.5 px-3 rounded-md bg-[#37352F] hover:bg-[#262420] dark:bg-[#E6E6E5] dark:hover:bg-[#FFFFFF] text-[#FFFFFF] dark:text-[#191919] font-medium text-xs shadow-xs transition-all"
         >
           <Plus className="w-3.5 h-3.5" />
-          <span>Scrape New Clients</span>
+          <span>New Lead Scrape</span>
         </Link>
       </div>
 
-      {/* Navigation Sections */}
-      <div className="flex-1 px-3 py-2 space-y-6 overflow-y-auto no-scrollbar text-xs">
-        {/* Main Nav */}
-        <div className="space-y-1">
-          {mainNav.map((item) => {
-            const Icon = item.icon;
+      {/* ── Navigation Sections ── */}
+      <div className="flex-1 px-2.5 py-1 space-y-5 overflow-y-auto no-scrollbar">
+        {/* Workspace Ecosystem */}
+        <div className="space-y-0.5">
+          <div className="px-2 py-1 text-[11px] font-semibold text-[#9B9A97] dark:text-[#787774] uppercase tracking-wider">
+            Workspace
+          </div>
+          {workspaceNav.map((item) => {
             const active = isActive(item.href);
             return (
               <Link
@@ -94,117 +112,152 @@ export function WorkspaceSidebar() {
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
                 className={cn(
-                  "flex items-center gap-2.5 px-3 py-2 rounded-xl font-medium transition-colors",
+                  "flex items-center gap-2 px-2.5 py-1.5 rounded-md transition-colors font-normal text-[13px]",
                   active
-                    ? "bg-primary/10 text-primary font-bold border border-primary/20"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                    ? "bg-[#EFEFEE] dark:bg-[#2A2A2A] text-[#111111] dark:text-[#FFFFFF] font-semibold"
+                    : "text-[#37352F] dark:text-[#D4D4D4] hover:bg-[#EFEFEE] dark:hover:bg-[#2A2A2A]"
                 )}
               >
-                <Icon className={cn("w-4 h-4 shrink-0", active ? "text-primary" : "text-muted-foreground")} />
-                <span>{item.title}</span>
+                <span className="text-sm shrink-0">{item.emoji}</span>
+                <span className="truncate">{item.title}</span>
               </Link>
             );
           })}
         </div>
 
-        {/* Quick Tools & Presets */}
-        <div className="space-y-2">
-          <div className="px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80">
-            Presets & Shortcuts
+        {/* Outreach & Sales */}
+        <div className="space-y-0.5">
+          <div className="px-2 py-1 text-[11px] font-semibold text-[#9B9A97] dark:text-[#787774] uppercase tracking-wider">
+            Client Acquisition
           </div>
-          <div className="space-y-0.5">
-            {quickTools.map((tool) => (
+          {outreachNav.map((item) => {
+            const active = isActive(item.href);
+            return (
               <Link
-                key={tool.tag}
-                href={tool.href}
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
                 className={cn(
-                  "flex items-center gap-2 px-3 py-2 rounded-xl text-xs transition-colors",
-                  "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                  "flex items-center gap-2 px-2.5 py-1.5 rounded-md transition-colors font-normal text-[13px]",
+                  active
+                    ? "bg-[#EFEFEE] dark:bg-[#2A2A2A] text-[#111111] dark:text-[#FFFFFF] font-semibold"
+                    : "text-[#37352F] dark:text-[#D4D4D4] hover:bg-[#EFEFEE] dark:hover:bg-[#2A2A2A]"
                 )}
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-primary/70 shrink-0" />
-                <span className="truncate flex-1">{tool.title}</span>
+                <span className="text-sm shrink-0">{item.emoji}</span>
+                <span className="truncate">{item.title}</span>
               </Link>
-            ))}
-          </div>
+            );
+          })}
         </div>
 
-        {/* Exit back to Academy */}
-        <div className="pt-2">
-          <div className="h-px bg-border/60 mb-3" />
+        {/* Quick Settings & Navigation */}
+        <div className="space-y-0.5">
+          <div className="px-2 py-1 text-[11px] font-semibold text-[#9B9A97] dark:text-[#787774] uppercase tracking-wider">
+            System
+          </div>
+          <Link
+            href="/workspace/settings"
+            onClick={() => setMobileOpen(false)}
+            className={cn(
+              "flex items-center gap-2 px-2.5 py-1.5 rounded-md transition-colors text-[13px]",
+              isActive("/workspace/settings")
+                ? "bg-[#EFEFEE] dark:bg-[#2A2A2A] text-[#111111] dark:text-[#FFFFFF] font-semibold"
+                : "text-[#37352F] dark:text-[#D4D4D4] hover:bg-[#EFEFEE] dark:hover:bg-[#2A2A2A]"
+            )}
+          >
+            <span className="text-sm shrink-0">⚙️</span>
+            <span>Settings & API Keys</span>
+          </Link>
+
           <Link
             href="/dashboard"
-            className="flex items-center justify-between px-3 py-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors"
+            className="flex items-center justify-between px-2.5 py-1.5 rounded-md text-[#787774] dark:text-[#9B9A97] hover:bg-[#EFEFEE] dark:hover:bg-[#2A2A2A] hover:text-[#37352F] dark:hover:text-[#E6E6E5] transition-colors text-[13px]"
           >
-            <div className="flex items-center gap-2.5">
-              <GraduationCap className="w-4 h-4 text-muted-foreground" />
+            <div className="flex items-center gap-2">
+              <span className="text-sm shrink-0">🎓</span>
               <span>Back to Academy</span>
             </div>
-            <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
+            <ChevronRight className="w-3.5 h-3.5 opacity-60" />
           </Link>
         </div>
       </div>
 
-      {/* User Footer Profile */}
-      <div className="p-3 border-t border-border/80">
-        <div className="flex items-center justify-between p-2 rounded-xl bg-muted/40 border border-border/60">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <UserButton />
-            <div className="flex flex-col min-w-0">
-              <span className="text-xs font-semibold text-foreground truncate">
-                {user?.fullName || user?.firstName || "Founder"}
-              </span>
-              <span className="text-[10px] text-muted-foreground font-mono truncate">
-                Pro AI OS
-              </span>
-            </div>
+      {/* ── Notion User & Theme Footer ── */}
+      <div className="p-2.5 border-t border-[#E9E9E7] dark:border-[#2E2E2E] flex items-center justify-between">
+        <div className="flex items-center gap-2 min-w-0">
+          <UserButton />
+          <div className="flex flex-col min-w-0">
+            <span className="text-xs font-semibold text-[#37352F] dark:text-[#E6E6E5] truncate">
+              {user?.fullName || user?.firstName || "Founder"}
+            </span>
+            <span className="text-[10px] text-[#787774] dark:text-[#9B9A97] truncate">
+              Agency OS V2
+            </span>
           </div>
         </div>
+
+        {/* Notion Theme Switcher Button */}
+        <button
+          onClick={toggleTheme}
+          title="Toggle Light / Dark mode"
+          className="p-1.5 rounded-md hover:bg-[#EFEFEE] dark:hover:bg-[#2A2A2A] text-[#787774] dark:text-[#9B9A97] hover:text-[#37352F] dark:hover:text-[#E6E6E5] transition-colors cursor-pointer"
+        >
+          {theme === "dark" ? (
+            <Sun className="w-4 h-4 text-amber-400" />
+          ) : (
+            <Moon className="w-4 h-4 text-[#37352F]" />
+          )}
+        </button>
       </div>
     </div>
   );
 
   return (
     <>
-      {/* Mobile Trigger */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 z-50 flex items-center justify-between px-4 bg-card/95 border-b border-border backdrop-blur-xl">
+      {/* Mobile Sticky Header */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-[#F7F6F3] dark:bg-[#202020] border-b border-[#E9E9E7] dark:border-[#2E2E2E] flex items-center justify-between px-4 z-40">
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="p-1.5 rounded-lg text-foreground hover:bg-muted"
+          className="p-2 -ml-2 rounded-md hover:bg-[#EFEFEE] dark:hover:bg-[#2A2A2A] text-[#37352F] dark:text-[#E6E6E5]"
         >
           {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
 
-        <div className="flex items-center">
-          <img
-            src="/workspace-logo-cropped.png"
-            alt="Eensell Workspace"
-            className="h-6 w-auto object-contain dark:hidden"
-          />
-          <img
-            src="/workspace-logo-cropped-white.png"
-            alt="Eensell Workspace"
-            className="h-6 w-auto object-contain hidden dark:block"
-          />
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold text-[#37352F] dark:text-[#E6E6E5]">
+            Eensell Workspace
+          </span>
         </div>
 
-        <Link
-          href="/dashboard"
-          className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground font-medium"
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-md hover:bg-[#EFEFEE] dark:hover:bg-[#2A2A2A] text-[#37352F] dark:text-[#E6E6E5]"
         >
-          <GraduationCap className="w-3.5 h-3.5" />
-          <span>Academy</span>
-        </Link>
+          {theme === "dark" ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
+        </button>
       </div>
 
+      {/* Mobile Drawer Overlay */}
       {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 top-14 bg-black/40 backdrop-blur-xs">
-          <div className="w-64 h-[calc(100vh-3.5rem)]">{content}</div>
-        </div>
+        <div
+          className="lg:hidden fixed inset-0 bg-black/30 backdrop-blur-xs z-40 transition-opacity"
+          onClick={() => setMobileOpen(false)}
+        />
       )}
 
-      {/* Desktop Persistent Sidebar */}
-      <aside className="hidden lg:flex flex-col w-60 fixed inset-y-0 left-0 z-30">
+      {/* Mobile Drawer Panel */}
+      <div
+        className={cn(
+          "lg:hidden fixed inset-y-0 left-0 w-64 z-50 transform transition-transform duration-200 ease-in-out",
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        {content}
+      </div>
+
+      {/* Desktop Fixed Left Sidebar */}
+      <aside className="hidden lg:block fixed inset-y-0 left-0 w-60 z-30">
         {content}
       </aside>
     </>

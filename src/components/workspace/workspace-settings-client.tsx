@@ -120,44 +120,52 @@ export function WorkspaceSettingsClient({
   };
 
   return (
-    <div className="flex-1 flex flex-col p-4 sm:p-6 lg:p-8 space-y-6 max-w-5xl mx-auto w-full">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-border">
-        <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-              Paramètres & Clés API
-            </h1>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-              BYOK Config
-            </span>
-          </div>
-          <p className="text-muted-foreground text-sm mt-1">
-            Connectez vos propres clés API (Scraper Google Maps & OpenAI) pour alimenter votre Workspace OS en toute autonomie.
-          </p>
+    <div className="p-4 sm:p-8 lg:p-12 max-w-5xl mx-auto w-full space-y-6">
+      {/* ── Notion Header ── */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-1.5 text-xs text-[#787774] dark:text-[#9B9A97]">
+          <span>Eensell Workspace</span>
+          <span>/</span>
+          <span className="text-[#37352F] dark:text-[#E6E6E5] font-medium">Settings & API Keys</span>
         </div>
 
-        <button
-          onClick={() => handleSave()}
-          disabled={isSaving}
-          className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs shadow-xs hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 flex items-center gap-2"
-        >
-          {isSaving ? (
-            <>
-              <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-              <span>Enregistrement...</span>
-            </>
-          ) : (
-            <>
-              <ShieldCheck className="w-4 h-4" />
-              <span>Enregistrer les clés</span>
-            </>
-          )}
-        </button>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+          <div className="flex items-center gap-3">
+            <span className="text-3xl select-none">⚙️</span>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5]">
+                Workspace Settings & API Keys
+              </h1>
+              <p className="text-xs text-[#787774] dark:text-[#9B9A97] mt-0.5">
+                Connect your Outscraper and OpenAI keys to power autonomous client extraction and copy drafting.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handleSave()}
+              disabled={isSaving}
+              className="text-xs font-semibold bg-[#37352F] hover:bg-[#262420] dark:bg-[#E6E6E5] dark:hover:bg-[#FFFFFF] text-[#FFFFFF] dark:text-[#191919] gap-1.5 h-8 px-3 rounded-md shadow-xs cursor-pointer flex items-center disabled:opacity-50"
+            >
+              {isSaving ? (
+                <>
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin mr-1" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <>
+                  <ShieldCheck className="w-3.5 h-3.5 mr-1" />
+                  <span>Save Keys</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Concept Explainer Banner */}
-      <div className="rounded-2xl bg-amber-500/10 border border-amber-500/25 p-4 flex items-start gap-3">
+      <div className="p-3.5 px-4 rounded-lg bg-[#FBFAF7] dark:bg-[#202020] border border-[#EDEDEB] dark:border-[#2E2E2E] flex items-start gap-3 text-xs">
         <Sparkles className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
         <div className="text-xs space-y-1">
           <p className="font-bold text-foreground">

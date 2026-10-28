@@ -17,11 +17,9 @@ import {
   ArrowRight,
   Send,
   Loader2,
-  Users
+  Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
 interface ScrapedBusiness {
@@ -58,10 +56,10 @@ const DEFAULT_PRESET_LEADS: Record<string, ScrapedBusiness[]> = {
       name: "Atlas Prestige Immobilier",
       niche: "Real Estate Agencies",
       city: "Casablanca",
-      rating: 4.7,
+      rating: 4.9,
       reviewsCount: 142,
       phone: "+212 5 22 45 88 12",
-      address: "Angle Bd d'Anfa et Zerktouni, Casablanca",
+      address: "Boulevard d'Anfa, Maarif, Casablanca",
       website: "https://atlasprestige.ma",
       hasWebsite: true,
       score: "HOT",
@@ -69,24 +67,24 @@ const DEFAULT_PRESET_LEADS: Record<string, ScrapedBusiness[]> = {
     {
       id: "c3",
       name: "Clinique Esthétique Racine",
-      niche: "Aesthetic Medicine",
+      niche: "Aesthetic Clinics",
       city: "Casablanca",
-      rating: 4.9,
-      reviewsCount: 198,
-      phone: "+212 5 22 79 30 00",
-      address: "Boulevard Franklin Roosevelt, Racine, Casablanca",
-      website: "https://clinique-racine.ma",
+      rating: 4.7,
+      reviewsCount: 94,
+      phone: "+212 5 22 39 10 20",
+      address: "Rue Ahmed Charci, Racine, Casablanca",
+      website: "https://cliniqueracine.ma",
       hasWebsite: true,
-      score: "HOT",
+      score: "WARM",
     },
     {
       id: "c4",
-      name: "Cabinet Dentaire Triangle d'Or",
-      niche: "Dental Clinics",
+      name: "Cabinet d'Avocats Benjelloun & Partners",
+      niche: "Legal & Corporate Law",
       city: "Casablanca",
-      rating: 4.4,
-      reviewsCount: 34,
-      phone: "+212 5 22 39 10 20",
+      rating: 4.5,
+      reviewsCount: 38,
+      phone: "+212 5 22 22 90 40",
       address: "Rue Ahmed El Mokri, Triangle d'Or, Casablanca",
       website: "",
       hasWebsite: false,
@@ -104,19 +102,6 @@ const DEFAULT_PRESET_LEADS: Record<string, ScrapedBusiness[]> = {
       website: "https://safiluxemotors.ma",
       hasWebsite: true,
       score: "WARM",
-    },
-    {
-      id: "c6",
-      name: "Agence Immobilière Ain Diab",
-      niche: "Real Estate Agencies",
-      city: "Casablanca",
-      rating: 4.1,
-      reviewsCount: 19,
-      phone: "+212 5 22 79 88 44",
-      address: "Corniche Ain Diab, Casablanca",
-      website: "",
-      hasWebsite: false,
-      score: "HOT",
     },
   ],
   rabat: [
@@ -146,29 +131,16 @@ const DEFAULT_PRESET_LEADS: Record<string, ScrapedBusiness[]> = {
       hasWebsite: true,
       score: "WARM",
     },
-    {
-      id: "r3",
-      name: "Cabinet Juridique & Fiscal Souissi",
-      niche: "Legal & Notary",
-      city: "Rabat",
-      rating: 4.9,
-      reviewsCount: 42,
-      phone: "+212 5 37 65 11 00",
-      address: "Avenue Mohamed VI, Souissi, Rabat",
-      website: "https://souissijuridique.ma",
-      hasWebsite: true,
-      score: "HOT",
-    },
   ],
   marrakech: [
     {
       id: "m1",
-      name: "Palmeraie Luxury Villas & Riads",
-      niche: "Real Estate & Hospitality",
+      name: "Palmeraie Luxury Villas & Stays",
+      niche: "Hospitality & Luxury Real Estate",
       city: "Marrakech",
       rating: 4.9,
       reviewsCount: 220,
-      phone: "+212 5 24 30 77 90",
+      phone: "+212 5 24 33 80 00",
       address: "Circuit de la Palmeraie, Marrakech",
       website: "https://palmeraievillas.ma",
       hasWebsite: true,
@@ -176,27 +148,27 @@ const DEFAULT_PRESET_LEADS: Record<string, ScrapedBusiness[]> = {
     },
     {
       id: "m2",
-      name: "Gueliz Smile Dental Clinic",
-      niche: "Dental Clinics",
+      name: "Marrakech Concierge Services",
+      niche: "High-End Concierge",
       city: "Marrakech",
       rating: 4.6,
-      reviewsCount: 74,
-      phone: "+212 5 24 44 80 10",
-      address: "Avenue Mohammed V, Guéliz, Marrakech",
-      website: "",
-      hasWebsite: false,
-      score: "HOT",
+      reviewsCount: 48,
+      phone: "+212 5 24 45 60 70",
+      address: "Gueliz, Avenue Mohammed V, Marrakech",
+      website: "https://marrakechconcierge.ma",
+      hasWebsite: true,
+      score: "WARM",
     },
   ],
 };
 
-const SUGGESTED_NICHES = [
+const TARGET_NICHES = [
   "Dental Clinics",
   "Real Estate Agencies",
-  "Aesthetic Medicine",
-  "Luxury Auto Dealers",
-  "Restaurants & Lounges",
-  "Law Firms & Notaries",
+  "Aesthetic & Cosmetic Clinics",
+  "Law & Notary Offices",
+  "Luxury Car Rentals & Dealers",
+  "High-Ticket E-commerce Brands",
   "Gyms & Fitness Centers",
   "Architects & Interior Designers",
 ];
@@ -275,12 +247,12 @@ export function WorkspaceScraperClient() {
 
   const handleAddToCRM = (business: ScrapedBusiness) => {
     setAddedIds((prev) => new Set(prev).add(business.id));
-    toast.success(`Added "${business.name}" to your Outreach CRM!`);
+    toast.success(`Ajouté "${business.name}" à votre CRM !`);
   };
 
   const handleExportCSV = () => {
     if (results.length === 0) {
-      toast.error("No leads to export. Run a scrape first.");
+      toast.error("Aucun prospect à exporter.");
       return;
     }
 
@@ -294,7 +266,7 @@ export function WorkspaceScraperClient() {
       `"${b.phone}"`,
       `"${b.address}"`,
       `"${b.website || "None"}"`,
-      `"${b.score}"`
+      `"${b.score}"`,
     ]);
 
     const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
@@ -305,252 +277,231 @@ export function WorkspaceScraperClient() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    toast.success("CSV file downloaded successfully!");
+    toast.success("Fichier CSV téléchargé avec succès !");
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-7xl mx-auto">
-      {/* ── Page Header ── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-border">
-        <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20 mb-2">
-            <MapPin className="w-3.5 h-3.5" />
-            <span>Target Client Extraction</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight">
-            Google Maps Business Scraper
-          </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Search any niche in any city to find businesses with phone numbers, Google ratings, and direct outreach info.
-          </p>
+    <div className="p-4 sm:p-8 lg:p-12 max-w-7xl mx-auto w-full space-y-6">
+      {/* ── Notion Header ── */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-1.5 text-xs text-[#787774] dark:text-[#9B9A97]">
+          <span>Eensell Workspace</span>
+          <span>/</span>
+          <span className="text-[#37352F] dark:text-[#E6E6E5] font-medium">Google Maps Scraper</span>
         </div>
 
-        <div className="flex items-center gap-2.5">
-          <Button
-            onClick={handleExportCSV}
-            variant="outline"
-            size="sm"
-            className="font-bold border-border gap-2"
-          >
-            <Download className="w-4 h-4" />
-            <span>Export CSV</span>
-          </Button>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+          <div className="flex items-center gap-3">
+            <span className="text-3xl select-none">📍</span>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5]">
+                Google Maps Lead Scraper
+              </h1>
+              <p className="text-xs text-[#787774] dark:text-[#9B9A97] mt-0.5">
+                Extract verified businesses by niche and city with ratings, phone numbers, and websites.
+              </p>
+            </div>
+          </div>
 
-          <Link href="/workspace/crm">
-            <Button size="sm" className="font-bold bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
-              <Users className="w-4 h-4" />
-              <span>Open CRM</span>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={handleExportCSV}
+              variant="outline"
+              size="sm"
+              className="text-xs font-medium border-[#EDEDEB] dark:border-[#2E2E2E] text-[#37352F] dark:text-[#E6E6E5] gap-1.5 h-8 px-3 rounded-md hover:bg-[#F7F6F3] dark:hover:bg-[#2A2A2A] cursor-pointer"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Export CSV</span>
             </Button>
-          </Link>
+
+            <Link href="/workspace/crm">
+              <Button
+                size="sm"
+                className="font-medium text-xs bg-[#37352F] hover:bg-[#262420] dark:bg-[#E6E6E5] dark:hover:bg-[#FFFFFF] text-[#FFFFFF] dark:text-[#191919] gap-1.5 h-8 px-3 rounded-md shadow-xs cursor-pointer"
+              >
+                <Users className="w-3.5 h-3.5" />
+                <span>Open CRM</span>
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* ── Scraper Search Card ── */}
-      <Card className="bg-card border-border shadow-xs">
-        <CardContent className="p-5 sm:p-6 space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5">
-            {/* Niche Input */}
-            <div className="md:col-span-6 space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                Target Business Niche
-              </label>
-              <div className="relative">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  type="text"
-                  value={niche}
-                  onChange={(e) => setNiche(e.target.value)}
-                  placeholder="e.g. Dental Clinics, Real Estate, Cosmetic Surgery..."
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-border bg-background text-sm text-foreground focus:outline-hidden focus:border-primary font-medium"
-                />
-              </div>
-            </div>
+      {/* ── Notion Callout ── */}
+      <div className="p-3.5 px-4 rounded-lg bg-[#FBFAF7] dark:bg-[#202020] border border-[#EDEDEB] dark:border-[#2E2E2E] flex items-start gap-3 text-xs">
+        <span className="text-base select-none mt-0.5">💡</span>
+        <div className="flex-1 space-y-1">
+          <p className="font-semibold text-[#37352F] dark:text-[#E6E6E5]">
+            {isLiveScraper ? "Outscraper Live API Active" : "Google Maps Verified Directory & Live Scraper"}
+          </p>
+          <p className="text-[#787774] dark:text-[#9B9A97] leading-relaxed">
+            Every query searches target local businesses. Connect your Outscraper API key in{" "}
+            <Link href="/workspace/settings" className="underline font-medium text-[#37352F] dark:text-[#E6E6E5]">
+              Settings
+            </Link>{" "}
+            to scrape directly with live credits.
+          </p>
+        </div>
+      </div>
 
-            {/* City Input */}
-            <div className="md:col-span-4 space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                City / Region
-              </label>
-              <div className="relative">
-                <MapPin className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  type="text"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  placeholder="e.g. Casablanca, Rabat, Dubai, Paris..."
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-border bg-background text-sm text-foreground focus:outline-hidden focus:border-primary font-medium"
-                />
-              </div>
-            </div>
-
-            {/* Run Scrape Button */}
-            <div className="md:col-span-2 flex items-end">
-              <Button
-                onClick={handleRunScrape}
-                disabled={isScraping}
-                className="w-full h-10 font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm gap-2"
-              >
-                {isScraping ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Scraping...</span>
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-4 h-4" />
-                    <span>Run Scrape</span>
-                  </>
-                )}
-              </Button>
-            </div>
+      {/* ── Notion Search Controls ── */}
+      <div className="p-4 rounded-lg bg-[#FFFFFF] dark:bg-[#202020] border border-[#EDEDEB] dark:border-[#2E2E2E] space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+          <div className="sm:col-span-5 relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#787774]">🏷️</span>
+            <input
+              type="text"
+              value={niche}
+              onChange={(e) => setNiche(e.target.value)}
+              placeholder="Niche (e.g. Dental Clinics, Real Estate, Clinics...)"
+              className="w-full pl-8 pr-3 py-1.5 rounded-md border border-[#EDEDEB] dark:border-[#2E2E2E] bg-transparent text-xs text-[#37352F] dark:text-[#E6E6E5] placeholder-[#9B9A97] outline-none"
+            />
           </div>
 
-          {/* Quick Niche Pills */}
-          <div className="space-y-1.5 pt-2">
-            <span className="text-[11px] font-semibold text-muted-foreground">High-Ticket Recommended Niches:</span>
-            <div className="flex flex-wrap gap-1.5">
-              {SUGGESTED_NICHES.map((tag) => (
-                <button
-                  key={tag}
-                  type="button"
-                  onClick={() => setNiche(tag)}
-                  className={`text-xs px-2.5 py-1 rounded-lg border transition-colors ${
-                    niche === tag
-                      ? "bg-primary/10 border-primary text-primary font-bold"
-                      : "bg-muted/40 border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted"
-                  }`}
-                >
-                  {tag}
-                </button>
-              ))}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* ── Scraped Results Table ── */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h3 className="font-bold text-base text-foreground">
-              Extracted Leads ({results.length})
-            </h3>
-            <Badge variant="outline" className="text-xs font-semibold text-emerald-600 border-emerald-500/30 bg-emerald-500/10">
-              Verified Maps Data
-            </Badge>
+          <div className="sm:col-span-4 relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#787774]">📍</span>
+            <input
+              type="text"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              placeholder="City (e.g. Casablanca, Rabat, Marrakech, Dubai...)"
+              className="w-full pl-8 pr-3 py-1.5 rounded-md border border-[#EDEDEB] dark:border-[#2E2E2E] bg-transparent text-xs text-[#37352F] dark:text-[#E6E6E5] placeholder-[#9B9A97] outline-none"
+            />
           </div>
 
-          <div className="text-xs text-muted-foreground">
-            Targeting: <strong className="text-foreground">{niche}</strong> in <strong className="text-foreground">{city}</strong>
+          <div className="sm:col-span-3">
+            <Button
+              onClick={handleRunScrape}
+              disabled={isScraping}
+              className="w-full h-8 text-xs font-semibold bg-[#37352F] hover:bg-[#262420] dark:bg-[#E6E6E5] dark:hover:bg-[#FFFFFF] text-[#FFFFFF] dark:text-[#191919] rounded-md cursor-pointer"
+            >
+              {isScraping ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" />
+                  <span>Scraping...</span>
+                </>
+              ) : (
+                <>
+                  <Search className="w-3.5 h-3.5 mr-1.5" />
+                  <span>Search Maps</span>
+                </>
+              )}
+            </Button>
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-xs">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse text-xs">
-              <thead>
-                <tr className="border-b border-border bg-muted/40 text-muted-foreground font-semibold">
-                  <th className="p-3.5 pl-4">Business Name & Address</th>
-                  <th className="p-3.5">Google Rating</th>
-                  <th className="p-3.5">Phone (Direct)</th>
-                  <th className="p-3.5">Website</th>
-                  <th className="p-3.5">Lead Potential</th>
-                  <th className="p-3.5 text-right pr-4">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {results.map((biz) => {
-                  const isAdded = addedIds.has(biz.id);
+        {/* Niche quick tags */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1">
+          <span className="text-[11px] text-[#787774] dark:text-[#9B9A97] font-medium shrink-0">Quick presets:</span>
+          {TARGET_NICHES.slice(0, 6).map((n) => (
+            <button
+              key={n}
+              onClick={() => setNiche(n)}
+              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors shrink-0 cursor-pointer ${
+                niche === n
+                  ? "bg-[#37352F] text-[#FFFFFF] dark:bg-[#E6E6E5] dark:text-[#191919]"
+                  : "bg-[#F7F6F3] dark:bg-[#2A2A2A] text-[#787774] dark:text-[#9B9A97] hover:text-[#37352F] dark:hover:text-[#E6E6E5]"
+              }`}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+      </div>
 
-                  return (
-                    <tr key={biz.id} className="hover:bg-muted/20 transition-colors">
-                      <td className="p-3.5 pl-4 max-w-xs">
-                        <div className="font-bold text-foreground text-sm leading-tight">{biz.name}</div>
-                        <div className="text-muted-foreground text-[11px] truncate mt-0.5">{biz.address}</div>
-                      </td>
-
-                      <td className="p-3.5">
-                        <div className="flex items-center gap-1.5">
-                          <span className="flex items-center text-amber-500 font-bold">
-                            <Star className="w-3.5 h-3.5 fill-current" />
-                            <span className="ml-1 text-foreground">{biz.rating}</span>
-                          </span>
-                          <span className="text-muted-foreground text-[11px]">({biz.reviewsCount})</span>
-                        </div>
-                      </td>
-
-                      <td className="p-3.5 font-mono font-bold text-foreground">
-                        <div className="flex items-center gap-1.5">
-                          <Phone className="w-3.5 h-3.5 text-emerald-500" />
-                          <span>{biz.phone}</span>
-                        </div>
-                      </td>
-
-                      <td className="p-3.5">
-                        {biz.website ? (
-                          <a
-                            href={biz.website}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-primary hover:underline font-medium text-[11px]"
-                          >
-                            <Globe className="w-3 h-3" />
-                            <span>Visit site</span>
-                            <ExternalLink className="w-2.5 h-2.5" />
-                          </a>
-                        ) : (
-                          <span className="text-amber-600 dark:text-amber-400 font-bold text-[10px] bg-amber-500/10 px-1.5 py-0.5 rounded">
-                            No Website (Prime Opportunity)
-                          </span>
-                        )}
-                      </td>
-
-                      <td className="p-3.5">
-                        <Badge className={`text-[10px] font-bold border-none ${
-                          biz.score === "HOT"
-                            ? "bg-rose-500/10 text-rose-600 dark:text-rose-400"
-                            : "bg-blue-500/10 text-blue-600 dark:text-blue-400"
-                        }`}>
-                          {biz.score === "HOT" ? "🔥 High Intent" : "✨ Qualified"}
-                        </Badge>
-                      </td>
-
-                      <td className="p-3.5 text-right pr-4">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <Button
-                            onClick={() => handleAddToCRM(biz)}
-                            disabled={isAdded}
-                            size="sm"
-                            variant={isAdded ? "secondary" : "outline"}
-                            className="h-7 text-[11px] font-bold gap-1 px-2.5"
-                          >
-                            {isAdded ? (
-                              <>
-                                <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                                <span>In CRM</span>
-                              </>
-                            ) : (
-                              <>
-                                <Plus className="w-3 h-3" />
-                                <span>Add CRM</span>
-                              </>
-                            )}
-                          </Button>
-
-                          <Link href={`/workspace/drafter?name=${encodeURIComponent(biz.name)}&niche=${encodeURIComponent(biz.niche)}&city=${encodeURIComponent(biz.city)}`}>
-                            <Button size="sm" className="h-7 text-[11px] font-bold bg-primary hover:bg-primary/90 text-primary-foreground gap-1 px-2.5">
-                              <Send className="w-3 h-3" />
-                              <span>Pitch</span>
-                            </Button>
-                          </Link>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+      {/* ── Scraped Results Database Table ── */}
+      <div className="border border-[#EDEDEB] dark:border-[#2E2E2E] rounded-lg overflow-hidden bg-[#FFFFFF] dark:bg-[#202020]">
+        <div className="px-3.5 py-2.5 bg-[#F7F6F3] dark:bg-[#1E1E1E] border-b border-[#EDEDEB] dark:border-[#2E2E2E] flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-[#37352F] dark:text-[#E6E6E5]">
+              Extracted Businesses
+            </span>
+            <span className="px-1.5 py-0.2 rounded bg-[#EFEFEE] dark:bg-[#2E2E2E] text-[10px] text-[#787774] dark:text-[#9B9A97] font-mono">
+              {results.length} results
+            </span>
           </div>
+
+          <span className="text-[11px] text-[#787774] dark:text-[#9B9A97]">
+            Click "Pitch" to generate cold copy with AI
+          </span>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs border-collapse">
+            <thead className="bg-[#F7F6F3]/50 dark:bg-[#1E1E1E]/50 border-b border-[#EDEDEB] dark:border-[#2E2E2E] text-[#787774] dark:text-[#9B9A97] text-[11px]">
+              <tr>
+                <th className="py-2 px-3 font-medium border-r border-[#EDEDEB] dark:border-[#2E2E2E]">Aa Business Name</th>
+                <th className="py-2 px-3 font-medium border-r border-[#EDEDEB] dark:border-[#2E2E2E]">⭐ Rating</th>
+                <th className="py-2 px-3 font-medium border-r border-[#EDEDEB] dark:border-[#2E2E2E]">📞 Verified Phone</th>
+                <th className="py-2 px-3 font-medium border-r border-[#EDEDEB] dark:border-[#2E2E2E]">🌐 Website</th>
+                <th className="py-2 px-3 font-medium border-r border-[#EDEDEB] dark:border-[#2E2E2E]">📍 Address</th>
+                <th className="py-2 px-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#EDEDEB] dark:divide-[#2E2E2E]">
+              {results.map((b) => (
+                <tr key={b.id} className="hover:bg-[#F7F6F3]/50 dark:hover:bg-[#252525] group">
+                  <td className="py-2 px-3 border-r border-[#EDEDEB] dark:border-[#2E2E2E] font-medium text-[#37352F] dark:text-[#E6E6E5]">
+                    <div className="flex flex-col">
+                      <span className="font-semibold">{b.name}</span>
+                      <span className="text-[10px] text-[#787774] dark:text-[#9B9A97]">{b.niche} &bull; {b.city}</span>
+                    </div>
+                  </td>
+                  <td className="py-2 px-3 border-r border-[#EDEDEB] dark:border-[#2E2E2E]">
+                    <div className="flex items-center gap-1 font-medium text-[#37352F] dark:text-[#E6E6E5]">
+                      <span className="text-amber-500">★</span>
+                      <span>{b.rating}</span>
+                      <span className="text-[10px] text-[#787774] dark:text-[#9B9A97]">({b.reviewsCount})</span>
+                    </div>
+                  </td>
+                  <td className="py-2 px-3 border-r border-[#EDEDEB] dark:border-[#2E2E2E] font-mono text-[11px] text-[#37352F] dark:text-[#E6E6E5]">
+                    {b.phone}
+                  </td>
+                  <td className="py-2 px-3 border-r border-[#EDEDEB] dark:border-[#2E2E2E]">
+                    {b.website ? (
+                      <a
+                        href={b.website}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs text-[#787774] hover:text-[#37352F] dark:hover:text-[#E6E6E5] underline truncate max-w-[130px] inline-block"
+                      >
+                        {b.website.replace(/^https?:\/\//, "").replace(/\/.*$/, "")}
+                      </a>
+                    ) : (
+                      <span className="text-[11px] text-[#9B9A97] dark:text-[#666666] italic">None</span>
+                    )}
+                  </td>
+                  <td className="py-2 px-3 border-r border-[#EDEDEB] dark:border-[#2E2E2E] text-[11px] text-[#787774] dark:text-[#9B9A97] max-w-[200px] truncate">
+                    {b.address}
+                  </td>
+                  <td className="py-2 px-3 text-right">
+                    <div className="flex items-center justify-end gap-1.5">
+                      <button
+                        onClick={() => handleAddToCRM(b)}
+                        disabled={addedIds.has(b.id)}
+                        className={`px-2 py-1 rounded text-[11px] font-medium transition-colors cursor-pointer ${
+                          addedIds.has(b.id)
+                            ? "bg-[#DEFBE6] text-[#0F7B34]"
+                            : "bg-[#F7F6F3] dark:bg-[#2A2A2A] text-[#37352F] dark:text-[#E6E6E5] hover:bg-[#EFEFEE]"
+                        }`}
+                      >
+                        {addedIds.has(b.id) ? "In CRM ✓" : "+ CRM"}
+                      </button>
+
+                      <Link
+                        href={`/workspace/drafter?company=${encodeURIComponent(b.name)}&niche=${encodeURIComponent(
+                          b.niche
+                        )}&city=${encodeURIComponent(b.city)}`}
+                        className="px-2 py-1 rounded text-[11px] font-medium bg-[#37352F] hover:bg-[#262420] dark:bg-[#E6E6E5] dark:hover:bg-[#FFFFFF] text-[#FFFFFF] dark:text-[#191919] transition-colors cursor-pointer"
+                      >
+                        Pitch
+                      </Link>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

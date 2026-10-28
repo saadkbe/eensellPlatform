@@ -135,30 +135,39 @@ export function WorkspaceNotesClient() {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
-      {/* ── Page Header ── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-border">
-        <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20 mb-2">
-            <StickyNote className="w-3.5 h-3.5" />
-            <span>Knowledge Base & Scratchpad</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight">
-            Agency Notes & Playbooks
-          </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Keep meeting notes, client objection handling scripts, and agency strategies right inside your workspace.
-          </p>
+    <div className="p-4 sm:p-8 lg:p-12 max-w-7xl mx-auto w-full space-y-6">
+      {/* ── Notion Header ── */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-1.5 text-xs text-[#787774] dark:text-[#9B9A97]">
+          <span>Eensell Workspace</span>
+          <span>/</span>
+          <span className="text-[#37352F] dark:text-[#E6E6E5] font-medium">Notes & Playbooks</span>
         </div>
 
-        <Button
-          onClick={handleCreateNote}
-          size="sm"
-          className="font-bold bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 shadow-sm self-start md:self-auto"
-        >
-          <Plus className="w-4 h-4" />
-          <span>New Note</span>
-        </Button>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+          <div className="flex items-center gap-3">
+            <span className="text-3xl select-none">📝</span>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5]">
+                Agency Notes & Playbooks
+              </h1>
+              <p className="text-xs text-[#787774] dark:text-[#9B9A97] mt-0.5">
+                Meeting frameworks, objection handling scripts, and client notes in a Notion-style document view.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={handleCreateNote}
+              size="sm"
+              className="text-xs font-semibold bg-[#37352F] hover:bg-[#262420] dark:bg-[#E6E6E5] dark:hover:bg-[#FFFFFF] text-[#FFFFFF] dark:text-[#191919] gap-1.5 h-8 px-3 rounded-md shadow-xs cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>New Note</span>
+            </Button>
+          </div>
+        </div>
       </div>
 
       {/* ── 2-Column Split: Notes List (Left 4 cols) + Active Editor (Right 8 cols) ── */}

@@ -1,12 +1,13 @@
 import { WorkspaceSidebar } from "@/components/workspace/workspace-sidebar";
+import { WorkspaceThemeInit } from "@/components/workspace/workspace-theme-init";
 import { Metadata } from "next";
 import { getOrCreateUser } from "@/actions/user.actions";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Eensell Workspace | Autonomous Client Outreach OS",
+  title: "Eensell Workspace | Agency Operating System",
   description:
-    "Plan, scrape, draft, and dispatch. AI Voice Outreach Agent and high-converting client acquisition CRM.",
+    "Notion-style agency operating system: scrape client leads, manage outreach CRM, create sheets, draft emails, and track agency MRR.",
 };
 
 export default async function WorkspaceLayout({
@@ -29,7 +30,8 @@ export default async function WorkspaceLayout({
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex transition-colors duration-150">
+    <div className="min-h-screen bg-[#FFFFFF] dark:bg-[#191919] text-[#37352F] dark:text-[#E6E6E5] flex transition-colors duration-150 antialiased font-sans">
+      <WorkspaceThemeInit />
       {/* Left Sidebar */}
       <WorkspaceSidebar />
 

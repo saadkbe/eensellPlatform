@@ -224,40 +224,49 @@ Si vous voulez jeter un œil à la démo, je vous l'envoie ici avec plaisir ! �
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-7xl mx-auto">
-      {/* ── Page Header ── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-border">
-        <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20 mb-2">
-            <Send className="w-3.5 h-3.5" />
-            <span>High-Converting Copy Engine</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight">
-            Cold Email & WhatsApp Drafter
-          </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Generate battle-tested cold emails, WhatsApp hooks, and calling scripts tailored to Moroccan and international clients.
-          </p>
+    <div className="p-4 sm:p-8 lg:p-12 max-w-7xl mx-auto w-full space-y-6">
+      {/* ── Notion Header ── */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-1.5 text-xs text-[#787774] dark:text-[#9B9A97]">
+          <span>Eensell Workspace</span>
+          <span>/</span>
+          <span className="text-[#37352F] dark:text-[#E6E6E5] font-medium">Email & WhatsApp Drafter</span>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={handleGenerateWithAI}
-            disabled={isAiGenerating}
-            size="sm"
-            className="font-bold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white gap-2 shadow-xs cursor-pointer"
-          >
-            <Sparkles className={`w-3.5 h-3.5 ${isAiGenerating ? "animate-spin" : ""}`} />
-            <span>{isAiGenerating ? "IA en cours..." : "Rédiger avec GPT-4o"}</span>
-          </Button>
-          <Button onClick={generatePitch} variant="outline" size="sm" className="font-bold border-border gap-2">
-            <RefreshCw className="w-3.5 h-3.5" />
-            <span>Templates</span>
-          </Button>
-          <Button onClick={handleCopy} size="sm" className="font-bold bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
-            {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-            <span>{copied ? "Copied ✓" : "Copy Pitch"}</span>
-          </Button>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+          <div className="flex items-center gap-3">
+            <span className="text-3xl select-none">✍️</span>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5]">
+                Cold Outreach Drafter
+              </h1>
+              <p className="text-xs text-[#787774] dark:text-[#9B9A97] mt-0.5">
+                Generate high-converting cold emails, WhatsApp hooks, and calling scripts tailored to Moroccan and international clients.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={handleGenerateWithAI}
+              disabled={isAiGenerating}
+              size="sm"
+              className="text-xs font-semibold bg-[#37352F] hover:bg-[#262420] dark:bg-[#E6E6E5] dark:hover:bg-[#FFFFFF] text-[#FFFFFF] dark:text-[#191919] gap-1.5 h-8 px-3 rounded-md shadow-xs cursor-pointer"
+            >
+              <Sparkles className={`w-3.5 h-3.5 ${isAiGenerating ? "animate-spin" : ""}`} />
+              <span>{isAiGenerating ? "Génération..." : "Rédiger avec GPT-4o"}</span>
+            </Button>
+
+            <Button
+              onClick={handleCopy}
+              size="sm"
+              variant="outline"
+              className="text-xs font-medium border-[#EDEDEB] dark:border-[#2E2E2E] text-[#37352F] dark:text-[#E6E6E5] gap-1.5 h-8 px-3 rounded-md hover:bg-[#F7F6F3] dark:hover:bg-[#2A2A2A] cursor-pointer"
+            >
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copied ? "Copié !" : "Copier"}</span>
+            </Button>
+          </div>
         </div>
       </div>
 
