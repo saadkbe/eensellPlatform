@@ -2,8 +2,10 @@ import { db } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { 
   BookOpen, Lock, PlayCircle, CheckCircle2, Clock, 
-  Brain, Wand2, Video, Zap, Megaphone, Building2, Users, DollarSign, Rocket
+  Brain, Wand2, Video, Zap, Megaphone, Building2, Users, DollarSign, Rocket,
+  Sparkles, ArrowRight
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -18,10 +20,15 @@ const iconMap: Record<string, any> = {
 
 export const dynamic = "force-dynamic";
 
-export default async function ModulesPage() {
+export default async function ModulesPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ upgrade?: string }>;
+}) {
+  const resolvedParams = searchParams ? await searchParams : {};
   const clerkUser = await currentUser();
 
-  const [modules, userProgress] = await Promise.all([
+  const [modules, userProgress, dbUser] = await Promise.all([
     db.module.findMany({
       include: {
         lessons: {
@@ -41,12 +48,57 @@ export default async function ModulesPage() {
           select: { lessonId: true },
         })
       : [],
+    clerkUser
+      ? db.user.findUnique({
+          where: { clerkId: clerkUser.id },
+          select: { tier: true, role: true },
+        })
+      : null,
   ]);
+
+  const isFreeLibrary = dbUser?.tier === "FREE_LIBRARY" && dbUser?.role !== "ADMIN";
+  const showUpgradeBanner = isFreeLibrary || resolvedParams.upgrade === "true";
 
   const completedLessonIds = new Set(userProgress.map((p) => p.lessonId));
 
   return (
     <div className="space-y-8">
+      {/* 60-Day Challenge V1 Member / Upgrade Alert Banner */}
+      {showUpgradeBanner && (
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary/15 via-primary/5 to-card border border-primary/30 p-5 sm:p-6 shadow-lg shadow-primary/5">
+          <div className="absolute top-0 right-0 -mr-8 -mt-8 w-40 h-40 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-primary/20 text-primary flex items-center justify-center shrink-0 border border-primary/30 shadow-inner">
+                <Sparkles className="w-6 h-6 text-primary" />
+              </div>
+              <div className="space-y-1.5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">
+                    60-Day Challenge V1 Member
+                  </span>
+                  <span className="text-xs text-muted-foreground">• Original AI Library Active</span>
+                </div>
+                <h3 className="text-base sm:text-lg font-bold text-foreground">
+                  You are currently on the 60-Day Challenge V1
+                </h3>
+                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-2xl">
+                  Your full V1 course library is accessible anytime below. To unlock the new <strong className="text-foreground">Challenge V2 ecosystem</strong> — including the interactive 60-day daily action roadmap, weekly live coaching calls, Make.com blueprints, and the autonomous Eensell Workspace OS... upgrade your account.
+                </p>
+              </div>
+            </div>
+            <div className="shrink-0 pt-1 lg:pt-0">
+              <Link href="/upgrade" className="block w-full sm:w-auto">
+                <Button className="w-full sm:w-auto font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20 px-6 py-5 gap-2 text-sm">
+                  <span>Upgrade to Challenge V2 (499 MAD)</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">

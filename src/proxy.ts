@@ -20,8 +20,9 @@ const isPublicRoute = createRouteMatcher([
 // Admin-only routes
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 
-// Dashboard routes (active users only)
+// Dashboard and Workspace routes (active users only)
 const isDashboardRoute = createRouteMatcher(["/dashboard(.*)"]);
+const isWorkspaceRoute = createRouteMatcher(["/workspace(.*)"]);
 
 const V2_ONLY_ROUTES = [
   "/dashboard/challenge",
@@ -31,6 +32,7 @@ const V2_ONLY_ROUTES = [
   "/dashboard/career",
   "/dashboard/goals",
   "/dashboard/chat",
+  "/workspace",
 ];
 
 // Pending route
@@ -75,8 +77,8 @@ export default clerkMiddleware(async (auth, req) => {
     });
   }
 
-  // Dashboard routes — only active users and admins
-  if (isDashboardRoute(req)) {
+  // Dashboard & Workspace routes — only active users and admins
+  if (isDashboardRoute(req) || isWorkspaceRoute(req)) {
     if (userStatus === "PENDING" || userStatus === "REJECTED" || userStatus === "SUSPENDED") {
       return NextResponse.redirect(new URL("/pending", req.url));
     }

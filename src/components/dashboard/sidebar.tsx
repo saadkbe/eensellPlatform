@@ -217,7 +217,7 @@ function SidebarContent({
         )}
       </nav>
 
-      {/* Upgrade Banner for FREE_LIBRARY members */}
+      {/* Upgrade Banner for 60-Day Challenge V1 members */}
       {isFreeLibrary && (
         <div className="mx-4 mb-4 p-4 rounded-2xl bg-gradient-to-b from-primary/15 via-primary/5 to-card border border-primary/25 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-24 h-24 bg-primary/20 rounded-full blur-2xl pointer-events-none -mr-8 -mt-8" />
@@ -226,18 +226,18 @@ function SidebarContent({
               <Sparkles className="w-3.5 h-3.5" />
             </div>
             <h4 className="text-xs font-bold text-foreground tracking-tight">
-              Unlock Eensell University V2
+              Challenge V1 Member
             </h4>
           </div>
           <p className="text-[11px] text-muted-foreground mb-3 leading-relaxed relative z-10">
-            Get the 60-Day Roadmap, Make.com Blueprints, and Weekly Live Calls.
+            You are on V1. Upgrade to V2 to access the 60-Day Daily Roadmap, Make.com Blueprints & Workspace OS.
           </p>
           <Link href="/upgrade" onClick={() => setMobileOpen(false)} className="block relative z-10">
             <Button
               size="sm"
               className="w-full text-xs font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20"
             >
-              Upgrade for 499 MAD
+              Upgrade to V2 (499 MAD)
             </Button>
           </Link>
         </div>
