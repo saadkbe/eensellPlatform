@@ -38,6 +38,11 @@ function PendingContent() {
 
   /* ── Auto-Refresh Polling for Admin Activation ── */
   useEffect(() => {
+    // If admin is previewing the page via ?preview=true, skip polling redirect
+    if (typeof window !== "undefined" && window.location.search.includes("preview=true")) {
+      return;
+    }
+
     const interval = setInterval(async () => {
       try {
         const status = await checkUserStatus();

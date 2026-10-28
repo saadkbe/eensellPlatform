@@ -102,9 +102,10 @@ export default clerkMiddleware(async (auth, req) => {
     });
   }
 
-  // Pending route — if user is actually active, redirect to dashboard
+  // Pending route — active users get redirected to dashboard unless previewing or admin
   if (isPendingRoute(req)) {
-    if (userStatus === "ACTIVE" || userRole === "ADMIN") {
+    const isPreview = req.nextUrl.searchParams.get("preview") === "true";
+    if (!isPreview && userRole !== "ADMIN" && userStatus === "ACTIVE") {
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
     return NextResponse.next({
