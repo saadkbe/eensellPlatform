@@ -111,9 +111,10 @@ export async function syncUserToDB() {
           firstName: clerkUser.firstName,
           lastName: clerkUser.lastName,
           imageUrl: clerkUser.imageUrl,
-          role: "PENDING_USER",
-          status: "PENDING",
+          role: "ACTIVE_USER",
+          status: "ACTIVE",
           tier: "FREE_LIBRARY",
+          onboardingCompleted: true,
           referralCode,
         },
       });

@@ -36,22 +36,23 @@ export default async function DashboardLayout({
     getUserChallengeProgress(),
   ]);
   
-  // Securely enforce pending status based on the database (truth) rather than just the cached Clerk token
-  if (dbUser && dbUser.role !== "ADMIN" && (dbUser.status === "PENDING" || dbUser.status === "REJECTED" || dbUser.status === "SUSPENDED")) {
+  // Suspended or rejected users are blocked
+  if (dbUser && dbUser.role !== "ADMIN" && (dbUser.status === "REJECTED" || dbUser.status === "SUSPENDED")) {
     redirect("/pending");
   }
 
-  if (dbUser && !dbUser.onboardingCompleted) {
-    redirect("/onboarding");
-  }
-
-  // Tier-based route protection for FREE_LIBRARY members
+  // Tier-based route protection for FREE_LIBRARY members (always allow access to free AI Library)
   const pathname = headerList.get("x-pathname") || "";
   if (dbUser && dbUser.role !== "ADMIN" && dbUser.tier === "FREE_LIBRARY") {
     const isExactDashboard = pathname === "/dashboard" || pathname === "/dashboard/";
     const isV2Route = V2_ONLY_ROUTES.some((route) => pathname.startsWith(route));
     if (isExactDashboard || isV2Route) {
       redirect("/dashboard/modules?upgrade=true");
+    }
+  } else if (dbUser && dbUser.tier === "UNIVERSITY_V2") {
+    // Only paid V2 members undergo the 60-Day Challenge onboarding flow
+    if (!dbUser.onboardingCompleted) {
+      redirect("/onboarding");
     }
   }
 

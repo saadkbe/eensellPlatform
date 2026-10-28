@@ -77,13 +77,13 @@ export default clerkMiddleware(async (auth, req) => {
     });
   }
 
-  // Dashboard & Workspace routes — only active users and admins
+  // Dashboard & Workspace routes
   if (isDashboardRoute(req) || isWorkspaceRoute(req)) {
-    if (userStatus === "PENDING" || userStatus === "REJECTED" || userStatus === "SUSPENDED") {
+    if (userStatus === "REJECTED" || userStatus === "SUSPENDED") {
       return NextResponse.redirect(new URL("/pending", req.url));
     }
 
-    // Fast tier check at proxy level if tier claim is present
+    // Fast tier check at proxy level for FREE_LIBRARY members
     if (userRole !== "ADMIN" && userTier === "FREE_LIBRARY") {
       const pathname = req.nextUrl.pathname;
       const isExactDashboard = pathname === "/dashboard" || pathname === "/dashboard/";
@@ -91,6 +91,16 @@ export default clerkMiddleware(async (auth, req) => {
       if (isExactDashboard || isV2Route) {
         return NextResponse.redirect(new URL("/dashboard/modules?upgrade=true", req.url));
       }
+      return NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      });
+    }
+
+    // Pending users who are not on free library go to /pending
+    if (userStatus === "PENDING") {
+      return NextResponse.redirect(new URL("/pending", req.url));
     }
 
     // If no status set yet (new user), we let them pass to the dashboard.
