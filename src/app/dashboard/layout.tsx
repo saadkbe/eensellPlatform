@@ -36,12 +36,12 @@ export default async function DashboardLayout({
     getUserChallengeProgress(),
   ]);
   
-  // Suspended or rejected users are blocked
-  if (dbUser && dbUser.role !== "ADMIN" && (dbUser.status === "REJECTED" || dbUser.status === "SUSPENDED")) {
+  // Pending, suspended or rejected users are blocked and directed to payment verification
+  if (dbUser && dbUser.role !== "ADMIN" && (dbUser.status === "PENDING" || dbUser.status === "REJECTED" || dbUser.status === "SUSPENDED")) {
     redirect("/pending");
   }
 
-  // Tier-based route protection for FREE_LIBRARY members (always allow access to free AI Library)
+  // Tier-based route protection for legacy/V1 members (they only access AI Library & uploads)
   const pathname = headerList.get("x-pathname") || "";
   if (dbUser && dbUser.role !== "ADMIN" && dbUser.tier === "FREE_LIBRARY") {
     const isExactDashboard = pathname === "/dashboard" || pathname === "/dashboard/";
@@ -50,7 +50,7 @@ export default async function DashboardLayout({
       redirect("/dashboard/modules?upgrade=true");
     }
   } else if (dbUser && dbUser.tier === "UNIVERSITY_V2") {
-    // Only paid V2 members undergo the 60-Day Challenge onboarding flow
+    // Approved V2 members undergo the 60-Day Challenge onboarding flow
     if (!dbUser.onboardingCompleted) {
       redirect("/onboarding");
     }
