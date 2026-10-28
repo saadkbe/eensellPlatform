@@ -590,6 +590,7 @@ model WorkspaceAccount {
   elevenLabsApiKey String?
   voiceId          String?  @default("21m00Tcm4TlvDq8ikWAM") // Default ElevenLabs voice (Rachel)
   outscraperApiKey String?
+  openaiApiKey     String?
   isGmailConnected Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt

@@ -20,7 +20,11 @@ export interface WorkspaceAccountData {
   agencyName: string | null;
   elevenLabsApiKey: string | null;
   voiceId: string | null;
+  outscraperApiKey: string | null;
+  openaiApiKey: string | null;
   isGmailConnected: boolean;
+  isOutscraperConnected: boolean;
+  isOpenAIConnected: boolean;
 }
 
 // ──────────────────────────────────────────────
@@ -51,7 +55,11 @@ export async function getWorkspaceAccount(): Promise<WorkspaceAccountData> {
     agencyName: account.agencyName,
     elevenLabsApiKey: account.elevenLabsApiKey ? "•".repeat(24) : null,
     voiceId: account.voiceId,
+    outscraperApiKey: account.outscraperApiKey ? "•".repeat(24) : null,
+    openaiApiKey: account.openaiApiKey ? "•".repeat(24) : null,
     isGmailConnected: account.isGmailConnected,
+    isOutscraperConnected: Boolean(account.outscraperApiKey && account.outscraperApiKey.length > 5),
+    isOpenAIConnected: Boolean(account.openaiApiKey && account.openaiApiKey.length > 5),
   };
 }
 
@@ -62,6 +70,8 @@ export async function updateWorkspaceSettings(data: {
   agencyName?: string;
   elevenLabsApiKey?: string;
   voiceId?: string;
+  outscraperApiKey?: string;
+  openaiApiKey?: string;
 }) {
   const user = await getAuthUser();
   
@@ -83,6 +93,16 @@ export async function updateWorkspaceSettings(data: {
   // Only update ElevenLabs API key if provided and not masked
   if (data.elevenLabsApiKey && !data.elevenLabsApiKey.includes("•")) {
     updateData.elevenLabsApiKey = data.elevenLabsApiKey.trim();
+  }
+
+  // Only update Outscraper API key if provided and not masked
+  if (data.outscraperApiKey !== undefined && !data.outscraperApiKey.includes("•")) {
+    updateData.outscraperApiKey = data.outscraperApiKey.trim();
+  }
+
+  // Only update OpenAI API key if provided and not masked
+  if (data.openaiApiKey !== undefined && !data.openaiApiKey.includes("•")) {
+    updateData.openaiApiKey = data.openaiApiKey.trim();
   }
 
   const account = await db.workspaceAccount.upsert({

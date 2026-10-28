@@ -158,6 +158,53 @@ Si vous voulez jeter un œil à la démo, je vous l'envoie ici avec plaisir ! �
     generatePitch();
   }, [channel, businessName, contactName, city, niche, service, language]);
 
+  const [isAiGenerating, setIsAiGenerating] = useState(false);
+
+  const handleGenerateWithAI = async () => {
+    setIsAiGenerating(true);
+    toast.info("Génération de l'accroche ultra-personnalisée avec GPT-4o-mini...");
+
+    try {
+      const res = await fetch("/api/workspace/ai-draft", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          channel,
+          language,
+          leadName: contactName,
+          leadCompany: businessName,
+          leadNiche: niche,
+          leadCity: city,
+          customOffer: service,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.requiresApiKey) {
+        toast.warning(data.message, {
+          action: {
+            label: "Paramètres",
+            onClick: () => {
+              window.location.href = "/workspace/settings";
+            },
+          },
+        });
+      } else if (data.success) {
+        if (data.subject) setSubject(data.subject);
+        if (data.body) setBody(data.body);
+        toast.success("Message rédigé sur-mesure par l'IA !");
+      } else if (data.error) {
+        toast.error(data.error);
+      }
+    } catch (err: any) {
+      console.error("AI drafter error:", err);
+      toast.error("Erreur lors de la génération IA.");
+    } finally {
+      setIsAiGenerating(false);
+    }
+  };
+
   const handleCopy = () => {
     const textToCopy = channel === "email" ? `Objet: ${subject}\n\n${body}` : body;
     navigator.clipboard.writeText(textToCopy);
@@ -194,9 +241,18 @@ Si vous voulez jeter un œil à la démo, je vous l'envoie ici avec plaisir ! �
         </div>
 
         <div className="flex items-center gap-2">
+          <Button
+            onClick={handleGenerateWithAI}
+            disabled={isAiGenerating}
+            size="sm"
+            className="font-bold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white gap-2 shadow-xs cursor-pointer"
+          >
+            <Sparkles className={`w-3.5 h-3.5 ${isAiGenerating ? "animate-spin" : ""}`} />
+            <span>{isAiGenerating ? "IA en cours..." : "Rédiger avec GPT-4o"}</span>
+          </Button>
           <Button onClick={generatePitch} variant="outline" size="sm" className="font-bold border-border gap-2">
             <RefreshCw className="w-3.5 h-3.5" />
-            <span>Regenerate</span>
+            <span>Templates</span>
           </Button>
           <Button onClick={handleCopy} size="sm" className="font-bold bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
             {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -346,6 +402,21 @@ Si vous voulez jeter un œil à la démo, je vous l'envoie ici avec plaisir ! �
                     />
                   </div>
                 </div>
+              </div>
+
+              {/* Generate with AI button */}
+              <div className="pt-2">
+                <Button
+                  onClick={handleGenerateWithAI}
+                  disabled={isAiGenerating}
+                  className="w-full font-bold bg-amber-500 hover:bg-amber-600 text-white gap-2 shadow-xs cursor-pointer py-2.5"
+                >
+                  <Sparkles className={`w-4 h-4 ${isAiGenerating ? "animate-spin" : ""}`} />
+                  <span>{isAiGenerating ? "Génération en cours..." : "Générer avec votre Clé OpenAI"}</span>
+                </Button>
+                <p className="text-[11px] text-muted-foreground text-center mt-1.5">
+                  Modèle GPT-4o-mini connecté à votre clé API dans Paramètres
+                </p>
               </div>
             </CardContent>
           </Card>

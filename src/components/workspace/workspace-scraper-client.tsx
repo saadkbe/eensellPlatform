@@ -207,30 +207,70 @@ export function WorkspaceScraperClient() {
   const [isScraping, setIsScraping] = useState(false);
   const [results, setResults] = useState<ScrapedBusiness[]>(DEFAULT_PRESET_LEADS.casablanca);
   const [addedIds, setAddedIds] = useState<Set<string>>(new Set());
+  const [isLiveScraper, setIsLiveScraper] = useState(false);
 
-  const handleRunScrape = () => {
+  const handleRunScrape = async () => {
     setIsScraping(true);
-    toast.info(`Connecting to Google Maps scraper for "${niche}" in "${city}"...`);
+    toast.info(`Recherche de prospects pour "${niche}" à "${city}"...`);
 
-    setTimeout(() => {
-      const cityKey = city.toLowerCase();
-      let found = DEFAULT_PRESET_LEADS[cityKey] || DEFAULT_PRESET_LEADS.casablanca;
-      
-      // Filter or customize based on niche
-      const customized = found.map((item, idx) => ({
-        ...item,
-        id: `scraped_${Date.now()}_${idx}`,
-        niche: niche,
-        city: city,
-        name: item.name.includes("Casablanca") || item.name.includes("Rabat")
-          ? item.name.replace(/Casablanca|Rabat|Marrakech/g, city)
-          : `${item.name} (${city})`,
-      }));
+    try {
+      const res = await fetch("/api/workspace/scraper", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ niche, city }),
+      });
 
-      setResults(customized);
+      const data = await res.json();
+
+      if (data.requiresApiKey) {
+        toast.warning(data.message, {
+          action: {
+            label: "Paramètres",
+            onClick: () => {
+              window.location.href = "/workspace/settings";
+            },
+          },
+        });
+        // Graceful fallback to verified directory
+        const cityKey = city.toLowerCase();
+        const found = DEFAULT_PRESET_LEADS[cityKey] || DEFAULT_PRESET_LEADS.casablanca;
+        const customized = found.map((item, idx) => ({
+          ...item,
+          id: `demo_${Date.now()}_${idx}`,
+          niche: niche,
+          city: city,
+          name: item.name.includes("Casablanca") || item.name.includes("Rabat")
+            ? item.name.replace(/Casablanca|Rabat|Marrakech/g, city)
+            : `${item.name} (${city})`,
+        }));
+        setResults(customized);
+        setIsLiveScraper(false);
+      } else if (data.success && Array.isArray(data.leads) && data.leads.length > 0) {
+        const mapped: ScrapedBusiness[] = data.leads.map((l: any) => ({
+          id: l.id,
+          name: l.name,
+          niche: l.category,
+          city: l.city,
+          rating: Number(l.rating) || 4.5,
+          reviewsCount: Number(l.reviews) || 15,
+          phone: l.phone || "Non renseigné",
+          address: l.address,
+          website: l.website || "",
+          hasWebsite: Boolean(l.website),
+          score: (Number(l.rating) >= 4.5 ? "HOT" : "WARM") as "HOT" | "WARM" | "COLD",
+        }));
+        setResults(mapped);
+        setIsLiveScraper(true);
+        toast.success(`Google Maps en direct : ${mapped.length} prospects extraits avec succès !`);
+      } else if (data.error) {
+        toast.error(data.error);
+      }
+    } catch (err: any) {
+      console.error("Scraper fetch error:", err);
+      toast.error("Erreur de connexion au scraper. Affichage des prospects locaux.");
+    } finally {
       setIsScraping(false);
-      toast.success(`Successfully extracted ${customized.length} qualified client leads!`);
-    }, 1200);
+    }
   };
 
   const handleAddToCRM = (business: ScrapedBusiness) => {
