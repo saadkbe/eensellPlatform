@@ -182,7 +182,7 @@ export async function testGmailConnection() {
 export async function getWorkspaceOverview() {
   const user = await getAuthUser();
 
-  const [account, campaigns, leads, savedMessages] = await Promise.all([
+  const [account, campaigns, leads, savedMessages, retainers, tasks] = await Promise.all([
     db.workspaceAccount.findUnique({ where: { userId: user.id } }),
     db.workspaceCampaign.findMany({
       where: { userId: user.id },
@@ -197,12 +197,20 @@ export async function getWorkspaceOverview() {
     db.workspaceLead.findMany({
       where: { userId: user.id },
       orderBy: { createdAt: "desc" },
-      take: 20,
+      take: 50,
     }),
     db.workspaceMessage.findMany({
       where: { userId: user.id },
       orderBy: { createdAt: "asc" },
       take: 20,
+    }),
+    db.workspaceRetainer.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: "desc" },
+    }),
+    db.workspaceTask.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: "asc" },
     }),
   ]);
 
@@ -211,16 +219,23 @@ export async function getWorkspaceOverview() {
   const replies = leads.filter((l) => ["REPLIED", "MEETING_BOOKED"].includes(l.status)).length;
   const meetingsBooked = leads.filter((l) => l.status === "MEETING_BOOKED").length;
 
+  const totalMRR = retainers
+    .filter((r) => r.status === "active")
+    .reduce((sum, r) => sum + r.monthlyFee, 0);
+  const pendingMRR = retainers
+    .filter((r) => r.status === "pending_payment")
+    .reduce((sum, r) => sum + r.monthlyFee, 0);
+
   // Build natural daily debrief speech
   let debriefText = "";
   if (meetingsBooked > 0) {
-    debriefText = `Bonjour ${user.firstName || "cher fondateur"} ! Excellente nouvelle aujourd'hui : nous avons ${meetingsBooked} rendez-vous client confirmé pour vos automatisations, et ${replies} réponses positives. Votre pipeline génère des opportunités qualifiées.`;
+    debriefText = `Bonjour ${user.firstName || "cher fondateur"} ! Excellente nouvelle : ${meetingsBooked} rendez-vous client confirmé pour vos automatisations, et ${replies} réponses positives.`;
   } else if (replies > 0) {
-    debriefText = `Bonjour ${user.firstName || "cher fondateur"}. Votre campagne d'outreach est active : nous avons reçu ${replies} réponses intéressées d'agences qui demandent plus d'informations. Je vous suggère de planifier un appel de cadrage.`;
+    debriefText = `Bonjour ${user.firstName || "cher fondateur"}. Votre campagne d'outreach est active : ${replies} réponses reçues. Planifiez un appel de cadrage.`;
   } else if (sentEmails > 0) {
-    debriefText = `Bonjour ${user.firstName || "cher fondateur"}. L'agent d'outreach a déjà envoyé ${sentEmails} emails personnalisés à des agences ciblées. Nous attendons les premières ouvertures et réponses sous 24 heures.`;
+    debriefText = `Bonjour ${user.firstName || "cher fondateur"}. ${sentEmails} emails personnalisés ont été expédiés. Vos premiers retours devraient arriver sous peu.`;
   } else {
-    debriefText = `Bienvenue dans votre Eensell Workspace. Je suis votre agent d'acquisition autonome. Dites-moi simplement : "J'ai un blueprint d'automatisation pour les agences immobilières au Maroc et je veux lancer l'outreach", et je m'occupe de tout de A à Z.`;
+    debriefText = `Bienvenue dans votre Eensell Workspace. Connectez vos clés API dans Paramètres ou commencez par extraire vos premiers prospects avec Google Maps Scraper.`;
   }
 
   return {
@@ -231,6 +246,8 @@ export async function getWorkspaceOverview() {
           senderName: account.senderName,
           agencyName: account.agencyName,
           hasElevenLabs: Boolean(account.elevenLabsApiKey),
+          hasOpenAI: Boolean(account.openaiApiKey),
+          hasOutscraper: Boolean(account.outscraperApiKey),
           voiceId: account.voiceId,
         }
       : null,
@@ -241,7 +258,11 @@ export async function getWorkspaceOverview() {
       replies,
       meetingsBooked,
       conversionRate: sentEmails > 0 ? Math.round((replies / sentEmails) * 100) : 0,
+      totalMRR,
+      pendingMRR,
     },
+    retainers,
+    tasks,
     campaigns,
     recentLeads: leads,
     savedMessages,
@@ -744,5 +765,229 @@ export async function getWorkspaceMessages() {
     orderBy: { createdAt: "asc" },
     take: 30,
   });
+}
+
+// ──────────────────────────────────────────────
+// Retainers & Contracts Actions (Real Database)
+// ──────────────────────────────────────────────
+export async function createRetainerAction(data: {
+  clientName: string;
+  contactPerson?: string;
+  service: string;
+  category?: string;
+  monthlyFee: number;
+  status?: string;
+  nextBilling?: string;
+  phone?: string;
+  city?: string;
+}) {
+  const user = await getAuthUser();
+  const retainer = await db.workspaceRetainer.create({
+    data: {
+      userId: user.id,
+      clientName: data.clientName.trim(),
+      contactPerson: data.contactPerson?.trim() || null,
+      service: data.service.trim(),
+      category: data.category || "whatsapp",
+      monthlyFee: Number(data.monthlyFee) || 5000,
+      status: data.status || "active",
+      nextBilling: data.nextBilling || null,
+      phone: data.phone?.trim() || null,
+      city: data.city?.trim() || null,
+    },
+  });
+  revalidatePath("/workspace");
+  revalidatePath("/workspace/sheets");
+  return { success: true, retainer };
+}
+
+export async function updateRetainerStatusAction(id: string, status: string) {
+  const user = await getAuthUser();
+  await db.workspaceRetainer.updateMany({
+    where: { id, userId: user.id },
+    data: { status },
+  });
+  revalidatePath("/workspace");
+  revalidatePath("/workspace/sheets");
+  return { success: true };
+}
+
+export async function deleteRetainerAction(id: string) {
+  const user = await getAuthUser();
+  await db.workspaceRetainer.deleteMany({
+    where: { id, userId: user.id },
+  });
+  revalidatePath("/workspace");
+  revalidatePath("/workspace/sheets");
+  return { success: true };
+}
+
+// ──────────────────────────────────────────────
+// Daily Priorities & Tasks Actions (Real Database)
+// ──────────────────────────────────────────────
+export async function createTaskAction(text: string, category: string = "outreach") {
+  const user = await getAuthUser();
+  const task = await db.workspaceTask.create({
+    data: {
+      userId: user.id,
+      text: text.trim(),
+      category,
+      done: false,
+    },
+  });
+  revalidatePath("/workspace");
+  return { success: true, task };
+}
+
+export async function toggleTaskAction(id: string) {
+  const user = await getAuthUser();
+  const current = await db.workspaceTask.findFirst({
+    where: { id, userId: user.id },
+  });
+  if (!current) throw new Error("Task not found");
+  const updated = await db.workspaceTask.update({
+    where: { id },
+    data: { done: !current.done },
+  });
+  revalidatePath("/workspace");
+  return { success: true, task: updated };
+}
+
+export async function deleteTaskAction(id: string) {
+  const user = await getAuthUser();
+  await db.workspaceTask.deleteMany({
+    where: { id, userId: user.id },
+  });
+  revalidatePath("/workspace");
+  return { success: true };
+}
+
+// ──────────────────────────────────────────────
+// Lead / CRM Actions (Real Database)
+// ──────────────────────────────────────────────
+export async function addLeadToCrmAction(lead: {
+  businessName: string;
+  niche: string;
+  city: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  address?: string;
+  status?: "PENDING" | "SENT" | "OPENED" | "REPLIED" | "MEETING_BOOKED" | "DECLINED";
+}) {
+  const user = await getAuthUser();
+  const cleanEmail =
+    lead.email && lead.email.includes("@")
+      ? lead.email
+      : `contact@${lead.businessName.toLowerCase().replace(/[^a-z0-9]/g, "") || "client"}.ma`;
+
+  const created = await db.workspaceLead.create({
+    data: {
+      userId: user.id,
+      businessName: lead.businessName,
+      niche: lead.niche,
+      city: lead.city,
+      country: "Morocco",
+      phone: lead.phone || null,
+      email: cleanEmail,
+      website: lead.website || null,
+      status: lead.status || "PENDING",
+    },
+  });
+  revalidatePath("/workspace");
+  revalidatePath("/workspace/crm");
+  revalidatePath("/workspace/sheets");
+  return { success: true, lead: created };
+}
+
+export async function deleteLeadAction(leadId: string) {
+  const user = await getAuthUser();
+  await db.workspaceLead.deleteMany({
+    where: { id: leadId, userId: user.id },
+  });
+  revalidatePath("/workspace");
+  revalidatePath("/workspace/crm");
+  revalidatePath("/workspace/sheets");
+  return { success: true };
+}
+
+// ──────────────────────────────────────────────
+// Invoices Actions (Real Database)
+// ──────────────────────────────────────────────
+export async function saveInvoiceAction(data: {
+  invoiceNumber: string;
+  clientName: string;
+  clientEmail?: string;
+  clientPhone?: string;
+  service: string;
+  amount: number;
+  status?: string;
+  dueDate?: string;
+}) {
+  const user = await getAuthUser();
+  const invoice = await db.workspaceInvoice.create({
+    data: {
+      userId: user.id,
+      invoiceNumber: data.invoiceNumber,
+      clientName: data.clientName,
+      clientEmail: data.clientEmail || null,
+      clientPhone: data.clientPhone || null,
+      service: data.service,
+      amount: data.amount,
+      status: data.status || "DRAFT",
+      dueDate: data.dueDate || null,
+    },
+  });
+  revalidatePath("/workspace");
+  revalidatePath("/workspace/invoices");
+  return { success: true, invoice };
+}
+
+export async function getWorkspaceInvoicesAction() {
+  const user = await getAuthUser();
+  return db.workspaceInvoice.findMany({
+    where: { userId: user.id },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+// ──────────────────────────────────────────────
+// Notes Actions (Real Database)
+// ──────────────────────────────────────────────
+export async function saveNoteAction(data: {
+  title: string;
+  content: string;
+  category?: string;
+  pinned?: boolean;
+}) {
+  const user = await getAuthUser();
+  const note = await db.workspaceNote.create({
+    data: {
+      userId: user.id,
+      title: data.title,
+      content: data.content,
+      category: data.category || "playbook",
+      pinned: data.pinned || false,
+    },
+  });
+  revalidatePath("/workspace/notes");
+  return { success: true, note };
+}
+
+export async function getWorkspaceNotesAction() {
+  const user = await getAuthUser();
+  return db.workspaceNote.findMany({
+    where: { userId: user.id },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+export async function deleteNoteAction(id: string) {
+  const user = await getAuthUser();
+  await db.workspaceNote.deleteMany({
+    where: { id, userId: user.id },
+  });
+  revalidatePath("/workspace/notes");
+  return { success: true };
 }
 

@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { saveInvoiceAction } from "@/actions/workspace.actions";
 
 interface InvoiceItem {
   id: string;
@@ -89,6 +90,22 @@ export function WorkspaceInvoicesClient() {
     window.print();
   };
 
+  const handleSaveInvoice = async () => {
+    try {
+      await saveInvoiceAction({
+        invoiceNumber,
+        clientName,
+        service: items[0]?.description || "AI Automation Services",
+        amount: total,
+        dueDate,
+        status: "SENT",
+      });
+      toast.success(`Facture ${invoiceNumber} enregistrée avec succès dans la base de données !`);
+    } catch {
+      toast.error("Erreur lors de l'enregistrement de la facture");
+    }
+  };
+
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 select-text">
       {/* ── Notion Header (Hidden when printing) ── */}
@@ -113,6 +130,15 @@ export function WorkspaceInvoicesClient() {
           </div>
 
           <div className="flex items-center gap-2">
+            <Button
+              onClick={handleSaveInvoice}
+              variant="outline"
+              size="sm"
+              className="text-xs h-8 px-3 rounded-md border-[#EDEDEB] dark:border-[#2E2E2E]"
+            >
+              <CheckCircle2 className="w-3.5 h-3.5 mr-1 text-emerald-500" />
+              <span>Save Invoice</span>
+            </Button>
             <Button
               onClick={handlePrint}
               size="sm"

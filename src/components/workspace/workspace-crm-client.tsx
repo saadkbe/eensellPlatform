@@ -19,7 +19,7 @@ import {
   ArrowUpDown,
   Plus,
 } from "lucide-react";
-import { updateLeadStatus } from "@/actions/workspace.actions";
+import { updateLeadStatus, deleteLeadAction, addLeadToCrmAction } from "@/actions/workspace.actions";
 import { toast } from "sonner";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
@@ -35,68 +35,11 @@ interface WorkspaceCrmClientProps {
   };
 }
 
-const STARTER_LEADS = [
-  {
-    id: "crm_1",
-    businessName: "Atlas Prestige Immobilier",
-    niche: "Real Estate Agencies",
-    city: "Casablanca",
-    country: "Morocco",
-    website: "https://atlasprestige.ma",
-    phone: "+212 5 22 45 88 12",
-    email: "direction@atlasprestige.ma",
-    status: "REPLIED",
-    replyNotes: "Director confirmed interest in WhatsApp qualification bot. Meeting held.",
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "crm_2",
-    businessName: "Cabinet Dentaire Dr. Alami Gauthier",
-    niche: "Dental Clinics",
-    city: "Casablanca",
-    country: "Morocco",
-    website: "https://cabinet-dentaire-alami.ma",
-    phone: "+212 5 22 20 14 55",
-    email: "contact@cabinet-alami.ma",
-    status: "SENT",
-    replyNotes: "Cold email sent with personalized Loom demo.",
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "crm_3",
-    businessName: "Casablanca Prime Properties",
-    niche: "Real Estate Agencies",
-    city: "Casablanca",
-    country: "Morocco",
-    website: "https://casablancaprime.ma",
-    phone: "+212 5 22 98 14 00",
-    email: "info@casablancaprime.ma",
-    status: "REPLIED",
-    replyNotes: "Proposal sent for 6,000 MAD / month retainer.",
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "crm_4",
-    businessName: "Rabat Agdal Immobilier",
-    niche: "Real Estate Agencies",
-    city: "Rabat",
-    country: "Morocco",
-    website: "https://rabatagdalimmo.ma",
-    phone: "+212 5 37 77 50 14",
-    email: "agence@rabatagdalimmo.ma",
-    status: "DRAFTED",
-    replyNotes: "Ready to dispatch outreach pitch.",
-    createdAt: new Date().toISOString(),
-  },
-];
-
 export function WorkspaceCrmClient({
   initialLeads,
   stats,
 }: WorkspaceCrmClientProps) {
-  const [leads, setLeads] = useState<any[]>(
-    initialLeads && initialLeads.length > 0 ? initialLeads : STARTER_LEADS
-  );
+  const [leads, setLeads] = useState<any[]>(initialLeads || []);
   const [filterStatus, setFilterStatus] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLead, setSelectedLead] = useState<any | null>(null);

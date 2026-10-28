@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { addLeadToCrmAction, deleteLeadAction } from "@/actions/workspace.actions";
 
 interface SheetRow {
   id: string;
@@ -26,77 +27,42 @@ interface SheetRow {
   notes: string;
 }
 
-const INITIAL_SHEET_ROWS: SheetRow[] = [
-  {
-    id: "s1",
-    name: "Atlas Prestige Immobilier",
-    niche: "Real Estate",
-    city: "Casablanca",
-    phone: "+212 5 22 45 88 12",
-    email: "direction@atlasprestige.ma",
-    status: "Closed Won",
-    retainerMad: 5500,
-    notes: "Active WhatsApp Bot for property inquiries. Paying via CIH monthly.",
-  },
-  {
-    id: "s2",
-    name: "Cabinet Dentaire Dr. Alami",
-    niche: "Dentistry",
-    city: "Casablanca",
-    phone: "+212 5 24 43 11 20",
-    email: "contact@cabinet-alami.ma",
-    status: "Closed Won",
-    retainerMad: 4500,
-    notes: "AI voice booking for emergency and routine consultations.",
-  },
-  {
-    id: "s3",
-    name: "Casablanca Prime Properties",
-    niche: "Real Estate",
-    city: "Casablanca",
-    phone: "+212 5 22 98 14 00",
-    email: "info@casablancaprime.ma",
-    status: "Proposal Sent",
-    retainerMad: 6000,
-    notes: "Demo delivered on Thursday. Waiting for director contract signoff.",
-  },
-  {
-    id: "s4",
-    name: "Clinique Esthétique Racine",
-    niche: "Aesthetic Clinic",
-    city: "Casablanca",
-    phone: "+212 5 22 39 10 20",
-    email: "contact@cliniqueracine.ma",
-    status: "Meeting Booked",
-    retainerMad: 7000,
-    notes: "Zoom call scheduled for Tuesday 15:00. Interested in multilingual booking.",
-  },
-  {
-    id: "s5",
-    name: "Rabat Agdal Immobilier",
-    niche: "Real Estate",
-    city: "Rabat",
-    phone: "+212 5 37 77 50 14",
-    email: "agence@rabatagdalimmo.ma",
-    status: "Contacted",
-    retainerMad: 5000,
-    notes: "Reached out via WhatsApp voice note. Opened demo link.",
-  },
-  {
-    id: "s6",
-    name: "Palmeraie Luxury Villas",
-    niche: "Hospitality & Villas",
-    city: "Marrakech",
-    phone: "+212 5 24 33 80 00",
-    email: "reservations@palmeraievillas.ma",
-    status: "New",
-    retainerMad: 8000,
-    notes: "Scraped via Google Maps. High review count, needs instant guest response.",
-  },
-];
 
-export function WorkspaceSheetsClient() {
-  const [rows, setRows] = useState<SheetRow[]>(INITIAL_SHEET_ROWS);
+interface WorkspaceSheetsClientProps {
+  initialLeads?: any[];
+  initialRetainers?: any[];
+}
+
+export function WorkspaceSheetsClient({
+  initialLeads = [],
+  initialRetainers = [],
+}: WorkspaceSheetsClientProps) {
+  const mappedRows: SheetRow[] = [
+    ...initialRetainers.map((r: any) => ({
+      id: `ret_${r.id}`,
+      name: r.clientName,
+      niche: r.service,
+      city: r.city || "Casablanca",
+      phone: r.phone || "—",
+      email: `contact@${r.clientName.toLowerCase().replace(/[^a-z0-9]/g, "") || "client"}.ma`,
+      status: (r.status === "active" ? "Closed Won" : "Proposal Sent") as SheetRow["status"],
+      retainerMad: Number(r.monthlyFee) || 5000,
+      notes: `Recurring ${r.service} contract`,
+    })),
+    ...initialLeads.map((l: any) => ({
+      id: `lead_${l.id}`,
+      name: l.businessName,
+      niche: l.niche,
+      city: l.city,
+      phone: l.phone || "—",
+      email: l.email || "—",
+      status: (l.status === "MEETING_BOOKED" ? "Meeting Booked" : l.status === "REPLIED" ? "Proposal Sent" : "Contacted") as SheetRow["status"],
+      retainerMad: 5000,
+      notes: l.replyNotes || "Prospect outreach",
+    })),
+  ];
+
+  const [rows, setRows] = useState<SheetRow[]>(mappedRows);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
 
@@ -116,29 +82,52 @@ export function WorkspaceSheetsClient() {
     .filter((r) => r.status === "Closed Won")
     .reduce((acc, r) => acc + (Number(r.retainerMad) || 0), 0);
 
-  const handleAddRow = () => {
-    const newRow: SheetRow = {
-      id: `new_${Date.now()}`,
-      name: "New Agency Client",
-      niche: "Real Estate",
-      city: "Casablanca",
-      phone: "+212 6 ...",
-      email: "contact@client.ma",
-      status: "New",
-      retainerMad: 4500,
-      notes: "Lead captured. Follow up this week.",
-    };
-    setRows([newRow, ...rows]);
-    toast.success("New row added to database table!");
+  const handleAddRow = async () => {
+    try {
+      const res = await addLeadToCrmAction({
+        businessName: "New Client Lead",
+        niche: "Real Estate",
+        city: "Casablanca",
+        phone: "+212 6 ...",
+        status: "PENDING",
+      });
+      if (res.success && res.lead) {
+        const newRow: SheetRow = {
+          id: `lead_${res.lead.id}`,
+          name: res.lead.businessName,
+          niche: res.lead.niche,
+          city: res.lead.city,
+          phone: res.lead.phone || "—",
+          email: res.lead.email,
+          status: "New",
+          retainerMad: 5000,
+          notes: "Prospect saved to database",
+        };
+        setRows([newRow, ...rows]);
+        toast.success("New client lead saved to database!");
+      }
+    } catch {
+      toast.error("Erreur lors de la création de la ligne");
+    }
   };
 
   const handleUpdateRow = (id: string, field: keyof SheetRow, value: any) => {
     setRows(rows.map((r) => (r.id === id ? { ...r, [field]: value } : r)));
   };
 
-  const handleDeleteRow = (id: string) => {
+  const handleDeleteRow = async (id: string) => {
     setRows(rows.filter((r) => r.id !== id));
-    toast.info("Row removed from table.");
+    if (id.startsWith("lead_")) {
+      const realId = id.replace("lead_", "");
+      try {
+        await deleteLeadAction(realId);
+        toast.info("Prospect supprimé de la base de données");
+      } catch {
+        // silent
+      }
+    } else {
+      toast.info("Ligne supprimée");
+    }
   };
 
   const handleExportCSV = () => {

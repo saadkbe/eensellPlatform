@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { addLeadToCrmAction } from "@/actions/workspace.actions";
 
 interface ScrapedBusiness {
   id: string;
@@ -245,9 +246,22 @@ export function WorkspaceScraperClient() {
     }
   };
 
-  const handleAddToCRM = (business: ScrapedBusiness) => {
-    setAddedIds((prev) => new Set(prev).add(business.id));
-    toast.success(`Ajouté "${business.name}" à votre CRM !`);
+  const handleAddToCRM = async (business: ScrapedBusiness) => {
+    try {
+      await addLeadToCrmAction({
+        businessName: business.name,
+        niche: business.niche,
+        city: business.city,
+        phone: business.phone,
+        website: business.website,
+        address: business.address,
+        status: "PENDING",
+      });
+      setAddedIds((prev) => new Set(prev).add(business.id));
+      toast.success(`"${business.name}" a été enregistré dans votre CRM !`);
+    } catch {
+      toast.error("Erreur lors de l'ajout au CRM");
+    }
   };
 
   const handleExportCSV = () => {

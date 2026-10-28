@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { saveNoteAction, deleteNoteAction } from "@/actions/workspace.actions";
 
 interface Note {
   id: string;
@@ -111,7 +112,7 @@ export function WorkspaceNotesClient() {
     return matchesSearch && matchesCat;
   });
 
-  const handleCreateNote = () => {
+  const handleCreateNote = async () => {
     const newNote: Note = {
       id: `note_${Date.now()}`,
       title: "New Agency Note",
@@ -123,15 +124,32 @@ export function WorkspaceNotesClient() {
     setNotes([newNote, ...notes]);
     setSelectedNote(newNote);
     toast.success("New note created!");
+    try {
+      await saveNoteAction({
+        title: newNote.title,
+        content: newNote.content,
+        category: newNote.category,
+        pinned: false,
+      });
+    } catch {
+      // local copy is already set
+    }
   };
 
-  const handleDeleteNote = (id: string) => {
+  const handleDeleteNote = async (id: string) => {
     const updated = notes.filter((n) => n.id !== id);
     setNotes(updated);
     if (selectedNote.id === id && updated.length > 0) {
       setSelectedNote(updated[0]);
     }
     toast.info("Note deleted.");
+    if (!id.startsWith("n1") && !id.startsWith("n2") && !id.startsWith("n3")) {
+      try {
+        await deleteNoteAction(id);
+      } catch {
+        // silent
+      }
+    }
   };
 
   return (

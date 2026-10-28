@@ -75,6 +75,10 @@ model User {
   workspaceLeads     WorkspaceLead[]
   workspaceCampaigns WorkspaceCampaign[]
   workspaceMessages  WorkspaceMessage[]
+  workspaceRetainers WorkspaceRetainer[]
+  workspaceTasks     WorkspaceTask[]
+  workspaceInvoices  WorkspaceInvoice[]
+  workspaceNotes     WorkspaceNote[]
 
   // ── Referral System ──
   referralCode   String?   @unique
@@ -675,5 +679,69 @@ model WorkspaceMessage {
 
   @@index([userId])
   @@index([createdAt])
+}
+
+model WorkspaceRetainer {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clientName    String
+  contactPerson String?
+  service       String
+  category      String   @default("whatsapp")
+  monthlyFee    Int      @default(5000)
+  status        String   @default("active")
+  nextBilling   String?
+  phone         String?
+  city          String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model WorkspaceTask {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  text      String
+  category  String   @default("outreach")
+  done      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model WorkspaceInvoice {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invoiceNumber String
+  clientName    String
+  clientEmail   String?
+  clientPhone   String?
+  service       String
+  amount        Float
+  status        String   @default("DRAFT")
+  dueDate       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model WorkspaceNote {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  content   String   @db.Text
+  category  String   @default("playbook")
+  pinned    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
