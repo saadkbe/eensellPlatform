@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, Fragment } from "react";
+import Link from "next/link";
 import { SignOutButton } from "@clerk/nextjs";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -11,11 +12,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/components/landing/LanguageProvider";
-import { Navbar } from "@/components/landing/Navbar";
+import { Language } from "@/lib/translations";
 import { toast } from "sonner";
 import confetti from "canvas-confetti";
 import { useRouter } from "next/navigation";
 import { checkUserStatus } from "@/actions/user.actions";
+
+const languages: { code: Language; label: string; flagUrl: string }[] = [
+  { code: "ar", label: "العربية", flagUrl: "https://flagcdn.com/sa.svg" },
+  { code: "fr", label: "Français", flagUrl: "https://flagcdn.com/fr.svg" },
+  { code: "en", label: "English", flagUrl: "https://flagcdn.com/us.svg" },
+];
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
@@ -27,10 +34,11 @@ function WhatsAppIcon({ className }: { className?: string }) {
 
 function PendingContent() {
   const router = useRouter();
-  const { t, language, dir, isRTL } = useLanguage();
+  const { t, language, setLanguage, dir, isRTL } = useLanguage();
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [selectedMethod, setSelectedMethod] = useState<"cih" | "cash">("cih");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [isLangOpen, setIsLangOpen] = useState(false);
 
   /** Tri-lingual text helper */
   const tx = (ar: string, fr: string, en: string) =>
@@ -92,12 +100,10 @@ function PendingContent() {
 
   return (
     <div dir={dir} className={`min-h-screen bg-slate-50/70 dark:bg-background text-foreground antialiased selection:bg-primary/20 ${isRTL ? "font-arabic" : ""}`}>
-      <Navbar hideLinks={true} />
-
-      {/* Subtle Top Indicator Banner */}
-      <div className="bg-amber-500/10 border-b border-amber-500/20 py-2.5 px-4 text-center text-xs sm:text-sm font-semibold text-amber-900 dark:text-amber-200">
-        <div className="max-w-6xl mx-auto flex items-center justify-center gap-2">
-          <Sparkles className="w-4 h-4 text-primary shrink-0" />
+      {/* ── Top Notice Information Banner (Full Width, Never Covered) ── */}
+      <div className="w-full bg-amber-500/10 border-b border-amber-500/20 py-2.5 px-4 text-center text-xs sm:text-sm font-semibold text-amber-900 dark:text-amber-200">
+        <div className="max-w-7xl mx-auto flex items-center justify-center gap-2">
+          <Sparkles className="w-4 h-4 text-primary shrink-0 animate-pulse" />
           <span>
             {tx(
               "خطوة أخيرة: أكمل التحويل البنكي ثم أرسل صورة الوصل عبر واتساب لتفعيل حسابك فوراً",
@@ -107,6 +113,73 @@ function PendingContent() {
           </span>
         </div>
       </div>
+
+      {/* ── Clean, Compact, Docked Header (Proper size, zero overlap) ── */}
+      <header className="border-b border-slate-200 dark:border-border bg-white/95 dark:bg-card/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center">
+            <img
+              src="/logo2.png"
+              alt="Eensell University"
+              className="h-8 sm:h-9 w-auto object-contain brightness-0 dark:invert"
+            />
+          </Link>
+
+          <div className="flex items-center gap-2.5 sm:gap-4">
+            {/* Language Selector */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setIsLangOpen(!isLangOpen)}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-border text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-accent transition-colors"
+              >
+                <img
+                  src={languages.find((l) => l.code === language)?.flagUrl}
+                  alt={language}
+                  className="w-4 h-auto rounded-xs shadow-xs"
+                />
+                <span className="uppercase">{language}</span>
+                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
+              </button>
+
+              {isLangOpen && (
+                <div className="absolute top-full mt-1.5 right-0 rtl:right-auto rtl:left-0 w-36 bg-white dark:bg-card border border-slate-200 dark:border-border rounded-xl shadow-xl py-1 z-50">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      type="button"
+                      onClick={() => {
+                        setLanguage(lang.code);
+                        setIsLangOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs transition-colors text-left rtl:text-right ${
+                        language === lang.code
+                          ? "bg-primary/10 font-bold text-primary"
+                          : "font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-accent"
+                      }`}
+                    >
+                      <img src={lang.flagUrl} alt={lang.code} className="w-4 h-auto rounded-xs" />
+                      <span>{lang.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Logout Button */}
+            <SignOutButton>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-xs font-bold text-slate-500 hover:text-foreground hover:bg-slate-100 dark:hover:bg-accent gap-1.5 h-8 px-2.5"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">{t("pending_logout")}</span>
+              </Button>
+            </SignOutButton>
+          </div>
+        </div>
+      </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20">
         {/* ══════════════════════════════════════════════════════
