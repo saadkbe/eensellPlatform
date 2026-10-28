@@ -4,35 +4,42 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UserButton, useUser } from "@clerk/nextjs";
 import {
-  Mic,
+  LayoutDashboard,
+  MapPin,
   Users,
+  Table2,
   Send,
+  Receipt,
+  StickyNote,
   Settings,
   GraduationCap,
   Plus,
   Compass,
-  MessageSquare,
   Sparkles,
   Layers,
   ChevronRight,
   Menu,
   X,
-  FolderOpen,
+  TrendingUp,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 const mainNav = [
-  { title: "AI Agent Chat", href: "/workspace", icon: MessageSquare },
-  { title: "Campaigns", href: "/workspace/campaigns", icon: Send },
-  { title: "Leads & CRM", href: "/workspace/crm", icon: Users },
-  { title: "Integrations & Gmail", href: "/workspace/settings", icon: Settings },
+  { title: "Overview & Income", href: "/workspace", icon: LayoutDashboard },
+  { title: "Maps Lead Scraper", href: "/workspace/scraper", icon: MapPin },
+  { title: "Clients & Outreach", href: "/workspace/crm", icon: Users },
+  { title: "Agency Sheets", href: "/workspace/sheets", icon: Table2 },
+  { title: "Email & DM Drafter", href: "/workspace/drafter", icon: Send },
+  { title: "Invoices & Contracts", href: "/workspace/invoices", icon: Receipt },
+  { title: "Notes & Scratchpad", href: "/workspace/notes", icon: StickyNote },
+  { title: "Settings", href: "/workspace/settings", icon: Settings },
 ];
 
-const recentThreads = [
-  { title: "Agences Immo Casablanca", tag: "casablanca-immo", active: true },
-  { title: "Cabinets Dentaires Rabat", tag: "rabat-dental", active: false },
-  { title: "E-commerce Brands Marrakech", tag: "kech-ecom", active: false },
+const quickTools = [
+  { title: "Dental Clinics Casablanca", href: "/workspace/scraper", tag: "casa-dental" },
+  { title: "Real Estate Rabat", href: "/workspace/scraper", tag: "rabat-immo" },
+  { title: "Standard Service Agreement", href: "/workspace/invoices", tag: "invoice-tmp" },
 ];
 
 export function WorkspaceSidebar() {
@@ -63,14 +70,14 @@ export function WorkspaceSidebar() {
         </Link>
       </div>
 
-      {/* Top New Campaign Button */}
+      {/* Top Scrape Leads Button */}
       <div className="p-3">
         <Link
-          href="/workspace"
-          className="flex items-center justify-center gap-2 w-full py-2 px-3 rounded-xl bg-primary text-primary-foreground font-semibold text-xs shadow-xs hover:opacity-90 transition-opacity"
+          href="/workspace/scraper"
+          className="flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xs shadow-xs transition-all"
         >
           <Plus className="w-3.5 h-3.5" />
-          <span>New campaign</span>
+          <span>Scrape New Clients</span>
         </Link>
       </div>
 
@@ -89,36 +96,34 @@ export function WorkspaceSidebar() {
                 className={cn(
                   "flex items-center gap-2.5 px-3 py-2 rounded-xl font-medium transition-colors",
                   active
-                    ? "bg-muted text-foreground font-semibold"
+                    ? "bg-primary/10 text-primary font-bold border border-primary/20"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                 )}
               >
-                <Icon className={cn("w-4 h-4 shrink-0", active ? "text-amber-500" : "text-muted-foreground")} />
+                <Icon className={cn("w-4 h-4 shrink-0", active ? "text-primary" : "text-muted-foreground")} />
                 <span>{item.title}</span>
               </Link>
             );
           })}
         </div>
 
-        {/* Recent Outreach Threads */}
+        {/* Quick Tools & Presets */}
         <div className="space-y-2">
           <div className="px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80">
-            Recent campaigns
+            Presets & Shortcuts
           </div>
           <div className="space-y-0.5">
-            {recentThreads.map((thread) => (
+            {quickTools.map((tool) => (
               <Link
-                key={thread.tag}
-                href="/workspace"
+                key={tool.tag}
+                href={tool.href}
                 className={cn(
                   "flex items-center gap-2 px-3 py-2 rounded-xl text-xs transition-colors",
-                  thread.active && pathname === "/workspace"
-                    ? "bg-amber-500/10 text-amber-700 dark:text-amber-300 font-semibold border border-amber-500/20"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                  "text-muted-foreground hover:text-foreground hover:bg-muted/40"
                 )}
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
-                <span className="truncate flex-1">{thread.title}</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-primary/70 shrink-0" />
+                <span className="truncate flex-1">{tool.title}</span>
               </Link>
             ))}
           </div>

@@ -33,8 +33,8 @@ export default async function WorkspaceLayout({
       {/* Left Sidebar */}
       <WorkspaceSidebar />
 
-      {/* Main Split-Screen Viewport */}
-      <main className="flex-1 min-w-0 pt-14 lg:pt-0 lg:pl-60 flex flex-col h-screen overflow-hidden">
+      {/* Main Viewport */}
+      <main className="flex-1 min-w-0 pt-14 lg:pt-0 lg:pl-60 flex flex-col min-h-screen overflow-y-auto">
         {children}
       </main>
     </div>

@@ -1,10 +1,10 @@
 import { getWorkspaceOverview } from "@/actions/workspace.actions";
-import { WorkspaceAgentConsole } from "@/components/workspace/workspace-agent-console";
+import { WorkspaceDashboardClient } from "@/components/workspace/workspace-dashboard-client";
 
 export const dynamic = "force-dynamic";
 
 export default async function WorkspacePage() {
-  const overview = await getWorkspaceOverview();
+  const overview = await getWorkspaceOverview().catch(() => null);
 
-  return <WorkspaceAgentConsole initialData={overview} />;
+  return <WorkspaceDashboardClient initialData={overview} />;
 }
