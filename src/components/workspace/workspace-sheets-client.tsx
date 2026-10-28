@@ -182,7 +182,7 @@ export function WorkspaceSheetsClient() {
   };
 
   return (
-    <div className="p-4 sm:p-8 lg:p-12 max-w-7xl mx-auto w-full space-y-6">
+    <div className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 select-text">
       {/* ── Notion Header ── */}
       <div className="space-y-3">
         <div className="flex items-center gap-1.5 text-xs text-[#787774] dark:text-[#9B9A97]">
