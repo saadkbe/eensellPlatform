@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useUser } from "@clerk/nextjs";
 import {
   createRetainerAction,
   updateRetainerStatusAction,
@@ -66,6 +67,16 @@ interface WorkspaceDashboardProps {
 }
 
 export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProps) {
+  const { user } = useUser();
+  const firstName = user?.firstName || user?.fullName?.split(" ")[0] || "Founder";
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 18) return "Good afternoon";
+    return "Good evening";
+  };
+
   // Real Database Retainers & Tasks (No hardcoded mock data)
   const [retainers, setRetainers] = useState<any[]>(initialData?.retainers || []);
   const [tasks, setTasks] = useState<any[]>(initialData?.tasks || []);
@@ -218,10 +229,10 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5]">
-            Agency Command & Revenue
+            {getGreeting()}, {firstName} 👋
           </h1>
           <p className="text-xs sm:text-sm text-[#787774] dark:text-[#9B9A97]">
-            Real-time operating system for client retainers, outbound acquisition, and cashflow.
+            Agency Command Center &bull; Tracking client retainers, active acquisition, and cashflow.
           </p>
         </div>
 
@@ -544,38 +555,38 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
             </Link>
 
             <Link
-              href="/workspace/sheets"
-              className="p-4 rounded-2xl bg-[#FFFFFF] dark:bg-[#202020] border border-[#EDEDEB] dark:border-[#2E2E2E] hover:border-[#D3D1CB] dark:hover:border-[#3E3E3E] hover:shadow-xs transition-all group"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center text-sm font-bold">
-                  📊
-                </div>
-                <ArrowRight className="w-3.5 h-3.5 text-[#9B9A97] group-hover:text-amber-600 group-hover:translate-x-0.5 transition-all" />
-              </div>
-              <h3 className="font-bold text-xs text-[#37352F] dark:text-[#E6E6E5] group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
-                Agency Database Sheets
-              </h3>
-              <p className="text-[11px] text-[#787774] dark:text-[#9B9A97] mt-0.5">
-                Relational live database table for your prospects, client contacts, and deal forecasting.
-              </p>
-            </Link>
-
-            <Link
               href="/workspace/drafter"
               className="p-4 rounded-2xl bg-[#FFFFFF] dark:bg-[#202020] border border-[#EDEDEB] dark:border-[#2E2E2E] hover:border-[#D3D1CB] dark:hover:border-[#3E3E3E] hover:shadow-xs transition-all group"
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="w-8 h-8 rounded-xl bg-violet-50 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 flex items-center justify-center text-sm font-bold">
-                  ✍️
+                  ✉️
                 </div>
                 <ArrowRight className="w-3.5 h-3.5 text-[#9B9A97] group-hover:text-violet-600 group-hover:translate-x-0.5 transition-all" />
               </div>
               <h3 className="font-bold text-xs text-[#37352F] dark:text-[#E6E6E5] group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
-                AI Pitch & Voice Drafter
+                Cold Email Drafter
               </h3>
               <p className="text-[11px] text-[#787774] dark:text-[#9B9A97] mt-0.5">
-                Generate tailored outreach copy in Darija, French, and English using GPT-4o and ElevenLabs.
+                Generate high-converting personalized cold emails with subject line scoring & spam check.
+              </p>
+            </Link>
+
+            <Link
+              href="/workspace/whatsapp"
+              className="p-4 rounded-2xl bg-[#FFFFFF] dark:bg-[#202020] border border-[#EDEDEB] dark:border-[#2E2E2E] hover:border-[#D3D1CB] dark:hover:border-[#3E3E3E] hover:shadow-xs transition-all group"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-sm font-bold">
+                  💬
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-[#9B9A97] group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all" />
+              </div>
+              <h3 className="font-bold text-xs text-[#37352F] dark:text-[#E6E6E5] group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                WhatsApp Outreach
+              </h3>
+              <p className="text-[11px] text-[#787774] dark:text-[#9B9A97] mt-0.5">
+                Direct WhatsApp hooks, audio voice note scripts, Darija/French templates, and 1-click dispatch.
               </p>
             </Link>
           </div>

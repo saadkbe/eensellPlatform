@@ -508,7 +508,16 @@ export function WorkspaceScraperClient() {
                         )}&city=${encodeURIComponent(b.city)}`}
                         className="px-2 py-1 rounded text-[11px] font-medium bg-[#37352F] hover:bg-[#262420] dark:bg-[#E6E6E5] dark:hover:bg-[#FFFFFF] text-[#FFFFFF] dark:text-[#191919] transition-colors cursor-pointer"
                       >
-                        Pitch
+                        Email
+                      </Link>
+
+                      <Link
+                        href={`/workspace/whatsapp?phone=${encodeURIComponent(b.phone)}&name=${encodeURIComponent(
+                          b.name
+                        )}&city=${encodeURIComponent(b.city)}&niche=${encodeURIComponent(b.niche)}`}
+                        className="px-2 py-1 rounded text-[11px] font-medium bg-emerald-600 hover:bg-emerald-700 text-white transition-colors cursor-pointer"
+                      >
+                        WhatsApp
                       </Link>
                     </div>
                   </td>

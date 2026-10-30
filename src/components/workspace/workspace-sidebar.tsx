@@ -39,7 +39,8 @@ const workspaceNav = [
 ];
 
 const outreachNav = [
-  { title: "Email & WhatsApp Drafter", href: "/workspace/drafter", emoji: "✍️" },
+  { title: "Cold Email Drafter", href: "/workspace/drafter", emoji: "✉️" },
+  { title: "WhatsApp Outreach", href: "/workspace/whatsapp", emoji: "💬" },
   { title: "Invoices & Contracts", href: "/workspace/invoices", emoji: "🧾" },
   { title: "Notes & Playbooks", href: "/workspace/notes", emoji: "📝" },
 ];
