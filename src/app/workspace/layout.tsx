@@ -1,4 +1,5 @@
 import { WorkspaceSidebar } from "@/components/workspace/workspace-sidebar";
+import { WorkspaceTopBar } from "@/components/workspace/workspace-topbar";
 import { WorkspaceThemeInit } from "@/components/workspace/workspace-theme-init";
 import { Metadata } from "next";
 import { getOrCreateUser } from "@/actions/user.actions";
@@ -7,7 +8,7 @@ import { redirect } from "next/navigation";
 export const metadata: Metadata = {
   title: "Eensell Workspace | Agency Operating System",
   description:
-    "Notion-style agency operating system: scrape client leads, manage outreach CRM, create sheets, draft emails, and track agency MRR.",
+    "Agency operating system: scrape client leads, manage outreach CRM, create sheets, draft emails, and track agency MRR.",
 };
 
 export default async function WorkspaceLayout({
@@ -36,8 +37,11 @@ export default async function WorkspaceLayout({
       <WorkspaceSidebar />
 
       {/* Main Viewport */}
-      <main className="flex-1 min-w-0 pt-14 lg:pt-0 lg:pl-60 flex flex-col min-h-screen overflow-y-auto">
-        {children}
+      <main className="flex-1 min-w-0 lg:pl-60 flex flex-col min-h-screen overflow-y-auto">
+        <WorkspaceTopBar />
+        <div className="flex-1 min-w-0">
+          {children}
+        </div>
       </main>
     </div>
   );

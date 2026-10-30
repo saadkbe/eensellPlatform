@@ -27,7 +27,7 @@ import {
   ChevronDown,
   Building2,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 
@@ -50,6 +50,17 @@ export function WorkspaceSidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user } = useUser();
   const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    const handleToggle = () => setMobileOpen((prev) => !prev);
+    const handleClose = () => setMobileOpen(false);
+    window.addEventListener("toggle-workspace-sidebar", handleToggle);
+    window.addEventListener("close-workspace-sidebar", handleClose);
+    return () => {
+      window.removeEventListener("toggle-workspace-sidebar", handleToggle);
+      window.removeEventListener("close-workspace-sidebar", handleClose);
+    };
+  }, []);
 
   const isActive = (href: string) => {
     if (href === "/workspace") return pathname === "/workspace";
@@ -216,29 +227,6 @@ export function WorkspaceSidebar() {
 
   return (
     <>
-      {/* Mobile Sticky Header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-[#F7F6F3] dark:bg-[#202020] border-b border-[#E9E9E7] dark:border-[#2E2E2E] flex items-center justify-between px-4 z-40">
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="p-2 -ml-2 rounded-md hover:bg-[#EFEFEE] dark:hover:bg-[#2A2A2A] text-[#37352F] dark:text-[#E6E6E5]"
-        >
-          {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
-
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-[#37352F] dark:text-[#E6E6E5]">
-            Eensell Workspace
-          </span>
-        </div>
-
-        <button
-          onClick={toggleTheme}
-          className="p-2 rounded-md hover:bg-[#EFEFEE] dark:hover:bg-[#2A2A2A] text-[#37352F] dark:text-[#E6E6E5]"
-        >
-          {theme === "dark" ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
-        </button>
-      </div>
-
       {/* Mobile Drawer Overlay */}
       {mobileOpen && (
         <div

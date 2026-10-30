@@ -10,11 +10,52 @@ export async function getUserNotifications() {
   const user = await getCurrentUser();
   if (!user) return [];
 
-  return db.notification.findMany({
+  let notifications = await db.notification.findMany({
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },
     take: 20,
   });
+
+  // Seed helpful initial workspace notifications if none exist
+  if (notifications.length === 0) {
+    try {
+      await db.notification.createMany({
+        data: [
+          {
+            userId: user.id,
+            title: "Welcome to Eensell Workspace OS",
+            message: "Your agency command center is ready. Connect your API keys in Settings to activate AI pitches and Maps scraping.",
+            linkUrl: "/workspace/settings",
+            isRead: false,
+          },
+          {
+            userId: user.id,
+            title: "Google Maps Scraper Ready",
+            message: "Extract verified phone numbers, reviews, and decision-maker emails across any Moroccan or international city.",
+            linkUrl: "/workspace/scraper",
+            isRead: false,
+          },
+          {
+            userId: user.id,
+            title: "WhatsApp & Cold Email Studios",
+            message: "Draft tailored hooks in Darija and French with 1-click WhatsApp launch and Gmail sync.",
+            linkUrl: "/workspace/whatsapp",
+            isRead: false,
+          },
+        ],
+      });
+
+      notifications = await db.notification.findMany({
+        where: { userId: user.id },
+        orderBy: { createdAt: "desc" },
+        take: 20,
+      });
+    } catch {
+      // fallback
+    }
+  }
+
+  return notifications;
 }
 
 // Get unread notification count for the current user
@@ -38,6 +79,7 @@ export async function markNotificationAsRead(notificationId: string) {
   });
 
   revalidatePath("/dashboard");
+  revalidatePath("/workspace");
 }
 
 // Mark all notifications as read
@@ -51,6 +93,7 @@ export async function markAllNotificationsAsRead() {
   });
 
   revalidatePath("/dashboard");
+  revalidatePath("/workspace");
 }
 
 // Send a notification to all active users (admin utility)
