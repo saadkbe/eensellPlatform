@@ -36,8 +36,8 @@ export default async function WorkspaceLayout({
       {/* Left Sidebar */}
       <WorkspaceSidebar />
 
-      {/* Main Viewport */}
-      <main className="flex-1 min-w-0 lg:pl-60 flex flex-col min-h-screen overflow-y-auto">
+      {/* Main Viewport with sticky topbar */}
+      <main className="flex-1 min-w-0 lg:pl-60 flex flex-col min-h-screen relative">
         <WorkspaceTopBar />
         <div className="flex-1 min-w-0">
           {children}

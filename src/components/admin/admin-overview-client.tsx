@@ -161,9 +161,9 @@ export function AdminOverviewClient() {
   }, [filterType, customRange]);
 
   const statsList = [
-    { label: "Total Revenue", value: `${data.stats.revenue.toLocaleString()} MAD`, icon: DollarSign, trend: "+12.5%" },
-    { label: "Total Users", value: data.stats.totalUsers, icon: Users, trend: "+4.2%" },
-    { label: "Active Users", value: data.stats.activeUsers, icon: UserCheck, trend: "+2.1%" },
+    { label: "Total Revenue", value: `${data.stats.revenue.toLocaleString()} MAD`, icon: DollarSign, trend: null },
+    { label: "Total Users", value: data.stats.totalUsers, icon: Users, trend: null },
+    { label: "Active Students", value: data.stats.activeUsers, icon: UserCheck, trend: null },
     { label: "Pending Approvals", value: data.stats.pendingUsers, icon: Clock, trend: null },
     { label: "Total Modules", value: data.stats.totalModules, icon: BookOpen, trend: null },
     { label: "Suspended", value: data.stats.suspendedUsers, icon: AlertTriangle, trend: null },

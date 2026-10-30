@@ -68,6 +68,8 @@ export async function computeTodayStats(campaignId: string, startDate: Date) {
 
   const paidStudents = await db.user.count({
     where: {
+      role: { not: "ADMIN" },
+      tier: "UNIVERSITY_V2",
       status: "ACTIVE",
       createdAt: { gte: startDate },
     },
@@ -105,15 +107,22 @@ export async function captureSnapshot(campaignId: string, targetDate: Date) {
   });
 
   const paidStudents = await db.user.count({
-    where: { status: "ACTIVE", createdAt: { gte: campaign.startDate, lte: targetEnd } },
+    where: {
+      role: { not: "ADMIN" },
+      tier: "UNIVERSITY_V2",
+      status: "ACTIVE",
+      createdAt: { gte: campaign.startDate, lte: targetEnd },
+    },
   });
 
   const newPaidToday = await db.user.count({
     where: {
+      role: { not: "ADMIN" },
+      tier: "UNIVERSITY_V2",
       status: "ACTIVE",
       updatedAt: { gte: targetStart, lte: targetEnd },
       createdAt: { gte: campaign.startDate },
-    }
+    },
   });
   
   const dailyRevenue = newPaidToday * campaign.pricePerStudent;
@@ -158,6 +167,8 @@ export async function getPendingUsers(startDate: Date) {
 export async function getRecentPayments(startDate: Date) {
   return await db.user.findMany({
     where: {
+      role: { not: "ADMIN" },
+      tier: "UNIVERSITY_V2",
       status: "ACTIVE",
       createdAt: { gte: startDate },
     },

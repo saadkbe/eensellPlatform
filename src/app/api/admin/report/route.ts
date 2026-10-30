@@ -65,13 +65,23 @@ export async function GET() {
     }),
   ]);
 
-  const revenue = activeUsers * 499;
+  const BASELINE_PAID_STUDENTS = 115;
+  const PRICE_PER_STUDENT = 200;
+  const newChallengePaidStudents = await db.user.count({
+    where: {
+      role: { not: "ADMIN" },
+      tier: "UNIVERSITY_V2",
+      status: "ACTIVE",
+    },
+  });
+  const revenue = (BASELINE_PAID_STUDENTS + newChallengePaidStudents) * PRICE_PER_STUDENT;
+  const paidActiveUsers = BASELINE_PAID_STUDENTS + newChallengePaidStudents;
 
   return NextResponse.json({
     generatedAt: new Date().toISOString(),
     stats: {
       totalUsers,
-      activeUsers,
+      activeUsers: paidActiveUsers,
       pendingUsers,
       suspendedUsers,
       rejectedUsers,
