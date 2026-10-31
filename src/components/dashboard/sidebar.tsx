@@ -21,6 +21,8 @@ import {
   Sparkles,
   LogOut,
   MoreHorizontal,
+  Zap,
+  ArrowUpRight,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -63,6 +65,7 @@ const v2NavSections: NavSection[] = [
     label: "BUILD & EARN",
     labelKey: "nav_build_earn",
     items: [
+      { title: "Eensell Workspace", href: "/workspace", icon: Zap },
       { title: "Resources & Blueprints", titleKey: "nav_resources", href: "/dashboard/resources", icon: FolderOpen },
       { title: "Documentation", titleKey: "nav_documentation", href: "/dashboard/documentation", icon: FileText },
       { title: "Deals & Tools", titleKey: "nav_tools", href: "/dashboard/tools", icon: Wrench },
@@ -242,6 +245,34 @@ function SidebarContent({
           </Link>
         </div>
       )}
+
+      {/* ── Eensell Workspace OS Access Card ── */}
+      <div className="mx-4 mb-4">
+        <Link
+          href="/workspace"
+          onClick={() => setMobileOpen(false)}
+          className="group block relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-neutral-900 to-slate-950 p-4 border border-white/10 hover:border-primary/50 transition-all duration-300 shadow-md hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-0.5"
+        >
+          <div className="absolute top-0 right-0 -mr-6 -mt-6 w-20 h-20 bg-primary/20 rounded-full blur-xl pointer-events-none group-hover:bg-primary/30 transition-all" />
+          <div className="flex items-center justify-between mb-2 relative z-10">
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-primary/20 text-primary border border-primary/30">
+              <Sparkles className="w-3 h-3 text-primary animate-pulse" />
+              AI AGENCY OS
+            </span>
+            <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+          </div>
+          <h4 className="text-sm font-black text-white tracking-tight mb-1 flex items-center gap-2">
+            <span>Eensell Workspace</span>
+          </h4>
+          <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed mb-3">
+            Lead Scraper, CRM Pipeline, WhatsApp Outreach & Invoicing engine.
+          </p>
+          <div className="w-full py-2 px-3 rounded-xl bg-white/10 group-hover:bg-primary text-white text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-sm">
+            <Zap className="w-3.5 h-3.5 fill-current" />
+            <span>Launch Workspace</span>
+          </div>
+        </Link>
+      </div>
 
       {/* User section */}
       <div className="px-5 py-5 border-t border-border mt-auto">

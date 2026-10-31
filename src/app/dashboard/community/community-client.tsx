@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useRef, useMemo } from "react";
+import { useState, useTransition, useMemo } from "react";
 import {
   createPost,
   togglePinPost,
@@ -24,8 +24,6 @@ import {
   ChevronDown,
   ChevronUp,
   Flame,
-  Heart,
-  Lightbulb,
   Rocket,
   Trophy,
   Briefcase,
@@ -34,25 +32,17 @@ import {
   Link2,
   ExternalLink,
   Plus,
-  Check,
   Search,
-  CheckCircle2,
   X,
   Sparkles,
   Phone,
   ArrowUpRight,
-  Users,
-  TrendingUp,
   Clock,
   Radio,
   Eye,
-  Award,
-  Zap,
 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Dialog,
@@ -459,7 +449,7 @@ export function CommunityClient({
     return posts.filter((p) => parsePostContent(p.content).meta.category === "HIRE").length;
   }, [posts]);
 
-  // Post Card Component
+  // Post Card Component (Clean Luxury White)
   const PostCard = ({ post, index }: { post: Post; index: number }) => {
     const isSaved = savedPosts.has(post.id);
     const authorName =
@@ -494,86 +484,86 @@ export function CommunityClient({
         className="group relative"
       >
         <div
-          className={`relative rounded-2xl border transition-all duration-300 backdrop-blur-xl overflow-hidden ${
+          className={`relative rounded-2xl transition-all duration-300 overflow-hidden shadow-xs hover:shadow-md ${
             post.isPinned
-              ? "bg-gradient-to-b from-amber-500/[0.07] via-neutral-900/90 to-neutral-950 border-amber-500/30 shadow-[0_4px_30px_rgba(245,158,11,0.08)]"
+              ? "bg-gradient-to-b from-amber-50/60 via-white to-white border border-amber-300/80 shadow-amber-500/5"
               : category === "WIN"
-              ? "bg-gradient-to-b from-emerald-500/[0.08] via-neutral-900/95 to-neutral-950 border-emerald-500/30 shadow-[0_4px_35px_rgba(16,185,129,0.08)]"
+              ? "bg-gradient-to-b from-emerald-50/50 via-white to-white border border-emerald-300/80 shadow-emerald-500/5"
               : category === "HIRE"
-              ? "bg-gradient-to-b from-violet-500/[0.08] via-neutral-900/95 to-neutral-950 border-violet-500/30 shadow-[0_4px_35px_rgba(139,92,246,0.08)]"
-              : "bg-neutral-900/80 hover:bg-neutral-900/95 border-white/[0.08] hover:border-white/[0.18] shadow-lg shadow-black/20"
+              ? "bg-gradient-to-b from-violet-50/50 via-white to-white border border-violet-300/80 shadow-violet-500/5"
+              : "bg-white hover:bg-white border border-slate-200/90 hover:border-slate-300"
           }`}
         >
-          {/* Top category ambient glow bar */}
+          {/* Top category ambient highlight bar */}
           {post.isPinned && (
-            <div className="h-1 w-full bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500" />
+            <div className="h-1.5 w-full bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500" />
           )}
           {category === "WIN" && (
-            <div className="h-1 w-full bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-500" />
+            <div className="h-1.5 w-full bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-500" />
           )}
           {category === "HIRE" && (
-            <div className="h-1 w-full bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500" />
+            <div className="h-1.5 w-full bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500" />
           )}
 
           {/* Header Row */}
           <div className="p-5 sm:p-6 pb-3 flex items-start justify-between gap-4">
             <div className="flex items-center gap-3.5 min-w-0">
               <div className="relative shrink-0">
-                <Avatar className="h-11 w-11 sm:h-12 sm:w-12 border-2 border-white/10 ring-2 ring-black/40">
+                <Avatar className="h-11 w-11 sm:h-12 sm:w-12 border-2 border-slate-100 shadow-xs">
                   {post.author.imageUrl ? (
                     <AvatarImage src={post.author.imageUrl} alt={authorName} />
                   ) : null}
-                  <AvatarFallback className="text-xs font-black bg-gradient-to-br from-neutral-800 to-neutral-950 text-white">
+                  <AvatarFallback className="text-xs font-black bg-gradient-to-br from-slate-800 to-slate-900 text-white">
                     {authorInitial}
                   </AvatarFallback>
                 </Avatar>
-                <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-neutral-900" />
+                <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white shadow-xs" />
               </div>
 
               <div className="space-y-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-bold text-sm sm:text-base text-white tracking-tight truncate">
+                  <span className="font-extrabold text-sm sm:text-base text-slate-900 tracking-tight truncate">
                     {authorName}
                   </span>
 
                   {post.author.role === "ADMIN" ? (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-amber-500/20 text-amber-400 border border-amber-500/40">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-amber-100 text-amber-800 border border-amber-300">
                       <ShieldCheck className="w-3 h-3" />
                       Founder
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/5 text-slate-300 border border-white/10">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
                       Builder
                     </span>
                   )}
 
                   {/* Category Pill */}
                   {category === "WIN" && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse">
-                      <Trophy className="w-3 h-3 text-emerald-400" />
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-2xs">
+                      <Trophy className="w-3 h-3 text-emerald-600" />
                       Verified Win
                     </span>
                   )}
                   {category === "HIRE" && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-violet-500/20 text-violet-300 border border-violet-500/40">
-                      <Briefcase className="w-3 h-3 text-violet-400" />
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-violet-100 text-violet-800 border border-violet-300 shadow-2xs">
+                      <Briefcase className="w-3 h-3 text-violet-600" />
                       {meta.hireType === "LOOKING" ? "Hiring Talent" : "Open for Hire"}
                     </span>
                   )}
                   {category === "ANNOUNCEMENT" && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                      <Sparkles className="w-3 h-3 text-amber-400" />
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300 shadow-2xs">
+                      <Sparkles className="w-3 h-3 text-amber-600" />
                       Official
                     </span>
                   )}
                 </div>
 
-                <div className="flex items-center gap-2 text-xs text-slate-400">
-                  <Clock className="w-3 h-3 text-slate-500" />
+                <div className="flex items-center gap-2 text-xs text-slate-500">
+                  <Clock className="w-3 h-3 text-slate-400" />
                   <span>{formatDate(post.createdAt)}</span>
                   {post.isPinned && (
-                    <span className="flex items-center gap-1 text-amber-400 font-semibold text-[11px] ml-1">
-                      <Pin className="w-3 h-3 fill-amber-400" />
+                    <span className="flex items-center gap-1 text-amber-700 font-bold text-[11px] ml-1 bg-amber-100/80 px-2 py-0.5 rounded-md">
+                      <Pin className="w-3 h-3 fill-amber-600 text-amber-600" />
                       Pinned Post
                     </span>
                   )}
@@ -587,32 +577,32 @@ export function CommunityClient({
                 onClick={() => toggleSave(post.id)}
                 className={`p-2 rounded-xl transition-all cursor-pointer ${
                   isSaved
-                    ? "bg-white/15 text-amber-400"
-                    : "text-slate-400 hover:text-white hover:bg-white/5"
+                    ? "bg-amber-100 text-amber-700 shadow-2xs"
+                    : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"
                 }`}
                 title={isSaved ? "Saved" : "Save Post"}
               >
-                <Bookmark className={`w-4 h-4 ${isSaved ? "fill-amber-400" : ""}`} />
+                <Bookmark className={`w-4 h-4 ${isSaved ? "fill-amber-600 text-amber-600" : ""}`} />
               </button>
 
               <DropdownMenu>
-                <DropdownMenuTrigger className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer">
+                <DropdownMenuTrigger className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all cursor-pointer">
                   <MoreHorizontal className="w-4 h-4" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-neutral-900 border-white/10 text-white shadow-2xl">
+                <DropdownMenuContent align="end" className="bg-white border-slate-200 text-slate-900 shadow-xl">
                   {isAdmin && (
                     <DropdownMenuItem
                       onClick={() => handleTogglePin(post.id)}
-                      className="cursor-pointer gap-2 text-xs"
+                      className="cursor-pointer gap-2 text-xs font-medium"
                     >
-                      <Pin className="w-3.5 h-3.5" />
+                      <Pin className="w-3.5 h-3.5 text-amber-600" />
                       <span>{post.isPinned ? "Unpin Post" : "Pin to Top"}</span>
                     </DropdownMenuItem>
                   )}
                   {canDelete && (
                     <DropdownMenuItem
                       onClick={() => handleDelete(post.id)}
-                      className="cursor-pointer gap-2 text-xs text-rose-400 focus:text-rose-400"
+                      className="cursor-pointer gap-2 text-xs text-rose-600 focus:text-rose-600 font-medium"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                       <span>Delete Post</span>
@@ -626,18 +616,18 @@ export function CommunityClient({
           {/* Post Content */}
           <div className="px-5 sm:px-6 pt-1 pb-4 space-y-3">
             {/* Title */}
-            <h2 className="text-base sm:text-lg font-black text-white tracking-tight leading-snug">
+            <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-snug">
               {post.title}
             </h2>
 
             {/* Win Revenue Highlight Stamp */}
             {category === "WIN" && meta.winRevenue && (
-              <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500/20 via-teal-500/15 to-emerald-500/25 border border-emerald-500/40 shadow-inner">
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-300">
+              <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 border border-emerald-300 shadow-xs">
+                <span className="text-xs font-black uppercase tracking-wider text-emerald-800">
                   Deal Milestone:
                 </span>
-                <span className="text-base sm:text-lg font-black text-emerald-400 tracking-tight flex items-center gap-1 drop-shadow-md">
-                  <DollarSign className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span className="text-base sm:text-lg font-black text-emerald-700 tracking-tight flex items-center gap-1">
+                  <DollarSign className="w-4 h-4 text-emerald-600 shrink-0" />
                   {meta.winRevenue}
                 </span>
               </div>
@@ -645,20 +635,20 @@ export function CommunityClient({
 
             {/* Hire / Service Information Card */}
             {category === "HIRE" && (
-              <div className="p-4 rounded-xl bg-violet-500/10 border border-violet-500/25 space-y-3">
+              <div className="p-4 rounded-xl bg-violet-50/70 border border-violet-200 space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <span className="text-[10px] uppercase font-black tracking-widest text-violet-400">
+                    <span className="text-[10px] uppercase font-black tracking-widest text-violet-700">
                       {meta.hireType === "LOOKING" ? "Position / Need" : "Specialization"}
                     </span>
-                    <h3 className="text-sm sm:text-base font-bold text-white">
+                    <h3 className="text-sm sm:text-base font-bold text-slate-900">
                       {meta.hireRole || "Make.com & AI Automation Specialist"}
                     </h3>
                   </div>
 
                   {meta.hireRate && (
-                    <div className="px-3 py-1 rounded-lg bg-violet-500/20 border border-violet-500/40">
-                      <span className="text-xs font-black text-violet-200">
+                    <div className="px-3 py-1 rounded-lg bg-white border border-violet-200 shadow-2xs">
+                      <span className="text-xs font-black text-violet-800">
                         {meta.hireRate}
                       </span>
                     </div>
@@ -670,7 +660,7 @@ export function CommunityClient({
                     {meta.hireSkills.map((skill, sIdx) => (
                       <span
                         key={sIdx}
-                        className="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-violet-400/15 text-violet-300 border border-violet-400/25"
+                        className="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-white text-violet-700 border border-violet-200 shadow-2xs"
                       >
                         {skill}
                       </span>
@@ -687,9 +677,9 @@ export function CommunityClient({
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-black font-extrabold text-xs tracking-tight shadow-md transition-all hover:scale-[1.02] cursor-pointer"
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-slate-950 font-black text-xs tracking-tight shadow-sm transition-all hover:scale-[1.02] cursor-pointer"
                     >
-                      <Phone className="w-3.5 h-3.5 fill-black" />
+                      <Phone className="w-3.5 h-3.5 fill-slate-950" />
                       <span>Hire on WhatsApp</span>
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </a>
@@ -699,7 +689,7 @@ export function CommunityClient({
             )}
 
             {/* Rich formatted body */}
-            <div className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+            <div className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
               <RichTextRenderer content={parsedContent} />
             </div>
 
@@ -708,14 +698,14 @@ export function CommunityClient({
               <div className="pt-2">
                 <div
                   onClick={() => setSelectedPreviewImage(meta.imageUrl || null)}
-                  className="relative rounded-2xl overflow-hidden border border-white/10 bg-black/40 group cursor-zoom-in max-h-[460px] flex items-center justify-center"
+                  className="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 group cursor-zoom-in max-h-[460px] flex items-center justify-center shadow-xs"
                 >
                   <img
                     src={meta.imageUrl}
                     alt={post.title}
                     className="w-full h-auto object-cover max-h-[460px] group-hover:scale-[1.01] transition-transform duration-300"
                   />
-                  <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md text-[10px] font-bold text-white flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg bg-slate-900/80 backdrop-blur-md text-[10px] font-bold text-white flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Eye className="w-3.5 h-3.5" />
                     <span>Click to expand</span>
                   </div>
@@ -729,43 +719,43 @@ export function CommunityClient({
                 href={meta.linkUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all group mt-2"
+                className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100/80 border border-slate-200/90 transition-all group mt-2"
               >
-                <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+                <div className="w-9 h-9 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-2xs">
                   <Link2 className="w-4 h-4 text-primary" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-xs font-bold text-white group-hover:text-primary transition-colors truncate">
+                  <div className="text-xs font-bold text-slate-900 group-hover:text-primary transition-colors truncate">
                     {meta.linkTitle || meta.linkUrl}
                   </div>
-                  <div className="text-[10px] text-slate-400 truncate">
+                  <div className="text-[10px] text-slate-500 truncate">
                     {meta.linkUrl}
                   </div>
                 </div>
-                <ExternalLink className="w-4 h-4 text-slate-500 group-hover:text-white transition-colors shrink-0 mr-1" />
+                <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-slate-700 transition-colors shrink-0 mr-1" />
               </a>
             )}
           </div>
 
           {/* Reactions Bar & Comment Toggle */}
-          <div className="px-5 sm:px-6 py-3 border-t border-white/[0.08] bg-black/30 flex flex-wrap items-center justify-between gap-3">
+          <div className="px-5 sm:px-6 py-3 border-t border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3">
             {/* Reaction Emojis */}
             <div className="flex flex-wrap items-center gap-1.5">
               {reactionGroups.map((rg) => (
                 <button
                   key={rg.emoji}
                   onClick={() => handleReaction(post.id, rg.emoji)}
-                  className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     rg.hasReacted
-                      ? "bg-primary/25 border border-primary/50 text-white shadow-xs"
+                      ? "bg-primary/10 border border-primary text-primary shadow-2xs"
                       : rg.count > 0
-                      ? "bg-white/10 text-slate-200 border border-white/10 hover:bg-white/15"
-                      : "bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 border border-transparent"
+                      ? "bg-white text-slate-800 border border-slate-200 hover:bg-slate-50 shadow-2xs"
+                      : "bg-white text-slate-500 hover:text-slate-800 hover:bg-slate-100 border border-slate-200/60 shadow-2xs"
                   }`}
                   title={rg.label}
                 >
                   <span className="text-sm">{rg.emoji}</span>
-                  {rg.count > 0 && <span className="text-xs">{rg.count}</span>}
+                  {rg.count > 0 && <span className="text-xs font-bold">{rg.count}</span>}
                 </button>
               ))}
             </div>
@@ -773,16 +763,16 @@ export function CommunityClient({
             {/* Comment Drawer Toggle */}
             <button
               onClick={() => toggleComments(post.id)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-200/90 transition-all cursor-pointer shadow-2xs"
             >
-              <MessageSquare className="w-3.5 h-3.5" />
+              <MessageSquare className="w-3.5 h-3.5 text-slate-500" />
               <span>
                 {post._count.comments} {post._count.comments === 1 ? "Comment" : "Comments"}
               </span>
               {isCommentsOpen ? (
-                <ChevronUp className="w-3.5 h-3.5 ml-0.5" />
+                <ChevronUp className="w-3.5 h-3.5 ml-0.5 text-slate-500" />
               ) : (
-                <ChevronDown className="w-3.5 h-3.5 ml-0.5" />
+                <ChevronDown className="w-3.5 h-3.5 ml-0.5 text-slate-500" />
               )}
             </button>
           </div>
@@ -794,7 +784,7 @@ export function CommunityClient({
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                className="border-t border-white/[0.08] bg-black/50 p-5 sm:p-6 space-y-4"
+                className="border-t border-slate-200 bg-slate-50/90 p-5 sm:p-6 space-y-4"
               >
                 {/* List Comments */}
                 {post.comments.length > 0 ? (
@@ -806,30 +796,30 @@ export function CommunityClient({
                       return (
                         <div
                           key={c.id}
-                          className="flex items-start justify-between gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]"
+                          className="flex items-start justify-between gap-3 p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs"
                         >
                           <div className="flex items-start gap-2.5 min-w-0">
-                            <Avatar className="h-7 w-7 border border-white/10 shrink-0">
+                            <Avatar className="h-7 w-7 border border-slate-200 shrink-0">
                               {c.user.imageUrl ? <AvatarImage src={c.user.imageUrl} /> : null}
-                              <AvatarFallback className="text-[10px] bg-neutral-800 text-white">
+                              <AvatarFallback className="text-[10px] bg-slate-800 text-white font-bold">
                                 {c.user.firstName?.charAt(0) || "B"}
                               </AvatarFallback>
                             </Avatar>
                             <div className="space-y-1 min-w-0">
                               <div className="flex items-center gap-2">
-                                <span className="text-xs font-bold text-white truncate">
+                                <span className="text-xs font-bold text-slate-900 truncate">
                                   {cName}
                                 </span>
                                 {c.user.role === "ADMIN" && (
-                                  <span className="text-[9px] px-1.5 py-0.2 rounded-sm bg-amber-500/20 text-amber-400 font-extrabold">
+                                  <span className="text-[9px] px-1.5 py-0.2 rounded-sm bg-amber-100 text-amber-800 font-black border border-amber-300">
                                     Founder
                                   </span>
                                 )}
-                                <span className="text-[10px] text-slate-500">
+                                <span className="text-[10px] text-slate-400">
                                   {formatDate(c.createdAt)}
                                 </span>
                               </div>
-                              <p className="text-xs text-slate-300 leading-relaxed break-words">
+                              <p className="text-xs text-slate-700 leading-relaxed break-words font-normal">
                                 {c.content}
                               </p>
                             </div>
@@ -838,7 +828,7 @@ export function CommunityClient({
                           {canDeleteComment && (
                             <button
                               onClick={() => handleDeleteComment(c.id, post.id)}
-                              className="text-slate-500 hover:text-rose-400 transition-colors p-1"
+                              className="text-slate-400 hover:text-rose-600 transition-colors p-1"
                               title="Delete comment"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -866,13 +856,13 @@ export function CommunityClient({
                       }
                     }}
                     placeholder="Write a comment..."
-                    className="h-10 text-xs bg-neutral-900 border-white/10 text-white rounded-xl focus-visible:ring-primary/40"
+                    className="h-10 text-xs bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 rounded-xl focus-visible:ring-primary/40 shadow-2xs"
                   />
                   <Button
                     onClick={submitComment}
                     disabled={!commentText.trim() || isPending}
                     size="sm"
-                    className="h-10 px-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shrink-0"
+                    className="h-10 px-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shrink-0 shadow-sm"
                   >
                     <Send className="w-3.5 h-3.5" />
                   </Button>
@@ -887,28 +877,28 @@ export function CommunityClient({
 
   return (
     <div className="space-y-6">
-      {/* ── 1. Top Executive Banner & Community Metrics Bar ── */}
-      <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-neutral-900 via-neutral-950 to-black p-6 sm:p-8 shadow-2xl">
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/3 -mb-20 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+      {/* ── 1. Top Executive Banner & Community Metrics Bar (Crisp White Card) ── */}
+      <div className="relative overflow-hidden rounded-3xl border border-slate-200/90 bg-gradient-to-br from-amber-500/[0.03] via-white to-slate-50/60 p-6 sm:p-8 shadow-xs">
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/3 -mb-20 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-xs">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 115 Active Builders
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-white/5 text-slate-300 border border-white/10">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 shadow-2xs">
+                <Trophy className="w-3.5 h-3.5 text-amber-600" />
                 28+ Verified Client Wins
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+            <h1 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
               Eensell Builder Network
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
               Share closed client deals, get feedback on Make.com scenarios, hire automation specialists, and scale your AI agency together.
             </p>
           </div>
@@ -919,16 +909,16 @@ export function CommunityClient({
               href="https://discord.gg/ZGtYg2AqC"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-[#5865F2]/20 hover:bg-[#5865F2]/30 text-white font-bold text-xs border border-[#5865F2]/40 shadow-lg shadow-[#5865F2]/10 transition-all hover:scale-105"
+              className="inline-flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-[#5865F2]/10 hover:bg-[#5865F2]/15 text-[#5865F2] font-bold text-xs border border-[#5865F2]/30 shadow-xs transition-all hover:scale-105"
             >
               <Radio className="w-4 h-4 text-[#5865F2] animate-pulse" />
               <span>Discord Voice Lounge</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-slate-300" />
+              <ArrowUpRight className="w-3.5 h-3.5 text-slate-400" />
             </a>
 
             <button
               onClick={() => setDialogOpen(true)}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-primary via-orange-500 to-amber-500 hover:opacity-95 text-white font-extrabold text-xs shadow-lg shadow-primary/20 transition-all hover:scale-105 cursor-pointer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-primary via-orange-500 to-amber-500 hover:opacity-95 text-white font-black text-xs shadow-md shadow-primary/20 transition-all hover:scale-105 cursor-pointer"
             >
               <Plus className="w-4 h-4 stroke-[3]" />
               <span>Create Post</span>
@@ -937,34 +927,34 @@ export function CommunityClient({
         </div>
 
         {/* Live Wins Marquee / Highlights Strip */}
-        <div className="mt-6 pt-5 border-t border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+        <div className="mt-6 pt-5 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="flex items-center gap-3 p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+            <div className="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-200">
               <Trophy className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-              <div className="text-[11px] font-bold text-white truncate">+15,000 MAD Closed</div>
-              <div className="text-[10px] text-slate-400 truncate">Make.com Real Estate Pipeline</div>
+              <div className="text-xs font-black text-slate-900 truncate">+15,000 MAD Closed</div>
+              <div className="text-[11px] text-slate-500 truncate">Make.com Real Estate Pipeline</div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-            <div className="w-8 h-8 rounded-lg bg-violet-500/20 text-violet-400 flex items-center justify-center shrink-0">
+          <div className="flex items-center gap-3 p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+            <div className="w-9 h-9 rounded-lg bg-violet-100 text-violet-700 flex items-center justify-center shrink-0 border border-violet-200">
               <Briefcase className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-              <div className="text-[11px] font-bold text-white truncate">Hire Marketplace Live</div>
-              <div className="text-[10px] text-slate-400 truncate">Find Make & WhatsApp builders</div>
+              <div className="text-xs font-black text-slate-900 truncate">Hire Marketplace Live</div>
+              <div className="text-[11px] text-slate-500 truncate">Find Make & WhatsApp builders</div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+          <div className="flex items-center gap-3 p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+            <div className="w-9 h-9 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 border border-amber-200">
               <Sparkles className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-              <div className="text-[11px] font-bold text-white truncate">Weekly Mastermind</div>
-              <div className="text-[10px] text-slate-400 truncate">Live every Thursday 8PM GMT+1</div>
+              <div className="text-xs font-black text-slate-900 truncate">Weekly Mastermind</div>
+              <div className="text-[11px] text-slate-500 truncate">Live every Thursday 8PM GMT+1</div>
             </div>
           </div>
         </div>
@@ -974,28 +964,28 @@ export function CommunityClient({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* ── MAIN FEED COLUMN (col-span-8) ── */}
         <div className="lg:col-span-8 space-y-6">
-          {/* ── High-End Inline Composer ── */}
-          <div className="rounded-2xl border border-white/10 bg-neutral-900/90 backdrop-blur-xl p-4 sm:p-5 shadow-xl space-y-4">
+          {/* ── High-End Inline Composer (Crisp White Card) ── */}
+          <div className="rounded-2xl border border-slate-200/90 bg-white shadow-xs p-4 sm:p-5 space-y-4">
             <div className="flex items-center gap-3">
-              <Avatar className="h-10 w-10 border border-white/10 shrink-0">
+              <Avatar className="h-10 w-10 border border-slate-200 shrink-0">
                 {currentUser?.imageUrl ? (
                   <AvatarImage src={currentUser.imageUrl} />
                 ) : null}
-                <AvatarFallback className="bg-primary/20 text-primary font-bold text-xs">
+                <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs">
                   {currentUser?.firstName?.charAt(0) || "U"}
                 </AvatarFallback>
               </Avatar>
 
               <button
                 onClick={() => setDialogOpen(true)}
-                className="flex-1 text-left px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-slate-400 hover:text-slate-200 transition-all cursor-pointer truncate"
+                className="flex-1 text-left px-4 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs text-slate-500 hover:text-slate-800 transition-all cursor-pointer truncate"
               >
                 Share a client win, list your services, or start a discussion...
               </button>
 
               <button
                 onClick={() => setDialogOpen(true)}
-                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-xs transition-all cursor-pointer"
+                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-xs transition-all cursor-pointer shadow-xs"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Post</span>
@@ -1003,43 +993,43 @@ export function CommunityClient({
             </div>
 
             {/* Quick Category Action Pills */}
-            <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-white/[0.06]">
+            <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
               <button
                 onClick={() => openComposerWithCategory("WIN")}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/25 transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-all cursor-pointer"
               >
-                <Trophy className="w-3.5 h-3.5 text-emerald-400" />
+                <Trophy className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Share a Win (+ MAD Milestone)</span>
               </button>
 
               <button
                 onClick={() => openComposerWithCategory("HIRE")}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-violet-500/10 hover:bg-violet-500/20 text-violet-300 border border-violet-500/25 transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-violet-50 hover:bg-violet-100 text-violet-800 border border-violet-200 transition-all cursor-pointer"
               >
-                <Briefcase className="w-3.5 h-3.5 text-violet-400" />
+                <Briefcase className="w-3.5 h-3.5 text-violet-600" />
                 <span>Offer Services (Hire)</span>
               </button>
 
               <button
                 onClick={() => openComposerWithCategory("DISCUSSION")}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-all cursor-pointer"
               >
-                <MessageSquare className="w-3.5 h-3.5 text-slate-400" />
+                <MessageSquare className="w-3.5 h-3.5 text-slate-500" />
                 <span>Tech Question / Idea</span>
               </button>
             </div>
           </div>
 
           {/* ── Navigation Tabs & Filters Bar ── */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-white/10">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
             {/* Main Tabs */}
             <div className="flex flex-wrap items-center gap-1.5">
               <button
                 onClick={() => setActiveTab("feed")}
                 className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
                   activeTab === "feed"
-                    ? "bg-white text-black shadow-md"
-                    : "bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 border border-white/5"
+                    ? "bg-slate-900 text-white shadow-xs"
+                    : "bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200/80 shadow-2xs"
                 }`}
               >
                 <Flame className="w-3.5 h-3.5" />
@@ -1050,11 +1040,11 @@ export function CommunityClient({
                 onClick={() => setActiveTab("wins")}
                 className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
                   activeTab === "wins"
-                    ? "bg-emerald-500 text-black shadow-md shadow-emerald-500/20"
-                    : "bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 border border-white/5"
+                    ? "bg-emerald-600 text-white shadow-xs"
+                    : "bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200/80 shadow-2xs"
                 }`}
               >
-                <Trophy className="w-3.5 h-3.5 text-emerald-400" />
+                <Trophy className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Wins ({winCount})</span>
               </button>
 
@@ -1062,14 +1052,14 @@ export function CommunityClient({
                 onClick={() => setActiveTab("hire")}
                 className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
                   activeTab === "hire"
-                    ? "bg-violet-600 text-white shadow-md shadow-violet-600/20"
-                    : "bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 border border-white/5"
+                    ? "bg-violet-600 text-white shadow-xs"
+                    : "bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200/80 shadow-2xs"
                 }`}
               >
-                <Briefcase className="w-3.5 h-3.5 text-violet-400" />
+                <Briefcase className="w-3.5 h-3.5 text-violet-600" />
                 <span>Hire Marketplace</span>
                 {hireCount > 0 && (
-                  <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-violet-400/20 text-violet-300 font-extrabold">
+                  <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-violet-100 text-violet-800 font-extrabold border border-violet-200">
                     {hireCount}
                   </span>
                 )}
@@ -1079,11 +1069,11 @@ export function CommunityClient({
                 onClick={() => setActiveTab("announcements")}
                 className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
                   activeTab === "announcements"
-                    ? "bg-amber-500 text-black shadow-md"
-                    : "bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 border border-white/5"
+                    ? "bg-amber-500 text-slate-950 font-black shadow-xs"
+                    : "bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200/80 shadow-2xs"
                 }`}
               >
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
                 <span>Announcements</span>
               </button>
 
@@ -1091,11 +1081,11 @@ export function CommunityClient({
                 onClick={() => setActiveTab("saved")}
                 className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
                   activeTab === "saved"
-                    ? "bg-white text-black shadow-md"
-                    : "bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 border border-white/5"
+                    ? "bg-slate-900 text-white shadow-xs"
+                    : "bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200/80 shadow-2xs"
                 }`}
               >
-                <Bookmark className="w-3.5 h-3.5" />
+                <Bookmark className="w-3.5 h-3.5 text-slate-500" />
                 <span>Saved ({savedPosts.size})</span>
               </button>
             </div>
@@ -1107,21 +1097,21 @@ export function CommunityClient({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search community..."
-                className="h-9 pl-8 text-xs bg-neutral-900 border-white/10 text-white rounded-xl focus-visible:ring-primary/40"
+                className="h-9 pl-8 text-xs bg-white border-slate-200 text-slate-900 rounded-xl focus-visible:ring-primary/40 shadow-2xs"
               />
             </div>
           </div>
 
           {/* Sub-filters for Hire tab */}
           {activeTab === "hire" && (
-            <div className="flex items-center gap-2 p-2 rounded-xl bg-violet-500/10 border border-violet-500/20">
-              <span className="text-xs font-bold text-violet-300 px-2">Filter:</span>
+            <div className="flex items-center gap-2 p-2 rounded-xl bg-violet-50 border border-violet-200">
+              <span className="text-xs font-bold text-violet-800 px-2">Filter:</span>
               <button
                 onClick={() => setHireSubFilter("all")}
                 className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   hireSubFilter === "all"
-                    ? "bg-violet-600 text-white"
-                    : "text-violet-300 hover:bg-violet-500/20"
+                    ? "bg-violet-600 text-white shadow-2xs"
+                    : "text-violet-700 hover:bg-violet-100"
                 }`}
               >
                 All Services
@@ -1130,8 +1120,8 @@ export function CommunityClient({
                 onClick={() => setHireSubFilter("offering")}
                 className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   hireSubFilter === "offering"
-                    ? "bg-violet-600 text-white"
-                    : "text-violet-300 hover:bg-violet-500/20"
+                    ? "bg-violet-600 text-white shadow-2xs"
+                    : "text-violet-700 hover:bg-violet-100"
                 }`}
               >
                 Available for Hire
@@ -1140,8 +1130,8 @@ export function CommunityClient({
                 onClick={() => setHireSubFilter("looking")}
                 className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   hireSubFilter === "looking"
-                    ? "bg-violet-600 text-white"
-                    : "text-violet-300 hover:bg-violet-500/20"
+                    ? "bg-violet-600 text-white shadow-2xs"
+                    : "text-violet-700 hover:bg-violet-100"
                 }`}
               >
                 Looking to Hire
@@ -1151,13 +1141,13 @@ export function CommunityClient({
 
           {/* ── Feed List ── */}
           {filteredPosts.length === 0 ? (
-            <div className="text-center py-20 rounded-2xl border border-dashed border-white/10 bg-neutral-900/40 p-8 space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mx-auto text-slate-500">
+            <div className="text-center py-20 rounded-2xl border border-dashed border-slate-300 bg-white p-8 space-y-4 shadow-2xs">
+              <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto text-slate-400">
                 <MessageSquare className="w-7 h-7" />
               </div>
               <div className="space-y-1">
-                <h3 className="text-base font-bold text-white">No posts found</h3>
-                <p className="text-xs text-slate-400 max-w-sm mx-auto">
+                <h3 className="text-base font-bold text-slate-900">No posts found</h3>
+                <p className="text-xs text-slate-500 max-w-sm mx-auto">
                   {searchQuery
                     ? "No community posts matched your search keywords."
                     : activeTab === "wins"
@@ -1169,7 +1159,7 @@ export function CommunityClient({
               </div>
               <button
                 onClick={() => setDialogOpen(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-xs cursor-pointer shadow-md"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-xs cursor-pointer shadow-sm"
               >
                 <Plus className="w-4 h-4" />
                 <span>Create First Post</span>
@@ -1184,21 +1174,21 @@ export function CommunityClient({
           )}
         </div>
 
-        {/* ── RIGHT EXECUTIVE SIDEBAR (col-span-4) ── */}
+        {/* ── RIGHT EXECUTIVE SIDEBAR (col-span-4) (Crisp White Cards) ── */}
         <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-20">
           {/* Card 1: Live Discord Lounge & Mastermind */}
-          <div className="relative overflow-hidden rounded-2xl border border-[#5865F2]/40 bg-gradient-to-br from-[#5865F2]/15 via-neutral-900 to-neutral-950 p-6 shadow-xl space-y-4">
+          <div className="relative overflow-hidden rounded-2xl border border-[#5865F2]/30 bg-gradient-to-br from-[#5865F2]/10 via-white to-white p-6 shadow-xs space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#5865F2] flex items-center justify-center text-white shadow-md">
+              <div className="w-10 h-10 rounded-xl bg-[#5865F2] flex items-center justify-center text-white shadow-sm">
                 <Radio className="w-5 h-5 animate-pulse" />
               </div>
               <div>
-                <h4 className="text-sm font-black text-white">Live Voice Mastermind</h4>
-                <p className="text-[11px] text-slate-300">Daily live networking & Q&A</p>
+                <h4 className="text-sm font-black text-slate-900">Live Voice Mastermind</h4>
+                <p className="text-[11px] text-slate-500">Daily live networking & Q&A</p>
               </div>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-slate-600 leading-relaxed font-normal">
               Connect directly with high-performing agency builders, review Make.com blueprints, and practice sales outreach pitches.
             </p>
 
@@ -1206,7 +1196,7 @@ export function CommunityClient({
               href="https://discord.gg/ZGtYg2AqC"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#5865F2] hover:bg-[#4752C4] text-white font-extrabold text-xs shadow-lg shadow-[#5865F2]/25 transition-all hover:scale-[1.02]"
+              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#5865F2] hover:bg-[#4752C4] text-white font-extrabold text-xs shadow-md shadow-[#5865F2]/20 transition-all hover:scale-[1.02]"
             >
               <span>Join Discord Lounge</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -1214,46 +1204,46 @@ export function CommunityClient({
           </div>
 
           {/* Card 2: Community Wall of Fame (Top Wins) */}
-          <div className="rounded-2xl border border-white/10 bg-neutral-900/90 backdrop-blur-xl p-5 shadow-xl space-y-4">
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Trophy className="w-4 h-4 text-amber-400" />
-                <h4 className="text-xs font-black uppercase tracking-wider text-white">
+                <Trophy className="w-4 h-4 text-amber-500" />
+                <h4 className="text-xs font-black uppercase tracking-wider text-slate-900">
                   Wall of Fame
                 </h4>
               </div>
-              <span className="text-[10px] text-emerald-400 font-bold uppercase">
+              <span className="text-[10px] text-emerald-700 font-extrabold uppercase bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
                 Verified
               </span>
             </div>
 
             <div className="space-y-2.5">
-              <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-between gap-3">
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3 shadow-2xs">
                 <div className="min-w-0">
-                  <div className="text-xs font-bold text-white truncate">Make.com Real Estate CRM</div>
-                  <div className="text-[10px] text-slate-400 truncate">Agency Retainer Deal</div>
+                  <div className="text-xs font-bold text-slate-900 truncate">Make.com Real Estate CRM</div>
+                  <div className="text-[10px] text-slate-500 truncate">Agency Retainer Deal</div>
                 </div>
-                <span className="text-xs font-black text-emerald-400 shrink-0">
+                <span className="text-xs font-black text-emerald-700 shrink-0">
                   +15,000 MAD
                 </span>
               </div>
 
-              <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-between gap-3">
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3 shadow-2xs">
                 <div className="min-w-0">
-                  <div className="text-xs font-bold text-white truncate">WhatsApp Lead Qualification Bot</div>
-                  <div className="text-[10px] text-slate-400 truncate">Dental Clinic Client</div>
+                  <div className="text-xs font-bold text-slate-900 truncate">WhatsApp Lead Qualification Bot</div>
+                  <div className="text-[10px] text-slate-500 truncate">Dental Clinic Client</div>
                 </div>
-                <span className="text-xs font-black text-emerald-400 shrink-0">
+                <span className="text-xs font-black text-emerald-700 shrink-0">
                   +8,500 MAD
                 </span>
               </div>
 
-              <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-between gap-3">
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3 shadow-2xs">
                 <div className="min-w-0">
-                  <div className="text-xs font-bold text-white truncate">E-commerce Multi-Channel Sync</div>
-                  <div className="text-[10px] text-slate-400 truncate">Cold Outreach Client</div>
+                  <div className="text-xs font-bold text-slate-900 truncate">E-commerce Multi-Channel Sync</div>
+                  <div className="text-[10px] text-slate-500 truncate">Cold Outreach Client</div>
                 </div>
-                <span className="text-xs font-black text-emerald-400 shrink-0">
+                <span className="text-xs font-black text-emerald-700 shrink-0">
                   +4,000 MAD
                 </span>
               </div>
@@ -1261,28 +1251,28 @@ export function CommunityClient({
 
             <button
               onClick={() => openComposerWithCategory("WIN")}
-              className="w-full py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-slate-200 transition-all text-center cursor-pointer"
+              className="w-full py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 transition-all text-center cursor-pointer shadow-2xs"
             >
               Post Your Own Win
             </button>
           </div>
 
           {/* Card 3: Hire Board Quick Access */}
-          <div className="rounded-2xl border border-violet-500/25 bg-gradient-to-b from-violet-500/10 via-neutral-900 to-neutral-950 p-5 shadow-xl space-y-3.5">
+          <div className="rounded-2xl border border-violet-200 bg-gradient-to-b from-violet-50/70 via-white to-white p-5 shadow-xs space-y-3.5">
             <div className="flex items-center gap-2">
-              <Briefcase className="w-4 h-4 text-violet-400" />
-              <h4 className="text-xs font-black uppercase tracking-wider text-white">
+              <Briefcase className="w-4 h-4 text-violet-600" />
+              <h4 className="text-xs font-black uppercase tracking-wider text-slate-900">
                 Hire Talent
               </h4>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-slate-600 leading-relaxed font-normal">
               Need someone to build your Make.com scenario or WhatsApp bot? Hire proven builders from inside Eensell.
             </p>
 
             <div className="flex flex-wrap gap-1.5 pt-1">
               {["Make.com", "WhatsApp API", "OpenAI Agents", "Google Sheets CRM", "Webhooks"].map((s) => (
-                <span key={s} className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-violet-400/15 text-violet-300 border border-violet-400/25">
+                <span key={s} className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white text-violet-700 border border-violet-200 shadow-2xs">
                   {s}
                 </span>
               ))}
@@ -1293,19 +1283,19 @@ export function CommunityClient({
                 setActiveTab("hire");
                 window.scrollTo({ top: 300, behavior: "smooth" });
               }}
-              className="w-full py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-extrabold transition-all cursor-pointer shadow-md shadow-violet-600/20"
+              className="w-full py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs font-black transition-all cursor-pointer shadow-sm shadow-violet-600/20"
             >
               Browse Hire Marketplace
             </button>
           </div>
 
           {/* Card 4: Community Code of Conduct */}
-          <div className="rounded-2xl border border-white/10 bg-neutral-900/60 p-5 text-slate-400 text-xs space-y-2.5">
-            <h5 className="font-bold text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 text-slate-600 text-xs space-y-2.5 shadow-xs">
+            <h5 className="font-bold text-slate-900 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-primary" />
               Community Code of Honor
             </h5>
-            <ul className="space-y-1.5 list-disc list-inside text-[11px] leading-relaxed text-slate-400">
+            <ul className="space-y-1.5 list-disc list-inside text-[11px] leading-relaxed text-slate-600">
               <li>Give before you take — help debug before asking.</li>
               <li>Post real proof with numbers for wins.</li>
               <li>Respectful freelance deals — deliver 100% excellence.</li>
@@ -1314,15 +1304,15 @@ export function CommunityClient({
         </div>
       </div>
 
-      {/* ── 3. Rich Post Creation Dialog ── */}
+      {/* ── 3. Rich Post Creation Dialog (Crisp White Modal) ── */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-neutral-950 border border-white/10 text-white sm:max-w-2xl max-h-[92vh] overflow-y-auto shadow-2xl">
+        <DialogContent className="bg-white border border-slate-200 text-slate-900 sm:max-w-2xl max-h-[92vh] overflow-y-auto shadow-2xl">
           <DialogHeader>
-            <DialogTitle className="text-lg font-black flex items-center gap-2">
+            <DialogTitle className="text-lg font-black flex items-center gap-2 text-slate-900">
               <PenLine className="w-5 h-5 text-primary" />
               <span>Create Community Post</span>
             </DialogTitle>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500">
               Share wins with the community, offer your automation services, or ask technical questions.
             </p>
           </DialogHeader>
@@ -1330,15 +1320,15 @@ export function CommunityClient({
           <div className="space-y-4 pt-2">
             {/* Category Selector */}
             <div className="space-y-1.5">
-              <Label className="text-xs font-bold text-slate-300">Category</Label>
+              <Label className="text-xs font-bold text-slate-700">Category</Label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 <button
                   type="button"
                   onClick={() => setPostCategory("DISCUSSION")}
                   className={`p-2.5 rounded-xl text-xs font-bold border flex flex-col items-center gap-1 transition-all cursor-pointer ${
                     postCategory === "DISCUSSION"
-                      ? "bg-white text-black border-white shadow-md"
-                      : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
+                      ? "bg-slate-900 text-white border-slate-900 shadow-xs"
+                      : "bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                   }`}
                 >
                   <MessageSquare className="w-4 h-4" />
@@ -1350,11 +1340,11 @@ export function CommunityClient({
                   onClick={() => setPostCategory("WIN")}
                   className={`p-2.5 rounded-xl text-xs font-bold border flex flex-col items-center gap-1 transition-all cursor-pointer ${
                     postCategory === "WIN"
-                      ? "bg-emerald-500 text-black border-emerald-500 shadow-md"
-                      : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
+                      ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
+                      : "bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                   }`}
                 >
-                  <Trophy className="w-4 h-4 text-emerald-400" />
+                  <Trophy className="w-4 h-4 text-emerald-600" />
                   <span>Share Win</span>
                 </button>
 
@@ -1363,11 +1353,11 @@ export function CommunityClient({
                   onClick={() => setPostCategory("HIRE")}
                   className={`p-2.5 rounded-xl text-xs font-bold border flex flex-col items-center gap-1 transition-all cursor-pointer ${
                     postCategory === "HIRE"
-                      ? "bg-violet-600 text-white border-violet-600 shadow-md"
-                      : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
+                      ? "bg-violet-600 text-white border-violet-600 shadow-xs"
+                      : "bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                   }`}
                 >
-                  <Briefcase className="w-4 h-4 text-violet-400" />
+                  <Briefcase className="w-4 h-4 text-violet-600" />
                   <span>Hire / Services</span>
                 </button>
 
@@ -1377,11 +1367,11 @@ export function CommunityClient({
                     onClick={() => setPostCategory("ANNOUNCEMENT")}
                     className={`p-2.5 rounded-xl text-xs font-bold border flex flex-col items-center gap-1 transition-all cursor-pointer ${
                       postCategory === "ANNOUNCEMENT"
-                        ? "bg-amber-500 text-black border-amber-500 shadow-md"
-                        : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
+                        ? "bg-amber-500 text-slate-950 font-black border-amber-500 shadow-xs"
+                        : "bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                     }`}
                   >
-                    <Sparkles className="w-4 h-4 text-amber-400" />
+                    <Sparkles className="w-4 h-4 text-amber-600" />
                     <span>Announcement</span>
                   </button>
                 )}
@@ -1390,30 +1380,30 @@ export function CommunityClient({
 
             {/* Win-Specific Fields */}
             {postCategory === "WIN" && (
-              <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 space-y-2">
-                <Label className="text-xs font-bold text-emerald-300">
+              <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2">
+                <Label className="text-xs font-bold text-emerald-800">
                   Revenue Milestone / Deal Amount (e.g. +14,000 MAD or $2,500 retainer)
                 </Label>
                 <Input
                   value={winRevenue}
                   onChange={(e) => setWinRevenue(e.target.value)}
                   placeholder="+15,000 MAD"
-                  className="h-9 text-xs bg-black/60 border-emerald-500/30 text-white font-bold"
+                  className="h-9 text-xs bg-white border-emerald-300 text-slate-900 font-bold"
                 />
               </div>
             )}
 
             {/* Hire-Specific Fields */}
             {postCategory === "HIRE" && (
-              <div className="p-4 rounded-xl bg-violet-500/10 border border-violet-500/30 space-y-3">
+              <div className="p-4 rounded-xl bg-violet-50 border border-violet-200 space-y-3">
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setHireType("OFFERING")}
                     className={`py-2 text-xs font-bold rounded-lg transition-all ${
                       hireType === "OFFERING"
-                        ? "bg-violet-600 text-white"
-                        : "bg-white/5 text-slate-400"
+                        ? "bg-violet-600 text-white shadow-2xs"
+                        : "bg-white text-slate-600 border border-violet-200"
                     }`}
                   >
                     Offering Services
@@ -1423,8 +1413,8 @@ export function CommunityClient({
                     onClick={() => setHireType("LOOKING")}
                     className={`py-2 text-xs font-bold rounded-lg transition-all ${
                       hireType === "LOOKING"
-                        ? "bg-violet-600 text-white"
-                        : "bg-white/5 text-slate-400"
+                        ? "bg-violet-600 text-white shadow-2xs"
+                        : "bg-white text-slate-600 border border-violet-200"
                     }`}
                   >
                     Looking to Hire
@@ -1433,47 +1423,47 @@ export function CommunityClient({
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <Label className="text-xs text-slate-300">Specialization / Role</Label>
+                    <Label className="text-xs text-slate-700 font-bold">Specialization / Role</Label>
                     <Input
                       value={hireRole}
                       onChange={(e) => setHireRole(e.target.value)}
                       placeholder="e.g. Make.com Scenario Architect"
-                      className="h-9 text-xs bg-black/50 border-violet-500/30 text-white"
+                      className="h-9 text-xs bg-white border-slate-200 text-slate-900"
                     />
                   </div>
 
                   <div className="space-y-1">
-                    <Label className="text-xs text-slate-300">Rate / Budget</Label>
+                    <Label className="text-xs text-slate-700 font-bold">Rate / Budget</Label>
                     <Input
                       value={hireRate}
                       onChange={(e) => setHireRate(e.target.value)}
                       placeholder="e.g. From 3,500 MAD / project"
-                      className="h-9 text-xs bg-black/50 border-violet-500/30 text-white"
+                      className="h-9 text-xs bg-white border-slate-200 text-slate-900"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <Label className="text-xs text-slate-300">
+                  <Label className="text-xs text-slate-700 font-bold">
                     Skills / Tech Stack (comma separated)
                   </Label>
                   <Input
                     value={hireSkillsInput}
                     onChange={(e) => setHireSkillsInput(e.target.value)}
                     placeholder="Make.com, WhatsApp Cloud API, OpenAI, CRM"
-                    className="h-9 text-xs bg-black/50 border-violet-500/30 text-white"
+                    className="h-9 text-xs bg-white border-slate-200 text-slate-900"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <Label className="text-xs text-slate-300">
+                  <Label className="text-xs text-slate-700 font-bold">
                     WhatsApp Direct Phone (international format, e.g. 212612345678)
                   </Label>
                   <Input
                     value={hireContact}
                     onChange={(e) => setHireContact(e.target.value)}
                     placeholder="2126XXXXXXXX"
-                    className="h-9 text-xs bg-black/50 border-violet-500/30 text-white"
+                    className="h-9 text-xs bg-white border-slate-200 text-slate-900"
                   />
                 </div>
               </div>
@@ -1481,7 +1471,7 @@ export function CommunityClient({
 
             {/* Title */}
             <div className="space-y-1.5">
-              <Label className="text-xs font-bold text-slate-300">Post Title</Label>
+              <Label className="text-xs font-bold text-slate-700">Post Title</Label>
               <Input
                 value={postTitle}
                 onChange={(e) => setPostTitle(e.target.value)}
@@ -1492,24 +1482,24 @@ export function CommunityClient({
                     ? "Available for Make.com & WhatsApp API agency setups"
                     : "How are you handling WhatsApp webhook retries in Make?"
                 }
-                className="h-10 text-xs bg-neutral-900 border-white/10 text-white rounded-xl focus-visible:ring-primary/40 font-bold"
+                className="h-10 text-xs bg-white border-slate-200 text-slate-900 rounded-xl focus-visible:ring-primary/40 font-bold"
               />
             </div>
 
             {/* Body */}
             <div className="space-y-1.5">
-              <Label className="text-xs font-bold text-slate-300">Content</Label>
+              <Label className="text-xs font-bold text-slate-700">Content</Label>
               <RichTextEditor
                 content={postContent}
                 onChange={setPostContent}
                 placeholder="Share the details, breakdown of your workflow, lessons learned, or instructions..."
-                className="min-h-[150px]"
+                className="min-h-[150px] bg-white text-slate-900"
               />
             </div>
 
             {/* Media Attachment: Image URL */}
             <div className="space-y-1.5">
-              <Label className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+              <Label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
                 <ImageIcon className="w-3.5 h-3.5 text-primary" />
                 <span>Attach Screenshot / Image URL (optional)</span>
               </Label>
@@ -1517,10 +1507,10 @@ export function CommunityClient({
                 value={postImageUrl}
                 onChange={(e) => setPostImageUrl(e.target.value)}
                 placeholder="https://example.com/screenshot.png"
-                className="h-9 text-xs bg-neutral-900 border-white/10 text-white rounded-xl"
+                className="h-9 text-xs bg-white border-slate-200 text-slate-900 rounded-xl"
               />
               {postImageUrl && (
-                <div className="mt-2 rounded-xl overflow-hidden border border-white/10 max-h-36 bg-black flex items-center justify-center">
+                <div className="mt-2 rounded-xl overflow-hidden border border-slate-200 max-h-36 bg-slate-50 flex items-center justify-center">
                   <img src={postImageUrl} alt="Preview" className="max-h-36 object-contain" />
                 </div>
               )}
@@ -1529,31 +1519,31 @@ export function CommunityClient({
             {/* Link Attachment */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
               <div className="space-y-1">
-                <Label className="text-xs text-slate-300">Link URL (optional)</Label>
+                <Label className="text-xs text-slate-700 font-bold">Link URL (optional)</Label>
                 <Input
                   value={postLinkUrl}
                   onChange={(e) => setPostLinkUrl(e.target.value)}
                   placeholder="https://..."
-                  className="h-9 text-xs bg-neutral-900 border-white/10 text-white rounded-xl"
+                  className="h-9 text-xs bg-white border-slate-200 text-slate-900 rounded-xl"
                 />
               </div>
               <div className="space-y-1">
-                <Label className="text-xs text-slate-300">Link Title (optional)</Label>
+                <Label className="text-xs text-slate-700 font-bold">Link Title (optional)</Label>
                 <Input
                   value={postLinkTitle}
                   onChange={(e) => setPostLinkTitle(e.target.value)}
                   placeholder="e.g. Make.com Blueprint Demo"
-                  className="h-9 text-xs bg-neutral-900 border-white/10 text-white rounded-xl"
+                  className="h-9 text-xs bg-white border-slate-200 text-slate-900 rounded-xl"
                 />
               </div>
             </div>
 
             {/* Footer Buttons */}
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10">
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
               <button
                 type="button"
                 onClick={() => setDialogOpen(false)}
-                className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition-colors cursor-pointer"
+                className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
               >
                 Cancel
               </button>
@@ -1561,7 +1551,7 @@ export function CommunityClient({
                 type="button"
                 onClick={handleCreatePost}
                 disabled={isPending || !postTitle.trim() || !postContent.trim()}
-                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-orange-500 hover:opacity-95 text-white font-black text-xs transition-all shadow-lg shadow-primary/20 cursor-pointer disabled:opacity-50 flex items-center gap-2"
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-orange-500 hover:opacity-95 text-white font-black text-xs transition-all shadow-md shadow-primary/20 cursor-pointer disabled:opacity-50 flex items-center gap-2"
               >
                 {isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 <span>Publish Post</span>
@@ -1576,11 +1566,11 @@ export function CommunityClient({
         open={!!selectedPreviewImage}
         onOpenChange={(open) => !open && setSelectedPreviewImage(null)}
       >
-        <DialogContent className="bg-black/95 border border-white/10 max-w-4xl p-2 text-white overflow-hidden shadow-2xl">
+        <DialogContent className="bg-white/95 border border-slate-200 max-w-4xl p-2 text-slate-900 overflow-hidden shadow-2xl">
           <div className="relative flex items-center justify-center p-2">
             <button
               onClick={() => setSelectedPreviewImage(null)}
-              className="absolute top-3 right-3 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer z-10"
+              className="absolute top-3 right-3 p-2 rounded-full bg-slate-900/10 hover:bg-slate-900/20 text-slate-900 transition-all cursor-pointer z-10"
             >
               <X className="w-5 h-5" />
             </button>
