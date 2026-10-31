@@ -130,7 +130,7 @@ function SidebarContent({
   return (
     <div className="flex flex-col h-full" dir={dir}>
       {/* Logo */}
-      <div className="flex justify-center items-center px-4 py-4 sm:py-5 border-b border-border">
+      <div className="flex justify-center items-center px-4 py-4 sm:py-5 border-b border-border shrink-0">
         <img
           src="/logo2.png"
           alt="Eensell University"
@@ -138,8 +138,37 @@ function SidebarContent({
         />
       </div>
 
+      {/* ── Eensell Workspace OS Quick Launch Button (Positioned OVER / ABOVE the sidebar pages) ── */}
+      <div className="px-3.5 pt-3 pb-1 shrink-0">
+        <Link
+          href="/workspace"
+          onClick={() => setMobileOpen(false)}
+          className="group flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-violet-500/10 via-primary/5 to-purple-500/10 hover:from-violet-500/15 hover:to-primary/15 dark:from-violet-950/40 dark:to-slate-900/40 border border-violet-500/25 dark:border-violet-500/30 hover:border-violet-500/50 transition-all duration-200 shadow-sm hover:shadow"
+        >
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+              <Zap className="w-4 h-4 fill-white" />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-bold text-foreground group-hover:text-primary transition-colors truncate">
+                  Eensell Workspace
+                </span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+              </div>
+              <p className="text-[10px] text-muted-foreground truncate font-medium">
+                Agency OS & Tools
+              </p>
+            </div>
+          </div>
+          <div className="w-6 h-6 rounded-md bg-white/80 dark:bg-white/5 border border-border/80 flex items-center justify-center text-muted-foreground group-hover:text-primary group-hover:border-primary/40 shrink-0 transition-all">
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </div>
+        </Link>
+      </div>
+
       {/* Navigation Sections */}
-      <nav className="flex-1 px-4 py-6 space-y-6 overflow-y-auto no-scrollbar">
+      <nav className="flex-1 min-h-0 px-4 py-4 space-y-6 overflow-y-auto no-scrollbar">
         {sections.map((section, sIndex) => (
           <div key={section.label || sIndex}>
             <p className="px-4 mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground/60">
@@ -246,33 +275,7 @@ function SidebarContent({
         </div>
       )}
 
-      {/* ── Eensell Workspace OS Access Card ── */}
-      <div className="mx-4 mb-4">
-        <Link
-          href="/workspace"
-          onClick={() => setMobileOpen(false)}
-          className="group block relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-neutral-900 to-slate-950 p-4 border border-white/10 hover:border-primary/50 transition-all duration-300 shadow-md hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-0.5"
-        >
-          <div className="absolute top-0 right-0 -mr-6 -mt-6 w-20 h-20 bg-primary/20 rounded-full blur-xl pointer-events-none group-hover:bg-primary/30 transition-all" />
-          <div className="flex items-center justify-between mb-2 relative z-10">
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-primary/20 text-primary border border-primary/30">
-              <Sparkles className="w-3 h-3 text-primary animate-pulse" />
-              AI AGENCY OS
-            </span>
-            <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-          </div>
-          <h4 className="text-sm font-black text-white tracking-tight mb-1 flex items-center gap-2">
-            <span>Eensell Workspace</span>
-          </h4>
-          <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed mb-3">
-            Lead Scraper, CRM Pipeline, WhatsApp Outreach & Invoicing engine.
-          </p>
-          <div className="w-full py-2 px-3 rounded-xl bg-white/10 group-hover:bg-primary text-white text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-sm">
-            <Zap className="w-3.5 h-3.5 fill-current" />
-            <span>Launch Workspace</span>
-          </div>
-        </Link>
-      </div>
+
 
       {/* User section */}
       <div className="px-5 py-5 border-t border-border mt-auto">
