@@ -8,9 +8,8 @@ import {
   toggleReaction,
   addComment,
   deleteComment,
-  parsePostContent,
-  type PostMetadata,
 } from "@/actions/community.actions";
+import { parsePostContent, type PostMetadata } from "@/lib/community-utils";
 import { toast } from "sonner";
 import {
   Bookmark,
