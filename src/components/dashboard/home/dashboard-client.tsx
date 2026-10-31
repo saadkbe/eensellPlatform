@@ -31,7 +31,6 @@ import { useLanguage } from "@/components/landing/LanguageProvider";
 import { LeaderboardWidget } from "../leaderboard-widget";
 import { ReferralPromoModal } from "../referrals/referral-promo-modal";
 import { HeroSection } from "./hero-section";
-import { PromoHeroBanner } from "./promo-hero-banner";
 
 // Animation Variants
 const containerVariants = {
@@ -167,11 +166,6 @@ export function DashboardClient({
       className="space-y-6 sm:space-y-8 pb-16 w-full"
     >
       <ReferralPromoModal />
-
-      {/* ── Top Affiliate Promotional Hero Banner ── */}
-      <motion.div variants={itemVariants}>
-        <PromoHeroBanner />
-      </motion.div>
 
       {/* ── Welcome & 60-Day Challenge Banner ── */}
       <motion.div variants={itemVariants}>

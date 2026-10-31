@@ -61,16 +61,74 @@ export async function getPosts() {
   });
 }
 
-// Create a new community post (admin-only)
-export async function createPost(title: string, content: string) {
+export interface PostMetadata {
+  category: "DISCUSSION" | "WIN" | "HIRE" | "ANNOUNCEMENT" | "QUESTION";
+  imageUrl?: string;
+  linkUrl?: string;
+  linkTitle?: string;
+  winRevenue?: string;
+  hireType?: "OFFERING" | "LOOKING";
+  hireRole?: string;
+  hireRate?: string;
+  hireContact?: string;
+  hireSkills?: string[];
+}
+
+export function serializePostContent(content: string, meta?: PostMetadata): string {
+  if (!meta) return content;
+  return `<!--EENSELL_POST_META:${JSON.stringify(meta)}-->\n${content}`;
+}
+
+export function parsePostContent(rawContent: string): { content: string; meta: PostMetadata } {
+  const match = rawContent.match(/<!--EENSELL_POST_META:(.*?)-->/);
+  if (match) {
+    try {
+      const meta = JSON.parse(match[1]) as PostMetadata;
+      const cleanContent = rawContent.replace(/<!--EENSELL_POST_META:(.*?)-->\n?/, "");
+      return { content: cleanContent, meta };
+    } catch {
+      // fallback
+    }
+  }
+
+  if (
+    rawContent.includes("60-Day AI Automation Agency Sprint") ||
+    rawContent.includes("Deliverables Completed") ||
+    rawContent.includes("Milestone Win")
+  ) {
+    return {
+      content: rawContent,
+      meta: { category: "WIN" },
+    };
+  }
+
+  return {
+    content: rawContent,
+    meta: { category: "ANNOUNCEMENT" },
+  };
+}
+
+// Create a new community post (open to all community members; announcements are admin-only)
+export async function createPost(
+  title: string,
+  content: string,
+  meta?: PostMetadata
+) {
   const user = await getAuthUser();
-  if (user.role !== "ADMIN") throw new Error("Only admins can create posts");
+
+  // If explicitly marking as an official announcement, require ADMIN
+  if (meta?.category === "ANNOUNCEMENT" && user.role !== "ADMIN") {
+    meta.category = "DISCUSSION";
+  }
+
+  const finalContent = serializePostContent(content, meta);
 
   const post = await db.communityPost.create({
     data: {
       title,
-      content,
+      content: finalContent,
       authorId: user.id,
+      isPinned: user.role === "ADMIN" && meta?.category === "ANNOUNCEMENT",
     },
     include: {
       author: {
@@ -116,30 +174,33 @@ export async function createPost(title: string, content: string) {
     },
   });
 
-  // Send Premium Email Template for Community Post
-  const activeUsers = await db.user.findMany({
-    where: { status: "ACTIVE" },
-    select: { email: true, firstName: true },
-  });
-  
-  if (activeUsers.length > 0) {
-    const { sendCommunityPostEmail } = await import("./email.actions");
-    const recipients = activeUsers.map(u => ({ 
-      email: u.email!, 
-      name: u.firstName || "Student" 
-    }));
-    await sendCommunityPostEmail(recipients, title, "/dashboard/community");
-    
-    const { notifyAllActiveUsers } = await import("./notification.actions");
-    await notifyAllActiveUsers({
-      title: "New Community Post",
-      message: `A new post "${title}" has been published.`,
-      linkUrl: "/dashboard/community",
-      skipEmail: true,
+  // Send Broadcast Email only for official ADMIN announcements
+  if (user.role === "ADMIN" && meta?.category === "ANNOUNCEMENT") {
+    const activeUsers = await db.user.findMany({
+      where: { status: "ACTIVE" },
+      select: { email: true, firstName: true },
     });
+
+    if (activeUsers.length > 0) {
+      const { sendCommunityPostEmail } = await import("./email.actions");
+      const recipients = activeUsers.map((u) => ({
+        email: u.email!,
+        name: u.firstName || "Student",
+      }));
+      await sendCommunityPostEmail(recipients, title, "/dashboard/community");
+
+      const { notifyAllActiveUsers } = await import("./notification.actions");
+      await notifyAllActiveUsers({
+        title: "New Official Announcement",
+        message: `An official update "${title}" has been published.`,
+        linkUrl: "/dashboard/community",
+        skipEmail: true,
+      });
+    }
   }
 
   revalidatePath("/dashboard/community");
+  revalidatePath("/admin/posts");
   return post;
 }
 
@@ -264,13 +325,19 @@ export async function togglePinPost(postId: string) {
   revalidatePath("/dashboard/community");
 }
 
-// Delete a post (admin-only)
+// Delete a post (author or admin)
 export async function deletePost(postId: string) {
   const user = await getAuthUser();
-  if (user.role !== "ADMIN") throw new Error("Only admins can delete posts");
+  const post = await db.communityPost.findUnique({ where: { id: postId } });
+  if (!post) throw new Error("Post not found");
+
+  if (user.role !== "ADMIN" && post.authorId !== user.id) {
+    throw new Error("Only admins or the author can delete this post");
+  }
 
   await db.communityPost.delete({ where: { id: postId } });
   revalidatePath("/dashboard/community");
+  revalidatePath("/admin/posts");
 }
 
 // Toggle a reaction on a post

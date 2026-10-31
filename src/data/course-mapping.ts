@@ -42,20 +42,20 @@ export const COURSE_CATEGORIES: CourseCategory[] = [
   {
     id: "course-3",
     code: "M3",
-    title: "AI Automation & Workflows",
-    description: "Build powerful automations with Make.com, AI chatbots, WhatsApp bots, and intelligent AI agents.",
-    icon: "Zap",
-    color: "from-amber-500 to-orange-500",
-    moduleOrders: [2, 7], // AI Automation & Workflows + AI Chatbots & AI Agents
-  },
-  {
-    id: "course-4",
-    code: "M4",
     title: "AI Website & Landing Page Creation",
     description: "Learn how to build high-converting websites and landing pages using AI.",
     icon: "LayoutTemplate",
     color: "from-pink-500 to-rose-500",
     moduleOrders: [3], // AI Website & Landing Page Creation
+  },
+  {
+    id: "course-4",
+    code: "M4",
+    title: "AI Automation & Workflows",
+    description: "Build powerful automations with Make.com, AI chatbots, WhatsApp bots, and intelligent AI agents.",
+    icon: "Zap",
+    color: "from-amber-500 to-orange-500",
+    moduleOrders: [2, 7], // AI Automation & Workflows + AI Chatbots & AI Agents
   },
   {
     id: "course-5",

@@ -32,7 +32,7 @@ export default async function CommunityPage() {
               Community Hub
             </h1>
             <p className="text-base sm:text-lg text-slate-200/90 leading-relaxed font-medium drop-shadow">
-              Official announcements and updates from the Eensell team. Join Discord for live discussions.
+              Share your client wins, hire automation builders, exchange resources, and connect with fellow builders.
             </p>
           </div>
           <div className="shrink-0 md:pr-12">

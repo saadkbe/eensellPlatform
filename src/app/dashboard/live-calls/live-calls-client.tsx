@@ -650,11 +650,21 @@ export function LiveCallsClient({ upcomingCalls, pastCalls }: LiveCallsClientPro
                       className="bg-card border-border hover:border-amber-500/30 transition-all rounded-3xl overflow-hidden shadow-sm flex flex-col justify-between group"
                     >
                       <CardContent className="p-5 space-y-3.5">
-                        <div className="relative aspect-video rounded-2xl overflow-hidden bg-gradient-to-br from-slate-900 to-black border border-white/10 flex items-center justify-center group-hover:border-amber-500/40 transition-all">
-                          <div className="w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
-                            <PlayCircle className="w-6 h-6 fill-amber-500/20" />
+                        <div className="relative aspect-video rounded-2xl overflow-hidden bg-slate-950 border border-white/10 flex items-center justify-center group-hover:border-amber-500/40 transition-all shadow-md">
+                          <img
+                            src="/thumbnails/live-replay-thumb.jpg"
+                            alt={call.title}
+                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/15 group-hover:via-black/20 transition-all" />
+                          <div className="relative z-10 w-12 h-12 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
+                            <PlayCircle className="w-6 h-6 fill-slate-950" />
                           </div>
-                          <span className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-md text-[10px] font-mono text-white">
+                          <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 text-[10px] font-bold tracking-wider uppercase shadow-xs">
+                            Replay Masterclass
+                          </div>
+                          <span className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/80 backdrop-blur-md text-[10px] font-mono text-white/90 border border-white/10">
                             60m+
                           </span>
                         </div>
