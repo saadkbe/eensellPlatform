@@ -36,6 +36,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
 import { useLanguage } from "@/components/landing/LanguageProvider";
+import { cn } from "@/lib/utils";
 import {
   createRetainerAction,
   updateRetainerStatusAction,
