@@ -4,13 +4,15 @@ import { DashboardClient } from "@/components/dashboard/home/dashboard-client";
 import { getLeaderboard } from "@/actions/user.actions";
 import { getUserChallengeProgress } from "@/actions/challenge.actions";
 
+import { TranslationKey } from "@/lib/translations";
+
 export const dynamic = "force-dynamic";
 
-function getGreeting(): string {
+function getGreetingKey(): TranslationKey {
   const hour = new Date().getHours();
-  if (hour < 12) return "Good morning";
-  if (hour < 18) return "Good afternoon";
-  return "Good evening";
+  if (hour < 12) return "dash_greeting_morning";
+  if (hour < 18) return "dash_greeting_afternoon";
+  return "dash_greeting_evening";
 }
 
 export default async function DashboardPage() {
@@ -76,7 +78,7 @@ export default async function DashboardPage() {
   return (
     <DashboardClient
       firstName={firstName}
-      greeting={getGreeting()}
+      greetingKey={getGreetingKey()}
       totalModules={totalModules}
       completedLessons={completedLessons}
       progressPercent={progressPercent}

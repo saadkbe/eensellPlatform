@@ -35,6 +35,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
+import { useLanguage } from "@/components/landing/LanguageProvider";
 import {
   createRetainerAction,
   updateRetainerStatusAction,
@@ -74,13 +75,14 @@ interface WorkspaceDashboardProps {
 
 export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProps) {
   const { user } = useUser();
-  const firstName = user?.firstName || user?.fullName?.split(" ")[0] || "Agency Founder";
+  const { t, dir, isRTL } = useLanguage();
+  const firstName = user?.firstName || user?.fullName?.split(" ")[0] || "Founder";
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return "Good morning";
-    if (hour < 18) return "Good afternoon";
-    return "Good evening";
+    if (hour < 12) return t("dash_greeting_morning");
+    if (hour < 18) return t("dash_greeting_afternoon");
+    return t("dash_greeting_evening");
   };
 
   // Real Database Retainers & Tasks
@@ -196,7 +198,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
   };
 
   const handleDeleteRetainer = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this client retainer?")) return;
+    if (!confirm(t("ws_confirm_delete_retainer"))) return;
     setRetainers((prev) => prev.filter((r) => r.id !== id));
     try {
       await deleteRetainerAction(id);
@@ -231,11 +233,11 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
             <div className="flex items-center gap-2.5 flex-wrap">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Eensell Workspace OS &bull; Live
+                {t("ws_live_badge")}
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 shadow-2xs">
                 <Zap className="w-3.5 h-3.5 text-amber-600 fill-amber-600" />
-                Agency Command Center
+                {t("ws_command_center_badge")}
               </span>
             </div>
 
@@ -243,7 +245,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
               {getGreeting()}, {firstName} 👋
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-              Autonomous agency execution suite: B2B lead scraping, WhatsApp outreach, AI cold email drafting, CRM deal flow, and client retainer cashflow.
+              {t("ws_header_desc")}
             </p>
           </div>
 
@@ -254,7 +256,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs border border-slate-200/90 shadow-2xs transition-all hover:scale-105"
             >
               <Key className="w-3.5 h-3.5 text-amber-500" />
-              <span>API Settings</span>
+              <span>{t("ws_btn_api_settings")}</span>
             </Link>
 
             <Link
@@ -262,7 +264,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs border border-blue-200 shadow-2xs transition-all hover:scale-105"
             >
               <MapPin className="w-3.5 h-3.5 text-blue-600" />
-              <span>Scrape Leads</span>
+              <span>{t("ws_btn_scrape_leads")}</span>
             </Link>
 
             <button
@@ -270,7 +272,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary via-orange-500 to-amber-500 hover:opacity-95 text-white font-black text-xs shadow-md shadow-primary/20 transition-all hover:scale-105 cursor-pointer"
             >
               <Plus className="w-4 h-4 stroke-[3]" />
-              <span>Add Retainer</span>
+              <span>{t("ws_btn_add_retainer")}</span>
             </button>
           </div>
         </div>
@@ -286,7 +288,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
         >
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-black text-slate-500 uppercase tracking-wider">
-              Monthly Cashflow (MRR)
+              {t("ws_kpi_mrr_label")}
             </span>
             <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200 shadow-2xs">
               <DollarSign className="w-4 h-4" />
@@ -296,10 +298,10 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
           <div className="my-3">
             <div className="text-3xl font-black tracking-tight text-slate-900">
               {totalMRR.toLocaleString()}{" "}
-              <span className="text-xs font-bold text-slate-500">MAD / mo</span>
+              <span className="text-xs font-bold text-slate-500">{t("ws_kpi_mrr_unit")}</span>
             </div>
             <p className="text-[11px] text-slate-500 mt-1 flex items-center gap-1.5">
-              <span>Target:</span>
+              <span>{t("ws_kpi_target")}</span>
               <strong className="text-slate-800 font-bold">30,000 MAD</strong>
               <span>&bull;</span>
               <span className="text-emerald-600 font-bold">{progressPercent}%</span>
@@ -317,8 +319,8 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
               />
             </div>
             <div className="flex justify-between text-[10px] text-slate-500 pt-0.5">
-              <span className="font-bold text-slate-700">{retainers.filter((r) => r.status === "active").length} Active contracts</span>
-              <span>Pending: {pendingMRR.toLocaleString()} MAD</span>
+              <span className="font-bold text-slate-700">{retainers.filter((r) => r.status === "active").length} {t("ws_kpi_active_contracts")}</span>
+              <span>{t("ws_kpi_pending_label")} {pendingMRR.toLocaleString()} MAD</span>
             </div>
           </div>
         </motion.div>
@@ -332,7 +334,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
         >
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-black text-slate-500 uppercase tracking-wider">
-              Prospects Database
+              {t("ws_kpi_leads_label")}
             </span>
             <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-200 shadow-2xs">
               <TrendingUp className="w-4 h-4" />
@@ -342,10 +344,10 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
           <div className="my-3">
             <div className="text-3xl font-black tracking-tight text-slate-900">
               {stats?.totalLeads || 0}{" "}
-              <span className="text-xs font-bold text-slate-500">Leads</span>
+              <span className="text-xs font-bold text-slate-500">{t("ws_kpi_leads_unit")}</span>
             </div>
             <p className="text-[11px] text-slate-500 mt-1">
-              Ready for cold WhatsApp & email outreach
+              {t("ws_kpi_leads_sub")}
             </p>
           </div>
 
@@ -354,11 +356,11 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
               href="/workspace/scraper"
               className="text-blue-600 font-bold hover:underline flex items-center gap-1"
             >
-              <span>Scrape Maps</span>
+              <span>{t("ws_btn_scrape_leads")}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
             <Link href="/workspace/crm" className="text-slate-500 hover:text-slate-800 font-medium">
-              Open CRM &rarr;
+              {t("ws_nav_crm")} &rarr;
             </Link>
           </div>
         </motion.div>
@@ -372,7 +374,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
         >
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-black text-slate-500 uppercase tracking-wider">
-              Active Client Accounts
+              {t("ws_kpi_clients_label")}
             </span>
             <div className="w-9 h-9 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center border border-violet-200 shadow-2xs">
               <Users className="w-4 h-4" />
@@ -382,24 +384,22 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
           <div className="my-3">
             <div className="text-3xl font-black tracking-tight text-slate-900">
               {retainers.length}{" "}
-              <span className="text-xs font-bold text-slate-500">Accounts</span>
+              <span className="text-xs font-bold text-slate-500">{t("ws_kpi_clients_unit")}</span>
             </div>
             <p className="text-[11px] text-slate-500 mt-1">
-              {retainers.length === 0
-                ? "No clients registered yet"
-                : `Avg. ${Math.round(totalMRR / (retainers.length || 1)).toLocaleString()} MAD / account`}
+              {t("ws_kpi_clients_sub")}
             </p>
           </div>
 
           <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
             <span className="text-slate-500">
-              {retainers.filter((r) => r.status === "active").length} active billings
+              {retainers.filter((r) => r.status === "active").length} {t("ws_kpi_active_contracts")}
             </span>
             <button
               onClick={() => setIsAddRetainerOpen(true)}
               className="text-violet-600 font-bold hover:underline cursor-pointer"
             >
-              + Add Client
+              + {t("ws_btn_add_retainer")}
             </button>
           </div>
         </motion.div>
@@ -413,7 +413,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
         >
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-black text-slate-500 uppercase tracking-wider">
-              Outreach Velocity
+              {t("ws_kpi_velocity_label")}
             </span>
             <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-200 shadow-2xs">
               <Zap className="w-4 h-4" />
@@ -423,14 +423,10 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
           <div className="my-3">
             <div className="text-3xl font-black tracking-tight text-slate-900">
               {stats?.sentEmails || 0}{" "}
-              <span className="text-xs font-bold text-slate-500">Sent</span>
+              <span className="text-xs font-bold text-slate-500">{t("ws_kpi_velocity_unit")}</span>
             </div>
             <p className="text-[11px] text-slate-500 mt-1 flex items-center gap-1.5">
-              <span>Replies:</span>
-              <strong className="text-amber-700 font-bold">{stats?.replies || 0}</strong>
-              <span>&bull;</span>
-              <span>Calls:</span>
-              <strong className="text-slate-800 font-bold">{stats?.meetingsBooked || 0}</strong>
+              {t("ws_kpi_velocity_sub")}
             </p>
           </div>
 
@@ -439,11 +435,11 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
               href="/workspace/whatsapp"
               className="text-amber-700 font-bold hover:underline flex items-center gap-1"
             >
-              <span>WhatsApp Suite</span>
+              <span>{t("ws_nav_whatsapp")}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
             <Link href="/workspace/drafter" className="text-slate-500 hover:text-slate-800 font-medium">
-              Email Drafter &rarr;
+              {t("ws_nav_drafter")} &rarr;
             </Link>
           </div>
         </motion.div>
@@ -454,10 +450,10 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-black uppercase tracking-wider text-slate-900 flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-primary" />
-            <span>Workspace Growth Engines</span>
+            <span>{t("ws_apps_title")}</span>
           </h2>
           <span className="text-xs text-slate-500 font-medium">
-            Integrated Agency Tools
+            {t("ws_apps_subtitle")}
           </span>
         </div>
 
@@ -472,15 +468,15 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                 <MapPin className="w-5 h-5" />
               </div>
               <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200">
-                Outscraper API
+                {t("ws_app_tag_leadgen")}
               </span>
             </div>
             <h3 className="font-extrabold text-sm text-slate-900 group-hover:text-blue-600 transition-colors flex items-center gap-1.5">
-              <span>Google Maps B2B Scraper</span>
+              <span>{t("ws_nav_scraper")}</span>
               <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
             </h3>
             <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-              Extract verified business owners, phone numbers, addresses, and websites from any city in seconds.
+              {t("ws_app_scraper_desc")}
             </p>
           </Link>
 
@@ -494,15 +490,15 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                 <MessageSquare className="w-5 h-5" />
               </div>
               <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
-                iPhone 18 Pro Frame
+                {t("ws_app_tag_messaging")}
               </span>
             </div>
             <h3 className="font-extrabold text-sm text-slate-900 group-hover:text-emerald-600 transition-colors flex items-center gap-1.5">
-              <span>WhatsApp Outreach Suite</span>
+              <span>{t("ws_nav_whatsapp")}</span>
               <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
             </h3>
             <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-              High-converting Darija & French voice scripts, WhatsApp direct hooks, and simulated client previews.
+              {t("ws_app_whatsapp_desc")}
             </p>
           </Link>
 
@@ -516,15 +512,15 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                 <Mail className="w-5 h-5" />
               </div>
               <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-violet-50 text-violet-700 border border-violet-200">
-                GPT-4o Powered
+                {t("ws_app_tag_ai_copy")}
               </span>
             </div>
             <h3 className="font-extrabold text-sm text-slate-900 group-hover:text-violet-600 transition-colors flex items-center gap-1.5">
-              <span>AI Cold Email Drafter</span>
+              <span>{t("ws_nav_drafter")}</span>
               <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
             </h3>
             <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-              Generate personalized client pitches with automated subject line scoring, spam check, and Gmail SMTP dispatch.
+              {t("ws_app_drafter_desc")}
             </p>
           </Link>
 
@@ -538,15 +534,15 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                 <Building2 className="w-5 h-5" />
               </div>
               <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200">
-                Kanban Deal Flow
+                {t("ws_app_tag_pipeline")}
               </span>
             </div>
             <h3 className="font-extrabold text-sm text-slate-900 group-hover:text-amber-600 transition-colors flex items-center gap-1.5">
-              <span>Agency CRM Pipeline</span>
+              <span>{t("ws_nav_crm")}</span>
               <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
             </h3>
             <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-              Manage client pipeline stages: Scraped, Contacted, WhatsApp Replied, Demo Booked, and Retainer Closed.
+              {t("ws_app_crm_desc")}
             </p>
           </Link>
 
@@ -560,15 +556,15 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                 <Receipt className="w-5 h-5" />
               </div>
               <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-teal-50 text-teal-700 border border-teal-200">
-                PDF & MAD / USD
+                {t("ws_app_tag_finance")}
               </span>
             </div>
             <h3 className="font-extrabold text-sm text-slate-900 group-hover:text-teal-600 transition-colors flex items-center gap-1.5">
-              <span>Instant Invoicing Engine</span>
+              <span>{t("ws_nav_invoices")}</span>
               <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
             </h3>
             <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-              Create professional branded invoices and payment receipts for your local or international client retainers.
+              {t("ws_app_invoices_desc")}
             </p>
           </Link>
 
@@ -582,15 +578,15 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                 <FileText className="w-5 h-5" />
               </div>
               <span className="text-[10px] uppercase font-black px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
-                Notepad & Blueprints
+                {t("ws_app_tag_knowledge")}
               </span>
             </div>
             <h3 className="font-extrabold text-sm text-slate-900 group-hover:text-primary transition-colors flex items-center gap-1.5">
-              <span>Agency Scratchpad & Notes</span>
+              <span>{t("ws_nav_notes")}</span>
               <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
             </h3>
             <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-              Store client scope of work, Make.com blueprint notes, and objection handling scripts in one secure location.
+              {t("ws_app_notes_desc")}
             </p>
           </Link>
         </div>
@@ -604,13 +600,13 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="font-extrabold text-base text-slate-900 flex items-center gap-2">
-                  <span>Client Retainers & Active Cashflow</span>
+                  <span>{t("ws_retainers_title")}</span>
                   <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
                     {retainers.length}
                   </span>
                 </h2>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Monthly recurring services, client deliverables, and payment collection tracking.
+                  {t("ws_retainers_subtitle")}
                 </p>
               </div>
 
@@ -620,7 +616,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                 className="h-8 text-xs font-bold bg-primary hover:bg-primary/90 text-white shadow-xs cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5 mr-1" />
-                Add Retainer
+                {t("ws_btn_add_retainer")}
               </Button>
             </div>
 
@@ -632,10 +628,10 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm font-bold text-slate-900">
-                    No client retainers registered yet
+                    {t("ws_retainers_empty_title")}
                   </p>
                   <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                    Close a client or register a current project to begin tracking your monthly recurring cashflow.
+                    {t("ws_retainers_empty_desc")}
                   </p>
                 </div>
                 <Button
@@ -644,7 +640,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                   className="h-8 text-xs font-bold bg-slate-900 text-white hover:bg-slate-800"
                 >
                   <Plus className="w-3.5 h-3.5 mr-1" />
-                  Register First Client
+                  {t("ws_btn_add_first_retainer")}
                 </Button>
               </div>
             ) : (
@@ -667,7 +663,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                             {client.clientName}
                           </div>
                           <div className="text-xs text-slate-500 truncate flex items-center gap-2 mt-0.5">
-                            <span>{client.contactPerson || "Lead Contact"}</span>
+                            <span>{client.contactPerson || client.clientName}</span>
                             <span>&bull;</span>
                             <span className="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.2 rounded border border-emerald-200">
                               {client.service}
@@ -693,12 +689,12 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                           {client.status === "active" ? (
                             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs hover:opacity-85 transition-opacity">
                               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                              Active
+                              {t("ws_status_active")}
                             </span>
                           ) : (
                             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-amber-50 text-amber-700 border border-amber-200 shadow-2xs hover:opacity-85 transition-opacity">
                               <Clock className="w-3 h-3 text-amber-500" />
-                              Pending
+                              {t("ws_status_pending")}
                             </span>
                           )}
                         </button>
@@ -711,7 +707,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                               target="_blank"
                               rel="noopener noreferrer"
                               className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 border border-transparent hover:border-emerald-200 transition-all"
-                              title="Chat on WhatsApp"
+                              title="WhatsApp"
                             >
                               <Phone className="w-3.5 h-3.5" />
                             </a>
@@ -720,7 +716,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                           <Link
                             href={`/workspace/invoices?client=${encodeURIComponent(client.clientName)}&fee=${client.monthlyFee}`}
                             className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 border border-transparent hover:border-blue-200 transition-all"
-                            title="Generate Invoice"
+                            title={t("ws_nav_invoices")}
                           >
                             <Receipt className="w-3.5 h-3.5" />
                           </Link>
@@ -728,7 +724,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                           <button
                             onClick={() => handleDeleteRetainer(client.id)}
                             className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-all cursor-pointer"
-                            title="Delete Retainer"
+                            title={t("ws_btn_delete")}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -750,10 +746,10 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
               <div>
                 <h3 className="font-extrabold text-xs uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
                   <Target className="w-4 h-4 text-emerald-600" />
-                  <span>Daily Priorities</span>
+                  <span>{t("ws_tasks_title")}</span>
                 </h3>
                 <span className="text-xs text-slate-500">
-                  {completedTasksCount} of {tasks.length} completed
+                  {completedTasksCount} / {tasks.length} {t("ws_tasks_completed_count")}
                 </span>
               </div>
               {tasks.length > 0 && (
@@ -766,7 +762,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
             {/* Tasks list */}
             {tasks.length === 0 ? (
               <p className="text-xs text-slate-500 py-3 text-center italic">
-                All daily priorities completed! Add your next high-leverage task below.
+                {t("ws_tasks_empty")}
               </p>
             ) : (
               <div className="space-y-2">
@@ -801,7 +797,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                       <button
                         onClick={(e) => handleDeleteTask(task.id, e)}
                         className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-rose-600 transition-opacity"
-                        title="Delete task"
+                        title={t("ws_btn_delete")}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -818,7 +814,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                   type="text"
                   value={newTaskText}
                   onChange={(e) => setNewTaskText(e.target.value)}
-                  placeholder="+ Add priority (press Enter)..."
+                  placeholder={t("ws_task_input_placeholder")}
                   className="flex-1 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 outline-none focus:border-slate-800 transition-colors"
                 />
                 <Button
@@ -827,7 +823,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                   disabled={isAddingTask || !newTaskText.trim()}
                   className="h-8 px-3 text-xs bg-slate-900 hover:bg-slate-800 text-white font-bold cursor-pointer disabled:opacity-40"
                 >
-                  Add
+                  {t("ws_btn_add_task")}
                 </Button>
               </div>
             </form>
@@ -838,19 +834,19 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
             <div className="flex items-center justify-between">
               <h3 className="font-extrabold text-xs uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <span>API & System Health</span>
+                <span>{t("ws_health_title")}</span>
               </h3>
               <Link
                 href="/workspace/settings"
                 className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1"
               >
-                <span>Settings</span>
-                <ChevronRight className="w-3.5 h-3.5" />
+                <span>{t("ws_health_manage_keys")}</span>
+                <ChevronRight className={cn("w-3.5 h-3.5", isRTL && "rotate-180")} />
               </Link>
             </div>
 
             <p className="text-xs text-slate-500 leading-relaxed font-normal">
-              Connect API keys to enable autonomous scraping, AI copywriting, and live email dispatch.
+              {t("ws_health_subtitle")}
             </p>
 
             <div className="space-y-2 pt-1 text-xs">
@@ -858,19 +854,19 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
               <div className="p-3 rounded-xl border border-slate-200/80 bg-slate-50/70 flex items-center justify-between shadow-2xs">
                 <div className="flex items-center gap-2.5">
                   <span className="text-base">🤖</span>
-                  <span className="font-bold text-slate-800">OpenAI GPT-4o</span>
+                  <span className="font-bold text-slate-800">{t("ws_health_openai")}</span>
                 </div>
                 {account?.hasOpenAI ? (
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    Connected
+                    {t("ws_health_operational")}
                   </span>
                 ) : (
                   <Link
                     href="/workspace/settings"
                     className="text-xs font-bold text-blue-600 hover:underline"
                   >
-                    Add Key
+                    {t("ws_health_not_configured")}
                   </Link>
                 )}
               </div>
@@ -879,19 +875,19 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
               <div className="p-3 rounded-xl border border-slate-200/80 bg-slate-50/70 flex items-center justify-between shadow-2xs">
                 <div className="flex items-center gap-2.5">
                   <span className="text-base">📍</span>
-                  <span className="font-bold text-slate-800">Outscraper Maps</span>
+                  <span className="font-bold text-slate-800">{t("ws_health_outscraper")}</span>
                 </div>
                 {account?.hasOutscraper ? (
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    Connected
+                    {t("ws_health_operational")}
                   </span>
                 ) : (
                   <Link
                     href="/workspace/settings"
                     className="text-xs font-bold text-blue-600 hover:underline"
                   >
-                    Add Key
+                    {t("ws_health_not_configured")}
                   </Link>
                 )}
               </div>
@@ -900,19 +896,19 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
               <div className="p-3 rounded-xl border border-slate-200/80 bg-slate-50/70 flex items-center justify-between shadow-2xs">
                 <div className="flex items-center gap-2.5">
                   <span className="text-base">✉️</span>
-                  <span className="font-bold text-slate-800">Gmail Dispatch</span>
+                  <span className="font-bold text-slate-800">{t("ws_health_gmail")}</span>
                 </div>
                 {account?.isGmailConnected ? (
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    Connected
+                    {t("ws_health_operational")}
                   </span>
                 ) : (
                   <Link
                     href="/workspace/settings"
                     className="text-xs font-bold text-blue-600 hover:underline"
                   >
-                    Connect SMTP
+                    {t("ws_health_inactive")}
                   </Link>
                 )}
               </div>
@@ -921,15 +917,15 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
               <div className="p-3 rounded-xl border border-slate-200/80 bg-slate-50/70 flex items-center justify-between shadow-2xs">
                 <div className="flex items-center gap-2.5">
                   <span className="text-base">🎙️</span>
-                  <span className="font-bold text-slate-800">ElevenLabs Voice</span>
+                  <span className="font-bold text-slate-800">{t("ws_health_elevenlabs")}</span>
                 </div>
                 {account?.hasElevenLabs ? (
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    Connected
+                    {t("ws_health_operational")}
                   </span>
                 ) : (
-                  <span className="text-xs text-slate-500 font-medium">Native Audio</span>
+                  <span className="text-xs text-slate-500 font-medium">{t("ws_health_not_configured")}</span>
                 )}
               </div>
             </div>
@@ -954,10 +950,10 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                   </div>
                   <div>
                     <h3 className="font-extrabold text-sm sm:text-base text-slate-900">
-                      Register Client Retainer
+                      {t("ws_modal_title")}
                     </h3>
                     <p className="text-xs text-slate-500">
-                      Saved directly to your database to track recurring cashflow.
+                      {t("ws_modal_subtitle")}
                     </p>
                   </div>
                 </div>
@@ -972,12 +968,12 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
               <form onSubmit={handleCreateRetainer} className="space-y-4">
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-700">
-                    Company / Client Name *
+                    {t("ws_modal_client_name")} *
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Prestige Real Estate, Cabinet Dr. Smith..."
+                    placeholder={t("ws_modal_client_placeholder")}
                     value={newClientName}
                     onChange={(e) => setNewClientName(e.target.value)}
                     className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 outline-none focus:border-slate-800 shadow-2xs"
@@ -987,11 +983,11 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-slate-700">
-                      Contact Person
+                      {t("ws_modal_contact_person")}
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. Founder, Marketing Director"
+                      placeholder={t("ws_modal_contact_placeholder")}
                       value={newContactPerson}
                       onChange={(e) => setNewContactPerson(e.target.value)}
                       className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 outline-none shadow-2xs"
@@ -999,13 +995,13 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-slate-700">
-                      City
+                      {t("ws_modal_city_label")}
                     </label>
                     <input
                       type="text"
                       value={newCity}
                       onChange={(e) => setNewCity(e.target.value)}
-                      placeholder="Casablanca, Paris, Dubai..."
+                      placeholder={t("ws_modal_city_placeholder")}
                       className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 outline-none shadow-2xs"
                     />
                   </div>
@@ -1014,7 +1010,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-slate-700">
-                      Monthly Retainer (MAD) *
+                      {t("ws_modal_fee_label")} *
                     </label>
                     <input
                       type="number"
@@ -1026,11 +1022,11 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-slate-700">
-                      Phone / WhatsApp
+                      {t("ws_modal_phone_label")}
                     </label>
                     <input
                       type="text"
-                      placeholder="+212 ..."
+                      placeholder={t("ws_modal_phone_placeholder")}
                       value={newPhone}
                       onChange={(e) => setNewPhone(e.target.value)}
                       className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 outline-none shadow-2xs"
@@ -1040,17 +1036,17 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-700">
-                    Deliverable / AI Service
+                    {t("ws_modal_service_type")}
                   </label>
                   <select
                     value={newService}
                     onChange={(e) => setNewService(e.target.value)}
                     className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 outline-none shadow-2xs"
                   >
-                    <option value="WhatsApp Lead Qualification Bot">WhatsApp Lead Qualification Bot</option>
-                    <option value="AI Voice Appointment Booking">AI Voice Appointment Booking</option>
-                    <option value="Full AI CRM & Instant Lead Calling">Full AI CRM & Instant Lead Calling</option>
-                    <option value="Custom Enterprise Automation">Custom Enterprise Automation</option>
+                    <option value="WhatsApp Lead Qualification Bot">{t("ws_modal_service_whatsapp")}</option>
+                    <option value="AI Voice Appointment Booking">{t("ws_modal_service_voice")}</option>
+                    <option value="Full AI CRM & Instant Lead Calling">{t("ws_modal_service_crm")}</option>
+                    <option value="Custom Enterprise Automation">{t("ws_modal_service_custom")}</option>
                   </select>
                 </div>
 
@@ -1061,14 +1057,14 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                     onClick={() => setIsAddRetainerOpen(false)}
                     className="h-9 px-4 text-xs font-bold text-slate-600"
                   >
-                    Cancel
+                    {t("ws_modal_cancel")}
                   </Button>
                   <Button
                     type="submit"
                     disabled={isSubmittingRetainer}
                     className="h-9 px-5 text-xs font-black bg-slate-900 hover:bg-slate-800 text-white shadow-xs"
                   >
-                    {isSubmittingRetainer ? "Saving..." : "Save Contract"}
+                    {isSubmittingRetainer ? t("ws_modal_saving") : t("ws_modal_save")}
                   </Button>
                 </div>
               </form>

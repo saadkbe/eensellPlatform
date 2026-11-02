@@ -65,7 +65,7 @@ const v2NavSections: NavSection[] = [
     label: "BUILD & EARN",
     labelKey: "nav_build_earn",
     items: [
-      { title: "Eensell Workspace", href: "/workspace", icon: Zap },
+      { title: "Eensell Workspace", titleKey: "nav_workspace" as TranslationKey, href: "/workspace", icon: Zap },
       { title: "Resources & Blueprints", titleKey: "nav_resources", href: "/dashboard/resources", icon: FolderOpen },
       { title: "Documentation", titleKey: "nav_documentation", href: "/dashboard/documentation", icon: FileText },
       { title: "Deals & Tools", titleKey: "nav_tools", href: "/dashboard/tools", icon: Wrench },
@@ -152,12 +152,12 @@ function SidebarContent({
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
                 <span className="text-xs font-bold text-foreground group-hover:text-primary transition-colors truncate">
-                  Eensell Workspace
+                  {t("nav_workspace")}
                 </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
               </div>
               <p className="text-[10px] text-muted-foreground truncate font-medium">
-                Agency OS & Tools
+                {t("nav_workspace_sub")}
               </p>
             </div>
           </div>
@@ -258,18 +258,18 @@ function SidebarContent({
               <Sparkles className="w-3.5 h-3.5" />
             </div>
             <h4 className="text-xs font-bold text-foreground tracking-tight">
-              Challenge V1 Member
+              {t("nav_upgrade_v1_title")}
             </h4>
           </div>
           <p className="text-[11px] text-muted-foreground mb-3 leading-relaxed relative z-10">
-            You are on V1. Upgrade to V2 to access the 60-Day Daily Roadmap, Make.com Blueprints & Workspace OS.
+            {t("nav_upgrade_v1_desc")}
           </p>
           <Link href="/upgrade" onClick={() => setMobileOpen(false)} className="block relative z-10">
             <Button
               size="sm"
               className="w-full text-xs font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20"
             >
-              Upgrade to V2 (499 MAD)
+              {t("nav_upgrade_v1_btn")}
             </Button>
           </Link>
         </div>

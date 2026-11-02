@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Trophy, Medal, Star } from "lucide-react";
+import { useLanguage } from "@/components/landing/LanguageProvider";
 
 interface LeaderboardUser {
   id: string;
@@ -13,7 +14,16 @@ interface LeaderboardUser {
 }
 
 export function LeaderboardWidget({ users }: { users: LeaderboardUser[] }) {
+  const { t } = useLanguage();
   if (!users || users.length === 0) return null;
+
+  const getRankTitle = (xp: number) => {
+    if (xp >= 1000) return t("dash_rank_grandmaster");
+    if (xp >= 500) return t("dash_rank_master");
+    if (xp >= 200) return t("dash_rank_elite");
+    if (xp >= 50) return t("dash_rank_scholar");
+    return t("dash_rank_novice");
+  };
 
   return (
     <div className="rounded-xl border border-border/50 bg-card/60 backdrop-blur-xl p-6 relative overflow-hidden flex flex-col h-full shadow-2xl">
@@ -24,8 +34,8 @@ export function LeaderboardWidget({ users }: { users: LeaderboardUser[] }) {
           <Trophy className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-foreground tracking-tight">Top Performers</h2>
-          <p className="text-sm text-muted-foreground">Global XP Leaderboard</p>
+          <h2 className="text-xl font-bold text-foreground tracking-tight">{t("dash_leaderboard_title")}</h2>
+          <p className="text-sm text-muted-foreground">{t("dash_leaderboard_subtitle")}</p>
         </div>
       </div>
 
@@ -77,7 +87,7 @@ export function LeaderboardWidget({ users }: { users: LeaderboardUser[] }) {
                     {user.firstName} {user.lastName}
                   </p>
                   <p className="text-xs sm:text-[13px] font-medium text-muted-foreground mt-0.5 truncate">
-                    {user.xp >= 1000 ? "Grandmaster" : user.xp >= 500 ? "Master" : user.xp >= 200 ? "Elite" : user.xp >= 50 ? "Scholar" : "Novice"}
+                    {getRankTitle(user.xp)}
                   </p>
                 </div>
               </div>

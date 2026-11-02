@@ -23,19 +23,27 @@ import {
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
+import { useLanguage } from "@/components/landing/LanguageProvider";
+import { TranslationKey } from "@/lib/translations";
 
-const workspaceNav = [
-  { title: "Overview & Revenue", href: "/workspace", icon: LayoutDashboard },
-  { title: "Google Maps Scraper", href: "/workspace/scraper", icon: MapPin },
-  { title: "Clients & CRM", href: "/workspace/crm", icon: Users },
-  { title: "Agency Sheets", href: "/workspace/sheets", icon: Table2 },
+interface NavEntry {
+  titleKey: TranslationKey;
+  href: string;
+  icon: any;
+}
+
+const workspaceNav: NavEntry[] = [
+  { titleKey: "ws_nav_overview", href: "/workspace", icon: LayoutDashboard },
+  { titleKey: "ws_nav_scraper", href: "/workspace/scraper", icon: MapPin },
+  { titleKey: "ws_nav_crm", href: "/workspace/crm", icon: Users },
+  { titleKey: "ws_nav_sheets", href: "/workspace/sheets", icon: Table2 },
 ];
 
-const outreachNav = [
-  { title: "Cold Email Drafter", href: "/workspace/drafter", icon: Mail },
-  { title: "WhatsApp Outreach", href: "/workspace/whatsapp", icon: MessageSquare },
-  { title: "Invoices & Contracts", href: "/workspace/invoices", icon: Receipt },
-  { title: "Notes & Playbooks", href: "/workspace/notes", icon: StickyNote },
+const outreachNav: NavEntry[] = [
+  { titleKey: "ws_nav_drafter", href: "/workspace/drafter", icon: Mail },
+  { titleKey: "ws_nav_whatsapp", href: "/workspace/whatsapp", icon: MessageSquare },
+  { titleKey: "ws_nav_invoices", href: "/workspace/invoices", icon: Receipt },
+  { titleKey: "ws_nav_notes", href: "/workspace/notes", icon: StickyNote },
 ];
 
 export function WorkspaceSidebar() {
@@ -43,6 +51,7 @@ export function WorkspaceSidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user } = useUser();
   const { theme, setTheme } = useTheme();
+  const { t, dir, isRTL } = useLanguage();
 
   useEffect(() => {
     const handleToggle = () => setMobileOpen((prev) => !prev);
@@ -67,7 +76,13 @@ export function WorkspaceSidebar() {
   };
 
   const content = (
-    <div className="flex flex-col h-full bg-[#F7F6F3] dark:bg-[#1E1E1E] border-r border-[#E9E9E7] dark:border-[#2E2E2E] text-[#37352F] dark:text-[#E6E6E5] select-none text-[13px]">
+    <div
+      dir={dir}
+      className={cn(
+        "flex flex-col h-full bg-[#F7F6F3] dark:bg-[#1E1E1E] text-[#37352F] dark:text-[#E6E6E5] select-none text-[13px]",
+        isRTL ? "border-l border-[#E9E9E7] dark:border-[#2E2E2E]" : "border-r border-[#E9E9E7] dark:border-[#2E2E2E]"
+      )}
+    >
       {/* ── Brand Workspace Header ── */}
       <div className="p-3 border-b border-[#E9E9E7]/80 dark:border-[#2E2E2E]">
         <Link
@@ -80,10 +95,10 @@ export function WorkspaceSidebar() {
             </div>
             <div className="flex flex-col min-w-0">
               <span className="font-semibold text-xs text-[#111111] dark:text-[#E6E6E5] truncate leading-tight">
-                Eensell Workspace
+                {t("nav_workspace")}
               </span>
               <span className="text-[10px] text-[#787774] dark:text-[#9B9A97] truncate leading-tight">
-                Agency Operating System
+                {t("ws_sidebar_badge")}
               </span>
             </div>
           </div>
@@ -98,7 +113,7 @@ export function WorkspaceSidebar() {
           className="flex items-center justify-center gap-2 w-full py-1.5 px-3 rounded-md bg-[#111111] hover:bg-[#242424] dark:bg-[#E6E6E5] dark:hover:bg-[#FFFFFF] text-[#FFFFFF] dark:text-[#111111] font-medium text-xs shadow-xs transition-all"
         >
           <Plus className="w-3.5 h-3.5" />
-          <span>New Lead Scrape</span>
+          <span>{t("ws_new_scrape")}</span>
         </Link>
       </div>
 
@@ -107,7 +122,7 @@ export function WorkspaceSidebar() {
         {/* Workspace Ecosystem */}
         <div className="space-y-0.5">
           <div className="px-2 py-1 text-[11px] font-semibold text-[#8C8B88] dark:text-[#787774] uppercase tracking-wider">
-            Workspace
+            {t("ws_sec_workspace")}
           </div>
           {workspaceNav.map((item) => {
             const active = isActive(item.href);
@@ -132,7 +147,7 @@ export function WorkspaceSidebar() {
                       : "text-[#66645E] dark:text-[#A3A3A3] group-hover:text-[#111111] dark:group-hover:text-white"
                   )}
                 />
-                <span className="truncate">{item.title}</span>
+                <span className="truncate">{t(item.titleKey)}</span>
               </Link>
             );
           })}
@@ -141,7 +156,7 @@ export function WorkspaceSidebar() {
         {/* Outreach & Sales */}
         <div className="space-y-0.5">
           <div className="px-2 py-1 text-[11px] font-semibold text-[#8C8B88] dark:text-[#787774] uppercase tracking-wider">
-            Client Acquisition
+            {t("ws_sec_acquisition")}
           </div>
           {outreachNav.map((item) => {
             const active = isActive(item.href);
@@ -166,7 +181,7 @@ export function WorkspaceSidebar() {
                       : "text-[#66645E] dark:text-[#A3A3A3] group-hover:text-[#111111] dark:group-hover:text-white"
                   )}
                 />
-                <span className="truncate">{item.title}</span>
+                <span className="truncate">{t(item.titleKey)}</span>
               </Link>
             );
           })}
@@ -175,7 +190,7 @@ export function WorkspaceSidebar() {
         {/* Settings & Academy */}
         <div className="space-y-0.5">
           <div className="px-2 py-1 text-[11px] font-semibold text-[#8C8B88] dark:text-[#787774] uppercase tracking-wider">
-            System
+            {t("ws_sec_system")}
           </div>
           <Link
             href="/workspace/settings"
@@ -195,7 +210,7 @@ export function WorkspaceSidebar() {
                   : "text-[#66645E] dark:text-[#A3A3A3] group-hover:text-[#111111] dark:group-hover:text-white"
               )}
             />
-            <span>Settings & API Keys</span>
+            <span>{t("ws_nav_settings")}</span>
           </Link>
 
           <Link
@@ -204,9 +219,9 @@ export function WorkspaceSidebar() {
           >
             <div className="flex items-center gap-2.5">
               <GraduationCap className="w-4 h-4 shrink-0 text-[#66645E] dark:text-[#A3A3A3] group-hover:text-[#111111] dark:group-hover:text-white stroke-[1.8]" />
-              <span>Back to Academy</span>
+              <span>{t("ws_back_academy")}</span>
             </div>
-            <ChevronRight className="w-3.5 h-3.5 opacity-60" />
+            <ChevronRight className={cn("w-3.5 h-3.5 opacity-60", isRTL && "rotate-180")} />
           </Link>
         </div>
       </div>
@@ -228,7 +243,7 @@ export function WorkspaceSidebar() {
         {/* Theme Switcher */}
         <button
           onClick={toggleTheme}
-          title="Toggle Light / Dark mode"
+          title={t("ws_toggle_theme")}
           className="p-1.5 rounded-md hover:bg-[#EFEFEE] dark:hover:bg-[#2A2A2A] text-[#787774] dark:text-[#9B9A97] hover:text-[#111111] dark:hover:text-[#E6E6E5] transition-colors cursor-pointer"
         >
           {theme === "dark" ? (
@@ -254,15 +269,26 @@ export function WorkspaceSidebar() {
       {/* Mobile Drawer Panel */}
       <div
         className={cn(
-          "lg:hidden fixed inset-y-0 left-0 w-64 z-50 transform transition-transform duration-200 ease-in-out",
-          mobileOpen ? "translate-x-0" : "-translate-x-full"
+          "lg:hidden fixed inset-y-0 w-64 z-50 transform transition-transform duration-200 ease-in-out",
+          isRTL
+            ? mobileOpen
+              ? "translate-x-0 right-0"
+              : "translate-x-full right-0"
+            : mobileOpen
+            ? "translate-x-0 left-0"
+            : "-translate-x-full left-0"
         )}
       >
         {content}
       </div>
 
-      {/* Desktop Fixed Left Sidebar */}
-      <aside className="hidden lg:block fixed inset-y-0 left-0 w-60 z-30">
+      {/* Desktop Fixed Sidebar */}
+      <aside
+        className={cn(
+          "hidden lg:block fixed inset-y-0 w-60 z-30",
+          isRTL ? "right-0" : "left-0"
+        )}
+      >
         {content}
       </aside>
     </>

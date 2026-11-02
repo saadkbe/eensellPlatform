@@ -11,19 +11,33 @@ import { toggleDayCompletion } from "@/actions/challenge.actions";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
+import { TranslationKey } from "@/lib/translations";
+
 interface HeroSectionProps {
   firstName: string;
-  greeting: string;
+  greeting?: string;
+  greetingKey?: TranslationKey;
   challengeProgress: any;
 }
 
 export function HeroSection({
   firstName,
   greeting,
+  greetingKey,
   challengeProgress,
 }: HeroSectionProps) {
   const { t } = useLanguage();
   const [isPending, startTransition] = useTransition();
+
+  const resolvedGreeting = greetingKey 
+    ? t(greetingKey) 
+    : greeting === "Good morning" 
+    ? t("dash_greeting_morning") 
+    : greeting === "Good afternoon" 
+    ? t("dash_greeting_afternoon") 
+    : greeting === "Good evening" 
+    ? t("dash_greeting_evening") 
+    : (greeting || t("dash_greeting_morning"));
 
   // Completed days array
   const initialCompletedDays: number[] = Array.isArray(challengeProgress?.completedDays)
@@ -76,14 +90,14 @@ export function HeroSection({
         if (result.success) {
           setCompletedList(result.completedDays);
           if (result.isCompleted) {
-            toast.success(`Day ${targetDay} completed! +50 XP awarded 🔥`);
+            toast.success(t("dash_day_completed_toast"));
           } else {
-            toast.info(`Day ${targetDay} marked uncompleted (-50 XP)`);
+            toast.info(t("dash_day_uncompleted_toast"));
           }
         }
       } catch (error) {
         setCompletedList(initialCompletedDays);
-        toast.error("Failed to update challenge progress.");
+        toast.error(t("dash_failed_update"));
       }
     });
   };
@@ -116,7 +130,7 @@ export function HeroSection({
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 backdrop-blur-md mb-4 w-fit">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span className="text-xs font-semibold text-amber-200/90">{greeting}</span>
+              <span className="text-xs font-semibold text-amber-200/90">{resolvedGreeting}</span>
             </div>
             
             <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-6">
@@ -131,7 +145,7 @@ export function HeroSection({
                   {t("roadmap_hero_badge")}
                 </h2>
                 <div className="flex items-center gap-2 text-sm">
-                  <span className="text-white font-bold font-mono">DAY {currentDay} / 60</span>
+                  <span className="text-white font-bold font-mono">{t("dash_day_of")} {currentDay} / 60</span>
                   <span className="text-white/40">•</span>
                   <span className="text-slate-400">{completedDays} {t("dash_days")} {t("roadmap_stat_finished")}</span>
                 </div>
@@ -202,7 +216,7 @@ export function HeroSection({
               
               <div className="flex items-center gap-2 text-xs text-slate-400 mb-6">
                 <Target className="w-4 h-4 text-amber-400" />
-                <span>Estimated time: {estimatedTime} • XP Reward: +50 XP</span>
+                <span>{t("dash_estimated_time")} {estimatedTime} • {t("dash_xp_reward")} +50 XP</span>
               </div>
             </div>
 
@@ -210,7 +224,7 @@ export function HeroSection({
               <Link href="/dashboard/challenge" className="w-full sm:w-auto flex-1">
                 <Button className="w-full h-11 px-5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs shadow-[0_0_20px_rgba(245,158,11,0.35)] transition-all hover:scale-[1.02] group border-0 rounded-xl">
                   <span className="flex items-center justify-center gap-2">
-                    Open 60-Day Roadmap
+                    {t("dash_open_roadmap")}
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-slate-950" />
                   </span>
                 </Button>
@@ -231,12 +245,12 @@ export function HeroSection({
                 {isTodayCompleted ? (
                   <>
                     <CheckCircle2 className="w-4 h-4 text-amber-400" />
-                    <span>Completed ✓</span>
+                    <span>{t("dash_completed_check")}</span>
                   </>
                 ) : (
                   <>
                     <Sparkles className="w-4 h-4 text-amber-400" />
-                    <span>Mark Day {currentDay} Done (+50 XP)</span>
+                    <span>{t("dash_mark_done")}</span>
                   </>
                 )}
               </Button>

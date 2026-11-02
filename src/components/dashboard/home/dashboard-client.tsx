@@ -63,6 +63,7 @@ const scaleVariants = {
 export function DashboardClient({
   firstName,
   greeting,
+  greetingKey,
   totalModules,
   completedLessons,
   progressPercent,
@@ -172,6 +173,7 @@ export function DashboardClient({
         <HeroSection 
           firstName={firstName}
           greeting={greeting}
+          greetingKey={greetingKey}
           challengeProgress={challengeProgress}
         />
       </motion.div>
@@ -187,15 +189,15 @@ export function DashboardClient({
                 </div>
                 <div>
                   <h3 className="text-base sm:text-lg font-bold text-foreground group-hover:text-orange-500 transition-colors">
-                    Refer & Earn
+                    {t("dash_refer_banner_title")}
                   </h3>
                   <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-                    Earn <span className="font-bold text-foreground">50 MAD</span> for every colleague or student who joins!
+                    {t("dash_refer_banner_desc")}
                   </p>
                 </div>
               </div>
               <Button size="sm" className="w-full sm:w-auto shrink-0 font-bold gap-2 bg-orange-500 text-white hover:bg-orange-600 border-0 shadow-md shadow-orange-500/20 transition-all rounded-xl h-10 px-5">
-                <span>Get Your Link</span>
+                <span>{t("dash_refer_banner_btn")}</span>
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </div>
@@ -260,7 +262,7 @@ export function DashboardClient({
                       )}
                       <div className="absolute bottom-3 left-3">
                         <Badge variant="secondary" className="bg-black/70 text-white backdrop-blur-md border-white/10 font-bold tracking-wider text-[10px]">
-                          IN PROGRESS
+                          {t("dash_in_progress")}
                         </Badge>
                       </div>
                     </div>
@@ -277,7 +279,7 @@ export function DashboardClient({
                       </h4>
                       
                       <p className="text-xs font-medium text-muted-foreground mb-4 line-clamp-1">
-                        Module: <span className="text-foreground/80">{continueModule?.title || "Module"}</span>
+                        {t("dash_module_prefix")} <span className="text-foreground/80">{continueModule?.title || "Module"}</span>
                       </p>
                       
                       <div>
@@ -300,7 +302,7 @@ export function DashboardClient({
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] mb-4">
                       <div className="w-2 h-2 rounded-full bg-orange-400 animate-ping" />
                       <Sparkles className="w-3.5 h-3.5 text-orange-400" />
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-orange-300">Next Lesson Drop Countdown</span>
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-orange-300">{t("dash_countdown_badge")}</span>
                     </div>
 
                     <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">
@@ -313,10 +315,10 @@ export function DashboardClient({
                     {/* Countdown Display */}
                     <div className="grid grid-cols-4 gap-2.5 sm:gap-3 max-w-md mb-6">
                       {[
-                        { label: 'Days', value: isClient ? String(timeLeft.days).padStart(2, '0') : '--' },
-                        { label: 'Hours', value: isClient ? String(timeLeft.hours).padStart(2, '0') : '--' },
-                        { label: 'Minutes', value: isClient ? String(timeLeft.minutes).padStart(2, '0') : '--' },
-                        { label: 'Seconds', value: isClient ? String(timeLeft.seconds).padStart(2, '0') : '--' },
+                        { label: t("dash_unit_days"), value: isClient ? String(timeLeft.days).padStart(2, '0') : '--' },
+                        { label: t("dash_unit_hours"), value: isClient ? String(timeLeft.hours).padStart(2, '0') : '--' },
+                        { label: t("dash_unit_minutes"), value: isClient ? String(timeLeft.minutes).padStart(2, '0') : '--' },
+                        { label: t("dash_unit_seconds"), value: isClient ? String(timeLeft.seconds).padStart(2, '0') : '--' },
                       ].map((item) => (
                         <div key={item.label} className="flex flex-col items-center justify-center p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
                           <span className="text-xl sm:text-2xl font-black text-white tracking-tight font-mono">
@@ -339,7 +341,7 @@ export function DashboardClient({
                     </Link>
                     <div className="flex items-center gap-2 text-xs text-slate-400 pl-1">
                       <Clock className="w-3.5 h-3.5 text-orange-400" />
-                      <span>Lessons drop Monday & Friday at 20:00</span>
+                      <span>{t("dash_lessons_drop_schedule")}</span>
                     </div>
                   </div>
                 </CardContent>

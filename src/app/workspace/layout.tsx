@@ -1,6 +1,7 @@
 import { WorkspaceSidebar } from "@/components/workspace/workspace-sidebar";
 import { WorkspaceTopBar } from "@/components/workspace/workspace-topbar";
 import { WorkspaceThemeInit } from "@/components/workspace/workspace-theme-init";
+import { WorkspaceLayoutWrapper, WorkspaceMainWrapper } from "@/components/workspace/workspace-layout-wrapper";
 import { Metadata } from "next";
 import { getOrCreateUser } from "@/actions/user.actions";
 import { redirect } from "next/navigation";
@@ -31,18 +32,18 @@ export default async function WorkspaceLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#FFFFFF] dark:bg-[#191919] text-[#37352F] dark:text-[#E6E6E5] flex transition-colors duration-150 antialiased font-sans">
+    <WorkspaceLayoutWrapper>
       <WorkspaceThemeInit />
-      {/* Left Sidebar */}
+      {/* Left / Right Sidebar */}
       <WorkspaceSidebar />
 
       {/* Main Viewport with sticky topbar */}
-      <main className="flex-1 min-w-0 lg:pl-60 flex flex-col min-h-screen relative">
+      <WorkspaceMainWrapper>
         <WorkspaceTopBar />
         <div className="flex-1 min-w-0">
           {children}
         </div>
-      </main>
-    </div>
+      </WorkspaceMainWrapper>
+    </WorkspaceLayoutWrapper>
   );
 }

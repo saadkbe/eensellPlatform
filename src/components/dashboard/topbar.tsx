@@ -86,9 +86,9 @@ export function TopBar() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500" />
             </span>
-            <span className="tracking-wide whitespace-nowrap">Eensell Workspace</span>
+            <span className="tracking-wide whitespace-nowrap">{t("nav_workspace")}</span>
             <span className="hidden sm:inline-flex text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold tracking-wider">
-              AI OS
+              {t("ws_topbar_live_os")}
             </span>
           </div>
         </Link>
