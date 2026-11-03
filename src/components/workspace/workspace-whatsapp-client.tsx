@@ -47,7 +47,51 @@ export function WorkspaceWhatsappClient() {
   const [language, setLanguage] = useState<"darija" | "fr" | "en">("darija");
   const [hookType, setHookType] = useState<"leak" | "demo" | "voicenote" | "competitor">("leak");
 
-  const [messageText, setMessageText] = useState("");
+  // Helper to compute template message
+  const getTemplateMessage = (
+    bName: string,
+    cName: string,
+    cCity: string,
+    cNiche: string,
+    cLang: "darija" | "fr" | "en",
+    cHook: "leak" | "demo" | "voicenote" | "competitor"
+  ) => {
+    if (cLang === "darija") {
+      if (cHook === "leak") {
+        return `Salam ${cName} 👋 Kantmenna tkoun bikhir.\nChft l-positionnement dial ${bName} f ${cCity} w tbarkellah 3ndkom demande kbira.\n\nSuis un spécialiste en automatisation IA pour les ${cNiche}.\nUne petite question : ch7al men prospect kay-sift msg f WhatsApp f l-lil wla le weekend w kay-mchi 7it kay-tsnna l-jawb ?\n\nSawbna un assistant WhatsApp intelligent li kayjawb f 3 secondes, kayfélter les budgets sérieux, w kay-fixer les rendez-vous direct f l'agenda.\n\nMomkin n-sift lik une petite vidéo de 2 min tchouf kifax kheddam direct pour ${bName} ?`;
+      } else if (cHook === "demo") {
+        return `Salam ${cName} ! J'espère que vous allez bien.\n3ndi fikra rapide pour digitaliser la qualification des clients dial ${bName} f ${cCity}.\n\nEst-ce que vous seriez ouvert à ce que je vous montre une démo de 3 minutes de notre bot WhatsApp en live ?\nZéro engagement, juste pour voir le potentiel pour votre équipe. 🔥`;
+      } else if (cHook === "voicenote") {
+        return `[Script Note Vocale - 25 secondes] :\n"Salam ${cName}, c'est [Votre Prénom] de l'agence Eensell Automations à ${cCity}. Je vous envoie ce court vocal direct car j'ai vu votre travail chez ${bName}. On vient de déployer un système WhatsApp qui qualifie 100% des prospects en moins de 10 secondes. Si vous êtes dispo ce jeudi, je vous envoie un aperçu vidéo. Bonne journée !"`;
+      } else {
+        return `Salam ${cName} 👋\nLes meilleurs cabinets et agences à ${cCity} perdent souvent 30% à 40% de leurs clients qualifiés simplement par manque de réactivité après 19h.\n\nNotre infrastructure WhatsApp IA s'occupe de tout 24h/24.\nSi vous avez 5 minutes cette semaine, je vous partage le cas d'usage adapté à ${bName} !`;
+      }
+    } else if (cLang === "fr") {
+      if (cHook === "leak") {
+        return `Bonjour ${cName} 👋\nJ'espère que vous allez bien. J'ai remarqué le positionnement remarquable de ${bName} à ${cCity}.\n\nUne entreprise dans votre secteur perd en moyenne 35% de ses prospects qualifiés simplement parce que les demandes WhatsApp du soir et du weekend restent sans réponse immédiate.\n\nNous avons développé une infrastructure IA WhatsApp qui :\n• Répond et qualifie chaque prospect en 3 secondes 24h/24 (budget, urgence, besoin).\n• Réserve le rendez-vous directement dans votre calendrier.\n\nSeriez-vous ouvert à ce que je vous partage une démo vidéo de 2 minutes adaptée à ${bName} ?`;
+      } else if (cHook === "demo") {
+        return `Bonjour ${cName},\nNous venons de finaliser une démonstration en direct d'assistant WhatsApp spécialisée pour les ${cNiche} à ${cCity}.\n\nPuis-je vous envoyer le lien de la simulation de 2 minutes pour tester vous-même la réactivité de l'IA pour ${bName} ?`;
+      } else if (cHook === "voicenote") {
+        return `[Script Message Vocal WhatsApp — 30 secondes] :\n"Bonjour ${cName}, je me permets ce court message vocal personnalisé car je suis avec attention le travail de ${bName}. Nous avons créé un agent WhatsApp qui qualifie les demandes entrantes 24h/24 sans faire attendre vos clients. Si le sujet vous parle, je serais ravi de vous partager un aperçu de 2 minutes. Belle journée à vous !"`;
+      } else {
+        return `Bonjour ${cName},\nLes leaders dans votre secteur à ${cCity} automatisent désormais 70% du premier contact sur WhatsApp afin de ne laisser aucun lead qualifié filer vers la concurrence.\n\nAvez-vous 5 minutes ce jeudi pour un rapide tour d'horizon adapté à ${bName} ?`;
+      }
+    } else {
+      return `Hi ${cName} 👋\nQuick question: how does your team at ${bName} handle inbound WhatsApp inquiries received on evenings and weekends?\n\nWe build 24/7 autonomous WhatsApp bots that qualify budgets and schedule consultations within 60 seconds.\n\nOpen to seeing a 2-minute live interactive demo tailored for ${bName} in ${cCity}?`;
+    }
+  };
+
+  const [messageText, setMessageText] = useState(() =>
+    getTemplateMessage(
+      initialName || "Atlas Prime Immobilier",
+      "M. le Directeur",
+      initialCity,
+      initialNiche,
+      "darija",
+      "leak"
+    )
+  );
+
   const [copied, setCopied] = useState(false);
   const [isAiGenerating, setIsAiGenerating] = useState(false);
   const [isSavingToCrm, setIsSavingToCrm] = useState(false);
@@ -76,39 +120,22 @@ export function WorkspaceWhatsappClient() {
     return () => clearInterval(interval);
   }, []);
 
-  // Generate hook template
   const generateMessage = () => {
-    let msg = "";
-
-    if (language === "darija") {
-      if (hookType === "leak") {
-        msg = `Salam ${contactName} 👋 Kantmenna tkoun bikhir.\nChft l-positionnement dial ${businessName} f ${city} w tbarkellah 3ndkom demande kbira.\n\nSuis un spécialiste en automatisation IA pour les ${niche}.\nUne petite question : ch7al men prospect kay-sift msg f WhatsApp f l-lil wla le weekend w kay-mchi 7it kay-tsnna l-jawb ?\n\nSawbna un assistant WhatsApp intelligent li kayjawb f 3 secondes, kayfélter les budgets sérieux, w kay-fixer les rendez-vous direct f l'agenda.\n\nMomkin n-sift lik une petite vidéo de 2 min tchouf kifax kheddam direct pour ${businessName} ?`;
-      } else if (hookType === "demo") {
-        msg = `Salam ${contactName} ! J'espère que vous allez bien.\n3ndi fikra rapide pour digitaliser la qualification des clients dial ${businessName} f ${city}.\n\nEst-ce que vous seriez ouvert à ce que je vous montre une démo de 3 minutes de notre bot WhatsApp en live ?\nZéro engagement, juste pour voir le potentiel pour votre équipe. 🔥`;
-      } else if (hookType === "voicenote") {
-        msg = `[Script Note Vocale - 25 secondes] :\n"Salam ${contactName}, c'est [Votre Prénom] de l'agence Eensell Automations à ${city}. Je vous envoie ce court vocal direct car j'ai vu votre travail chez ${businessName}. On vient de déployer un système WhatsApp qui qualifie 100% des prospects en moins de 10 secondes. Si vous êtes dispo ce jeudi, je vous envoie un aperçu vidéo. Bonne journée !"`;
-      } else {
-        msg = `Salam ${contactName} 👋\nLes meilleurs cabinets et agences à ${city} perdent souvent 30% à 40% de leurs clients qualifiés simplement par manque de réactivité après 19h.\n\nNotre infrastructure WhatsApp IA s'occupe de tout 24h/24.\nSi vous avez 5 minutes cette semaine, je vous partage le cas d'usage adapté à ${businessName} !`;
-      }
-    } else if (language === "fr") {
-      if (hookType === "leak") {
-        msg = `Bonjour ${contactName} 👋\nJ'espère que vous allez bien. J'ai remarqué le positionnement remarquable de ${businessName} à ${city}.\n\nUne entreprise dans votre secteur perd en moyenne 35% de ses prospects qualifiés simplement parce que les demandes WhatsApp du soir et du weekend restent sans réponse immédiate.\n\nNous avons développé une infrastructure IA WhatsApp qui :\n• Répond et qualifie chaque prospect en 3 secondes 24h/24 (budget, urgence, besoin).\n• Réserve le rendez-vous directement dans votre calendrier.\n\nSeriez-vous ouvert à ce que je vous partage une démo vidéo de 2 minutes adaptée à ${businessName} ?`;
-      } else if (hookType === "demo") {
-        msg = `Bonjour ${contactName},\nNous venons de finaliser une démonstration en direct d'assistant WhatsApp spécialisée pour les ${niche} à ${city}.\n\nPuis-je vous envoyer le lien de la simulation de 2 minutes pour tester vous-même la réactivité de l'IA pour ${businessName} ?`;
-      } else if (hookType === "voicenote") {
-        msg = `[Script Message Vocal WhatsApp — 30 secondes] :\n"Bonjour ${contactName}, je me permets ce court message vocal personnalisé car je suis avec attention le travail de ${businessName}. Nous avons créé un agent WhatsApp qui qualifie les demandes entrantes 24h/24 sans faire attendre vos clients. Si le sujet vous parle, je serais ravi de vous partager un aperçu de 2 minutes. Belle journée à vous !"`;
-      } else {
-        msg = `Bonjour ${contactName},\nLes leaders dans votre secteur à ${city} automatisent désormais 70% du premier contact sur WhatsApp afin de ne laisser aucun lead qualifié filer vers la concurrence.\n\nAvez-vous 5 minutes ce jeudi pour un rapide tour d'horizon adapté à ${businessName} ?`;
-      }
-    } else {
-      msg = `Hi ${contactName} 👋\nQuick question: how does your team at ${businessName} handle inbound WhatsApp inquiries received on evenings and weekends?\n\nWe build 24/7 autonomous WhatsApp bots that qualify budgets and schedule consultations within 60 seconds.\n\nOpen to seeing a 2-minute live interactive demo tailored for ${businessName} in ${city}?`;
-    }
-
-    setMessageText(msg);
+    setMessageText(
+      getTemplateMessage(businessName, contactName, city, niche, language, hookType)
+    );
   };
 
+  // Update template message when parameters change
+  const isFirstMount = useRef(true);
   useEffect(() => {
-    generateMessage();
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      return;
+    }
+    setMessageText(
+      getTemplateMessage(businessName, contactName, city, niche, language, hookType)
+    );
   }, [businessName, contactName, city, niche, language, hookType]);
 
   // Automatically resize bubble textarea to fit content with zero scrollbars on the bubble

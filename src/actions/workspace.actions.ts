@@ -84,10 +84,8 @@ export async function updateWorkspaceSettings(data: {
   // Only update password if provided and not masked
   if (data.gmailAppPassword && !data.gmailAppPassword.includes("•")) {
     updateData.gmailAppPassword = data.gmailAppPassword.replace(/\s+/g, ""); // clean spaces
-    // Verify connection immediately when password is updated
-    if (data.gmailAddress || (await db.workspaceAccount.findUnique({ where: { userId: user.id } }))?.gmailAddress) {
-      updateData.isGmailConnected = true;
-    }
+    // Require a successful testGmailConnection to mark as connected
+    updateData.isGmailConnected = false;
   }
 
   // Only update ElevenLabs API key if provided and not masked
@@ -140,9 +138,6 @@ export async function testGmailConnection() {
       auth: {
         user: account.gmailAddress,
         pass: account.gmailAppPassword,
-      },
-      tls: {
-        rejectUnauthorized: false,
       },
     });
 
@@ -721,6 +716,10 @@ export async function dispatchCampaignEmails(campaignId?: string) {
 
   let sentCount = 0;
   for (const lead of leads) {
+    if (!lead.email || !lead.email.includes("@")) {
+      continue;
+    }
+
     if (isRealGmail && transporter && account?.gmailAddress && lead.emailSubject && lead.emailBody) {
       try {
         await transporter.sendMail({
@@ -729,33 +728,37 @@ export async function dispatchCampaignEmails(campaignId?: string) {
           subject: lead.emailSubject,
           text: lead.emailBody,
         });
+
+        await db.workspaceLead.update({
+          where: { id: lead.id },
+          data: {
+            status: "SENT",
+            sentAt: new Date(),
+          },
+        });
+        sentCount++;
       } catch (sendErr) {
         console.warn(`Could not dispatch email to ${lead.email}:`, sendErr);
+        // Do not falsely mark as SENT when sending failed
       }
+    } else {
+      // If Gmail is not connected, keep pending and alert user
+      continue;
     }
-
-    await db.workspaceLead.update({
-      where: { id: lead.id },
-      data: {
-        status: "SENT",
-        sentAt: new Date(),
-      },
-    });
-    sentCount++;
   }
 
   revalidatePath("/workspace");
   revalidatePath("/workspace/crm");
   revalidatePath("/workspace/campaigns");
 
-  return {
-    success: true,
-    sentCount,
-    isRealGmail,
-    message: isRealGmail
-      ? `${sentCount} emails expédiés en direct depuis votre adresse Gmail (${account?.gmailAddress}) !`
-      : `${sentCount} emails enregistrés et marqués expédiés dans votre CRM Workspace !`,
-  };
+  if (!isRealGmail) {
+    return {
+      success: false,
+      sentCount: 0,
+      isRealGmail: false,
+      message: "Veuillez d'abord connecter et valider votre compte Gmail dans les Paramètres du Workspace.",
+    };
+  }
 }
 
 export async function getWorkspaceMessages() {
@@ -865,6 +868,63 @@ export async function deleteTaskAction(id: string) {
 // ──────────────────────────────────────────────
 // Lead / CRM Actions (Real Database)
 // ──────────────────────────────────────────────
+export async function updateRetainerAction(data: {
+  id: string;
+  clientName?: string;
+  service?: string;
+  monthlyFee?: number;
+  status?: string;
+  phone?: string;
+  city?: string;
+}) {
+  const user = await getAuthUser();
+  const updateData: Record<string, any> = {};
+  if (data.clientName !== undefined) updateData.clientName = data.clientName.trim();
+  if (data.service !== undefined) updateData.service = data.service.trim();
+  if (data.monthlyFee !== undefined) updateData.monthlyFee = Number(data.monthlyFee);
+  if (data.status !== undefined) updateData.status = data.status;
+  if (data.phone !== undefined) updateData.phone = data.phone?.trim() || null;
+  if (data.city !== undefined) updateData.city = data.city?.trim() || null;
+
+  await db.workspaceRetainer.updateMany({
+    where: { id: data.id, userId: user.id },
+    data: updateData,
+  });
+  revalidatePath("/workspace");
+  revalidatePath("/workspace/sheets");
+  return { success: true };
+}
+
+export async function updateLeadDetailsAction(data: {
+  id: string;
+  businessName?: string;
+  niche?: string;
+  city?: string;
+  phone?: string;
+  email?: string;
+  status?: "PENDING" | "SENT" | "OPENED" | "REPLIED" | "MEETING_BOOKED" | "DECLINED";
+  replyNotes?: string;
+}) {
+  const user = await getAuthUser();
+  const updateData: Record<string, any> = {};
+  if (data.businessName !== undefined) updateData.businessName = data.businessName.trim();
+  if (data.niche !== undefined) updateData.niche = data.niche.trim();
+  if (data.city !== undefined) updateData.city = data.city.trim();
+  if (data.phone !== undefined) updateData.phone = data.phone?.trim() || null;
+  if (data.email !== undefined) updateData.email = data.email.trim();
+  if (data.status !== undefined) updateData.status = data.status;
+  if (data.replyNotes !== undefined) updateData.replyNotes = data.replyNotes;
+
+  await db.workspaceLead.updateMany({
+    where: { id: data.id, userId: user.id },
+    data: updateData,
+  });
+  revalidatePath("/workspace");
+  revalidatePath("/workspace/crm");
+  revalidatePath("/workspace/sheets");
+  return { success: true };
+}
+
 export async function addLeadToCrmAction(lead: {
   businessName: string;
   niche: string;
@@ -878,8 +938,8 @@ export async function addLeadToCrmAction(lead: {
   const user = await getAuthUser();
   const cleanEmail =
     lead.email && lead.email.includes("@")
-      ? lead.email
-      : `contact@${lead.businessName.toLowerCase().replace(/[^a-z0-9]/g, "") || "client"}.ma`;
+      ? lead.email.trim()
+      : "";
 
   const created = await db.workspaceLead.create({
     data: {
@@ -980,6 +1040,28 @@ export async function getWorkspaceNotesAction() {
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },
   });
+}
+
+export async function updateNoteAction(data: {
+  id: string;
+  title?: string;
+  content?: string;
+  category?: string;
+  pinned?: boolean;
+}) {
+  const user = await getAuthUser();
+  const updateData: Record<string, any> = {};
+  if (data.title !== undefined) updateData.title = data.title;
+  if (data.content !== undefined) updateData.content = data.content;
+  if (data.category !== undefined) updateData.category = data.category;
+  if (data.pinned !== undefined) updateData.pinned = data.pinned;
+
+  const note = await db.workspaceNote.updateMany({
+    where: { id: data.id, userId: user.id },
+    data: updateData,
+  });
+  revalidatePath("/workspace/notes");
+  return { success: true, count: note.count };
 }
 
 export async function deleteNoteAction(id: string) {

@@ -30,14 +30,15 @@ export async function POST(req: NextRequest) {
     } = await req.json();
 
     const account = user.workspaceAccount;
-    const apiKey = account?.openaiApiKey || process.env.OPENAI_API_KEY;
+    // Strict BYOK: user must configure their own OpenAI API key in Workspace Settings
+    const apiKey = account?.openaiApiKey;
 
     if (!apiKey) {
       return NextResponse.json({
         success: false,
         requiresApiKey: true,
         message:
-          "Veuillez configurer votre clé OpenAI API dans les Paramètres du Workspace pour activer la rédaction de messages par IA.",
+          "Veuillez configurer votre clé OpenAI API personnelle dans les Paramètres du Workspace pour activer la rédaction de messages par IA.",
       });
     }
 

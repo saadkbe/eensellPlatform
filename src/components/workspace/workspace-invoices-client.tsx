@@ -30,27 +30,51 @@ interface InvoiceItem {
   rate: number;
 }
 
-export function WorkspaceInvoicesClient() {
-  const searchParams = useSearchParams();
-  const initialClient = searchParams.get("client") || "Atlas Prestige Immobilier";
-  const initialFee = Number(searchParams.get("fee")) || 5500;
+interface WorkspaceInvoicesClientProps {
+  initialAccount?: {
+    agencyName?: string | null;
+    senderName?: string | null;
+    gmailAddress?: string | null;
+  } | null;
+  initialInvoices?: any[];
+}
 
-  const [agencyName, setAgencyName] = useState("Atlas AI Automation");
-  const [agencyAddress, setAgencyAddress] = useState("Casablanca, Morocco • ICE: 003291882000041");
-  const [agencyEmail, setAgencyEmail] = useState("contact@atlas-ai.ma");
+export function WorkspaceInvoicesClient({
+  initialAccount,
+  initialInvoices = [],
+}: WorkspaceInvoicesClientProps) {
+  const searchParams = useSearchParams();
+  const initialClient = searchParams.get("client") || "";
+  const initialFee = Number(searchParams.get("fee")) || 5000;
+
+  const [agencyName, setAgencyName] = useState(
+    initialAccount?.agencyName || "My AI Automation Agency"
+  );
+  const [agencyAddress, setAgencyAddress] = useState("Casablanca, Morocco");
+  const [agencyEmail, setAgencyEmail] = useState(
+    initialAccount?.gmailAddress || ""
+  );
 
   const [clientName, setClientName] = useState(initialClient);
-  const [clientAddress, setClientAddress] = useState("Boulevard d'Anfa, Casablanca, Morocco");
-  const [clientContact, setClientContact] = useState("M. Youssef Berrada");
+  const [clientAddress, setClientAddress] = useState("");
+  const [clientContact, setClientContact] = useState("");
 
-  const [invoiceNumber, setInvoiceNumber] = useState("INV-2026-004");
+  const [invoiceNumber, setInvoiceNumber] = useState(
+    `INV-${new Date().getFullYear()}-${String(
+      (initialInvoices?.length || 0) + 1
+    ).padStart(3, "0")}`
+  );
   const [invoiceDate, setInvoiceDate] = useState(new Date().toISOString().slice(0, 10));
-  const [dueDate, setDueDate] = useState("2026-11-10");
+  const [dueDate, setDueDate] = useState(
+    new Date(Date.now() + 15 * 86400000).toISOString().slice(0, 10)
+  );
   const [currency, setCurrency] = useState("MAD");
 
-  const [bankName, setBankName] = useState("CIH Bank");
-  const [accountName, setAccountName] = useState("MONSIEUR SAAD KAABOUCHE");
-  const [rib, setRib] = useState("230825354630321100590031");
+  const [bankName, setBankName] = useState("Bank / Payment Method");
+  const [accountName, setAccountName] = useState(
+    initialAccount?.senderName || "Account Holder Name"
+  );
+  const [rib, setRib] = useState("RIB / IBAN / Account Number");
 
   const [items, setItems] = useState<InvoiceItem[]>([
     {
@@ -320,13 +344,16 @@ export function WorkspaceInvoicesClient() {
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-muted/40 border border-slate-200/80 dark:border-border text-xs space-y-1.5 max-w-sm w-full">
             <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
               <Building2 className="w-3.5 h-3.5 text-primary" />
-              <span>Bank Transfer Details (CIH Bank):</span>
+              <span>Bank Transfer Details:</span>
             </div>
             <div className="text-slate-600 dark:text-muted-foreground text-[11px]">
-              Beneficiary: <strong className="text-slate-900 dark:text-white">{accountName}</strong>
+              Bank: <input type="text" value={bankName} onChange={(e) => setBankName(e.target.value)} className="bg-transparent border-b border-border text-slate-900 dark:text-white font-medium outline-none px-1" />
             </div>
-            <div className="text-slate-600 dark:text-muted-foreground text-[11px] font-mono select-all">
-              RIB: <strong className="text-primary font-black">{rib}</strong>
+            <div className="text-slate-600 dark:text-muted-foreground text-[11px]">
+              Beneficiary: <input type="text" value={accountName} onChange={(e) => setAccountName(e.target.value)} className="bg-transparent border-b border-border text-slate-900 dark:text-white font-medium outline-none px-1" />
+            </div>
+            <div className="text-slate-600 dark:text-muted-foreground text-[11px] font-mono">
+              RIB / IBAN: <input type="text" value={rib} onChange={(e) => setRib(e.target.value)} className="bg-transparent border-b border-border text-primary font-black outline-none px-1 w-full" />
             </div>
             <div className="text-[10px] text-slate-400 pt-1">
               Please include Invoice #{invoiceNumber} as payment reference.

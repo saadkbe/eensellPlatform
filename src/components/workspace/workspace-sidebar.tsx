@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   MapPin,
   Users,
+  Send,
   Table2,
   Mail,
   MessageSquare,
@@ -36,6 +37,7 @@ const workspaceNav: NavEntry[] = [
   { titleKey: "ws_nav_overview", href: "/workspace", icon: LayoutDashboard },
   { titleKey: "ws_nav_scraper", href: "/workspace/scraper", icon: MapPin },
   { titleKey: "ws_nav_crm", href: "/workspace/crm", icon: Users },
+  { titleKey: "ws_nav_campaigns", href: "/workspace/campaigns", icon: Send },
   { titleKey: "ws_nav_sheets", href: "/workspace/sheets", icon: Table2 },
 ];
 

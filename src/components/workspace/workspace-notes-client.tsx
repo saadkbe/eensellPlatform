@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   StickyNote,
   Plus,
@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { saveNoteAction, deleteNoteAction } from "@/actions/workspace.actions";
+import { saveNoteAction, deleteNoteAction, updateNoteAction } from "@/actions/workspace.actions";
 
 interface Note {
   id: string;
@@ -89,11 +89,28 @@ Montrer la démo personnalisée WhatsApp en direct avec leur logo.
   },
 ];
 
-export function WorkspaceNotesClient() {
-  const [notes, setNotes] = useState<Note[]>(PRESET_NOTES);
-  const [selectedNote, setSelectedNote] = useState<Note>(PRESET_NOTES[0]);
+interface WorkspaceNotesClientProps {
+  initialNotes?: any[];
+}
+
+export function WorkspaceNotesClient({ initialNotes = [] }: WorkspaceNotesClientProps) {
+  const mergedInitialNotes: Note[] = [
+    ...initialNotes.map((dbNote: any) => ({
+      id: dbNote.id,
+      title: dbNote.title,
+      category: (dbNote.category || "Ideas") as Note["category"],
+      content: dbNote.content,
+      pinned: dbNote.pinned || false,
+      updatedAt: new Date(dbNote.updatedAt || dbNote.createdAt).toLocaleDateString(),
+    })),
+    ...PRESET_NOTES,
+  ];
+
+  const [notes, setNotes] = useState<Note[]>(mergedInitialNotes);
+  const [selectedNote, setSelectedNote] = useState<Note>(mergedInitialNotes[0] || PRESET_NOTES[0]);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>("ALL");
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const categories = [
     "ALL",
@@ -112,27 +129,51 @@ export function WorkspaceNotesClient() {
     return matchesSearch && matchesCat;
   });
 
+  const persistNoteChange = (updatedNote: Note) => {
+    if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    // Only persist non-preset notes
+    if (updatedNote.id.startsWith("n1") || updatedNote.id.startsWith("n2") || updatedNote.id.startsWith("n3")) {
+      return;
+    }
+    saveTimeoutRef.current = setTimeout(async () => {
+      try {
+        await updateNoteAction({
+          id: updatedNote.id,
+          title: updatedNote.title,
+          content: updatedNote.content,
+          category: updatedNote.category,
+          pinned: updatedNote.pinned,
+        });
+      } catch (err) {
+        console.error("Failed to auto-save note:", err);
+      }
+    }, 800);
+  };
+
   const handleCreateNote = async () => {
-    const newNote: Note = {
-      id: `note_${Date.now()}`,
-      title: "New Agency Note",
-      category: "Ideas",
-      pinned: false,
-      updatedAt: "Just now",
-      content: "Write your client notes, pitch ideas, or meeting summary here...",
-    };
-    setNotes([newNote, ...notes]);
-    setSelectedNote(newNote);
-    toast.success("New note created!");
     try {
-      await saveNoteAction({
-        title: newNote.title,
-        content: newNote.content,
-        category: newNote.category,
+      const res = await saveNoteAction({
+        title: "New Agency Note",
+        content: "Write your client notes, pitch ideas, or meeting summary here...",
+        category: "Ideas",
         pinned: false,
       });
+
+      const dbNote = res.note;
+      const newNote: Note = {
+        id: dbNote.id,
+        title: dbNote.title,
+        category: "Ideas",
+        pinned: false,
+        updatedAt: "Just now",
+        content: dbNote.content,
+      };
+
+      setNotes([newNote, ...notes]);
+      setSelectedNote(newNote);
+      toast.success("New note created & saved to database!");
     } catch {
-      // local copy is already set
+      toast.error("Could not create note");
     }
   };
 
@@ -271,8 +312,10 @@ export function WorkspaceNotesClient() {
                       type="text"
                       value={selectedNote.title}
                       onChange={(e) => {
-                        selectedNote.title = e.target.value;
-                        setNotes([...notes]);
+                        const updated = { ...selectedNote, title: e.target.value };
+                        setSelectedNote(updated);
+                        setNotes(notes.map((n) => (n.id === updated.id ? updated : n)));
+                        persistNoteChange(updated);
                       }}
                       className="text-lg sm:text-xl font-black bg-transparent border-none focus:outline-hidden text-foreground w-full"
                     />
@@ -281,8 +324,10 @@ export function WorkspaceNotesClient() {
                       <select
                         value={selectedNote.category}
                         onChange={(e) => {
-                          selectedNote.category = e.target.value as any;
-                          setNotes([...notes]);
+                          const updated = { ...selectedNote, category: e.target.value as any };
+                          setSelectedNote(updated);
+                          setNotes(notes.map((n) => (n.id === updated.id ? updated : n)));
+                          persistNoteChange(updated);
                         }}
                         className="text-xs font-semibold px-2 py-0.5 rounded-md border border-border bg-muted/40 text-muted-foreground"
                       >
@@ -312,9 +357,10 @@ export function WorkspaceNotesClient() {
                   rows={16}
                   value={selectedNote.content}
                   onChange={(e) => {
-                    selectedNote.content = e.target.value;
-                    selectedNote.updatedAt = "Just now";
-                    setNotes([...notes]);
+                    const updated = { ...selectedNote, content: e.target.value, updatedAt: "Just now" };
+                    setSelectedNote(updated);
+                    setNotes(notes.map((n) => (n.id === updated.id ? updated : n)));
+                    persistNoteChange(updated);
                   }}
                   className="w-full bg-transparent border-none focus:outline-hidden text-xs sm:text-sm text-foreground font-mono leading-relaxed resize-y"
                 />

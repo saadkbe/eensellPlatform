@@ -247,13 +247,25 @@ export function WorkspaceScraperClient() {
   };
 
   const handleAddToCRM = async (business: ScrapedBusiness) => {
+    if (!isLiveScraper && business.id.startsWith("demo_")) {
+      toast.info("Ce prospect fait partie de la prévisualisation démo. Configurez votre clé Outscraper dans les Paramètres pour enregistrer des entreprises réelles dans votre CRM.", {
+        action: {
+          label: "Paramètres",
+          onClick: () => {
+            window.location.href = "/workspace/settings";
+          },
+        },
+      });
+      return;
+    }
+
     try {
       await addLeadToCrmAction({
         businessName: business.name,
         niche: business.niche,
         city: business.city,
-        phone: business.phone,
-        website: business.website,
+        phone: business.phone === "Non renseigné" ? "" : business.phone,
+        website: business.website || "",
         address: business.address,
         status: "PENDING",
       });
@@ -433,6 +445,11 @@ export function WorkspaceScraperClient() {
             <span className="px-1.5 py-0.2 rounded bg-[#EFEFEE] dark:bg-[#2E2E2E] text-[10px] text-[#787774] dark:text-[#9B9A97] font-mono">
               {results.length} results
             </span>
+            {!isLiveScraper && (
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                Preview / Demo Mode
+              </span>
+            )}
           </div>
 
           <span className="text-[11px] text-[#787774] dark:text-[#9B9A97]">

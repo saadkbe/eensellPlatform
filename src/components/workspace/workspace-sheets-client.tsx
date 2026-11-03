@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import {
   Table2,
@@ -13,7 +13,12 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { addLeadToCrmAction, deleteLeadAction } from "@/actions/workspace.actions";
+import {
+  addLeadToCrmAction,
+  deleteLeadAction,
+  updateLeadDetailsAction,
+  updateRetainerAction,
+} from "@/actions/workspace.actions";
 
 interface SheetRow {
   id: string;
@@ -44,7 +49,7 @@ export function WorkspaceSheetsClient({
       niche: r.service,
       city: r.city || "Casablanca",
       phone: r.phone || "—",
-      email: `contact@${r.clientName.toLowerCase().replace(/[^a-z0-9]/g, "") || "client"}.ma`,
+      email: "—",
       status: (r.status === "active" ? "Closed Won" : "Proposal Sent") as SheetRow["status"],
       retainerMad: Number(r.monthlyFee) || 5000,
       notes: `Recurring ${r.service} contract`,
@@ -65,6 +70,49 @@ export function WorkspaceSheetsClient({
   const [rows, setRows] = useState<SheetRow[]>(mappedRows);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const saveDebounceMap = useRef<Record<string, NodeJS.Timeout>>({});
+
+  const persistRowUpdate = (row: SheetRow) => {
+    if (saveDebounceMap.current[row.id]) {
+      clearTimeout(saveDebounceMap.current[row.id]);
+    }
+
+    saveDebounceMap.current[row.id] = setTimeout(async () => {
+      try {
+        if (row.id.startsWith("lead_")) {
+          const leadId = row.id.replace("lead_", "");
+          let leadStatus: "PENDING" | "SENT" | "OPENED" | "REPLIED" | "MEETING_BOOKED" | "DECLINED" = "PENDING";
+          if (row.status === "Meeting Booked") leadStatus = "MEETING_BOOKED";
+          else if (row.status === "Proposal Sent" || row.status === "Closed Won") leadStatus = "REPLIED";
+          else if (row.status === "Contacted") leadStatus = "SENT";
+
+          await updateLeadDetailsAction({
+            id: leadId,
+            businessName: row.name,
+            niche: row.niche,
+            city: row.city,
+            phone: row.phone === "—" ? "" : row.phone,
+            email: row.email === "—" ? "" : row.email,
+            status: leadStatus,
+            replyNotes: row.notes,
+          });
+        } else if (row.id.startsWith("ret_")) {
+          const retainerId = row.id.replace("ret_", "");
+          await updateRetainerAction({
+            id: retainerId,
+            clientName: row.name,
+            service: row.niche,
+            city: row.city,
+            phone: row.phone === "—" ? "" : row.phone,
+            monthlyFee: Number(row.retainerMad) || 5000,
+            status: row.status === "Closed Won" ? "active" : "pending_payment",
+          });
+        }
+      } catch (err) {
+        console.error("Failed to auto-save sheet row:", err);
+      }
+    }, 800);
+  };
 
   const filteredRows = rows.filter((r) => {
     const matchesSearch =
@@ -112,7 +160,15 @@ export function WorkspaceSheetsClient({
   };
 
   const handleUpdateRow = (id: string, field: keyof SheetRow, value: any) => {
-    setRows(rows.map((r) => (r.id === id ? { ...r, [field]: value } : r)));
+    const updated = rows.map((r) => {
+      if (r.id === id) {
+        const next = { ...r, [field]: value };
+        persistRowUpdate(next);
+        return next;
+      }
+      return r;
+    });
+    setRows(updated);
   };
 
   const handleDeleteRow = async (id: string) => {

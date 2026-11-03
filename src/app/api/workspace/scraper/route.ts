@@ -29,7 +29,8 @@ export async function POST(req: NextRequest) {
     }
 
     const account = user.workspaceAccount;
-    const apiKey = account?.outscraperApiKey || process.env.OUTSCRAPER_API_KEY;
+    // Strict BYOK: user must configure their own Outscraper API key in Workspace Settings
+    const apiKey = account?.outscraperApiKey;
 
     if (!apiKey) {
       return NextResponse.json({
@@ -77,8 +78,7 @@ export async function POST(req: NextRequest) {
     const leads = dataItems.map((item: any, idx: number) => {
       const website = item.site || item.website || "";
       const email =
-        (item.emails && item.emails[0]) ||
-        (website ? `contact@${website.replace(/^https?:\/\//, "").replace(/\/.*$/, "")}` : "");
+        (item.emails && item.emails[0]) || null;
 
       return {
         id: `scraped_${Date.now()}_${idx}`,
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
         address: item.full_address || item.address || `${city}, ${country}`,
         phone: item.phone || item.verified_phone || "Non renseigné",
         website: website || null,
-        email: email || null,
+        email: email,
         rating: item.rating || 4.5,
         reviews: item.reviews || item.reviews_count || 12,
         status: "Nouveau Prospect",

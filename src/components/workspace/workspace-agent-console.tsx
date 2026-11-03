@@ -342,7 +342,7 @@ Saad | Eensell AI Partner`,
     setIsApplying(true);
     try {
       const res = await dispatchCampaignEmails();
-      if (res.success) {
+      if (res && res.success) {
         setLeads((prev) => prev.map((l) => ({ ...l, status: "SENT" })));
         setStats((prev) => ({
           ...prev,
@@ -350,6 +350,8 @@ Saad | Eensell AI Partner`,
         }));
         toast.success(res.message);
         setActiveTab("leads");
+      } else if (res) {
+        toast.error(res.message || "Erreur lors de l'expédition");
       }
     } catch (e: any) {
       toast.error(e.message || "Erreur lors de l'expédition");

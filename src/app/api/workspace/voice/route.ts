@@ -19,8 +19,7 @@ export async function POST(req: NextRequest) {
       include: { workspaceAccount: true },
     });
 
-    const apiKey =
-      user?.workspaceAccount?.elevenLabsApiKey || process.env.ELEVENLABS_API_KEY;
+    const apiKey = user?.workspaceAccount?.elevenLabsApiKey;
     const voiceId =
       customVoiceId ||
       user?.workspaceAccount?.voiceId ||
