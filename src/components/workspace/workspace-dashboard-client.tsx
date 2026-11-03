@@ -122,8 +122,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
     .filter((r) => r.status === "pending_payment")
     .reduce((sum, r) => sum + (Number(r.monthlyFee) || 0), 0);
 
-  const targetMRR = 30000;
-  const progressPercent = Math.min(Math.round((totalMRR / targetMRR) * 100), 100);
+  const activeRetainersCount = retainers.filter((r) => r.status === "active").length;
   const completedTasksCount = tasks.filter((t) => t.done).length;
 
   const account = initialData?.account;
@@ -254,7 +253,7 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
   };
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 select-text max-w-7xl mx-auto">
+    <div className="w-full px-3 sm:px-5 lg:px-6 py-4 sm:py-5 space-y-6 select-text">
       {/* ── 1. Executive Clean Hero Banner (No Orange Gradient, Crisp Premium Dark/Light) ── */}
       <div className="relative overflow-hidden rounded-3xl border border-slate-200/90 dark:border-white/10 bg-white dark:bg-[#1C1C1E] p-6 sm:p-8 shadow-xs">
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
@@ -325,34 +324,26 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
           </div>
 
           <div className="my-3">
-            <div className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-              {totalMRR.toLocaleString()}{" "}
+            <div className="text-3xl font-black tracking-tight text-slate-900 dark:text-white flex items-baseline gap-1.5">
+              <span>{totalMRR.toLocaleString()}</span>
               <span className="text-xs font-semibold text-slate-400">{t("ws_kpi_mrr_unit")}</span>
             </div>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
-              <span>{t("ws_kpi_target")}</span>
-              <strong className="text-slate-800 dark:text-slate-200 font-bold">30,000 MAD</strong>
-              <span>&bull;</span>
-              <span className="text-emerald-600 dark:text-emerald-400 font-bold">{progressPercent}%</span>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5 font-medium">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              <span>{activeRetainersCount} active recurring client{activeRetainersCount !== 1 ? "s" : ""}</span>
             </p>
           </div>
 
-          {/* Progress bar */}
-          <div className="space-y-1.5 pt-2 border-t border-slate-100 dark:border-white/5">
-            <div className="w-full bg-slate-100 dark:bg-white/10 h-2 rounded-full overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${progressPercent}%` }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="bg-emerald-500 h-full rounded-full"
-              />
-            </div>
-            <div className="flex justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-0.5">
-              <span className="font-semibold text-slate-700 dark:text-slate-300">
-                {retainers.filter((r) => r.status === "active").length} {t("ws_kpi_active_contracts")}
-              </span>
-              <span>{t("ws_kpi_pending_label")} {pendingMRR.toLocaleString()} MAD</span>
-            </div>
+          <div className="pt-2 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
+            <span className="text-slate-500 dark:text-slate-400 text-[11px]">
+              Pending: <strong className="text-slate-700 dark:text-slate-300 font-bold">{pendingMRR.toLocaleString()} MAD</strong>
+            </span>
+            <button
+              onClick={() => setIsAddRetainerOpen(true)}
+              className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline cursor-pointer text-[11px]"
+            >
+              + Add
+            </button>
           </div>
         </motion.div>
 
@@ -373,24 +364,25 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
           </div>
 
           <div className="my-3">
-            <div className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-              {stats?.totalLeads || 0}{" "}
+            <div className="text-3xl font-black tracking-tight text-slate-900 dark:text-white flex items-baseline gap-1.5">
+              <span>{stats?.totalLeads || 0}</span>
               <span className="text-xs font-semibold text-slate-400">{t("ws_kpi_leads_unit")}</span>
             </div>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-              {t("ws_kpi_leads_sub")}
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5 font-medium">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-blue-500" />
+              <span>{stats?.meetingsBooked || 0} meeting{stats?.meetingsBooked !== 1 ? "s" : ""} booked</span>
             </p>
           </div>
 
           <div className="pt-2 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
             <Link
               href="/workspace/scraper"
-              className="text-blue-600 dark:text-blue-400 font-semibold hover:underline flex items-center gap-1"
+              className="text-blue-600 dark:text-blue-400 font-semibold hover:underline flex items-center gap-1 text-[11px]"
             >
               <span>{t("ws_btn_scrape_leads")}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
-            <Link href="/workspace/crm" className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium">
+            <Link href="/workspace/crm" className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium text-[11px]">
               CRM &rarr;
             </Link>
           </div>
@@ -413,22 +405,23 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
           </div>
 
           <div className="my-3">
-            <div className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-              {retainers.length}{" "}
+            <div className="text-3xl font-black tracking-tight text-slate-900 dark:text-white flex items-baseline gap-1.5">
+              <span>{retainers.length}</span>
               <span className="text-xs font-semibold text-slate-400">{t("ws_kpi_clients_unit")}</span>
             </div>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-              {t("ws_kpi_clients_sub")}
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5 font-medium">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-violet-500" />
+              <span>{activeRetainersCount} active &bull; {retainers.length - activeRetainersCount} pending</span>
             </p>
           </div>
 
           <div className="pt-2 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
-            <span className="text-slate-500 dark:text-slate-400">
-              {retainers.filter((r) => r.status === "active").length} {t("ws_kpi_active_contracts")}
+            <span className="text-slate-500 dark:text-slate-400 text-[11px]">
+              {activeRetainersCount} {t("ws_kpi_active_contracts")}
             </span>
             <button
               onClick={() => setIsAddRetainerOpen(true)}
-              className="text-violet-600 dark:text-violet-400 font-semibold hover:underline cursor-pointer"
+              className="text-violet-600 dark:text-violet-400 font-semibold hover:underline cursor-pointer text-[11px]"
             >
               + {t("ws_btn_add_retainer")}
             </button>
@@ -452,24 +445,25 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
           </div>
 
           <div className="my-3">
-            <div className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-              {stats?.sentEmails || 0}{" "}
+            <div className="text-3xl font-black tracking-tight text-slate-900 dark:text-white flex items-baseline gap-1.5">
+              <span>{stats?.sentEmails || 0}</span>
               <span className="text-xs font-semibold text-slate-400">{t("ws_kpi_velocity_unit")}</span>
             </div>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
-              {t("ws_kpi_velocity_sub")}
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5 font-medium">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-slate-500" />
+              <span>{stats?.replies || 0} positive replies recorded</span>
             </p>
           </div>
 
           <div className="pt-2 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
             <Link
               href="/workspace/whatsapp"
-              className="text-slate-800 dark:text-slate-200 font-semibold hover:underline flex items-center gap-1"
+              className="text-slate-800 dark:text-slate-200 font-semibold hover:underline flex items-center gap-1 text-[11px]"
             >
               <span>{t("ws_nav_whatsapp")}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
-            <Link href="/workspace/drafter" className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium">
+            <Link href="/workspace/drafter" className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium text-[11px]">
               {t("ws_nav_drafter")} &rarr;
             </Link>
           </div>

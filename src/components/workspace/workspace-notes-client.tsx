@@ -1,26 +1,20 @@
 "use client";
 
-import { useState, useRef, useTransition } from "react";
+import { useState, useRef } from "react";
 import {
   StickyNote,
   Plus,
   Trash2,
   Search,
   Pin,
-  Clock,
   Sparkles,
-  BookOpen,
-  CheckCircle2,
   Loader2,
-  FileText,
   Copy,
   Check,
   Tag,
-  ArrowRight,
-  Filter,
+  RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { DeleteConfirmationModal } from "@/components/workspace/delete-confirmation-modal";
@@ -28,6 +22,7 @@ import {
   saveNoteAction,
   deleteNoteAction,
   updateNoteAction,
+  resetDefaultPlaybooksAction,
 } from "@/actions/workspace.actions";
 
 export interface WorkspaceNoteItem {
@@ -39,99 +34,33 @@ export interface WorkspaceNoteItem {
   updatedAt: string;
 }
 
-const PLAYBOOK_TEMPLATES: WorkspaceNoteItem[] = [
-  {
-    id: "preset_objections",
-    title: "The 4 Top Moroccan B2B Objections & Responses",
-    category: "Objection Handling",
-    pinned: true,
-    updatedAt: "Official Guide",
-    content: `1. "C'est trop cher / On n'a pas le budget pour le moment" :
-→ "Je comprends parfaitement. Juste une question : combien vous rapporte un seul client/mandat signé chez vous ? Si notre assistant vous évite de perdre seulement 2 clients par mois qui appellent le soir, l'outil est rentabilisé 3 fois dès le premier mois."
-
-2. "On a déjà une secrétaire / réceptionniste au bureau" :
-→ "Exactement, et le but n'est pas de la remplacer, mais de lui libérer 70% de son temps. Que fait-elle à 20h le soir ou le dimanche quand un prospect chaud cherche un bien ou un rendez-vous urgent ? Notre IA prend le relais quand votre bureau est fermé."
-
-3. "L'IA est trop robotique, nos clients veulent un humain" :
-→ "C'était le cas il y a 2 ans. Aujourd'hui, notre agent WhatsApp répond en Darija ou en Français naturel en 3 secondes. Si le client pose une question complexe, l'IA transfère immédiatement la discussion sur votre téléphone personnel."
-
-4. "Envoyez-moi un email et je vous recontacterai" :
-→ "Bien sûr, je vous l'envoie tout de suite. Mais pour vous faire gagner du temps, est-ce que votre priorité ce mois-ci est plutôt d'avoir plus de leads ou de mieux convertir ceux que vous avez déjà ?"`,
-  },
-  {
-    id: "preset_discovery",
-    title: "15-Minute Client Discovery Call Framework",
-    category: "Client Discovery",
-    pinned: true,
-    updatedAt: "Official Guide",
-    content: `1. CADRAGE (2 min) :
-"Merci pour votre temps. Le but de notre appel n'est pas de vous faire une présentation théorique, mais de voir comment vous traitez actuellement vos leads et si notre automatisation peut vous faire gagner du temps."
-
-2. DIAGNOSTIC (6 min) :
-- "D'où viennent la majorité de vos demandes aujourd'hui ? (Instagram, Maps, Recommandation) ?"
-- "Quand un prospect vous écrit à 21h ou le samedi, qui lui répond et en combien de temps ?"
-- "Combien de prospects qualifiés estimez-vous perdre par manque de relance chaque mois ?"
-
-3. PITCH DE LA SOLUTION (5 min) :
-Montrer la démo personnalisée WhatsApp en direct avec leur logo.
-
-4. CLOSING (2 min) :
-"Si on met ça en place ce vendredi, êtes-vous prêt à tester sur vos 50 prochains prospects ?"`,
-  },
-  {
-    id: "preset_pricing",
-    title: "Morocco Retainer Pricing Structure & Tiers",
-    category: "Outreach Strategy",
-    pinned: false,
-    updatedAt: "Official Guide",
-    content: `Standard Agency Retainer Tiers in Morocco :
-
-• PACK DÉMARRAGE (Petits cabinets / commerces) :
-- Frais de Setup : 3,000 MAD (one-time)
-- Retainer Mensuel : 2,000 MAD / mois
-- Inclus : Bot WhatsApp FAQ + Prise de rdv Google Calendar.
-
-• PACK PRO (Agences Immobilières / Cliniques) :
-- Frais de Setup : 5,000 MAD
-- Retainer Mensuel : 4,500 à 6,000 MAD / mois
-- Inclus : Bot WhatsApp bilingue (FR/Darija) + Qualification budget + Relances automatiques J+1 et J+3 + Dashboard partagé.
-
-• PACK PREMIUM (Réseaux / Cliniques Esthétiques) :
-- Setup : 8,000 MAD
-- Retainer : 7,500 MAD / mois + Agent Vocal IA entrant.`,
-  },
-];
-
 interface WorkspaceNotesClientProps {
   initialNotes?: any[];
 }
 
 export function WorkspaceNotesClient({ initialNotes = [] }: WorkspaceNotesClientProps) {
-  // Merge user DB notes with starter playbooks
-  const mergedNotes: WorkspaceNoteItem[] = [
-    ...initialNotes.map((dbNote: any) => ({
-      id: dbNote.id,
-      title: dbNote.title,
-      category: (dbNote.category || "Ideas") as WorkspaceNoteItem["category"],
-      content: dbNote.content,
-      pinned: dbNote.pinned || false,
-      updatedAt: new Date(dbNote.updatedAt || dbNote.createdAt).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      }),
-    })),
-    ...PLAYBOOK_TEMPLATES,
-  ];
+  // Only user notes from database (pure DB persistence, no zombie static presets)
+  const mappedNotes: WorkspaceNoteItem[] = initialNotes.map((dbNote: any) => ({
+    id: dbNote.id,
+    title: dbNote.title,
+    category: (dbNote.category || "Ideas") as WorkspaceNoteItem["category"],
+    content: dbNote.content,
+    pinned: dbNote.pinned || false,
+    updatedAt: new Date(dbNote.updatedAt || dbNote.createdAt).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    }),
+  }));
 
-  const [notes, setNotes] = useState<WorkspaceNoteItem[]>(mergedNotes);
+  const [notes, setNotes] = useState<WorkspaceNoteItem[]>(mappedNotes);
   const [selectedNoteId, setSelectedNoteId] = useState<string>(
-    mergedNotes[0]?.id || PLAYBOOK_TEMPLATES[0].id
+    mappedNotes[0]?.id || ""
   );
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>("ALL");
   const [isSaving, setIsSaving] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [isResetting, setIsResetting] = useState(false);
 
   // Deletion modal state
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -139,7 +68,7 @@ export function WorkspaceNotesClient({ initialNotes = [] }: WorkspaceNotesClient
 
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const selectedNote = notes.find((n) => n.id === selectedNoteId) || notes[0];
+  const selectedNote = notes.find((n) => n.id === selectedNoteId) || (notes.length > 0 ? notes[0] : null);
 
   const categories = [
     "ALL",
@@ -150,7 +79,13 @@ export function WorkspaceNotesClient({ initialNotes = [] }: WorkspaceNotesClient
     "Ideas",
   ];
 
-  const filteredNotes = notes.filter((n) => {
+  // Sort: Pinned first, then by creation
+  const sortedNotes = [...notes].sort((a, b) => {
+    if (a.pinned === b.pinned) return 0;
+    return a.pinned ? -1 : 1;
+  });
+
+  const filteredNotes = sortedNotes.filter((n) => {
     const matchesSearch =
       n.title.toLowerCase().includes(search.toLowerCase()) ||
       n.content.toLowerCase().includes(search.toLowerCase());
@@ -158,43 +93,38 @@ export function WorkspaceNotesClient({ initialNotes = [] }: WorkspaceNotesClient
     return matchesSearch && matchesCat;
   });
 
-  // Debounced auto-save for user notes (or auto-converts preset to user note)
+  // Debounced auto-save directly to Database
   const persistNoteChange = (updatedNote: WorkspaceNoteItem) => {
     if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
     setIsSaving(true);
 
     saveTimeoutRef.current = setTimeout(async () => {
       try {
-        // If it's a preset note, clone it into a real user DB note upon first edit
-        if (updatedNote.id.startsWith("preset_")) {
-          const res = await saveNoteAction({
-            title: updatedNote.title,
-            content: updatedNote.content,
-            category: updatedNote.category,
-            pinned: updatedNote.pinned,
-          });
-          if (res.success && res.note) {
-            const newId = res.note.id;
-            setNotes((prev) =>
-              prev.map((n) => (n.id === updatedNote.id ? { ...updatedNote, id: newId } : n))
-            );
-            setSelectedNoteId(newId);
-          }
-        } else {
-          await updateNoteAction({
-            id: updatedNote.id,
-            title: updatedNote.title,
-            content: updatedNote.content,
-            category: updatedNote.category,
-            pinned: updatedNote.pinned,
-          });
-        }
+        await updateNoteAction({
+          id: updatedNote.id,
+          title: updatedNote.title,
+          content: updatedNote.content,
+          category: updatedNote.category,
+          pinned: updatedNote.pinned,
+        });
       } catch (err) {
         console.error("Auto-save failed:", err);
       } finally {
         setIsSaving(false);
       }
     }, 600);
+  };
+
+  const handleTogglePin = (noteToToggle: WorkspaceNoteItem, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    const nextPinned = !noteToToggle.pinned;
+    const updated: WorkspaceNoteItem = { ...noteToToggle, pinned: nextPinned };
+
+    setNotes((prev) =>
+      prev.map((n) => (n.id === updated.id ? updated : n))
+    );
+    persistNoteChange(updated);
+    toast.success(nextPinned ? `Note pinned to top` : `Note unpinned`);
   };
 
   const handleCreateNote = async () => {
@@ -219,12 +149,23 @@ export function WorkspaceNotesClient({ initialNotes = [] }: WorkspaceNotesClient
 
         setNotes((prev) => [newNote, ...prev]);
         setSelectedNoteId(newNote.id);
-        toast.success("New note created");
+        toast.success("New note created & saved");
       }
     } catch {
       toast.error("Failed to create note");
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleResetPlaybooks = async () => {
+    try {
+      setIsResetting(true);
+      await resetDefaultPlaybooksAction();
+      window.location.reload();
+    } catch {
+      toast.error("Failed to load starter playbooks");
+      setIsResetting(false);
     }
   };
 
@@ -248,14 +189,11 @@ export function WorkspaceNotesClient({ initialNotes = [] }: WorkspaceNotesClient
 
     toast.success("Note deleted successfully");
 
-    // Persist deletion to DB if not purely a local preset
-    if (!targetId.startsWith("preset_")) {
-      try {
-        await deleteNoteAction(targetId);
-      } catch (err) {
-        console.error("Failed to delete note from database:", err);
-        toast.error("Could not remove note from database");
-      }
+    try {
+      await deleteNoteAction(targetId);
+    } catch (err) {
+      console.error("Failed to delete note from database:", err);
+      toast.error("Could not remove note from database");
     }
   };
 
@@ -292,6 +230,19 @@ export function WorkspaceNotesClient({ initialNotes = [] }: WorkspaceNotesClient
         </div>
 
         <div className="flex items-center gap-2">
+          {notes.length === 0 && (
+            <Button
+              onClick={handleResetPlaybooks}
+              disabled={isResetting}
+              variant="outline"
+              size="sm"
+              className="h-9 px-3.5 rounded-xl border-slate-200 dark:border-white/10 text-xs font-semibold gap-1.5 text-slate-700 dark:text-slate-300"
+            >
+              {isResetting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3.5 h-3.5" />}
+              <span>Load Starter Playbooks</span>
+            </Button>
+          )}
+
           <Button
             onClick={handleCreateNote}
             size="sm"
@@ -340,13 +291,18 @@ export function WorkspaceNotesClient({ initialNotes = [] }: WorkspaceNotesClient
           {/* Note cards */}
           <div className="space-y-2 max-h-[640px] overflow-y-auto no-scrollbar pr-0.5">
             {filteredNotes.length === 0 ? (
-              <div className="p-8 text-center rounded-2xl border border-dashed border-slate-200 dark:border-white/10 text-xs text-slate-400">
-                No notes found matching your search.
+              <div className="p-8 text-center rounded-2xl border border-dashed border-slate-200 dark:border-white/10 text-xs text-slate-400 space-y-2">
+                <p>No notes in this view.</p>
+                <button
+                  onClick={handleCreateNote}
+                  className="text-xs font-semibold text-slate-900 dark:text-white underline cursor-pointer"
+                >
+                  Create your first note
+                </button>
               </div>
             ) : (
               filteredNotes.map((note) => {
                 const isSelected = selectedNote?.id === note.id;
-                const isPreset = note.id.startsWith("preset_");
 
                 return (
                   <motion.div
@@ -361,9 +317,20 @@ export function WorkspaceNotesClient({ initialNotes = [] }: WorkspaceNotesClient
                   >
                     <div className="flex items-start justify-between gap-2 mb-1.5">
                       <div className="flex items-center gap-2 flex-1 min-w-0">
-                        {note.pinned && (
-                          <Pin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 fill-current" />
-                        )}
+                        {/* Interactive Clickable Pin Button directly on note card */}
+                        <button
+                          type="button"
+                          onClick={(e) => handleTogglePin(note, e)}
+                          title={note.pinned ? "Click to unpin" : "Click to pin to top"}
+                          className={`p-1 rounded-md transition-all cursor-pointer shrink-0 ${
+                            note.pinned
+                              ? "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 hover:bg-emerald-100"
+                              : "text-slate-300 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5"
+                          }`}
+                        >
+                          <Pin className={`w-3.5 h-3.5 ${note.pinned ? "fill-current" : ""}`} />
+                        </button>
+
                         <h4 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white truncate">
                           {note.title || "Untitled Note"}
                         </h4>
@@ -388,7 +355,7 @@ export function WorkspaceNotesClient({ initialNotes = [] }: WorkspaceNotesClient
                         <Tag className="w-2.5 h-2.5" />
                         {note.category}
                       </span>
-                      <span>{isPreset ? "Official" : note.updatedAt}</span>
+                      <span>{note.updatedAt}</span>
                     </div>
                   </motion.div>
                 );
@@ -426,26 +393,18 @@ export function WorkspaceNotesClient({ initialNotes = [] }: WorkspaceNotesClient
                       <option value="Ideas">Ideas</option>
                     </select>
 
+                    {/* Dedicated Pin / Unpin button in toolbar */}
                     <button
                       type="button"
-                      onClick={() => {
-                        const updated: WorkspaceNoteItem = {
-                          ...selectedNote,
-                          pinned: !selectedNote.pinned,
-                        };
-                        setNotes((prev) =>
-                          prev.map((n) => (n.id === updated.id ? updated : n))
-                        );
-                        persistNoteChange(updated);
-                      }}
-                      className={`text-xs px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer flex items-center gap-1.5 font-medium ${
+                      onClick={() => handleTogglePin(selectedNote)}
+                      className={`text-xs px-3 py-1.5 rounded-xl border transition-all cursor-pointer flex items-center gap-1.5 font-medium ${
                         selectedNote.pinned
                           ? "bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-semibold"
-                          : "border-slate-200 dark:border-white/10 text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                          : "border-slate-200 dark:border-white/10 text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-white/5"
                       }`}
                     >
                       <Pin className={`w-3.5 h-3.5 ${selectedNote.pinned ? "fill-current" : ""}`} />
-                      <span>{selectedNote.pinned ? "Pinned" : "Pin"}</span>
+                      <span>{selectedNote.pinned ? "Pinned" : "Pin Note"}</span>
                     </button>
                   </div>
 
@@ -532,7 +491,7 @@ export function WorkspaceNotesClient({ initialNotes = [] }: WorkspaceNotesClient
           ) : (
             <div className="p-16 text-center rounded-3xl border border-dashed border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 text-slate-400 space-y-3">
               <StickyNote className="w-8 h-8 mx-auto text-slate-300" />
-              <p className="text-xs">Select a note from the left or create a new one.</p>
+              <p className="text-xs">No note selected. Select a note from the left or create a new one.</p>
               <Button
                 onClick={handleCreateNote}
                 size="sm"

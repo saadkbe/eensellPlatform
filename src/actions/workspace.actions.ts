@@ -1034,12 +1034,88 @@ export async function saveNoteAction(data: {
   return { success: true, note };
 }
 
+const PLAYBOOK_SEEDS = [
+  {
+    title: "The 4 Top Moroccan B2B Objections & Responses",
+    category: "Objection Handling",
+    pinned: true,
+    content: `1. "C'est trop cher / On n'a pas le budget pour le moment" :
+→ "Je comprends parfaitement. Juste une question : combien vous rapporte un seul client/mandat signé chez vous ? Si notre assistant vous évite de perdre seulement 2 clients par mois qui appellent le soir, l'outil est rentabilisé 3 fois dès le premier mois."
+
+2. "On a déjà une secrétaire / réceptionniste au bureau" :
+→ "Exactement, et le but n'est pas de la remplacer, mais de lui libérer 70% de son temps. Que fait-elle à 20h le soir ou le dimanche quand un prospect chaud cherche un bien ou un rendez-vous urgent ? Notre IA prend le relais quand votre bureau est fermé."
+
+3. "L'IA est trop robotique, nos clients veulent un humain" :
+→ "C'était le cas il y a 2 ans. Aujourd'hui, notre agent WhatsApp répond en Darija ou en Français naturel en 3 secondes. Si le client pose une question complexe, l'IA transfère immédiatement la discussion sur votre téléphone personnel."
+
+4. "Envoyez-moi un email et je vous recontacterai" :
+→ "Bien sûr, je vous l'envoie tout de suite. Mais pour vous faire gagner du temps, est-ce que votre priorité ce mois-ci est plutôt d'avoir plus de leads ou de mieux convertir ceux que vous avez déjà ?"`,
+  },
+  {
+    title: "15-Minute Client Discovery Call Framework",
+    category: "Client Discovery",
+    pinned: true,
+    content: `1. CADRAGE (2 min) :
+"Merci pour votre temps. Le but de notre appel n'est pas de vous faire une présentation théorique, mais de voir comment vous traitez actuellement vos leads et si notre automatisation peut vous faire gagner du temps."
+
+2. DIAGNOSTIC (6 min) :
+- "D'où viennent la majorité de vos demandes aujourd'hui ? (Instagram, Maps, Recommandation) ?"
+- "Quand un prospect vous écrit à 21h ou le samedi, qui lui répond et en combien de temps ?"
+- "Combien de prospects qualifiés estimez-vous perdre par manque de relance chaque mois ?"
+
+3. PITCH DE LA SOLUTION (5 min) :
+Montrer la démo personnalisée WhatsApp en direct avec leur logo.
+
+4. CLOSING (2 min) :
+"Si on met ça en place ce vendredi, êtes-vous prêt à tester sur vos 50 prochains prospects ?"`,
+  },
+  {
+    title: "Morocco Retainer Pricing Structure & Tiers",
+    category: "Outreach Strategy",
+    pinned: false,
+    content: `Standard Agency Retainer Tiers in Morocco :
+
+• PACK DÉMARRAGE (Petits cabinets / commerces) :
+- Frais de Setup : 3,000 MAD (one-time)
+- Retainer Mensuel : 2,000 MAD / mois
+- Inclus : Bot WhatsApp FAQ + Prise de rdv Google Calendar.
+
+• PACK PRO (Agences Immobilières / Cliniques) :
+- Frais de Setup : 5,000 MAD
+- Retainer Mensuel : 4,500 à 6,000 MAD / mois
+- Inclus : Bot WhatsApp bilingue (FR/Darija) + Qualification budget + Relances automatiques J+1 et J+3 + Dashboard partagé.
+
+• PACK PREMIUM (Réseaux / Cliniques Esthétiques) :
+- Setup : 8,000 MAD
+- Retainer : 7,500 MAD / mois + Agent Vocal IA entrant.`,
+  },
+];
+
 export async function getWorkspaceNotesAction() {
   const user = await getAuthUser();
-  return db.workspaceNote.findMany({
+  const existingNotes = await db.workspaceNote.findMany({
     where: { userId: user.id },
-    orderBy: { createdAt: "desc" },
+    orderBy: [{ pinned: "desc" }, { createdAt: "desc" }],
   });
+
+  return existingNotes;
+}
+
+export async function resetDefaultPlaybooksAction() {
+  const user = await getAuthUser();
+  for (const seed of PLAYBOOK_SEEDS) {
+    await db.workspaceNote.create({
+      data: {
+        userId: user.id,
+        title: seed.title,
+        category: seed.category,
+        pinned: seed.pinned,
+        content: seed.content,
+      },
+    });
+  }
+  revalidatePath("/workspace/notes");
+  return { success: true };
 }
 
 export async function updateNoteAction(data: {
