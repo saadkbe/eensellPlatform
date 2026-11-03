@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { DeleteConfirmationModal } from "@/components/workspace/delete-confirmation-modal";
+import { VerifiedCheckBadge, GlowingPulseSticker } from "@/components/workspace/workspace-stickers";
 import {
   addLeadToCrmAction,
   deleteLeadAction,
@@ -237,7 +238,7 @@ export function WorkspaceSheetsClient({
   };
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 select-text">
+    <div className="w-full px-3 sm:px-5 lg:px-6 py-4 sm:py-5 space-y-6 select-text">
       {/* ── Notion Header ── */}
       <div className="space-y-3">
         <div className="flex items-center gap-1.5 text-xs text-[#787774] dark:text-[#9B9A97]">
@@ -248,10 +249,16 @@ export function WorkspaceSheetsClient({
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
           <div className="flex items-center gap-3">
-            <span className="text-3xl select-none">📊</span>
+            <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/10 flex items-center justify-center border border-slate-200 dark:border-white/10 shadow-xs">
+              <VerifiedCheckBadge className="w-6 h-6" />
+            </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5]">
-                Agency Master Database
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5] flex items-center gap-2">
+                <span>Agency Master Database</span>
+                <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/40">
+                  <GlowingPulseSticker className="w-2.5 h-2.5" color="#10B981" />
+                  Auto-Save
+                </span>
               </h1>
               <p className="text-xs text-[#787774] dark:text-[#9B9A97] mt-0.5">
                 Notion-style data grid to track clients, retainers, and deal stages.
@@ -263,7 +270,7 @@ export function WorkspaceSheetsClient({
             <Button
               onClick={handleAddRow}
               size="sm"
-              className="font-medium text-xs bg-[#37352F] hover:bg-[#262420] dark:bg-[#E6E6E5] dark:hover:bg-[#FFFFFF] text-[#FFFFFF] dark:text-[#191919] gap-1.5 h-8 px-3 rounded-md shadow-xs cursor-pointer"
+              className="font-medium text-xs bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 gap-1.5 h-8 px-3 rounded-lg shadow-xs cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>New Row</span>
@@ -273,7 +280,7 @@ export function WorkspaceSheetsClient({
               onClick={handleExportCSV}
               variant="outline"
               size="sm"
-              className="text-xs font-medium border-[#EDEDEB] dark:border-[#2E2E2E] text-[#37352F] dark:text-[#E6E6E5] gap-1.5 h-8 px-3 rounded-md hover:bg-[#F7F6F3] dark:hover:bg-[#2A2A2A] cursor-pointer"
+              className="text-xs font-medium border-[#EDEDEB] dark:border-[#2E2E2E] text-[#37352F] dark:text-[#E6E6E5] gap-1.5 h-8 px-3 rounded-lg hover:bg-[#F7F6F3] dark:hover:bg-[#2A2A2A] cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Export CSV</span>
@@ -362,7 +369,7 @@ export function WorkspaceSheetsClient({
                       type="text"
                       value={r.name}
                       onChange={(e) => handleUpdateRow(r.id, "name", e.target.value)}
-                      className="w-full bg-transparent outline-none focus:bg-amber-500/10 px-1 py-0.5 rounded"
+                      className="w-full bg-transparent outline-none focus:bg-slate-100 dark:focus:bg-white/10 px-1 py-0.5 rounded"
                     />
                   </td>
                   <td className="py-1.5 px-3 border-r border-[#EDEDEB] dark:border-[#2E2E2E] text-[#787774] dark:text-[#9B9A97]">
@@ -370,7 +377,7 @@ export function WorkspaceSheetsClient({
                       type="text"
                       value={r.niche}
                       onChange={(e) => handleUpdateRow(r.id, "niche", e.target.value)}
-                      className="w-full bg-transparent outline-none focus:bg-amber-500/10 px-1 py-0.5 rounded"
+                      className="w-full bg-transparent outline-none focus:bg-slate-100 dark:focus:bg-white/10 px-1 py-0.5 rounded"
                     />
                   </td>
                   <td className="py-1.5 px-3 border-r border-[#EDEDEB] dark:border-[#2E2E2E] text-[#787774] dark:text-[#9B9A97]">
@@ -378,7 +385,7 @@ export function WorkspaceSheetsClient({
                       type="text"
                       value={r.city}
                       onChange={(e) => handleUpdateRow(r.id, "city", e.target.value)}
-                      className="w-full bg-transparent outline-none focus:bg-amber-500/10 px-1 py-0.5 rounded"
+                      className="w-full bg-transparent outline-none focus:bg-slate-100 dark:focus:bg-white/10 px-1 py-0.5 rounded"
                     />
                   </td>
                   <td className="py-1.5 px-3 border-r border-[#EDEDEB] dark:border-[#2E2E2E]">
@@ -401,7 +408,7 @@ export function WorkspaceSheetsClient({
                       type="number"
                       value={r.retainerMad}
                       onChange={(e) => handleUpdateRow(r.id, "retainerMad", Number(e.target.value))}
-                      className="w-24 bg-transparent outline-none focus:bg-amber-500/10 px-1 py-0.5 rounded"
+                      className="w-24 bg-transparent outline-none focus:bg-slate-100 dark:focus:bg-white/10 px-1 py-0.5 rounded"
                     />
                   </td>
                   <td className="py-1.5 px-3 border-r border-[#EDEDEB] dark:border-[#2E2E2E] text-[#787774] dark:text-[#9B9A97] font-mono text-[11px]">
@@ -409,7 +416,7 @@ export function WorkspaceSheetsClient({
                       type="text"
                       value={r.phone}
                       onChange={(e) => handleUpdateRow(r.id, "phone", e.target.value)}
-                      className="w-full bg-transparent outline-none focus:bg-amber-500/10 px-1 py-0.5 rounded"
+                      className="w-full bg-transparent outline-none focus:bg-slate-100 dark:focus:bg-white/10 px-1 py-0.5 rounded"
                     />
                   </td>
                   <td className="py-1.5 px-3 text-[#787774] dark:text-[#9B9A97]">
@@ -417,7 +424,7 @@ export function WorkspaceSheetsClient({
                       type="text"
                       value={r.notes}
                       onChange={(e) => handleUpdateRow(r.id, "notes", e.target.value)}
-                      className="w-full bg-transparent outline-none focus:bg-amber-500/10 px-1 py-0.5 rounded"
+                      className="w-full bg-transparent outline-none focus:bg-slate-100 dark:focus:bg-white/10 px-1 py-0.5 rounded"
                     />
                   </td>
                   <td className="py-1.5 px-2 text-center">

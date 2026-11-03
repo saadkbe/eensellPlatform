@@ -22,20 +22,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { addLeadToCrmAction } from "@/actions/workspace.actions";
+import { TargetRadarSticker, GlowingPulseSticker } from "@/components/workspace/workspace-stickers";
+import { WorkspaceLiveMap, MapBusiness } from "@/components/workspace/workspace-live-map";
 
-interface ScrapedBusiness {
-  id: string;
-  name: string;
-  niche: string;
-  city: string;
-  rating: number;
-  reviewsCount: number;
-  phone: string;
-  address: string;
-  website: string;
-  hasWebsite: boolean;
-  score: "HOT" | "WARM" | "MEDIUM";
-}
+interface ScrapedBusiness extends MapBusiness {}
 
 const DEFAULT_PRESET_LEADS: Record<string, ScrapedBusiness[]> = {
   casablanca: [
@@ -51,6 +41,8 @@ const DEFAULT_PRESET_LEADS: Record<string, ScrapedBusiness[]> = {
       website: "https://cabinet-dentaire-alami.ma",
       hasWebsite: true,
       score: "HOT",
+      lat: 33.5898,
+      lng: -7.6324,
     },
     {
       id: "c2",
@@ -64,6 +56,8 @@ const DEFAULT_PRESET_LEADS: Record<string, ScrapedBusiness[]> = {
       website: "https://atlasprestige.ma",
       hasWebsite: true,
       score: "HOT",
+      lat: 33.5872,
+      lng: -7.6389,
     },
     {
       id: "c3",
@@ -77,6 +71,8 @@ const DEFAULT_PRESET_LEADS: Record<string, ScrapedBusiness[]> = {
       website: "https://cliniqueracine.ma",
       hasWebsite: true,
       score: "WARM",
+      lat: 33.5841,
+      lng: -7.6475,
     },
     {
       id: "c4",
@@ -90,6 +86,8 @@ const DEFAULT_PRESET_LEADS: Record<string, ScrapedBusiness[]> = {
       website: "",
       hasWebsite: false,
       score: "WARM",
+      lat: 33.5885,
+      lng: -7.641,
     },
     {
       id: "c5",
@@ -103,6 +101,8 @@ const DEFAULT_PRESET_LEADS: Record<string, ScrapedBusiness[]> = {
       website: "https://safiluxemotors.ma",
       hasWebsite: true,
       score: "WARM",
+      lat: 33.581,
+      lng: -7.635,
     },
   ],
   rabat: [
@@ -118,6 +118,8 @@ const DEFAULT_PRESET_LEADS: Record<string, ScrapedBusiness[]> = {
       website: "https://rabatagdalimmo.ma",
       hasWebsite: true,
       score: "HOT",
+      lat: 34.0045,
+      lng: -6.8512,
     },
     {
       id: "r2",
@@ -131,6 +133,8 @@ const DEFAULT_PRESET_LEADS: Record<string, ScrapedBusiness[]> = {
       website: "https://centredentairehassan.ma",
       hasWebsite: true,
       score: "WARM",
+      lat: 34.0209,
+      lng: -6.8378,
     },
   ],
   marrakech: [
@@ -146,6 +150,8 @@ const DEFAULT_PRESET_LEADS: Record<string, ScrapedBusiness[]> = {
       website: "https://palmeraievillas.ma",
       hasWebsite: true,
       score: "HOT",
+      lat: 31.66,
+      lng: -7.95,
     },
     {
       id: "m2",
@@ -159,6 +165,8 @@ const DEFAULT_PRESET_LEADS: Record<string, ScrapedBusiness[]> = {
       website: "https://marrakechconcierge.ma",
       hasWebsite: true,
       score: "WARM",
+      lat: 31.6346,
+      lng: -8.0125,
     },
   ],
 };
@@ -230,7 +238,9 @@ export function WorkspaceScraperClient() {
           address: l.address,
           website: l.website || "",
           hasWebsite: Boolean(l.website),
-          score: (Number(l.rating) >= 4.5 ? "HOT" : "WARM") as "HOT" | "WARM" | "COLD",
+          score: (Number(l.rating) >= 4.5 ? "HOT" : "WARM") as "HOT" | "WARM" | "MEDIUM",
+          lat: l.latitude ? Number(l.latitude) : undefined,
+          lng: l.longitude ? Number(l.longitude) : undefined,
         }));
         setResults(mapped);
         setIsLiveScraper(true);
@@ -307,7 +317,7 @@ export function WorkspaceScraperClient() {
   };
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 select-text">
+    <div className="w-full px-3 sm:px-5 lg:px-6 py-4 sm:py-5 space-y-6 select-text">
       {/* ── Notion Header ── */}
       <div className="space-y-3">
         <div className="flex items-center gap-1.5 text-xs text-[#787774] dark:text-[#9B9A97]">
@@ -318,10 +328,12 @@ export function WorkspaceScraperClient() {
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
           <div className="flex items-center gap-3">
-            <span className="text-3xl select-none">📍</span>
+            <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/10 flex items-center justify-center border border-slate-200 dark:border-white/10 shadow-xs">
+              <TargetRadarSticker className="w-6 h-6" />
+            </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5]">
-                Google Maps Lead Scraper
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5] flex items-center gap-2">
+                <span>Google Maps Lead Scraper</span>
               </h1>
               <p className="text-xs text-[#787774] dark:text-[#9B9A97] mt-0.5">
                 Extract verified businesses by niche and city with ratings, phone numbers, and websites.
@@ -343,7 +355,7 @@ export function WorkspaceScraperClient() {
             <Link href="/workspace/crm">
               <Button
                 size="sm"
-                className="font-medium text-xs bg-[#37352F] hover:bg-[#262420] dark:bg-[#E6E6E5] dark:hover:bg-[#FFFFFF] text-[#FFFFFF] dark:text-[#191919] gap-1.5 h-8 px-3 rounded-md shadow-xs cursor-pointer"
+                className="font-medium text-xs bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 gap-1.5 h-8 px-3 rounded-md shadow-xs cursor-pointer"
               >
                 <Users className="w-3.5 h-3.5" />
                 <span>Open CRM</span>
@@ -354,11 +366,11 @@ export function WorkspaceScraperClient() {
       </div>
 
       {/* ── Notion Callout ── */}
-      <div className="p-3.5 px-4 rounded-lg bg-[#FBFAF7] dark:bg-[#202020] border border-[#EDEDEB] dark:border-[#2E2E2E] flex items-start gap-3 text-xs">
-        <span className="text-base select-none mt-0.5">💡</span>
+      <div className="p-3.5 px-4 rounded-xl bg-[#FBFAF7] dark:bg-[#202020] border border-[#EDEDEB] dark:border-[#2E2E2E] flex items-start gap-3 text-xs shadow-2xs">
+        <GlowingPulseSticker className="w-4 h-4 mt-0.5 shrink-0" color="#10B981" />
         <div className="flex-1 space-y-1">
-          <p className="font-semibold text-[#37352F] dark:text-[#E6E6E5]">
-            {isLiveScraper ? "Outscraper Live API Active" : "Google Maps Verified Directory & Live Scraper"}
+          <p className="font-semibold text-[#37352F] dark:text-[#E6E6E5] flex items-center gap-2">
+            <span>{isLiveScraper ? "Outscraper Live API Active" : "Google Maps Verified Directory & Live Scraper"}</span>
           </p>
           <p className="text-[#787774] dark:text-[#9B9A97] leading-relaxed">
             Every query searches target local businesses. Connect your Outscraper API key in{" "}
@@ -371,7 +383,7 @@ export function WorkspaceScraperClient() {
       </div>
 
       {/* ── Notion Search Controls ── */}
-      <div className="p-4 rounded-lg bg-[#FFFFFF] dark:bg-[#202020] border border-[#EDEDEB] dark:border-[#2E2E2E] space-y-3">
+      <div className="p-4 rounded-xl bg-[#FFFFFF] dark:bg-[#202020] border border-[#EDEDEB] dark:border-[#2E2E2E] space-y-3 shadow-2xs">
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
           <div className="sm:col-span-5 relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#787774]">🏷️</span>
@@ -380,7 +392,7 @@ export function WorkspaceScraperClient() {
               value={niche}
               onChange={(e) => setNiche(e.target.value)}
               placeholder="Niche (e.g. Dental Clinics, Real Estate, Clinics...)"
-              className="w-full pl-8 pr-3 py-1.5 rounded-md border border-[#EDEDEB] dark:border-[#2E2E2E] bg-transparent text-xs text-[#37352F] dark:text-[#E6E6E5] placeholder-[#9B9A97] outline-none"
+              className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-[#EDEDEB] dark:border-[#2E2E2E] bg-transparent text-xs text-[#37352F] dark:text-[#E6E6E5] placeholder-[#9B9A97] outline-none focus:border-slate-400 dark:focus:border-slate-500"
             />
           </div>
 
@@ -391,7 +403,7 @@ export function WorkspaceScraperClient() {
               value={city}
               onChange={(e) => setCity(e.target.value)}
               placeholder="City (e.g. Casablanca, Rabat, Marrakech, Dubai...)"
-              className="w-full pl-8 pr-3 py-1.5 rounded-md border border-[#EDEDEB] dark:border-[#2E2E2E] bg-transparent text-xs text-[#37352F] dark:text-[#E6E6E5] placeholder-[#9B9A97] outline-none"
+              className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-[#EDEDEB] dark:border-[#2E2E2E] bg-transparent text-xs text-[#37352F] dark:text-[#E6E6E5] placeholder-[#9B9A97] outline-none focus:border-slate-400 dark:focus:border-slate-500"
             />
           </div>
 
@@ -399,7 +411,7 @@ export function WorkspaceScraperClient() {
             <Button
               onClick={handleRunScrape}
               disabled={isScraping}
-              className="w-full h-8 text-xs font-semibold bg-[#37352F] hover:bg-[#262420] dark:bg-[#E6E6E5] dark:hover:bg-[#FFFFFF] text-[#FFFFFF] dark:text-[#191919] rounded-md cursor-pointer"
+              className="w-full h-8 text-xs font-semibold bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 rounded-lg cursor-pointer"
             >
               {isScraping ? (
                 <>
@@ -423,9 +435,9 @@ export function WorkspaceScraperClient() {
             <button
               key={n}
               onClick={() => setNiche(n)}
-              className={`px-2 py-0.5 rounded text-[11px] font-medium transition-colors shrink-0 cursor-pointer ${
+              className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors shrink-0 cursor-pointer ${
                 niche === n
-                  ? "bg-[#37352F] text-[#FFFFFF] dark:bg-[#E6E6E5] dark:text-[#191919]"
+                  ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs"
                   : "bg-[#F7F6F3] dark:bg-[#2A2A2A] text-[#787774] dark:text-[#9B9A97] hover:text-[#37352F] dark:hover:text-[#E6E6E5]"
               }`}
             >
@@ -434,6 +446,16 @@ export function WorkspaceScraperClient() {
           ))}
         </div>
       </div>
+
+      {/* ── Full-Width Live Google Maps & Radar Component ── */}
+      <WorkspaceLiveMap
+        niche={niche}
+        city={city}
+        businesses={results}
+        isScraping={isScraping}
+        addedIds={addedIds}
+        onAddToCRM={handleAddToCRM}
+      />
 
       {/* ── Scraped Results Database Table ── */}
       <div className="border border-[#EDEDEB] dark:border-[#2E2E2E] rounded-lg overflow-hidden bg-[#FFFFFF] dark:bg-[#202020]">

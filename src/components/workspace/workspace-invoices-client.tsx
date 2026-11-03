@@ -22,6 +22,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { saveInvoiceAction } from "@/actions/workspace.actions";
+import { VerifiedCheckBadge, ShieldSecureSticker } from "@/components/workspace/workspace-stickers";
 
 interface InvoiceItem {
   id: string;
@@ -131,7 +132,7 @@ export function WorkspaceInvoicesClient({
   };
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 select-text">
+    <div className="w-full px-3 sm:px-5 lg:px-6 py-4 sm:py-5 space-y-6 select-text">
       {/* ── Notion Header (Hidden when printing) ── */}
       <div className="space-y-3 print:hidden">
         <div className="flex items-center gap-1.5 text-xs text-[#787774] dark:text-[#9B9A97]">
@@ -142,7 +143,9 @@ export function WorkspaceInvoicesClient({
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
           <div className="flex items-center gap-3">
-            <span className="text-3xl select-none">🧾</span>
+            <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/10 flex items-center justify-center border border-slate-200 dark:border-white/10 shadow-xs shrink-0">
+              <ShieldSecureSticker className="w-6 h-6" />
+            </div>
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5]">
                 Agency Invoices & Billing
@@ -158,7 +161,7 @@ export function WorkspaceInvoicesClient({
               onClick={handleSaveInvoice}
               variant="outline"
               size="sm"
-              className="text-xs h-8 px-3 rounded-md border-[#EDEDEB] dark:border-[#2E2E2E]"
+              className="text-xs h-8 px-3 rounded-lg border-[#EDEDEB] dark:border-[#2E2E2E]"
             >
               <CheckCircle2 className="w-3.5 h-3.5 mr-1 text-emerald-500" />
               <span>Save Invoice</span>
@@ -166,7 +169,7 @@ export function WorkspaceInvoicesClient({
             <Button
               onClick={handlePrint}
               size="sm"
-              className="text-xs font-semibold bg-[#37352F] hover:bg-[#262420] dark:bg-[#E6E6E5] dark:hover:bg-[#FFFFFF] text-[#FFFFFF] dark:text-[#191919] gap-1.5 h-8 px-3 rounded-md shadow-xs cursor-pointer"
+              className="text-xs font-semibold bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 gap-1.5 h-8 px-3 rounded-lg shadow-xs cursor-pointer"
             >
               <Printer className="w-3.5 h-3.5" />
               <span>Print / PDF</span>

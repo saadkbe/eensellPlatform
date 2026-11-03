@@ -92,6 +92,8 @@ export async function POST(req: NextRequest) {
         email: email,
         rating: item.rating || 4.5,
         reviews: item.reviews || item.reviews_count || 12,
+        latitude: item.latitude || item.lat || null,
+        longitude: item.longitude || item.lng || null,
         status: "Nouveau Prospect",
       };
     });

@@ -30,6 +30,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { addLeadToCrmAction } from "@/actions/workspace.actions";
+import { ChatBubbleSticker, GlowingPulseSticker } from "@/components/workspace/workspace-stickers";
 
 export function WorkspaceWhatsappClient() {
   const searchParams = useSearchParams();
@@ -291,33 +292,41 @@ export function WorkspaceWhatsappClient() {
   };
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 select-text">
+    <div className="w-full px-3 sm:px-5 lg:px-6 py-4 sm:py-5 space-y-6 select-text">
       {/* ── Top Bar ── */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 border-b border-[#EDEDEB] dark:border-[#2E2E2E]">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#EDEDEB] dark:border-[#2E2E2E]">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/40">
               <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
               WHATSAPP OUTREACH STUDIO &bull; 1-CLICK LAUNCH
             </span>
-            <span className="text-xs text-[#787774] dark:text-[#9B9A97]">
-              Pre-approved Darija & French hooks for Moroccan decision-makers
+            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/40">
+              <GlowingPulseSticker className="w-2.5 h-2.5" color="#10B981" />
+              Active
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5]">
-            WhatsApp Outreach Studio
-          </h1>
-          <p className="text-xs sm:text-sm text-[#787774] dark:text-[#9B9A97]">
-            Launch direct WhatsApp conversations, test audio voice notes, and preview hooks inside an iPhone 18 Pro Max frame.
-          </p>
+          <div className="flex items-center gap-3 pt-1">
+            <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/10 flex items-center justify-center border border-slate-200 dark:border-white/10 shadow-xs shrink-0">
+              <ChatBubbleSticker className="w-6 h-6" />
+            </div>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5]">
+                WhatsApp Outreach Studio
+              </h1>
+              <p className="text-xs sm:text-sm text-[#787774] dark:text-[#9B9A97]">
+                Launch direct WhatsApp conversations, test audio voice notes, and preview hooks inside an iPhone 18 Pro Max frame.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Switcher & Actions */}
         <div className="flex flex-wrap items-center gap-2.5">
           <Link
             href="/workspace/drafter"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-violet-50 text-violet-700 dark:bg-violet-950/50 dark:text-violet-300 border border-violet-200 dark:border-violet-800/40 hover:bg-violet-100 transition-all"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-violet-50 text-violet-700 dark:bg-violet-950/50 dark:text-violet-300 border border-violet-200 dark:border-violet-800/40 hover:bg-violet-100 transition-all cursor-pointer"
           >
             <Mail className="w-3.5 h-3.5" />
             <span>Switch to Cold Email &rarr;</span>
@@ -325,7 +334,7 @@ export function WorkspaceWhatsappClient() {
 
           <Button
             onClick={handleLaunchWhatsApp}
-            className="inline-flex items-center gap-1.5 h-8 px-4 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs cursor-pointer"
+            className="inline-flex items-center gap-1.5 h-8 px-4 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs cursor-pointer"
           >
             <Send className="w-3.5 h-3.5" />
             <span>Launch on WhatsApp</span>
