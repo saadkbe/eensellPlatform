@@ -18,11 +18,13 @@ import {
   Sparkles,
   ArrowUpDown,
   Plus,
+  Trash2,
 } from "lucide-react";
 import { updateLeadStatus, deleteLeadAction, addLeadToCrmAction } from "@/actions/workspace.actions";
 import { toast } from "sonner";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import { DeleteConfirmationModal } from "@/components/workspace/delete-confirmation-modal";
 
 interface WorkspaceCrmClientProps {
   initialLeads: any[];
@@ -46,6 +48,8 @@ export function WorkspaceCrmClient({
   const [notesModalLead, setNotesModalLead] = useState<any | null>(null);
   const [replyNoteInput, setReplyNoteInput] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [leadToDelete, setLeadToDelete] = useState<any | null>(null);
 
   const filteredLeads = leads.filter((lead) => {
     const matchesFilter =
@@ -98,6 +102,18 @@ export function WorkspaceCrmClient({
       toast.error(e.message);
     } finally {
       setIsUpdating(false);
+    }
+  };
+
+  const confirmDeleteLead = async () => {
+    if (!leadToDelete) return;
+    const id = leadToDelete.id;
+    try {
+      await deleteLeadAction(id);
+      setLeads((prev) => prev.filter((l) => l.id !== id));
+      toast.success("Prospect supprimé du CRM");
+    } catch (e: any) {
+      toast.error(e.message || "Erreur de suppression");
     }
   };
 
@@ -356,6 +372,17 @@ export function WorkspaceCrmClient({
                           <MessageSquare className="w-3.5 h-3.5" />
                         </button>
 
+                        <button
+                          onClick={() => {
+                            setLeadToDelete(lead);
+                            setDeleteModalOpen(true);
+                          }}
+                          className="p-1.5 rounded-lg bg-card hover:bg-rose-500/10 text-muted-foreground hover:text-rose-500 border border-border transition-colors cursor-pointer"
+                          title="Supprimer le prospect"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+
                         {lead.status !== "MEETING_BOOKED" && (
                           <button
                             onClick={() =>
@@ -488,6 +515,15 @@ export function WorkspaceCrmClient({
           </div>
         )}
       </AnimatePresence>
+
+      <DeleteConfirmationModal
+        open={deleteModalOpen}
+        onOpenChange={setDeleteModalOpen}
+        title="Supprimer ce prospect ?"
+        description="Cette action retirera définitivement ce prospect de votre CRM."
+        itemName={leadToDelete ? `${leadToDelete.businessName} (${leadToDelete.city || "Maroc"})` : undefined}
+        onConfirm={confirmDeleteLead}
+      />
     </div>
   );
 }

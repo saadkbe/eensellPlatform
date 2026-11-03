@@ -15,6 +15,7 @@ import {
 import { deleteCampaign } from "@/actions/workspace.actions";
 import { toast } from "sonner";
 import Link from "next/link";
+import { DeleteConfirmationModal } from "@/components/workspace/delete-confirmation-modal";
 
 interface WorkspaceCampaignsClientProps {
   campaigns: any[];
@@ -24,19 +25,18 @@ export function WorkspaceCampaignsClient({
   campaigns: initialCampaigns,
 }: WorkspaceCampaignsClientProps) {
   const [campaigns, setCampaigns] = useState<any[]>(initialCampaigns);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [campaignToDelete, setCampaignToDelete] = useState<any | null>(null);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Voulez-vous supprimer cette campagne ?")) return;
-    setDeletingId(id);
+  const confirmDelete = async () => {
+    if (!campaignToDelete) return;
+    const id = campaignToDelete.id;
     try {
       await deleteCampaign(id);
       setCampaigns((prev) => prev.filter((c) => c.id !== id));
       toast.success("Campagne supprimée");
     } catch (e: any) {
       toast.error(e.message);
-    } finally {
-      setDeletingId(null);
     }
   };
 
@@ -85,9 +85,11 @@ export function WorkspaceCampaignsClient({
                     TERMINÉE & DISPATCHÉE
                   </span>
                   <button
-                    onClick={() => handleDelete(camp.id)}
-                    disabled={deletingId === camp.id}
-                    className="p-1 rounded-lg text-muted-foreground hover:text-rose-500 transition-colors cursor-pointer"
+                    onClick={() => {
+                      setCampaignToDelete(camp);
+                      setDeleteModalOpen(true);
+                    }}
+                    className="p-1.5 rounded-lg text-muted-foreground hover:text-rose-500 hover:bg-rose-500/10 transition-colors cursor-pointer"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -150,6 +152,15 @@ export function WorkspaceCampaignsClient({
           ))
         )}
       </div>
+
+      <DeleteConfirmationModal
+        open={deleteModalOpen}
+        onOpenChange={setDeleteModalOpen}
+        title="Supprimer cette campagne ?"
+        description="Cette action supprimera définitivement la campagne et l'historique associé."
+        itemName={campaignToDelete?.name}
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 }

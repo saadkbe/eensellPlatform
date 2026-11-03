@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { DeleteConfirmationModal } from "@/components/workspace/delete-confirmation-modal";
 import {
   addLeadToCrmAction,
   deleteLeadAction,
@@ -70,6 +71,8 @@ export function WorkspaceSheetsClient({
   const [rows, setRows] = useState<SheetRow[]>(mappedRows);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [rowToDelete, setRowToDelete] = useState<SheetRow | null>(null);
   const saveDebounceMap = useRef<Record<string, NodeJS.Timeout>>({});
 
   const persistRowUpdate = (row: SheetRow) => {
@@ -171,7 +174,14 @@ export function WorkspaceSheetsClient({
     setRows(updated);
   };
 
-  const handleDeleteRow = async (id: string) => {
+  const requestDeleteRow = (row: SheetRow) => {
+    setRowToDelete(row);
+    setDeleteModalOpen(true);
+  };
+
+  const confirmDeleteRow = async () => {
+    if (!rowToDelete) return;
+    const id = rowToDelete.id;
     setRows(rows.filter((r) => r.id !== id));
     if (id.startsWith("lead_")) {
       const realId = id.replace("lead_", "");
@@ -412,7 +422,7 @@ export function WorkspaceSheetsClient({
                   </td>
                   <td className="py-1.5 px-2 text-center">
                     <button
-                      onClick={() => handleDeleteRow(r.id)}
+                      onClick={() => requestDeleteRow(r)}
                       className="opacity-0 group-hover:opacity-100 p-1 hover:text-red-500 transition-opacity text-[#9B9A97] cursor-pointer"
                       title="Delete row"
                     >
@@ -434,6 +444,15 @@ export function WorkspaceSheetsClient({
           <span>New page / row</span>
         </button>
       </div>
+
+      <DeleteConfirmationModal
+        open={deleteModalOpen}
+        onOpenChange={setDeleteModalOpen}
+        title="Supprimer cette ligne ?"
+        description="Cette action retirera ce prospect / contrat de votre tableau."
+        itemName={rowToDelete?.name}
+        onConfirm={confirmDeleteRow}
+      />
     </div>
   );
 }
