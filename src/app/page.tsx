@@ -4,35 +4,51 @@ import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 
 // Dynamically import below-the-fold sections
-const VslSection = dynamic(() =>
-  import("@/components/landing/VslSection").then((mod) => mod.VslSection)
+const WorkspaceShowcaseSection = dynamic(() =>
+  import("@/components/landing/WorkspaceShowcaseSection").then(
+    (mod) => mod.WorkspaceShowcaseSection
+  )
 );
-const FeaturesSection = dynamic(() =>
-  import("@/components/landing/FeaturesSection").then((mod) => mod.FeaturesSection)
+const UniversitySection = dynamic(() =>
+  import("@/components/landing/UniversitySection").then(
+    (mod) => mod.UniversitySection
+  )
 );
 const OpportunitySection = dynamic(() =>
-  import("@/components/landing/OpportunitySection").then((mod) => mod.OpportunitySection)
+  import("@/components/landing/OpportunitySection").then(
+    (mod) => mod.OpportunitySection
+  )
 );
 const TransformationSection = dynamic(() =>
-  import("@/components/landing/TransformationSection").then((mod) => mod.TransformationSection)
+  import("@/components/landing/TransformationSection").then(
+    (mod) => mod.TransformationSection
+  )
 );
 const PricingSection = dynamic(() =>
   import("@/components/landing/PricingSection").then((mod) => mod.PricingSection)
 );
 const SocialProofSection = dynamic(() =>
-  import("@/components/landing/SocialProofSection").then((mod) => mod.SocialProofSection)
+  import("@/components/landing/SocialProofSection").then(
+    (mod) => mod.SocialProofSection
+  )
 );
 const CertificateSection = dynamic(() =>
-  import("@/components/landing/CertificateSection").then((mod) => mod.CertificateSection)
+  import("@/components/landing/CertificateSection").then(
+    (mod) => mod.CertificateSection
+  )
 );
 const MotivationSection = dynamic(() =>
-  import("@/components/landing/MotivationSection").then((mod) => mod.MotivationSection)
+  import("@/components/landing/MotivationSection").then(
+    (mod) => mod.MotivationSection
+  )
 );
 const FaqSection = dynamic(() =>
   import("@/components/landing/FaqSection").then((mod) => mod.FaqSection)
 );
 const FinalCtaSection = dynamic(() =>
-  import("@/components/landing/FinalCtaSection").then((mod) => mod.FinalCtaSection)
+  import("@/components/landing/FinalCtaSection").then(
+    (mod) => mod.FinalCtaSection
+  )
 );
 
 export default function HomePage() {
@@ -42,9 +58,11 @@ export default function HomePage() {
 
       <main>
         <HeroSection />
-        <VslSection />
-        <div id="features">
-          <FeaturesSection />
+        <div id="workspace">
+          <WorkspaceShowcaseSection />
+        </div>
+        <div id="university">
+          <UniversitySection />
         </div>
         <OpportunitySection />
         <div id="how-it-works">

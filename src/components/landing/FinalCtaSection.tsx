@@ -68,7 +68,7 @@ export function FinalCtaSection() {
                 className="w-full sm:w-auto h-13 px-9 text-sm sm:text-base font-bold bg-slate-950 hover:bg-slate-900 text-white rounded-2xl shadow-[0_10px_30px_rgba(15,23,42,0.18)] transition-all hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2"
               >
                 <Key className="w-4 h-4 rtl:ml-1 ltr:mr-1" />
-                <span>Get Immediate Access &bull; 200 MAD</span>
+                <span>Get Immediate Access &bull; 499 MAD</span>
                 <ArrowRight className="w-4 h-4 rtl:rotate-180" />
               </Button>
             </Link>
