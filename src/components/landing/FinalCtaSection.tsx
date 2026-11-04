@@ -16,7 +16,7 @@ import { motion } from "framer-motion";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 
 export function FinalCtaSection() {
-  const { dir } = useLanguage();
+  const { dir, t } = useLanguage();
 
   return (
     <section
@@ -44,20 +44,20 @@ export function FinalCtaSection() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
             </span>
-            <span>FOUNDING COHORT ENROLLMENT &bull; INSTANT ACCESS</span>
+            <span>{t("fcta_badge")}</span>
           </div>
 
           {/* Heading */}
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-950 tracking-tight leading-[1.15] mb-6 max-w-3xl text-balance">
-            Your Autonomous AI Agency{" "}
+            {t("fcta_title_1")}{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
-              Starts Right Now.
+              {t("fcta_title_2")}
             </span>
           </h2>
 
           {/* Subtitle */}
           <p className="text-base sm:text-lg text-slate-600 font-medium max-w-2xl mx-auto mb-10 leading-relaxed text-balance">
-            Stop waiting for the &ldquo;perfect moment.&rdquo; Over 350 Moroccan agency founders are already using the Workspace to extract leads, launch Darija WhatsApp pitches, and close 15,000 MAD retainers.
+            {t("fcta_sub")}
           </p>
 
           {/* CTA Buttons */}
@@ -68,7 +68,7 @@ export function FinalCtaSection() {
                 className="w-full sm:w-auto h-13 px-9 text-sm sm:text-base font-bold bg-slate-950 hover:bg-slate-900 text-white rounded-2xl shadow-[0_10px_30px_rgba(15,23,42,0.18)] transition-all hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2"
               >
                 <Key className="w-4 h-4 rtl:ml-1 ltr:mr-1" />
-                <span>Get Immediate Access &bull; 499 MAD</span>
+                <span>{t("fcta_cta_primary")}</span>
                 <ArrowRight className="w-4 h-4 rtl:rotate-180" />
               </Button>
             </Link>
@@ -85,7 +85,7 @@ export function FinalCtaSection() {
                 className="w-full sm:w-auto h-13 px-8 text-sm sm:text-base font-bold bg-white hover:bg-slate-50 text-slate-800 border-slate-200 shadow-2xs rounded-2xl transition-all hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2"
               >
                 <MessageCircle className="w-4 h-4 text-emerald-600" />
-                <span>WhatsApp VIP Advisory</span>
+                <span>{t("fcta_cta_secondary")}</span>
               </Button>
             </a>
           </div>
@@ -94,15 +94,15 @@ export function FinalCtaSection() {
           <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 text-xs font-semibold text-slate-500 pt-4 border-t border-slate-100 w-full">
             <div className="flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Full 2-Month Membership</span>
+              <span>{t("fcta_trust_1")}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>Instant Discord & Workspace Onboarding</span>
+              <span>{t("fcta_trust_2")}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>2 Live Zoom Deal Rooms Per Week</span>
+              <span>{t("fcta_trust_3")}</span>
             </div>
           </div>
         </motion.div>

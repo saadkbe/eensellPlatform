@@ -61,43 +61,43 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
               className="px-3 py-1.5 text-xs sm:text-[13px] font-semibold text-slate-700 hover:text-slate-950 transition-colors flex items-center gap-1.5 rounded-lg hover:bg-slate-50"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>12-Min VSL</span>
+              <span>{t("nav_vsl")}</span>
             </a>
             <a
               href="#workspace"
               className="px-3 py-1.5 text-xs sm:text-[13px] font-semibold text-slate-700 hover:text-slate-950 transition-colors rounded-lg hover:bg-slate-50"
             >
-              Workspace OS
+              {t("nav_workspace_os")}
             </a>
             <a
               href="#university"
               className="px-3 py-1.5 text-xs sm:text-[13px] font-semibold text-slate-700 hover:text-slate-950 transition-colors rounded-lg hover:bg-slate-50"
             >
-              University V2
+              {t("nav_university")}
             </a>
             <a
               href="#pricing"
               className="px-3 py-1.5 text-xs sm:text-[13px] font-semibold text-slate-700 hover:text-slate-950 transition-colors rounded-lg hover:bg-slate-50"
             >
-              Pricing
+              {t("nav_pricing")}
             </a>
             <a
               href="#testimonials"
               className="px-3 py-1.5 text-xs sm:text-[13px] font-semibold text-slate-700 hover:text-slate-950 transition-colors rounded-lg hover:bg-slate-50"
             >
-              Testimonials
+              {t("nav_testimonials")}
             </a>
             <a
               href="#faq"
               className="px-3 py-1.5 text-xs sm:text-[13px] font-semibold text-slate-700 hover:text-slate-950 transition-colors rounded-lg hover:bg-slate-50"
             >
-              FAQ
+              {t("nav_faq")}
             </a>
             <Link
               href="/contact"
               className="px-3 py-1.5 text-xs sm:text-[13px] font-semibold text-slate-700 hover:text-slate-950 transition-colors rounded-lg hover:bg-slate-50"
             >
-              Contact
+              {t("nav_contact")}
             </Link>
           </nav>
         )}
@@ -194,25 +194,25 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
         >
           <div className="flex flex-col gap-3 text-sm font-bold text-slate-800 pb-4 border-b border-slate-100">
             <a href="#vsl-player" onClick={() => setIsMobileMenuOpen(false)}>
-              12-Min VSL
+              {t("nav_vsl")}
             </a>
             <a href="#workspace" onClick={() => setIsMobileMenuOpen(false)}>
-              Workspace OS
+              {t("nav_workspace_os")}
             </a>
             <a href="#university" onClick={() => setIsMobileMenuOpen(false)}>
-              University V2
+              {t("nav_university")}
             </a>
             <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)}>
-              Pricing
+              {t("nav_pricing")}
             </a>
             <a href="#testimonials" onClick={() => setIsMobileMenuOpen(false)}>
-              Testimonials
+              {t("nav_testimonials")}
             </a>
             <a href="#faq" onClick={() => setIsMobileMenuOpen(false)}>
-              FAQ
+              {t("nav_faq")}
             </a>
             <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>
-              Contact
+              {t("nav_contact")}
             </Link>
           </div>
 

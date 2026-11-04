@@ -20,16 +20,16 @@ import { motion } from "framer-motion";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 
 export function PricingSection() {
-  const { dir } = useLanguage();
+  const { dir, t, isRTL } = useLanguage();
 
   const includedItems = [
-    "60-day implementation challenge to land your first paid B2B AI client.",
-    "Nine structured learning modules covering the complete Moroccan agency model.",
-    "Practical AI business resources (proposal decks, legal Moroccan devis, Darija scripts).",
-    "Ready-to-use automation workflows (Make.com, Voiceflow, WhatsApp bots).",
-    "Student dashboard and progress tracking with completion milestones.",
-    "Community access and recorded weekly live coaching sessions.",
-    "Eensell Workspace access under clearly defined usage limits (Maps Scraper, CRM, WhatsApp Studio, Invoicing).",
+    t("pricing_v2_inc_1"),
+    t("pricing_v2_inc_2"),
+    t("pricing_v2_inc_3"),
+    t("pricing_v2_inc_4"),
+    t("pricing_v2_inc_5"),
+    t("pricing_v2_inc_6"),
+    t("pricing_v2_inc_7"),
   ];
 
   return (
@@ -51,7 +51,7 @@ export function PricingSection() {
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 shadow-2xs mb-4 text-xs font-bold text-slate-800 tracking-wide uppercase"
           >
             <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Official V2 Enrollment</span>
+            <span>{t("pricing_v2_badge")}</span>
           </motion.div>
 
           <motion.h2
@@ -61,9 +61,9 @@ export function PricingSection() {
             transition={{ delay: 0.1 }}
             className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 tracking-tight leading-tight mb-4"
           >
-            Invest Once In Your Agency.{" "}
+            {t("pricing_v2_title_1")}{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
-              Close High-Ticket Clients.
+              {t("pricing_v2_title_2")}
             </span>
           </motion.h2>
 
@@ -74,7 +74,7 @@ export function PricingSection() {
             transition={{ delay: 0.15 }}
             className="text-sm sm:text-base text-slate-600 font-medium max-w-2xl mx-auto leading-relaxed"
           >
-            One single closed client covers this investment twenty times over. Everything you need to launch and scale in Morocco.
+            {t("pricing_v2_sub")}
           </motion.p>
         </div>
 
@@ -112,28 +112,28 @@ export function PricingSection() {
                 </div>
 
                 <h3 className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight mb-2">
-                  Eensell University V2
+                  {t("pricing_v2_card_title")}
                 </h3>
                 <p className="text-xs text-slate-500 font-medium leading-relaxed mb-6">
-                  Complete academy curriculum, live mastermind rooms, and the autonomous Workspace OS.
+                  {t("pricing_v2_sub")}
                 </p>
 
                 {/* Big Bold Pricing Display (499 MAD instead of 997 MAD) */}
-                <div className="mb-6 p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/90 text-left">
+                <div className="mb-6 p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/90 text-left rtl:text-right">
                   <div className="flex items-baseline gap-2 mb-1">
                     <span className="text-4xl sm:text-5xl font-black text-slate-950 font-mono tracking-tight">
-                      499
+                      {t("pricing_v2_price")}
                     </span>
                     <span className="text-2xl font-black text-slate-800">
-                      MAD
+                      {t("pricing_v2_currency")}
                     </span>
-                    <span className="text-sm font-bold text-slate-400 line-through ml-2">
-                      instead of 997 MAD
+                    <span className="text-sm font-bold text-slate-400 line-through ml-2 rtl:mr-2 rtl:ml-0">
+                      {t("pricing_v2_old_price")}
                     </span>
                   </div>
                   <p className="text-xs text-emerald-700 font-bold flex items-center gap-1 mt-1">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    One-time program purchase &bull; No monthly subscription
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span>{t("pricing_v2_frequency")}</span>
                   </p>
                 </div>
               </div>
@@ -145,7 +145,7 @@ export function PricingSection() {
                     size="lg"
                     className="w-full h-12 rounded-2xl text-xs sm:text-sm font-bold bg-slate-950 hover:bg-slate-900 text-white shadow-xl cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center gap-2"
                   >
-                    <span>Get Eensell University V2 Now</span>
+                    <span>{t("pricing_v2_cta")}</span>
                     <ArrowRight className="w-4 h-4 rtl:rotate-180" />
                   </Button>
                 </Link>
@@ -162,16 +162,13 @@ export function PricingSection() {
                     className="w-full h-11 rounded-2xl text-xs font-bold bg-white hover:bg-slate-50 text-slate-800 border-slate-200 shadow-2xs cursor-pointer flex items-center justify-center gap-2"
                   >
                     <MessageCircle className="w-4 h-4 text-emerald-600" />
-                    <span>Pay via CIH Bank / WhatsApp Concierge</span>
+                    <span>CIH Bank / WhatsApp</span>
                   </Button>
                 </a>
 
                 <div className="pt-2 flex items-center justify-center gap-4 text-[11px] text-slate-500 font-medium">
                   <span className="flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Secure SSL Checkout
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Zap className="w-3.5 h-3.5 text-emerald-600" /> Instant Activation
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> {t("pricing_v2_guarantee")}
                   </span>
                 </div>
               </div>
@@ -182,7 +179,7 @@ export function PricingSection() {
               <div>
                 <h4 className="text-sm font-extrabold uppercase tracking-wider text-slate-900 mb-5 flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-indigo-600" />
-                  <span>Everything Included In Your V2 Program:</span>
+                  <span>{t("pricing_v2_inc_heading")}</span>
                 </h4>
 
                 <ul className="space-y-3.5">
@@ -201,10 +198,10 @@ export function PricingSection() {
               <div className="mt-8 p-4 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-1.5">
                 <div className="flex items-center gap-2 text-xs font-bold text-slate-950">
                   <Key className="w-4 h-4 text-amber-500" />
-                  <span>Bring Your Own AI Keys:</span>
+                  <span>{t("ws_byo_title")}</span>
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  For the Workspace AI tools (OpenAI / Gemini / Groq), students use their own API keys. This guarantees zero markup on tokens, complete data privacy, and full control over your automations.
+                  {t("pricing_v2_byo_note")}
                 </p>
               </div>
             </div>

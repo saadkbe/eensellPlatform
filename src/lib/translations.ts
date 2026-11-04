@@ -8,6 +8,178 @@ export const translations = {
     nav_signIn: "تسجيل الدخول",
     nav_cta: "ابدأ الآن",
 
+    // ── V2 Landing Page Navbar ──
+    nav_vsl: "فيديو الشرح 12 دقيقة",
+    nav_workspace_os: "مساحة العمل OS",
+    nav_university: "الجامعة V2",
+    nav_pricing: "الأسعار",
+    nav_testimonials: "آراء الأعضاء",
+    nav_faq: "الأسئلة الشائعة",
+    nav_contact: "تواصل معنا",
+
+    // ── V2 Hero ──
+    hero_v2_badge: "إينسيل ورك سبيس 3.0 • الجامعة V2",
+    hero_v2_title_1: "طوّر وكالتك للذكاء الاصطناعي B2B بالمغرب",
+    hero_v2_title_2: "بأتمتة كاملة وبدون تدخل.",
+    hero_v2_sub: "استخرج بيانات أصحاب القرار في كازا والرباط ومراكش، واحصل على أرقام واتساب المباشرة، واقفل عقود من 10,000 إلى 30,000 درهم بالذكاء الاصطناعي.",
+    hero_v2_cta_primary: "احصل على وصول فوري لمساحة العمل",
+    hero_v2_cta_secondary: "شاهد فيديو الشرح (12 دقيقة)",
+    hero_v2_pill_1: "+14,800 عميل مستخرج",
+    hero_v2_pill_2: "84.6% نسبة فتح الواتساب",
+    hero_v2_pill_3: "نصوص إعلانية بالدارجة والفرنسية",
+    hero_v2_pill_4: "بدون أي خبرة برمجية",
+    hero_v2_vsl_badge: "شاهد الشرح الكامل في 12 دقيقة",
+    hero_v2_vsl_title: "كيف تبني وكالة ذكاء اصطناعي وتصل إلى 30,000 درهم شهرياً عبر نظام إينسيل",
+
+    // ── V2 Workspace OS Section ──
+    ws_badge: "نظام التشغيل المتكامل لوكالات الذكاء الاصطناعي",
+    ws_title_1: "كل ما تحتاجه لجلب وإغلاق",
+    ws_title_2: "عملاء B2B في المغرب.",
+    ws_sub: "توقف عن تضييع الوقت بين أدوات متفرقة. مساحة عمل إينسيل تجمع لك استخراج عملاء خرائط جوجل بالمغرب، رسائل الواتساب بالدارجة، إيميلات GPT-4o الاحترافية، ونظام الفواتير والـ Devis بالدرهم في منصة واحدة متكاملة.",
+    ws_byo_badge: "بدون أي عمولات وسيطة",
+    ws_byo_title: "استخدم مفاتيح API الخاصة بك (BYOK)",
+    ws_byo_desc: "اربط مفاتيحك الخاصة مباشرة في OpenAI و Anthropic و Gemini. أنت تدفع التكلفة الحقيقية الخام بدون أي زيادة أو نقاط مخفية.",
+    ws_cta_btn: "ابدأ استخدام مساحة العمل الآن",
+
+    ws_tool1_step: "الخطوة 1",
+    ws_tool1_name: "مستخرج عملاء خرائط جوجل",
+    ws_tool1_desc: "استخرج مئات الشركات والعيادات في كازا والرباط ومراكش مع أرقام الواتساب المباشرة والتقييمات والعناوين الفعلية.",
+
+    ws_tool2_step: "الخطوة 2",
+    ws_tool2_name: "نظام إدارة العملاء CRM المغربي",
+    ws_tool2_desc: "رتّب العملاء حسب مراحل التفاوض (مهتم، قيد النقاش، تم الإغلاق، تم إرسال الفاتورة) مع حساب القيمة الإجمالية المتوقعة بالدرهم مباشرة.",
+
+    ws_tool3_step: "الخطوة 3",
+    ws_tool3_name: "استوديو رسائل الواتساب بالدارجة",
+    ws_tool3_desc: "جهّز رسائل وتسجيلات صوتية بالدارجة والفرنسية داخل واجهة محاكية للآيفون بنماذج تواصل تحقق أكثر من 84% نسبة استجابة.",
+
+    ws_tool4_step: "الخطوة 4",
+    ws_tool4_name: "كاتب الإيميلات الاحترافية (GPT-4o)",
+    ws_tool4_desc: "ذكاء اصطناعي مخصص لمراسلة الشركات المغربية مع فحص تجنب السبام ومزامنة الإرسال بنقرة واحدة عبر حساب جيميل الخاص بك.",
+
+    ws_tool5_step: "الخطوة 5",
+    ws_tool5_name: "نظام إنشاء الـ Devis والفواتير بالدرهم",
+    ws_tool5_desc: "أنشئ عروض أسعار (Devis) وفواتير احترافية مطابقة للسوق المغربي مع حساب الإجمالي بالدرهم، بنود الدفعة الأولى، والتصدير المباشر كـ PDF.",
+
+    ws_tool6_step: "الخطوة 6",
+    ws_tool6_name: "مفكرة الاستراتيجيات والمتابعات",
+    ws_tool6_desc: "احتفظ بملاحظات معالجة اعتراضات العملاء، سيناريوهات المكالمات البيعية، ومواعيد المتابعة في مساحة عمل تحفظ تقدمك تلقائياً.",
+
+    // ── V2 University Section ──
+    uni_badge: "منهج جامعة إينسيل V2 الكامل",
+    uni_title_1: "تسع وحدات تعليمية لاحتراف",
+    uni_title_2: "نموذج وكالات الذكاء الاصطناعي B2B.",
+    uni_sub: "من الصفر تماماً حتى توقيع أول عقد بقيمة 10,000 إلى 30,000 درهم في 60 يوماً. محتوى عملي مسجل وموجّه خصيصاً لواقع السوق المغربي.",
+
+    uni_m1_title: "أسس وعقلية رواد أعمال الذكاء الاصطناعي",
+    uni_m1_desc: "فهم الفرص الحقيقية لثورة الذكاء الاصطناعي بالمغرب، بناء عقلية البيع للشركات، والتعرف على الأدوات التأسيسية للأتمتة.",
+    uni_m1_lessons: "وحدة 1",
+    uni_m1_tag: "الأسس والانطلاق",
+
+    uni_m2_title: "أدوات الذكاء الاصطناعي وهندسة الأوامر (Prompts)",
+    uni_m2_desc: "تعمق في أقوى نماذج الذكاء الاصطناعي وصياغة الأوامر المتقدمة لحل المشاكل المعقدة في الشركات والمؤسسات.",
+    uni_m2_lessons: "وحدتان",
+    uni_m2_tag: "احتراف الأوامر",
+
+    uni_m3_title: "إنشاء المواقع وصفحات الهبوط بالذكاء الاصطناعي",
+    uni_m3_desc: "تعلم بناء مواقع وصفحات هبوط عصرية وسريعة بالذكاء الاصطناعي تحقق أعلى نسب تحويل الزوار لعملاء فعليين.",
+    uni_m3_lessons: "وحدة 1",
+    uni_m3_tag: "المواقع وصفحات الهبوط",
+
+    uni_m4_title: "أتمتة الأعمال وبناء الشات بوت بالذكاء الاصطناعي",
+    uni_m4_desc: "بناء روبوتات واتساب ذكية وسيناريوهات أتمتة متكاملة عبر Make.com و n8n لإدارة العملاء والرد التلقائي 24/7.",
+    uni_m4_lessons: "وحدتان",
+    uni_m4_tag: "Make.com والروبوتات",
+
+    uni_m5_title: "صناعة الفيديوهات والمحتوى بالذكاء الاصطناعي",
+    uni_m5_desc: "إنتاج فيديوهات تسويقية فيروسية، ريلز بدون ظهور، وتوليد أفاتار واقعي للعلامات التجارية باستخدام Kling و ElevenLabs.",
+    uni_m5_lessons: "وحدتان",
+    uni_m5_tag: "الفيديو والمحتوى",
+
+    uni_m6_title: "بناء المنتجات الرقمية والـ Micro-SaaS",
+    uni_m6_desc: "تصميم وتغليف وبيع منتجات رقمية، قوالب ذكية، وحلول برمجية مصغرة تعتمد على الذكاء الاصطناعي باشتراكات دورية.",
+    uni_m6_lessons: "وحدة 1",
+    uni_m6_tag: "المنتجات الرقمية",
+
+    uni_m7_title: "الحصول على العملاء وإبرام الصفقات B2B",
+    uni_m7_desc: "نظام التواصل المتكامل خطوة بخطوة: استخراج الشركات، رسائل وتسجيلات الواتساب بالدارجة، وتجاوز رفض السكرتارية.",
+    uni_m7_lessons: "وحدتان",
+    uni_m7_tag: "جلب العملاء",
+
+    uni_m8_title: "الإغلاق وتحديد الأسعار والعقود القانونية",
+    uni_m8_desc: "كيفية تسعير خدماتك بين 10,000 و 30,000 درهم، كتابة العقود المغربية، وتحصيل دفعة مقدمة 50% بنجاح وأمان.",
+    uni_m8_lessons: "وحدة 1",
+    uni_m8_tag: "العقود والإغلاق",
+
+    uni_m9_title: "تحدي الـ 60 يوماً لتحقيق أول عميل مدفوع",
+    uni_m9_desc: "خطة عمل يومية محددة للمتابعة والمحاسبة حتى تتأكد من إتمام أول تعاقد ودخول التحويل البنكي لحسابك.",
+    uni_m9_lessons: "تحدي 60 يوم",
+    uni_m9_tag: "التحدي العملي",
+
+    uni_challenge_badge: "تحدي الـ 60 يوماً التطبيقي",
+    uni_challenge_title: "خطة عمل يومية خطوة بخطوة حتى وصول أول تحويل بنكي.",
+    uni_challenge_desc: "لست وحدك في هذه الرحلة. نوفر لك متابعة دقيقة وتوجيهاً مباشراً ومجتمعاً من المؤسسين الطموحين لنضمن تطبيقك للخطوات بنجاح.",
+    uni_challenge_cta: "ابدأ تحدي الـ 60 يوماً الآن",
+
+    // ── V2 Opportunity Section ──
+    opp_v2_badge: "فرصة الذكاء الاصطناعي في المغرب 2026",
+    opp_v2_title_1: "الشركات والعيادات في المغرب",
+    opp_v2_title_2: "في حاجة ماسة لحلول الذكاء الاصطناعي.",
+    opp_v2_p1: "بينما يكتفي الأغلب بالمشاهدة، أصحاب العيادات والمكاتب والشركات في كازا والرباط ومراكش يخسرون زبائن يومياً بسبب بطء الرد خارج أوقات العمل.",
+    opp_v2_p2: "عندما تقدم لهم نظام واتساب ذكي وأتمتة تجيب في ثوانٍ، لن تبيع 'دورات'... بل تبيع حل يضاعف أرباحهم، ومستعدين يدفعون مقابله شهرياً.",
+    opp_v2_stat1_val: "+420,000",
+    opp_v2_stat1_label: "شركة مسجلة في المغرب",
+    opp_v2_stat1_sub: "أقل من 2% يمتلكون نظام رد أو واتساب ذكي.",
+    opp_v2_stat2_val: "15,000 MAD",
+    opp_v2_stat2_label: "متوسط قيمة العقد الشهري",
+    opp_v2_stat2_sub: "ما تدفعه العيادات والشركات لأتمتة جلب الزبائن.",
+    opp_v2_stat3_val: "84.6%",
+    opp_v2_stat3_label: "نسبة التجاوب مع الرسائل",
+    opp_v2_stat3_sub: "باستخدام رسائل وتسجيلات الواتساب بالدارجة.",
+    opp_v2_stat4_val: "30-60 يوم",
+    opp_v2_stat4_label: "لإبرام أول صفقة مدفوعة",
+    opp_v2_stat4_sub: "المعدل الطبيعي للملتزمين بخطة العمل اليومية.",
+
+    // ── V2 Pricing Section ──
+    pricing_v2_badge: "التسجيل الرسمي في النسخة الثانية V2",
+    pricing_v2_title_1: "استثمار واحد واضح.",
+    pricing_v2_title_2: "مهارات للمستقبل وأدوات ذكية متكاملة.",
+    pricing_v2_sub: "كل ما تحتاجه لإطلاق وتطوير وكالة ذكاء اصطناعي رابحة ومربحة في المغرب بدون اشتراكات شهرية أو رسوم مخفية.",
+    pricing_v2_card_title: "جامعة إينسيل V2 (Eensell University V2)",
+    pricing_v2_card_badge: "الأكثر طلباً • وصول لبرنامج V2",
+    pricing_v2_price: "499",
+    pricing_v2_old_price: "997 MAD",
+    pricing_v2_currency: "درهم",
+    pricing_v2_frequency: "دفع لمرة واحدة فقط • وصول دائم للبرنامج والتحدي",
+    pricing_v2_inc_heading: "ما يتضمنه هذا البرنامج المتكامل:",
+    pricing_v2_inc_1: "تحدي الـ 60 يوماً العملي لمساعدتك على إبرام أول صفقة مدفوعة.",
+    pricing_v2_inc_2: "تسع وحدات تعليمية تفصيلية تغطي نموذج عمل الوكالات في السوق المغربي.",
+    pricing_v2_inc_3: "موارد أعمال حقيقية (نماذج عروض عمل، Devis مغربي قانوني، ونصوص تواصل بالدارجة).",
+    pricing_v2_inc_4: "سيناريوهات أتمتة جاهزة للتشغيل (Make.com وروبوتات واتساب تفاعلية).",
+    pricing_v2_inc_5: "لوحة تحكم خاصة ومتابعة مستمرة لنسبة إنجازك للدروس والتحديات.",
+    pricing_v2_inc_6: "عضوية في مجتمع المؤسسين ومكالمات تدريبية أسبوعية مباشرة مع تسجيلاتها.",
+    pricing_v2_inc_7: "استخدام مساحة عمل Eensell Workspace ضمن حدود واضحة (مستخرج الخرائط، الـ CRM، استوديو الواتساب، والـ Devis).",
+    pricing_v2_byo_note: "تنبيه الشفافية: ستستخدم مفاتيح API الخاصة بك في أدوات الذكاء الاصطناعي لتدفع التكلفة الحقيقية الخام فقط بدون أي زيادة.",
+    pricing_v2_cta: "اشترك في جامعة إينسيل V2 الآن",
+    pricing_v2_guarantee: "دفع آمن 100% • تفعيل فوري للوحة التحكم ومساحة العمل",
+
+    // ── V2 Final CTA Section ──
+    fcta_badge: "التسجيل في الدفعة التأسيسية • وصول فوري",
+    fcta_title_1: "وكالتك الذكية للذكاء الاصطناعي",
+    fcta_title_2: "تبدأ رحلتها اليوم.",
+    fcta_sub: "توقف عن انتظار 'الوقت المثالي'. أكثر من 350 رائد أعمال مغربي يستخدمون المنصة لاستخراج العملاء، إرسال رسائل الواتساب بالدارجة، وتوقيع عقود بمبالغ ممتازة.",
+    fcta_cta_primary: "احصل على وصول V2 الكامل — 499 درهم",
+    fcta_cta_secondary: "تواصل معنا مباشرة عبر الواتساب",
+    fcta_trust_1: "دفع آمن 100%",
+    fcta_trust_2: "مفاتيح API خاصة بك",
+    fcta_trust_3: "مجتمع 350+ مؤسس",
+
+    // ── V2 Footer ──
+    footer_tagline: "المنظومة الأولى بالمغرب لمساحات العمل والتعليم العملي لرواد أعمال وكالات الذكاء الاصطناعي.",
+    footer_copyright: "جميع الحقوق محفوظة. الدار البيضاء، المغرب.",
+    footer_support: "الدعم المباشر:",
+
+
     // Hero
     hero_badge: "التسجيل مفتوح للأعضاء المؤسسين",
     hero_headline_1: "انطلق من الصفر إلى",
@@ -534,6 +706,178 @@ export const translations = {
     nav_signIn: "Se connecter",
     nav_cta: "Commencer",
 
+    // ── V2 Landing Page Navbar ──
+    nav_vsl: "12-Min VSL",
+    nav_workspace_os: "Workspace OS",
+    nav_university: "Université V2",
+    nav_pricing: "Tarifs",
+    nav_testimonials: "Témoignages",
+    nav_faq: "FAQ",
+    nav_contact: "Contact",
+
+    // ── V2 Hero ──
+    hero_v2_badge: "Eensell Workspace 3.0 • Université V2",
+    hero_v2_title_1: "Développez Votre Agence IA B2B au Maroc",
+    hero_v2_title_2: "En Pilotage Automatique Complet.",
+    hero_v2_sub: "Scrapez les décideurs locaux à Casablanca, Rabat et Marrakech, enrichissez leurs numéros WhatsApp et signez des contrats de 10 000 à 30 000 MAD grâce à l'IA autonome.",
+    hero_v2_cta_primary: "Accéder Immédiatement au Workspace",
+    hero_v2_cta_secondary: "Voir la Démo de 12 Min",
+    hero_v2_pill_1: "14 800+ Leads Extraits",
+    hero_v2_pill_2: "84.6% Taux d'Ouverture WhatsApp",
+    hero_v2_pill_3: "Copywriting IA en Darija & Français",
+    hero_v2_pill_4: "0 Compétence en Code Requise",
+    hero_v2_vsl_badge: "Regardez la Démo Complète de 12 Minutes",
+    hero_v2_vsl_title: "Comment les Agences Marocaines Atteignent 30 000 MAD/mois avec Eensell OS",
+
+    // ── V2 Workspace OS Section ──
+    ws_badge: "Système d'Exploitation d'Agence Autonome",
+    ws_title_1: "Tout ce Qu'il Faut pour Prospecter & Signer",
+    ws_title_2: "des Clients B2B au Maroc.",
+    ws_sub: "Arrêtez d'assembler 10 outils différents. Eensell Workspace réunit l'extraction Google Maps locale, l'outreach WhatsApp en Darija, la rédaction d'emails avec GPT-4o et la facturation en MAD dans un seul tableau de bord unifié.",
+    ws_byo_badge: "Zéro Marge Ni Crédit Caché",
+    ws_byo_title: "Utilisez Vos Propres Clés API (BYOK)",
+    ws_byo_desc: "Connectez directement vos clés OpenAI, Anthropic ou Gemini. Vous payez le coût brut direct du fournisseur sans aucun surcoût.",
+    ws_cta_btn: "Accéder au Workspace Maintenant",
+
+    ws_tool1_step: "ÉTAPE 1",
+    ws_tool1_name: "Scraper Google Maps Local",
+    ws_tool1_desc: "Extrayez des centaines d'entreprises locales à Casablanca, Rabat et Marrakech avec numéros WhatsApp directs, avis et adresses réelles.",
+
+    ws_tool2_step: "ÉTAPE 2",
+    ws_tool2_name: "CRM B2B Marocain Intelligent",
+    ws_tool2_desc: "Organisez vos prospects par étapes (Chaud, En discussion, Signé, Facturé) et suivez votre chiffre d'affaires estimé en MAD en temps réel.",
+
+    ws_tool3_step: "ÉTAPE 3",
+    ws_tool3_name: "Studio Outreach WhatsApp en Darija",
+    ws_tool3_desc: "Simulez des notes vocales et messages en Darija et Français dans une interface iPhone. Scripts testés avec +84% de taux de réponse.",
+
+    ws_tool4_step: "ÉTAPE 4",
+    ws_tool4_name: "Rédacteur d'Emails IA (GPT-4o)",
+    ws_tool4_desc: "GPT-4o calibré pour la prospection locale au Maroc avec vérification anti-spam et synchronisation en 1 clic avec votre boîte Gmail.",
+
+    ws_tool5_step: "ÉTAPE 5",
+    ws_tool5_name: "Générateur de Devis & Factures MAD",
+    ws_tool5_desc: "Générez des devis et factures conformes aux pratiques marocaines avec montants en MAD, acomptes 50% et export direct en PDF.",
+
+    ws_tool6_step: "ÉTAPE 6",
+    ws_tool6_name: "Bloc-Notes Stratégique & Suivis",
+    ws_tool6_desc: "Gardez vos réponses aux objections clients, vos scripts d'appels et vos relances prioritaires dans un espace persistant à sauvegarde automatique.",
+
+    // ── V2 University Section ──
+    uni_badge: "Programme Complet Eensell University V2",
+    uni_title_1: "Neuf Modules Structurés pour Maîtriser",
+    uni_title_2: "le Modèle d'Agence IA B2B.",
+    uni_sub: "Du débutant complet à la signature de votre premier contrat de 10 000 à 30 000 MAD en 60 jours. Contenu enregistré, pratique et adapté au Maroc.",
+
+    uni_m1_title: "Fondations & Mindset de l'Entrepreneur IA",
+    uni_m1_desc: "Comprenez l'opportunité de l'IA au Maroc, adoptez le bon mindset pour démarcher des entreprises et découvrez les outils d'automatisation.",
+    uni_m1_lessons: "1 Module",
+    uni_m1_tag: "Fondations",
+
+    uni_m2_title: "Outils IA & Ingénierie de Prompts Avancée",
+    uni_m2_desc: "Plongez dans les meilleurs modèles LLM et maîtrisez les techniques de prompting professionnelles pour automatiser des processus réels.",
+    uni_m2_lessons: "2 Modules",
+    uni_m2_tag: "Prompt Mastery",
+
+    uni_m3_title: "Création de Sites & Landing Pages Modernes",
+    uni_m3_desc: "Apprenez à concevoir des sites web et landing pages SaaS modernes avec l'aide de l'IA pour maximiser la conversion de vos prospects.",
+    uni_m3_lessons: "1 Module",
+    uni_m3_tag: "Websites & CRO",
+
+    uni_m4_title: "Automatisation Make.com & Chatbots IA",
+    uni_m4_desc: "Construisez des automatisations de bout en bout avec Make.com, des bots WhatsApp intelligents et des assistants de réservation vocaux.",
+    uni_m4_lessons: "2 Modules",
+    uni_m4_tag: "Make.com & Bots",
+
+    uni_m5_title: "Production Vidéo & Contenu IA Viral",
+    uni_m5_desc: "Générez des vidéos courtes virales, des reels sans visage et des avatars ultra-réalistes pour des marques locales avec Kling & ElevenLabs.",
+    uni_m5_lessons: "2 Modules",
+    uni_m5_tag: "Vidéo & Création",
+
+    uni_m6_title: "Produits Digitaux & Micro-SaaS",
+    uni_m6_desc: "Créez, packagez et vendez des produits digitaux IA, des GPTs sur-mesure et des micro-logiciels avec abonnements récurrents.",
+    uni_m6_lessons: "1 Module",
+    uni_m6_tag: "Micro-SaaS",
+
+    uni_m7_title: "Freelance & Prospection de Clients B2B",
+    uni_m7_desc: "Système complet d'acquisition : extraction Google Maps, messages et vocaux WhatsApp en Darija, et franchissement du barrage secrétaire.",
+    uni_m7_lessons: "2 Modules",
+    uni_m7_tag: "Acquisition",
+
+    uni_m8_title: "Closing, Tarification & Contrats Légaux",
+    uni_m8_desc: "Comment fixer vos forfaits entre 10 000 et 30 000 MAD, rédiger des contrats conformes au Maroc et encaisser 50% d'acompte en sécurité.",
+    uni_m8_lessons: "1 Module",
+    uni_m8_tag: "Closing & Légal",
+
+    uni_m9_title: "Challenge 60 Jours : Premier Client Payant",
+    uni_m9_desc: "Un sprint d'exécution quotidien avec tâches concrètes et responsabilisation pour vous guider jusqu'à votre premier virement bancaire.",
+    uni_m9_lessons: "Challenge 60j",
+    uni_m9_tag: "Action Immédiate",
+
+    uni_challenge_badge: "Challenge Pratique 60 Jours",
+    uni_challenge_title: "Un plan d'action quotidien pas à pas jusqu'à votre premier virement.",
+    uni_challenge_desc: "Vous n'êtes pas seul : un suivi régulier, des sessions de questions/réponses en direct et une communauté active pour réussir votre lancement.",
+    uni_challenge_cta: "Rejoindre le Challenge 60 Jours",
+
+    // ── V2 Opportunity Section ──
+    opp_v2_badge: "Opportunité IA Maroc 2026",
+    opp_v2_title_1: "Les Entreprises Marocaines Cherchent",
+    opp_v2_title_2: "Désespérément à S'Automatiser.",
+    opp_v2_p1: "Alors que beaucoup restent spectateurs, les cabinets médicaux, agences et commerces à Casablanca, Rabat et Marrakech perdent des clients chaque soir faute de réactivité.",
+    opp_v2_p2: "En leur apportant un répondeur WhatsApp IA et des automatisations intelligentes, vous ne vendez pas de la théorie : vous leur rapportez du chiffre d'affaires chaque jour.",
+    opp_v2_stat1_val: "+420 000",
+    opp_v2_stat1_label: "PME Enregistrées au Maroc",
+    opp_v2_stat1_sub: "Moins de 2% possèdent un assistant WhatsApp automatisé.",
+    opp_v2_stat2_val: "15 000 MAD",
+    opp_v2_stat2_label: "Montant Moyen d'un Contrat",
+    opp_v2_stat2_sub: "Ce que paient les cliniques et agences pour automatiser leurs leads.",
+    opp_v2_stat3_val: "84.6%",
+    opp_v2_stat3_label: "Taux de Réponse à la Prospection",
+    opp_v2_stat3_sub: "Grâce aux messages vocaux ciblés en Darija et aux emails adaptés.",
+    opp_v2_stat4_val: "30-60 Jours",
+    opp_v2_stat4_label: "Vers le Premier Client Payant",
+    opp_v2_stat4_sub: "Délai moyen constaté chez les membres appliquant la méthode.",
+
+    // ── V2 Pricing Section ──
+    pricing_v2_badge: "Inscriptions Officielles Version V2",
+    pricing_v2_title_1: "Un Investissement Unique.",
+    pricing_v2_title_2: "Compétences Durables & Outils Autonomes.",
+    pricing_v2_sub: "Tout ce dont vous avez besoin pour lancer et rentabiliser une agence IA B2B au Maroc. Sans abonnement récurrent ni frais cachés.",
+    pricing_v2_card_title: "Eensell University V2",
+    pricing_v2_card_badge: "LE PLUS POPULAIRE • ACCÈS AU PROGRAMME V2",
+    pricing_v2_price: "499",
+    pricing_v2_old_price: "997 MAD",
+    pricing_v2_currency: "MAD",
+    pricing_v2_frequency: "Paiement unique • Accès complet au programme et au challenge",
+    pricing_v2_inc_heading: "Ce qui est inclus dans le programme :",
+    pricing_v2_inc_1: "Challenge d'implémentation de 60 jours pour signer votre premier client B2B.",
+    pricing_v2_inc_2: "Neuf modules d'apprentissage complets sur le modèle d'agence IA au Maroc.",
+    pricing_v2_inc_3: "Ressources business pratiques (présentations, devis marocains légaux, scripts en Darija).",
+    pricing_v2_inc_4: "Workflows d'automatisation prêts à l'emploi (Make.com, Voiceflow, bots WhatsApp).",
+    pricing_v2_inc_5: "Tableau de bord étudiant et suivi de progression avec objectifs par étape.",
+    pricing_v2_inc_6: "Accès à la communauté d'entrepreneurs et enregistrements des sessions live hebdomadaires.",
+    pricing_v2_inc_7: "Accès à Eensell Workspace avec quotas clairement définis (Scraper Maps, CRM, WhatsApp Studio, Devis).",
+    pricing_v2_byo_note: "Transparence totale : vous utilisez vos propres clés API sur les modèles d'IA au tarif fournisseur brut sans marge.",
+    pricing_v2_cta: "Rejoindre Eensell University V2 Maintenant",
+    pricing_v2_guarantee: "Paiement 100% Sécurisé • Activation Immédiate du Compte et du Workspace",
+
+    // ── V2 Final CTA Section ──
+    fcta_badge: "Inscriptions Cohorte Fondatrice • Accès Immédiat",
+    fcta_title_1: "Votre Agence IA Autonome",
+    fcta_title_2: "Commence Dès Aujourd'hui.",
+    fcta_sub: "N'attendez plus le 'moment idéal'. Plus de 350 fondateurs marocains utilisent déjà l'espace pour extraire des prospects, envoyer des messages en Darija et signer des contrats à 15 000 MAD.",
+    fcta_cta_primary: "Obtenir l'Accès Complet V2 — 499 MAD",
+    fcta_cta_secondary: "Discuter avec le Support WhatsApp",
+    fcta_trust_1: "Paiement Sécurisé 100%",
+    fcta_trust_2: "Vos Propres Clés API",
+    fcta_trust_3: "Communauté de 350+ Fondateurs",
+
+    // ── V2 Footer ──
+    footer_tagline: "L'écosystème de référence au Maroc pour la formation pratique et les outils des fondateurs d'agences IA.",
+    footer_copyright: "Tous droits réservés. Casablanca, Maroc.",
+    footer_support: "Support direct :",
+
+
     // Hero
     hero_badge: "Inscriptions ouvertes pour les membres fondateurs",
     hero_headline_1: "Passez de Zéro à",
@@ -1059,6 +1403,178 @@ export const translations = {
     // Navbar
     nav_signIn: "Sign In",
     nav_cta: "Get Started",
+
+    // ── V2 Landing Page Navbar ──
+    nav_vsl: "12-Min VSL",
+    nav_workspace_os: "Workspace OS",
+    nav_university: "University V2",
+    nav_pricing: "Pricing",
+    nav_testimonials: "Testimonials",
+    nav_faq: "FAQ",
+    nav_contact: "Contact",
+
+    // ── V2 Hero ──
+    hero_v2_badge: "Eensell Workspace 3.0 • University V2",
+    hero_v2_title_1: "Scale Your Moroccan B2B AI Agency",
+    hero_v2_title_2: "On Complete Autopilot.",
+    hero_v2_sub: "Scrape verified local decision-makers across Casablanca, Rabat & Marrakech, enrich WhatsApp numbers, and close 10,000 to 30,000 MAD clients with autonomous AI.",
+    hero_v2_cta_primary: "Get Immediate Workspace Access",
+    hero_v2_cta_secondary: "Watch 12-Min Breakdown",
+    hero_v2_pill_1: "14,800+ Leads Extracted",
+    hero_v2_pill_2: "84.6% WhatsApp Open Rate",
+    hero_v2_pill_3: "Darija & French AI Copywriting",
+    hero_v2_pill_4: "0 Coding Skills Required",
+    hero_v2_vsl_badge: "Watch The Full 12-Minute Breakdown",
+    hero_v2_vsl_title: "How Moroccan Agencies Scale to 30,000 MAD/mo Using Eensell OS",
+
+    // ── V2 Workspace OS Section ──
+    ws_badge: "Autonomous Agency Operating System",
+    ws_title_1: "Everything You Need to Run & Close",
+    ws_title_2: "Moroccan B2B Clients.",
+    ws_sub: "Stop stitching together 10 different fragmented tools. Eensell Workspace unites localized Google Maps lead extraction, Darija WhatsApp voice outreach, GPT-4o cold email pitch generation, and Moroccan MAD devis invoicing in one unified command center.",
+    ws_byo_badge: "Zero Markups & Hidden Credits",
+    ws_byo_title: "Bring Your Own API Keys (BYOK)",
+    ws_byo_desc: "Connect your own OpenAI, Anthropic, or Gemini keys directly. You pay direct wholesale provider cost with zero markups or hidden credits.",
+    ws_cta_btn: "Launch Eensell Workspace Now",
+
+    ws_tool1_step: "STEP 1",
+    ws_tool1_name: "Maps Intelligence Scraper",
+    ws_tool1_desc: "Extract hundreds of local Casablanca, Rabat & Marrakech businesses with direct WhatsApp phone numbers, ratings, and physical addresses.",
+
+    ws_tool2_step: "STEP 2",
+    ws_tool2_name: "Smart Moroccan CRM",
+    ws_tool2_desc: "Organize leads across Hot, Discussion, Closed, and Invoiced stages. Calculate estimated pipeline MAD value in real-time.",
+
+    ws_tool3_step: "STEP 3",
+    ws_tool3_name: "WhatsApp Outreach Studio",
+    ws_tool3_desc: "Simulate Darija & French voice notes inside a live iPhone frame. Deploy angles tested to trigger 84%+ response rates.",
+
+    ws_tool4_step: "STEP 4",
+    ws_tool4_name: "Cold Email AI Drafter",
+    ws_tool4_desc: "GPT-4o fine-tuned for local corporate outreach with deliverability spam checks and 1-click sync to your personal Gmail.",
+
+    ws_tool5_step: "STEP 5",
+    ws_tool5_name: "Devis & Invoicing Studio",
+    ws_tool5_desc: "Generate professional Moroccan devis (quotes) and factures (invoices) with MAD totals, deposit clauses, and PDF export.",
+
+    ws_tool6_step: "STEP 6",
+    ws_tool6_name: "Notes & Strategy Scratchpad",
+    ws_tool6_desc: "Keep client objection notes, pitch scripts, and pinned follow-ups organized in persistent auto-saving workspaces.",
+
+    // ── V2 University Section ──
+    uni_badge: "Eensell University V2 Curriculum",
+    uni_title_1: "Nine Structured Modules to Master",
+    uni_title_2: "The B2B AI Agency Model.",
+    uni_sub: "From complete beginner to signing your first 10,000 to 30,000 MAD retainer in 60 days. Everything is recorded, localized, and practical.",
+
+    uni_m1_title: "AI Foundations & Mindset",
+    uni_m1_desc: "Master the AI opportunity landscape, develop an entrepreneurial mindset, and understand the foundational tools powering modern automation.",
+    uni_m1_lessons: "1 Module",
+    uni_m1_tag: "Foundations",
+
+    uni_m2_title: "AI Tools & Prompt Engineering",
+    uni_m2_desc: "Deep-dive into the most powerful LLM tools and master advanced prompting frameworks for high-converting business workflows.",
+    uni_m2_lessons: "2 Modules",
+    uni_m2_tag: "Prompt Mastery",
+
+    uni_m3_title: "AI Website & Landing Page Creation",
+    uni_m3_desc: "Learn how to build high-converting websites and Web3 SaaS landing pages using AI code assistants, Figma, and modern templates.",
+    uni_m3_lessons: "1 Module",
+    uni_m3_tag: "Websites & CRO",
+
+    uni_m4_title: "AI Automation & Chatbots",
+    uni_m4_desc: "Build powerful end-to-end automations with Make.com, AI WhatsApp bots, voice booking agents, and autonomous n8n workflows.",
+    uni_m4_lessons: "2 Modules",
+    uni_m4_tag: "Make.com & Bots",
+
+    uni_m5_title: "AI Video & Content Production",
+    uni_m5_desc: "Generate viral short-form videos, faceless UGC reels, and realistic AI avatars for local Moroccan brands using Kling & ElevenLabs.",
+    uni_m5_lessons: "2 Modules",
+    uni_m5_tag: "Video & Content",
+
+    uni_m6_title: "Digital Products & Micro-SaaS",
+    uni_m6_desc: "Create, package, and monetize AI digital assets, custom GPTs, templates, and subscription-ready micro-software tools.",
+    uni_m6_lessons: "1 Module",
+    uni_m6_tag: "Micro-SaaS",
+
+    uni_m7_title: "Freelancing & Agency Client Acquisition",
+    uni_m7_desc: "Step-by-step outreach system: Google Maps lead scraping, cold WhatsApp audio pitches in Darija, and overcoming gatekeeper objections.",
+    uni_m7_lessons: "2 Modules",
+    uni_m7_tag: "Acquisition",
+
+    uni_m8_title: "Closing, Pricing & Legal Contracts",
+    uni_m8_desc: "How to quote 10,000 to 30,000 MAD retainers, draft Moroccan legal service contracts, collect 50% deposits, and handle invoicing.",
+    uni_m8_lessons: "1 Module",
+    uni_m8_tag: "Closing & Legal",
+
+    uni_m9_title: "60-Day First Client Challenge",
+    uni_m9_desc: "The daily execution sprint designed to keep you accountable with daily tasks until your first Moroccan bank transfer clears.",
+    uni_m9_lessons: "60-Day Sprint",
+    uni_m9_tag: "Execution Sprint",
+
+    uni_challenge_badge: "60-Day Implementation Challenge",
+    uni_challenge_title: "A step-by-step daily sprint until your first Moroccan bank transfer clears.",
+    uni_challenge_desc: "You are not alone: structured milestones, direct Q&A coaching, and an active founder community keep you executing consistently.",
+    uni_challenge_cta: "Join The 60-Day Challenge Now",
+
+    // ── V2 Opportunity Section ──
+    opp_v2_badge: "Morocco 2026 AI Opportunity",
+    opp_v2_title_1: "Moroccan Businesses Are Desperate",
+    opp_v2_title_2: "For AI Automation.",
+    opp_v2_p1: "While most people watch from the sidelines, clinics, agencies, and businesses in Casablanca, Rabat, and Marrakech lose customers every evening due to missed messages.",
+    opp_v2_p2: "When you deliver an autonomous 24/7 WhatsApp assistant and lead pipeline, you are not selling 'courses'... you are handing them more revenue, and they happily pay monthly retainers.",
+    opp_v2_stat1_val: "420,000+",
+    opp_v2_stat1_label: "Registered Moroccan SMEs",
+    opp_v2_stat1_sub: "Less than 2% have an AI customer service or WhatsApp bot.",
+    opp_v2_stat2_val: "15,000 MAD",
+    opp_v2_stat2_label: "Average Retainer Size",
+    opp_v2_stat2_sub: "What clinics and real estate agencies happily pay for lead automation.",
+    opp_v2_stat3_val: "84.6%",
+    opp_v2_stat3_label: "Outreach Conversion",
+    opp_v2_stat3_sub: "Response rate using localized Darija audio & personalized emails.",
+    opp_v2_stat4_val: "30-60 Days",
+    opp_v2_stat4_label: "To First Paid Client",
+    opp_v2_stat4_sub: "The average timeline for members following the step-by-step roadmap.",
+
+    // ── V2 Pricing Section ──
+    pricing_v2_badge: "Official V2 Enrollment",
+    pricing_v2_title_1: "One Clear Investment.",
+    pricing_v2_title_2: "Lifetime Skills & Autopilot Tools.",
+    pricing_v2_sub: "Everything you need to build, launch, and scale a profitable Moroccan B2B AI agency. No recurring fees, no surprise upsells.",
+    pricing_v2_card_title: "Eensell University V2",
+    pricing_v2_card_badge: "MOST POPULAR • LIFETIME V2 ACCESS",
+    pricing_v2_price: "499",
+    pricing_v2_old_price: "997 MAD",
+    pricing_v2_currency: "MAD",
+    pricing_v2_frequency: "One-time program purchase • Lifetime challenge & course access",
+    pricing_v2_inc_heading: "What's Included in the Program:",
+    pricing_v2_inc_1: "60-day implementation challenge to land your first paid B2B AI client.",
+    pricing_v2_inc_2: "Nine structured learning modules covering the complete Moroccan agency model.",
+    pricing_v2_inc_3: "Practical AI business resources (proposal decks, legal Moroccan devis, Darija scripts).",
+    pricing_v2_inc_4: "Ready-to-use automation workflows (Make.com, Voiceflow, WhatsApp bots).",
+    pricing_v2_inc_5: "Student dashboard and progress tracking with completion milestones.",
+    pricing_v2_inc_6: "Community access and recorded weekly live coaching sessions.",
+    pricing_v2_inc_7: "Eensell Workspace access under clearly defined usage limits (Maps Scraper, CRM, WhatsApp Studio, Invoicing).",
+    pricing_v2_byo_note: "Total transparency: You use your own OpenAI/Anthropic API keys at raw wholesale cost with zero markups.",
+    pricing_v2_cta: "Enroll in University V2 Now",
+    pricing_v2_guarantee: "100% Secure Checkout • Instant Dashboard & Workspace Activation",
+
+    // ── V2 Final CTA Section ──
+    fcta_badge: "FOUNDING COHORT ENROLLMENT • INSTANT ACCESS",
+    fcta_title_1: "Your Autonomous AI Agency",
+    fcta_title_2: "Starts Right Now.",
+    fcta_sub: "Stop waiting for the 'perfect moment.' Over 350 Moroccan agency founders are already using the Workspace to extract leads, launch Darija WhatsApp pitches, and close 15,000 MAD retainers.",
+    fcta_cta_primary: "Get Full V2 Access — 499 MAD",
+    fcta_cta_secondary: "Chat on WhatsApp Support",
+    fcta_trust_1: "100% Secure Checkout",
+    fcta_trust_2: "BYO API Keys",
+    fcta_trust_3: "350+ Founder Community",
+
+    // ── V2 Footer ──
+    footer_tagline: "The premier autonomous AI agency workspace & ecosystem for Moroccan entrepreneurs and agency founders.",
+    footer_copyright: "All rights reserved. Casablanca, Morocco.",
+    footer_support: "Direct support:",
+
 
     // Hero
     hero_badge: "Registration open for founding members",

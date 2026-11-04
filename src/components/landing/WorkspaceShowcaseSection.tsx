@@ -22,49 +22,49 @@ import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 
 export function WorkspaceShowcaseSection() {
-  const { dir } = useLanguage();
+  const { dir, t } = useLanguage();
 
   const workspaceTools = [
     {
       icon: MapPin,
-      name: "Maps Intelligence Scraper",
-      tag: "STEP 1",
-      desc: "Extract hundreds of local Casablanca, Rabat & Marrakech businesses with direct WhatsApp phone numbers, ratings, and physical addresses.",
+      name: t("ws_tool1_name"),
+      tag: t("ws_tool1_step"),
+      desc: t("ws_tool1_desc"),
       color: "emerald",
     },
     {
       icon: Layers,
-      name: "Smart Moroccan CRM",
-      tag: "STEP 2",
-      desc: "Organize leads across Hot, Discussion, Closed, and Invoiced stages. Calculate estimated pipeline MAD value in real-time.",
+      name: t("ws_tool2_name"),
+      tag: t("ws_tool2_step"),
+      desc: t("ws_tool2_desc"),
       color: "blue",
     },
     {
       icon: MessageSquare,
-      name: "WhatsApp Outreach Studio",
-      tag: "STEP 3",
-      desc: "Simulate Darija & French voice notes inside a live iPhone frame. Deploy angles tested to trigger 84%+ response rates.",
+      name: t("ws_tool3_name"),
+      tag: t("ws_tool3_step"),
+      desc: t("ws_tool3_desc"),
       color: "green",
     },
     {
       icon: Mail,
-      name: "Cold Email AI Drafter",
-      tag: "STEP 4",
-      desc: "GPT-4o fine-tuned for local corporate outreach with deliverability spam checks and 1-click sync to your personal Gmail.",
+      name: t("ws_tool4_name"),
+      tag: t("ws_tool4_step"),
+      desc: t("ws_tool4_desc"),
       color: "purple",
     },
     {
       icon: FileText,
-      name: "Devis & Invoicing Studio",
-      tag: "STEP 5",
-      desc: "Generate professional Moroccan devis (quotes) and factures (invoices) with MAD totals, deposit clauses, and PDF export.",
+      name: t("ws_tool5_name"),
+      tag: t("ws_tool5_step"),
+      desc: t("ws_tool5_desc"),
       color: "amber",
     },
     {
       icon: BookmarkCheck,
-      name: "Notes & Strategy Scratchpad",
-      tag: "STEP 6",
-      desc: "Keep client objection notes, pitch scripts, and pinned follow-ups organized in persistent auto-saving workspaces.",
+      name: t("ws_tool6_name"),
+      tag: t("ws_tool6_step"),
+      desc: t("ws_tool6_desc"),
       color: "indigo",
     },
   ];
@@ -88,7 +88,7 @@ export function WorkspaceShowcaseSection() {
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 shadow-2xs mb-4 text-xs font-bold text-slate-800 tracking-wide uppercase"
           >
             <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-            <span>Autonomous Agency Operating System</span>
+            <span>{t("ws_badge")}</span>
           </motion.div>
 
           <motion.h2
@@ -98,9 +98,9 @@ export function WorkspaceShowcaseSection() {
             transition={{ delay: 0.1 }}
             className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 tracking-tight leading-tight mb-4"
           >
-            Eensell Workspace OS:{" "}
+            {t("ws_title_1")}{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
-              Your Entire Agency In One Screen.
+              {t("ws_title_2")}
             </span>
           </motion.h2>
 
@@ -111,7 +111,7 @@ export function WorkspaceShowcaseSection() {
             transition={{ delay: 0.15 }}
             className="text-sm sm:text-base text-slate-600 font-medium max-w-2xl mx-auto leading-relaxed mb-6"
           >
-            Replace 5 messy SaaS subscriptions. Scrape qualified clinics, launch Darija WhatsApp pitches, draft cold emails, and invoice 15,000 MAD contracts inside a unified, distraction-free environment.
+            {t("ws_sub")}
           </motion.p>
 
           {/* BYO Keys Callout Banner */}
@@ -123,10 +123,8 @@ export function WorkspaceShowcaseSection() {
             className="inline-flex flex-wrap items-center justify-center gap-2 px-4 py-2 rounded-2xl bg-white border border-slate-200/90 shadow-2xs text-xs font-semibold text-slate-700"
           >
             <Key className="w-4 h-4 text-amber-500" />
-            <span className="font-bold text-slate-950">Bring Your Own Keys (BYOK):</span>
-            <span className="text-slate-500">
-              Users connect their own OpenAI, Gemini, or Groq API keys with zero platform markups and 100% data privacy.
-            </span>
+            <span className="font-bold text-slate-950">{t("ws_byo_title")}:</span>
+            <span className="text-slate-500">{t("ws_byo_desc")}</span>
           </motion.div>
         </div>
 

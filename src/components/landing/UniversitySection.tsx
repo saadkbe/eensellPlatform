@@ -23,80 +23,80 @@ import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 
 export function UniversitySection() {
-  const { dir } = useLanguage();
+  const { dir, t } = useLanguage();
 
   const courses = [
     {
       code: "M1",
-      title: "AI Foundations & Mindset",
-      desc: "Master the AI opportunity landscape, develop an entrepreneurial mindset, and understand the foundational tools powering modern automation.",
+      title: t("uni_m1_title"),
+      desc: t("uni_m1_desc"),
       image: "/modules/mod1_foundations.png",
-      lessons: "1 Module",
-      tag: "Foundations",
+      lessons: t("uni_m1_lessons"),
+      tag: t("uni_m1_tag"),
     },
     {
       code: "M2",
-      title: "AI Tools & Prompt Engineering",
-      desc: "Deep-dive into the most powerful LLM tools and master advanced prompting frameworks for high-converting business workflows.",
+      title: t("uni_m2_title"),
+      desc: t("uni_m2_desc"),
       image: "/modules/mod2_tools.png",
-      lessons: "2 Modules",
-      tag: "Prompt Mastery",
+      lessons: t("uni_m2_lessons"),
+      tag: t("uni_m2_tag"),
     },
     {
       code: "M3",
-      title: "AI Website & Landing Page Creation",
-      desc: "Learn how to build high-converting websites and Web3 SaaS landing pages using AI code assistants, Figma, and modern templates.",
+      title: t("uni_m3_title"),
+      desc: t("uni_m3_desc"),
       image: "/modules/mod16_website.png",
-      lessons: "1 Module",
-      tag: "Websites & CRO",
+      lessons: t("uni_m3_lessons"),
+      tag: t("uni_m3_tag"),
     },
     {
       code: "M4",
-      title: "AI Automation & Chatbots",
-      desc: "Build powerful end-to-end automations with Make.com, AI WhatsApp bots, voice booking agents, and autonomous n8n workflows.",
+      title: t("uni_m4_title"),
+      desc: t("uni_m4_desc"),
       image: "/modules/mod6_automation.png",
-      lessons: "2 Modules",
-      tag: "Make.com & Bots",
+      lessons: t("uni_m4_lessons"),
+      tag: t("uni_m4_tag"),
     },
     {
       code: "M5",
-      title: "AI Content & Video Creation",
-      desc: "Build high-velocity content systems: from viral short-form TikTok/Reels to realistic AI voice cloning and avatar production.",
+      title: t("uni_m5_title"),
+      desc: t("uni_m5_desc"),
       image: "/modules/mod13_video.png",
-      lessons: "4 Modules",
-      tag: "Video & Avatars",
+      lessons: t("uni_m5_lessons"),
+      tag: t("uni_m5_tag"),
     },
     {
       code: "M6",
-      title: "AI Marketing & Copywriting",
-      desc: "Master direct-response B2B copywriting, French & Darija offer positioning, personal branding, and high-converting marketing funnels.",
+      title: t("uni_m6_title"),
+      desc: t("uni_m6_desc"),
       image: "/modules/mod17_marketing.png",
-      lessons: "2 Modules",
-      tag: "Copy & Funnels",
+      lessons: t("uni_m6_lessons"),
+      tag: t("uni_m6_tag"),
     },
     {
       code: "M7",
-      title: "Building an AI Agency Business",
-      desc: "Set up your Moroccan AI business from scratch: pricing structure, legal setup, service retainers, and scalable operations.",
+      title: t("uni_m7_title"),
+      desc: t("uni_m7_desc"),
       image: "/modules/mod8_business.png",
-      lessons: "2 Modules",
-      tag: "Agency Operations",
+      lessons: t("uni_m7_lessons"),
+      tag: t("uni_m7_tag"),
     },
     {
       code: "M8",
-      title: "Client Acquisition & Outreach",
-      desc: "Master local lead scraping, Darija audio note pitch scripts, cold email infrastructure, and live discovery call closing.",
+      title: t("uni_m8_title"),
+      desc: t("uni_m8_desc"),
       image: "/modules/mod9_client.png",
-      lessons: "2 Modules",
-      tag: "Client Closing",
+      lessons: t("uni_m8_lessons"),
+      tag: t("uni_m8_tag"),
     },
     {
       code: "M9",
-      title: "AI Monetization & Future Trends",
-      desc: "Discover fast-cash AI service models, e-commerce automation, productivity systems, and emerging 2026 AI business opportunities.",
+      title: t("uni_m9_title"),
+      desc: t("uni_m9_desc"),
       image: "/modules/mod15_money.png",
-      lessons: "4 Modules",
-      tag: "Scale & Retainers",
+      lessons: t("uni_m9_lessons"),
+      tag: t("uni_m9_tag"),
     },
   ];
 
@@ -140,7 +140,7 @@ export function UniversitySection() {
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-50 border border-slate-200 shadow-2xs mb-4 text-xs font-bold text-slate-800 tracking-wide uppercase"
           >
             <GraduationCap className="w-3.5 h-3.5 text-indigo-600" />
-            <span>AI Library & Curriculum</span>
+            <span>{t("uni_badge")}</span>
           </motion.div>
 
           <motion.h2
@@ -150,9 +150,9 @@ export function UniversitySection() {
             transition={{ delay: 0.1 }}
             className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 tracking-tight leading-tight mb-4"
           >
-            Eensell University V2:{" "}
+            {t("uni_title_1")}{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
-              The Nine Core Courses.
+              {t("uni_title_2")}
             </span>
           </motion.h2>
 
@@ -163,7 +163,7 @@ export function UniversitySection() {
             transition={{ delay: 0.15 }}
             className="text-sm sm:text-base text-slate-600 font-medium max-w-2xl mx-auto leading-relaxed"
           >
-            Explore each course thumbnail below. A comprehensive 9-module academy covering everything from fundamental AI prompting to autonomous client acquisition in Morocco.
+            {t("uni_sub")}
           </motion.p>
         </div>
 

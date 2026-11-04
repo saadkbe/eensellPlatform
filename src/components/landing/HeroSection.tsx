@@ -17,7 +17,7 @@ import {
 import { useLanguage } from "@/components/landing/LanguageProvider";
 
 export function HeroSection() {
-  const { dir } = useLanguage();
+  const { dir, t, isRTL } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -63,9 +63,9 @@ export function HeroSection() {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
           </span>
           <span className="text-[11px] font-bold text-slate-800 tracking-wide uppercase">
-            Eensell Workspace 3.0 &bull; University V2
+            {t("hero_v2_badge")}
           </span>
-          <span className="text-[11px] font-semibold text-slate-400 group-hover:text-slate-700 transition-colors">
+          <span className="text-[11px] font-semibold text-slate-400 group-hover:text-slate-700 transition-colors rtl:rotate-180">
             &rarr;
           </span>
         </motion.div>
@@ -77,9 +77,9 @@ export function HeroSection() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-black text-slate-950 tracking-tight leading-[1.18] mb-4 max-w-3xl text-balance"
         >
-          Scale Your Moroccan B2B AI Agency{" "}
+          {t("hero_v2_title_1")}{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
-            On Complete Autopilot.
+            {t("hero_v2_title_2")}
           </span>
         </motion.h1>
 
@@ -90,7 +90,7 @@ export function HeroSection() {
           transition={{ duration: 0.5, delay: 0.15 }}
           className="text-xs sm:text-sm md:text-base text-slate-600 max-w-xl mx-auto mb-6 leading-relaxed font-medium text-balance"
         >
-          Scrape verified local decision-makers across Casablanca, Rabat & Marrakech, enrich WhatsApp numbers, and close 10,000 to 30,000 MAD clients with autonomous AI.
+          {t("hero_v2_sub")}
         </motion.p>
 
         {/* Compact CTA Row */}
@@ -105,7 +105,7 @@ export function HeroSection() {
               size="lg"
               className="w-full sm:w-auto h-11 px-7 text-xs sm:text-sm font-bold bg-slate-950 hover:bg-slate-900 text-white rounded-xl shadow-lg transition-all hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2"
             >
-              <span>Join Eensell University V2 &bull; 499 MAD</span>
+              <span>{t("hero_v2_cta_primary")}</span>
               <ArrowRight className="w-4 h-4 rtl:rotate-180" />
             </Button>
           </Link>
@@ -119,7 +119,7 @@ export function HeroSection() {
             <div className="w-4 h-4 rounded-full bg-slate-100 flex items-center justify-center">
               <Play className="w-2.5 h-2.5 fill-slate-900 text-slate-900 ml-0.5" />
             </div>
-            <span>{isPlaying ? "Pause Video" : "Watch 12-Min Breakdown"}</span>
+            <span>{isPlaying ? "Pause" : t("hero_v2_cta_secondary")}</span>
           </Button>
         </motion.div>
       </div>
@@ -197,7 +197,7 @@ export function HeroSection() {
 
                   <div className="mt-4 px-3.5 py-1.5 rounded-full bg-slate-950/80 border border-white/20 backdrop-blur-md text-white text-[11px] sm:text-xs font-bold shadow-lg flex items-center gap-1.5">
                     <Clock className="w-3.5 h-3.5 text-[#FF6B4A]" />
-                    <span>Click to Watch The 12-Minute Blueprint</span>
+                    <span>{t("hero_v2_vsl_badge")}</span>
                   </div>
                 </motion.div>
               )}
@@ -214,19 +214,19 @@ export function HeroSection() {
         >
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>14,800+ Leads Extracted</span>
+            <span>{t("hero_v2_pill_1")}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>84.6% WhatsApp Open Rate</span>
+            <span>{t("hero_v2_pill_2")}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>Darija & French AI Copywriting</span>
+            <span>{t("hero_v2_pill_3")}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>0 Coding Skills Required</span>
+            <span>{t("hero_v2_pill_4")}</span>
           </div>
         </motion.div>
       </motion.div>

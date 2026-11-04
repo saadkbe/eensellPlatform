@@ -5,28 +5,28 @@ import { motion } from "framer-motion";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 
 export function OpportunitySection() {
-  const { dir } = useLanguage();
+  const { dir, t } = useLanguage();
 
   const stats = [
     {
-      value: "420,000+",
-      label: "Registered Moroccan SMEs",
-      sub: "Less than 2% have an AI customer service or WhatsApp bot.",
+      value: t("opp_v2_stat1_val"),
+      label: t("opp_v2_stat1_label"),
+      sub: t("opp_v2_stat1_sub"),
     },
     {
-      value: "15,000 MAD",
-      label: "Average Retainer Size",
-      sub: "What clinics and real estate agencies happily pay for lead automation.",
+      value: t("opp_v2_stat2_val"),
+      label: t("opp_v2_stat2_label"),
+      sub: t("opp_v2_stat2_sub"),
     },
     {
-      value: "84.6%",
-      label: "Outreach Conversion",
-      sub: "Response rate using localized Darija audio & personalized emails.",
+      value: t("opp_v2_stat3_val"),
+      label: t("opp_v2_stat3_label"),
+      sub: t("opp_v2_stat3_sub"),
     },
     {
-      value: "30 Days",
-      label: "To First Client",
-      sub: "The average timeline for members following the step-by-step roadmap.",
+      value: t("opp_v2_stat4_val"),
+      label: t("opp_v2_stat4_label"),
+      sub: t("opp_v2_stat4_sub"),
     },
   ];
 
@@ -49,7 +49,7 @@ export function OpportunitySection() {
               className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-50 border border-slate-200 shadow-2xs text-xs font-bold text-slate-700 tracking-wide uppercase"
             >
               <TrendingUp className="w-3.5 h-3.5 text-[#FF6B4A]" />
-              <span>Morocco 2026 AI Goldrush</span>
+              <span>{t("opp_v2_badge")}</span>
             </motion.div>
 
             <motion.h2
@@ -59,9 +59,9 @@ export function OpportunitySection() {
               transition={{ delay: 0.1 }}
               className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 tracking-tight leading-[1.15]"
             >
-              A Monthly Salary Won&apos;t Make You Free.{" "}
+              {t("opp_v2_title_1")}{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
-                The Local Moroccan Market Will.
+                {t("opp_v2_title_2")}
               </span>
             </motion.h2>
 
@@ -72,7 +72,7 @@ export function OpportunitySection() {
               transition={{ delay: 0.2 }}
               className="text-base sm:text-lg text-slate-600 font-medium leading-relaxed"
             >
-              While most people struggle competing with millions of global freelancers on Upwork for 5-dollar tasks, a quiet group of young Moroccan entrepreneurs is closing 10,000 to 30,000 MAD contracts right in Casablanca, Rabat, Marrakech, and Tangier using automated AI tools.
+              {t("opp_v2_p1")}
             </motion.p>
 
             <motion.div
@@ -84,10 +84,10 @@ export function OpportunitySection() {
             >
               <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
                 <Sparkles className="w-4 h-4 text-indigo-600" />
-                <span>Zero Competition in French & Darija Automation</span>
+                <span>{t("opp_v2_badge")}</span>
               </div>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Local clinics and agencies lose 60% of their inquiries because they answer WhatsApp hours late. By giving them an instant autonomous booking bot, you fix their biggest revenue leak.
+                {t("opp_v2_p2")}
               </p>
             </motion.div>
           </div>
