@@ -6,7 +6,7 @@
 
 export const CHALLENGE_OFFER = {
   /** One-time price in Moroccan dirhams. */
-  priceMad: 697,
+  priceMad: 499,
   currency: "MAD",
 
   /**
@@ -48,5 +48,5 @@ export const CHALLENGE_OFFER = {
   },
 } as const;
 
-/** "697 MAD" */
+/** "499 MAD" */
 export const CHALLENGE_PRICE_LABEL = `${CHALLENGE_OFFER.priceMad} ${CHALLENGE_OFFER.currency}`;
