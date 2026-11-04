@@ -26,7 +26,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { addLeadToCrmAction } from "@/actions/workspace.actions";
-import { SparkleGeometricSticker, GlowingPulseSticker } from "@/components/workspace/workspace-stickers";
+import { SparkleGeometricSticker, GlowingPulseSticker, RealGmailLogo } from "@/components/workspace/workspace-stickers";
 
 export function WorkspaceDrafterClient() {
   const searchParams = useSearchParams();
@@ -214,12 +214,12 @@ Head of Automation — Eensell Certified Partner`;
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center shadow-md shrink-0">
-              <SparkleGeometricSticker className="w-7 h-7" />
+              <RealGmailLogo className="w-8 h-8" />
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-500/40">
-                  STEP 3 &bull; AI COPYWRITING & COLD OUTREACH
+                  STEP 3 &bull; GMAIL & COLD EMAIL STUDIO
                 </span>
                 <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
                   <GlowingPulseSticker className="w-2 h-2" color="#10B981" />
@@ -227,7 +227,7 @@ Head of Automation — Eensell Certified Partner`;
                 </span>
               </div>
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
-                Cold Email AI Drafter
+                Gmail & Cold Email AI Drafter
               </h1>
               <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
                 Craft concise, high-converting B2B emails with personalized value propositions, deliverability checks, and French/Darija business nuances.
@@ -539,9 +539,9 @@ Head of Automation — Eensell Certified Partner`;
                 <Button
                   onClick={handleOpenGmail}
                   size="sm"
-                  className="h-8 px-3 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white gap-1.5 cursor-pointer shadow-xs"
+                  className="h-8 px-3 rounded-xl text-xs font-semibold bg-white hover:bg-slate-100 text-slate-950 border border-slate-200 dark:border-slate-800 gap-2 cursor-pointer shadow-xs"
                 >
-                  <Send className="w-3.5 h-3.5" />
+                  <RealGmailLogo className="w-3.5 h-3.5" />
                   <span>Open in Gmail</span>
                 </Button>
 

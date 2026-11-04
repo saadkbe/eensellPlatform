@@ -30,7 +30,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { addLeadToCrmAction } from "@/actions/workspace.actions";
-import { ChatBubbleSticker, GlowingPulseSticker } from "@/components/workspace/workspace-stickers";
+import { ChatBubbleSticker, GlowingPulseSticker, RealWhatsAppLogo } from "@/components/workspace/workspace-stickers";
 
 export function WorkspaceWhatsappClient() {
   const searchParams = useSearchParams();
@@ -298,7 +298,7 @@ export function WorkspaceWhatsappClient() {
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center shadow-md shrink-0">
-              <ChatBubbleSticker className="w-7 h-7" />
+              <RealWhatsAppLogo className="w-8 h-8" />
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap">
@@ -330,9 +330,9 @@ export function WorkspaceWhatsappClient() {
 
             <Button
               onClick={handleLaunchWhatsApp}
-              className="inline-flex items-center gap-1.5 h-9 px-4 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-md cursor-pointer transition-transform hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 h-9 px-4 rounded-xl text-xs font-bold bg-[#25D366] hover:bg-[#20ba59] text-white shadow-md cursor-pointer transition-transform hover:scale-[1.02]"
             >
-              <Send className="w-3.5 h-3.5" />
+              <RealWhatsAppLogo className="w-4 h-4" />
               <span>Launch on WhatsApp</span>
             </Button>
           </div>
@@ -780,9 +780,9 @@ export function WorkspaceWhatsappClient() {
           <div className="w-full max-w-[390px] mt-4 flex items-center justify-between gap-2">
             <Button
               onClick={handleLaunchWhatsApp}
-              className="flex-1 h-9 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 shadow-xs cursor-pointer"
+              className="flex-1 h-9 rounded-xl text-xs font-bold bg-[#25D366] hover:bg-[#20ba59] text-white gap-2 shadow-xs cursor-pointer"
             >
-              <Send className="w-3.5 h-3.5" />
+              <RealWhatsAppLogo className="w-4 h-4" />
               <span>Launch WhatsApp</span>
             </Button>
 
