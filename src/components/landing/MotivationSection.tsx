@@ -3,80 +3,98 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useLanguage } from "@/components/landing/LanguageProvider";
-import { Hourglass } from "lucide-react";
+import { Hourglass, Sparkles, Target, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export function MotivationSection() {
-  const { t, dir } = useLanguage();
+  const { dir } = useLanguage();
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"]
+    offset: ["start end", "end start"],
   });
 
-  const scale = useTransform(scrollYProgress, [0, 0.5], [0.85, 1]);
-  const opacity = useTransform(scrollYProgress, [0, 0.4], [0, 1]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 180]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [0.95, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3], [0.6, 1]);
 
   return (
-    <section ref={containerRef} dir={dir} className="relative py-20 md:py-40 bg-black text-white overflow-hidden">
-      {/* Cinematic Orange Mesh Gradient Lighting */}
-      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-[#FF6B4A]/15 rounded-full blur-[150px] pointer-events-none z-0" />
-      <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-[#FF6B4A]/10 rounded-full blur-[180px] pointer-events-none z-0" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-[400px] bg-[#FF6B4A]/5 rounded-full blur-[120px] pointer-events-none z-0" />
+    <section
+      ref={containerRef}
+      dir={dir}
+      className="relative py-24 sm:py-36 bg-[#FAFBFE] text-slate-900 overflow-hidden border-t border-slate-200/70"
+    >
+      {/* Background ambient glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[550px] bg-gradient-to-tr from-amber-100/30 via-orange-50/20 to-indigo-100/30 rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="container max-w-5xl mx-auto px-6 relative z-10">
-        
+      <div className="container max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
         <div className="flex flex-col items-center text-center">
-          <motion.div 
-            style={{ rotate }}
-            className="w-20 h-20 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center mb-12 backdrop-blur-md shadow-[0_0_50px_rgba(255,107,74,0.15)]"
+          {/* Hourglass Web3 Icon Badge */}
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            className="w-16 h-16 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-center mb-8 shadow-md"
           >
-            <Hourglass className="w-10 h-10 text-[#FF6B4A]" />
+            <Hourglass className="w-8 h-8 text-[#FF6B4A]" />
           </motion.div>
-          
-          <motion.h2 
+
+          {/* Section Sub-badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-xs font-bold text-slate-700 tracking-wide uppercase mb-6 shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-[#FF6B4A]" />
+            <span>The 2026 Window of Opportunity</span>
+          </div>
+
+          {/* Massive Clean Headline */}
+          <motion.h2
             style={{ scale, opacity }}
-            className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tighter leading-[1.1] mb-16 text-balance"
+            className="text-3xl sm:text-5xl md:text-6xl font-black text-slate-950 tracking-tight leading-[1.12] mb-10 max-w-4xl text-balance"
           >
-            {t("motiv_title_1")}{" "}
-            <span className="text-[#FF6B4A] drop-shadow-[0_0_15px_rgba(255,107,74,0.4)] block sm:inline mt-2 sm:mt-0">
-              {t("motiv_title_2")}
+            The Moroccan AI Goldrush Is Happening Right Now.{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
+              Will You Watch Or Will You Build?
             </span>
           </motion.h2>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ delay: 0.2, duration: 0.8 }}
-            className="space-y-10 text-xl sm:text-2xl text-zinc-400 font-medium leading-relaxed max-w-3xl"
+          {/* Core Manifesto Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            className="relative w-full max-w-3xl rounded-[2.5rem] bg-white border border-slate-200/90 p-8 sm:p-12 shadow-[0_20px_60px_-15px_rgba(15,23,42,0.08)] text-left space-y-6"
           >
-            <p className="text-balance">{t("motiv_p1")}</p>
-            <div className="inline-block relative">
-              <div className="absolute inset-0 bg-[#FF6B4A] blur-2xl opacity-20" />
-              <p className="text-white font-black text-3xl sm:text-4xl relative z-10 px-8 py-5 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-md">
-                {t("motiv_p2")}
-              </p>
+            <p className="text-base sm:text-lg text-slate-600 font-medium leading-relaxed">
+              Every major shift in business creates a brief 18-month window where the playing field is completely leveled. The businesses that hesitate get left behind, while those who adopt automation early capture the entire local market.
+            </p>
+
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-900 font-bold text-sm sm:text-base leading-relaxed">
+              &ldquo;In Morocco right now, doctors, lawyers, auto dealers, and real estate developers have budget — but zero time to answer leads. A single automated WhatsApp and Email system solves their #1 pain point.&rdquo;
             </div>
-            <p className="text-balance">{t("motiv_p3")}</p>
+
+            <p className="text-sm sm:text-base text-slate-600 font-medium leading-relaxed">
+              You do not need to be a programmer. You do not need to raise venture capital. You simply need the proven workspace tools, the localized Darija scripts, and the discipline to execute for 60 days.
+            </p>
+
+            <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100">
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                <span className="flex h-2 w-2 rounded-full bg-emerald-500" />
+                <span>350+ Moroccan founders already active in our network</span>
+              </div>
+
+              <Link href="/sign-up">
+                <Button
+                  size="sm"
+                  className="h-10 px-5 rounded-xl text-xs font-bold bg-slate-950 hover:bg-slate-900 text-white shadow-xs cursor-pointer"
+                >
+                  <span>Start Your Agency Journey</span>
+                  <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+                </Button>
+              </Link>
+            </div>
           </motion.div>
         </div>
-
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9, y: 40 }} whileInView={{ opacity: 1, scale: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4, type: "spring" }}
-          className="mt-32 max-w-4xl mx-auto bg-gradient-to-br from-white/10 to-white/5 rounded-[3rem] p-10 sm:p-16 text-center border border-white/10 shadow-2xl relative overflow-hidden group"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B4A]/0 via-[#FF6B4A]/5 to-[#FF6B4A]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-          <div className="text-[#FF6B4A] text-8xl md:text-9xl font-serif leading-none mb-6 absolute top-4 left-6 md:top-8 md:left-10 opacity-20 pointer-events-none">"</div>
-          <p className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-10 relative z-10 leading-tight text-balance">
-            {t("motiv_quote")}
-          </p>
-          <div className="flex items-center justify-center gap-4 relative z-10">
-            <div className="w-12 h-1 bg-[#FF6B4A] rounded-full" />
-            <p className="text-zinc-400 font-bold uppercase tracking-widest text-sm">
-              {t("motiv_quote_sub")}
-            </p>
-            <div className="w-12 h-1 bg-[#FF6B4A] rounded-full" />
-          </div>
-        </motion.div>
       </div>
     </section>
   );

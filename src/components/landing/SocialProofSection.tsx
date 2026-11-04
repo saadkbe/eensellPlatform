@@ -75,10 +75,10 @@ export function SocialProofSection() {
                   and add `controls` to the video tag so users can play it. 
                 */}
                 <video 
-                  src="/placeholder-video.mp4" 
-                  poster="/dashboard.png" 
+                  src="/FEEDBACK1.mp4" 
+                  poster="/images/confident_thumbnail_cinematic.jpg" 
                   controls
-                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                  className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
                 />
 
                 {/* Optional Play Button Overlay (for aesthetic if no controls are used initially) */}

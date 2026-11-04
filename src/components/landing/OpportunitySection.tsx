@@ -1,123 +1,126 @@
 "use client";
 
-import { useRef } from "react";
-import { Sparkles, TrendingUp, Zap, Target } from "lucide-react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { Sparkles, TrendingUp, Zap, Target, ArrowUpRight, CheckCircle2 } from "lucide-react";
+import { motion } from "framer-motion";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 
 export function OpportunitySection() {
-  const { t, dir } = useLanguage();
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
+  const { dir } = useLanguage();
 
-  // Smooth Parallax effects
-  const yText = useTransform(scrollYProgress, [0, 1], [60, -60]);
-  const yCards = useTransform(scrollYProgress, [0, 1], [120, -120]);
-  const opacityGradient = useTransform(scrollYProgress, [0, 0.5, 1], [0.3, 1, 0.3]);
+  const stats = [
+    {
+      value: "420,000+",
+      label: "Registered Moroccan SMEs",
+      sub: "Less than 2% have an AI customer service or WhatsApp bot.",
+    },
+    {
+      value: "15,000 MAD",
+      label: "Average Retainer Size",
+      sub: "What clinics and real estate agencies happily pay for lead automation.",
+    },
+    {
+      value: "84.6%",
+      label: "Outreach Conversion",
+      sub: "Response rate using localized Darija audio & personalized emails.",
+    },
+    {
+      value: "30 Days",
+      label: "To First Client",
+      sub: "The average timeline for members following the step-by-step roadmap.",
+    },
+  ];
 
   return (
-    <section ref={containerRef} className="relative py-16 md:py-32 bg-[#FAFAFA] overflow-hidden" dir={dir}>
-      {/* Orange Mesh Gradient Light */}
-      <motion.div 
-        style={{ opacity: opacityGradient }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] md:w-[1000px] md:h-[1000px] bg-[#FF6B4A]/10 rounded-full blur-[120px] pointer-events-none z-0"
-      />
+    <section
+      dir={dir}
+      className="relative py-20 sm:py-32 bg-white text-slate-900 overflow-hidden"
+    >
+      {/* Background subtle light ambient aura */}
+      <div className="absolute top-1/3 right-1/4 w-[600px] h-[400px] bg-gradient-to-tr from-cyan-100/40 via-indigo-50/30 to-transparent rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="container max-w-6xl mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center mb-12 lg:mb-24">
-          
-          {/* Left Text Content - Parallax */}
-          <motion.div 
-            style={{ y: yText }}
-            className="lg:col-span-6"
-          >
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.8 }} 
-              whileInView={{ opacity: 1, scale: 1 }} 
+      <div className="container max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-16">
+          {/* Left Text */}
+          <div className="lg:col-span-6 space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white text-zinc-900 text-sm font-bold mb-8 shadow-sm border border-zinc-200"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-50 border border-slate-200 shadow-2xs text-xs font-bold text-slate-700 tracking-wide uppercase"
             >
-              <Sparkles className="w-4 h-4 text-[#FF6B4A]" />
-              {t("opp_badge")}
+              <TrendingUp className="w-3.5 h-3.5 text-[#FF6B4A]" />
+              <span>Morocco 2026 AI Goldrush</span>
             </motion.div>
-            
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-zinc-900 mb-8 leading-[1.15] tracking-tight text-balance">
-              {t("opp_title_1")}{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] to-[#E85A3B] block mt-2">
-                {t("opp_title_2")}
+
+            <motion.h2
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 tracking-tight leading-[1.15]"
+            >
+              A Monthly Salary Won&apos;t Make You Free.{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
+                The Local Moroccan Market Will.
               </span>
-            </h2>
-            
-            <div className="space-y-6 text-lg lg:text-xl text-zinc-500 leading-relaxed font-medium">
-              <p>{t("opp_p1")}</p>
-              <div className="p-6 bg-white rounded-2xl border border-zinc-200/60 shadow-sm relative overflow-hidden">
-                <div className="absolute left-0 rtl:left-auto rtl:right-0 top-0 bottom-0 w-1.5 bg-[#FF6B4A]" />
-                <p className="px-2">
-                  {t("opp_p2_pre")}{" "}
-                  <strong className="text-zinc-900 font-black">{t("opp_p2_bold")}</strong>{" "}
-                  {t("opp_p2_post")}
-                </p>
+            </motion.h2>
+
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-base sm:text-lg text-slate-600 font-medium leading-relaxed"
+            >
+              While most people struggle competing with millions of global freelancers on Upwork for 5-dollar tasks, a quiet group of young Moroccan entrepreneurs is closing 10,000 to 30,000 MAD contracts right in Casablanca, Rabat, Marrakech, and Tangier using automated AI tools.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2"
+            >
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
+                <Sparkles className="w-4 h-4 text-indigo-600" />
+                <span>Zero Competition in French & Darija Automation</span>
               </div>
-            </div>
-          </motion.div>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Local clinics and agencies lose 60% of their inquiries because they answer WhatsApp hours late. By giving them an instant autonomous booking bot, you fix their biggest revenue leak.
+              </p>
+            </motion.div>
+          </div>
 
-          {/* Right Stats Cards - Floating & Parallax */}
-          <motion.div 
-            style={{ y: yCards }}
-            className="lg:col-span-6 relative flex flex-col md:block justify-center items-center h-full lg:min-h-[450px]"
-          >
-            {/* Decorative background dashed circle */}
-            <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] border-2 border-dashed border-zinc-300 rounded-full animate-[spin_60s_linear_infinite] z-0" />
-
-            {[
-              { val: t("opp_stat_1_value"), label: t("opp_stat_1_label"), color: "purple", icon: TrendingUp, pos: "relative md:absolute md:top-[0%] md:right-[5%] rtl:md:right-auto rtl:md:left-[5%] mb-4 md:mb-0", delay: 0.1 },
-              { val: t("opp_stat_2_value"), label: t("opp_stat_2_label"), color: "blue", icon: Target, pos: "relative md:absolute md:top-[40%] md:left-[0%] rtl:md:left-auto rtl:md:right-[0%] mb-4 md:mb-0", delay: 0.3 },
-              { val: t("opp_stat_3_value"), label: t("opp_stat_3_label"), color: "yellow", icon: Zap, pos: "relative md:absolute md:bottom-[5%] md:right-[15%] rtl:md:right-auto rtl:md:left-[15%] mb-4 md:mb-0", delay: 0.5 }
-            ].map((stat, idx) => (
-              <motion.div 
+          {/* Right Stats Bento Grid */}
+          <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+            {stats.map((stat, idx) => (
+              <motion.div
                 key={idx}
-                initial={{ opacity: 0, scale: 0.5, y: 50 }} 
-                whileInView={{ opacity: 1, scale: 1, y: 0 }} 
-                viewport={{ once: true, margin: "-50px" }} 
-                transition={{ type: "spring", stiffness: 100, delay: stat.delay }}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className={`bg-white rounded-[2rem] border border-zinc-200/80 p-6 flex items-center gap-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl transition-all ${stat.pos} w-full md:w-[300px] z-20 backdrop-blur-sm bg-white/95`}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between"
               >
-                <div className={`icon-squircle icon-squircle-${stat.color} w-14 h-14 shrink-0 flex items-center justify-center text-white shadow-sm`}>
-                  <stat.icon className="w-6 h-6" />
-                </div>
                 <div>
-                  <h3 className="text-3xl font-black text-zinc-900 mb-0.5">{stat.val}</h3>
-                  <p className="text-xs text-zinc-500 font-bold uppercase tracking-wider">{stat.label}</p>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-2xl sm:text-3xl font-black text-slate-950 font-mono tracking-tight">
+                      {stat.value}
+                    </span>
+                    <ArrowUpRight className="w-4 h-4 text-slate-400" />
+                  </div>
+                  <h4 className="text-sm font-bold text-slate-900 mb-1">
+                    {stat.label}
+                  </h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    {stat.sub}
+                  </p>
                 </div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         </div>
-
-        {/* Floating Callout Card */}
-        <motion.div 
-          initial={{ opacity: 0, y: 40 }} 
-          whileInView={{ opacity: 1, y: 0 }} 
-          viewport={{ once: true }}
-          transition={{ type: "spring", stiffness: 80, delay: 0.2 }}
-          className="w-full max-w-5xl mx-auto bg-zinc-900 rounded-[2.5rem] p-10 sm:p-16 text-center relative overflow-hidden shadow-2xl"
-        >
-          {/* Animated Gradient Border Effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B4A]/20 via-purple-500/10 to-[#FF6B4A]/20 opacity-60 blur-3xl pointer-events-none" />
-          
-          <Sparkles className="absolute top-10 right-10 md:right-20 w-8 h-8 text-[#FF6B4A] animate-pulse" />
-          <p className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-6 tracking-tight relative z-10 text-balance leading-tight">
-            {t("opp_callout_1")}
-          </p>
-          <p className="text-lg md:text-xl text-zinc-400 font-medium max-w-2xl mx-auto relative z-10 leading-relaxed text-balance">
-            {t("opp_callout_2")}
-          </p>
-        </motion.div>
       </div>
     </section>
   );

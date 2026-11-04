@@ -1,60 +1,72 @@
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 
-
 // Dynamically import below-the-fold sections
-const PricingSection = dynamic(() =>
-  import("@/components/landing/PricingSection").then(mod => mod.PricingSection)
+const VslSection = dynamic(() =>
+  import("@/components/landing/VslSection").then((mod) => mod.VslSection)
 );
 const FeaturesSection = dynamic(() =>
-  import("@/components/landing/FeaturesSection").then(mod => mod.FeaturesSection)
+  import("@/components/landing/FeaturesSection").then((mod) => mod.FeaturesSection)
 );
 const OpportunitySection = dynamic(() =>
-  import("@/components/landing/OpportunitySection").then(mod => mod.OpportunitySection)
+  import("@/components/landing/OpportunitySection").then((mod) => mod.OpportunitySection)
 );
 const TransformationSection = dynamic(() =>
-  import("@/components/landing/TransformationSection").then(mod => mod.TransformationSection)
+  import("@/components/landing/TransformationSection").then((mod) => mod.TransformationSection)
+);
+const PricingSection = dynamic(() =>
+  import("@/components/landing/PricingSection").then((mod) => mod.PricingSection)
 );
 const SocialProofSection = dynamic(() =>
-  import("@/components/landing/SocialProofSection").then(mod => mod.SocialProofSection)
+  import("@/components/landing/SocialProofSection").then((mod) => mod.SocialProofSection)
 );
 const CertificateSection = dynamic(() =>
-  import("@/components/landing/CertificateSection").then(mod => mod.CertificateSection)
+  import("@/components/landing/CertificateSection").then((mod) => mod.CertificateSection)
 );
 const MotivationSection = dynamic(() =>
-  import("@/components/landing/MotivationSection").then(mod => mod.MotivationSection)
+  import("@/components/landing/MotivationSection").then((mod) => mod.MotivationSection)
 );
 const FaqSection = dynamic(() =>
-  import("@/components/landing/FaqSection").then(mod => mod.FaqSection)
+  import("@/components/landing/FaqSection").then((mod) => mod.FaqSection)
 );
 const FinalCtaSection = dynamic(() =>
-  import("@/components/landing/FinalCtaSection").then(mod => mod.FinalCtaSection)
+  import("@/components/landing/FinalCtaSection").then((mod) => mod.FinalCtaSection)
 );
 
 export default function HomePage() {
   return (
+    <div className="min-h-screen bg-white text-slate-900 relative overflow-x-hidden rtl-content selection:bg-slate-900 selection:text-white">
+      <Navbar />
 
-      <div className="min-h-screen bg-[#FAFAFA] text-zinc-900 relative overflow-x-hidden rtl-content">
-        <Navbar />
+      <main>
+        <HeroSection />
+        <VslSection />
+        <div id="features">
+          <FeaturesSection />
+        </div>
+        <OpportunitySection />
+        <div id="how-it-works">
+          <TransformationSection />
+        </div>
+        <div id="pricing">
+          <PricingSection />
+        </div>
+        <div id="testimonials">
+          <SocialProofSection />
+        </div>
+        <div id="certificate">
+          <CertificateSection />
+        </div>
+        <MotivationSection />
+        <div id="faq">
+          <FaqSection />
+        </div>
+        <FinalCtaSection />
+      </main>
 
-        <main>
-          <HeroSection />
-          <div id="pricing"><PricingSection /></div>
-          <div id="features"><FeaturesSection /></div>
-          <OpportunitySection />
-          <div id="how-it-works"><TransformationSection /></div>
-          <div id="testimonials"><SocialProofSection /></div>
-          <div id="certificate"><CertificateSection /></div>
-          <MotivationSection />
-          <div id="faq"><FaqSection /></div>
-          <FinalCtaSection />
-        </main>
-
-        <Footer />
-      </div>
-
+      <Footer />
+    </div>
   );
 }

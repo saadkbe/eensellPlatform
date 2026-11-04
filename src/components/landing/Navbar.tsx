@@ -52,12 +52,16 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
         {/* Center Navigation Links */}
         {!hideLinks && (
           <div className="hidden lg:flex items-center gap-1 sm:gap-2">
-            <Link href="/#pricing" className="px-3 sm:px-4 py-2 text-base font-semibold text-zinc-700 hover:text-zinc-950 transition-all duration-200">Pricing</Link>
-            <Link href="/#features" className="px-3 sm:px-4 py-2 text-base font-semibold text-zinc-700 hover:text-zinc-950 transition-all duration-200">Features</Link>
-            <Link href="/#how-it-works" className="px-3 sm:px-4 py-2 text-base font-semibold text-zinc-700 hover:text-zinc-950 transition-all duration-200">Process</Link>
-            <Link href="/#testimonials" className="px-3 sm:px-4 py-2 text-base font-semibold text-zinc-700 hover:text-zinc-950 transition-all duration-200">Testimonials</Link>
-            <Link href="/#faq" className="px-3 sm:px-4 py-2 text-base font-semibold text-zinc-700 hover:text-zinc-950 transition-all duration-200">FAQ</Link>
-            <Link href="/contact" className="px-3 sm:px-4 py-2 text-base font-semibold text-zinc-700 hover:text-zinc-950 transition-all duration-200">Contact</Link>
+            <a href="#vsl" className="px-3 sm:px-4 py-2 text-sm font-semibold text-slate-700 hover:text-slate-950 transition-colors flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              <span>12-Min VSL</span>
+            </a>
+            <a href="#features" className="px-3 sm:px-4 py-2 text-sm font-semibold text-slate-700 hover:text-slate-950 transition-colors">Workspace Tools</a>
+            <a href="#how-it-works" className="px-3 sm:px-4 py-2 text-sm font-semibold text-slate-700 hover:text-slate-950 transition-colors">Process</a>
+            <a href="#pricing" className="px-3 sm:px-4 py-2 text-sm font-semibold text-slate-700 hover:text-slate-950 transition-colors">Pricing</a>
+            <a href="#testimonials" className="px-3 sm:px-4 py-2 text-sm font-semibold text-slate-700 hover:text-slate-950 transition-colors">Testimonials</a>
+            <a href="#faq" className="px-3 sm:px-4 py-2 text-sm font-semibold text-slate-700 hover:text-slate-950 transition-colors">FAQ</a>
+            <Link href="/contact" className="px-3 sm:px-4 py-2 text-sm font-semibold text-slate-700 hover:text-slate-950 transition-colors">Contact</Link>
           </div>
         )}
 
@@ -98,12 +102,12 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
           {!hideLinks && (
             <>
               <Link href="/sign-in" prefetch={true}>
-                <Button variant="ghost" className="hidden sm:flex rounded-full px-5 h-11 text-base font-bold text-zinc-700 hover:text-zinc-900 hover:bg-white/50">
+                <Button variant="ghost" className="hidden sm:flex rounded-full px-5 h-10 text-sm font-bold text-slate-700 hover:text-slate-950 hover:bg-slate-100 cursor-pointer">
                   {t("nav_signIn")}
                 </Button>
               </Link>
               <Link href="/sign-up" prefetch={true}>
-                <Button className="rounded-full px-7 h-11 text-base font-bold bg-[#FF6B4A] hover:bg-[#E85A3B] text-white shadow-md transition-transform hover:-translate-y-0.5">
+                <Button className="rounded-full px-6 h-10 text-sm font-bold bg-slate-950 hover:bg-slate-900 text-white shadow-md transition-transform hover:-translate-y-0.5 cursor-pointer">
                   {t("nav_cta")}
                 </Button>
               </Link>

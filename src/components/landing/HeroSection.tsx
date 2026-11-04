@@ -4,155 +4,259 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Check, Lightbulb, Shield, Bot, Eye, MousePointer2 } from "lucide-react";
+import {
+  Check,
+  Sparkles,
+  ArrowRight,
+  Play,
+  ShieldCheck,
+  Zap,
+  MapPin,
+  MessageSquare,
+  Mail,
+  Bot,
+  Users,
+  CheckCircle2,
+} from "lucide-react";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 
 export function HeroSection() {
   const { t, dir, isRTL } = useLanguage();
 
   return (
-    <section dir={dir} className="relative min-h-screen pt-36 md:pt-48 pb-12 md:pb-20 flex flex-col items-center justify-center overflow-hidden bg-[#FAFAFA]">
-      
-      {/* Abstract Orange Mesh Background */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
-        <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-[#FF6B4A]/10 rounded-full blur-[120px]" />
+    <section
+      dir={dir}
+      className="relative min-h-screen pt-32 sm:pt-40 md:pt-48 pb-16 sm:pb-24 flex flex-col items-center justify-center overflow-hidden bg-white text-slate-900"
+    >
+      {/* ── Ambient Web3 Light Mesh Gradients ── */}
+      <div className="absolute top-0 inset-x-0 h-[650px] overflow-hidden pointer-events-none select-none z-0">
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-70" />
+
+        {/* Multi-color ambient luminous glows */}
+        <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[900px] h-[550px] bg-gradient-to-b from-indigo-100/50 via-purple-50/40 to-transparent rounded-full blur-[140px]" />
+        <div className="absolute top-[80px] left-[15%] w-[450px] h-[350px] bg-cyan-100/40 rounded-full blur-[120px]" />
+        <div className="absolute top-[120px] right-[15%] w-[450px] h-[350px] bg-emerald-100/40 rounded-full blur-[120px]" />
       </div>
 
-      {/* === SCATTERED FLOATING LOGOS === */}
-      <div className="absolute inset-0 w-full max-w-[1200px] mx-auto pointer-events-none z-10 hidden md:block">
-        
-        {/* Top Left: Higgsfield (In focus, large) */}
-        <motion.div 
-          initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", delay: 0.2 }}
-          className="absolute left-[3%] top-[20%]"
+      {/* ── MAIN HERO CONTENT ── */}
+      <div className="relative z-20 container max-w-5xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center">
+        {/* Web3 Announcement Pill */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/90 border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.04)] backdrop-blur-md mb-8 group hover:border-slate-300 transition-colors"
         >
-          <div className="bg-white shadow-xl w-24 h-24 overflow-hidden rounded-[1.5rem] animate-float-slow flex items-center justify-center border border-zinc-200/50">
-            <img src="https://www.google.com/s2/favicons?domain=higgsfield.ai&sz=128" alt="Higgsfield" className="w-full h-full object-cover" />
-          </div>
+          <span className="flex h-2 w-2 relative">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+          </span>
+          <span className="text-xs font-bold text-slate-800 tracking-wide uppercase">
+            Eensell Workspace 3.0 • The Autonomous Moroccan B2B Engine
+          </span>
+          <span className="text-xs font-semibold text-slate-400 group-hover:text-slate-700 transition-colors">
+            &rarr;
+          </span>
         </motion.div>
 
-        {/* Middle Left: OpenAI (Out of focus, small) */}
-        <motion.div 
-          initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", delay: 0.4 }}
-          className="absolute left-[3%] top-[50%]"
-        >
-          <div className="bg-white shadow-lg w-16 h-16 overflow-hidden rounded-2xl animate-float-delayed flex items-center justify-center border border-zinc-200/50 blur-[1px] opacity-90">
-            <img src="https://github.com/openai.png" alt="OpenAI" className="w-full h-full object-cover" />
-          </div>
-        </motion.div>
-
-        {/* Top Right: Runway (Out of focus, medium) */}
-        <motion.div 
-          initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", delay: 0.3 }}
-          className="absolute right-[3%] top-[15%]"
-        >
-          <div className="bg-white shadow-xl w-[80px] h-[80px] overflow-hidden rounded-2xl animate-float-delayed flex items-center justify-center border border-zinc-200/50 blur-[1.5px] opacity-80">
-            <img src="https://github.com/runwayml.png" alt="Runway" className="w-full h-full object-cover" />
-          </div>
-        </motion.div>
-
-        {/* Middle Right: PayPal (In focus, large) */}
-        <motion.div 
-          initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", delay: 0.5 }}
-          className="absolute right-[5%] top-[42%]"
-        >
-          <div className="bg-white shadow-2xl w-24 h-24 overflow-hidden rounded-[1.5rem] animate-float-slow flex items-center justify-center border border-zinc-200/50">
-            <img src="https://cdn.simpleicons.org/paypal/00457C" alt="PayPal" className="w-full h-full object-contain p-5" />
-          </div>
-        </motion.div>
-
-        {/* Floating Right Inner: Claude (Out of focus, small) */}
-        <motion.div 
-          initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", delay: 0.6 }}
-          className="absolute right-[18%] top-[32%]"
-        >
-          <div className="bg-white shadow-md w-14 h-14 overflow-hidden rounded-xl animate-float-delayed flex items-center justify-center border border-zinc-200/50 blur-[0.5px] opacity-95">
-            <img src="https://cdn.simpleicons.org/claude/black" alt="Claude" className="w-full h-full object-contain p-2.5" />
-          </div>
-        </motion.div>
-        
-      </div>
-
-      {/* === HERO TEXT CONTENT === */}
-      <div className="relative z-30 container max-w-5xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center">
-        
-        {/* Massive Clean Headline */}
+        {/* Clean Web3 High-Impact Headline */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
-          className="text-[2rem] sm:text-[2.5rem] md:text-[3rem] lg:text-[3.5rem] font-black text-zinc-900 tracking-tight leading-[1.15] mb-8 w-full"
+          transition={{ duration: 0.7, delay: 0.1 }}
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-950 tracking-tight leading-[1.12] mb-6 max-w-4xl text-balance"
         >
-          <span className="block">{t("hero_headline_1")}</span>
-          <span className="block">{t("hero_headline_2")}</span>
-          <span className="block text-[#FF6B4A]">{t("hero_headline_3")}</span>
+          Scale Your Moroccan B2B AI Agency{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
+            On Complete Autopilot.
+          </span>
         </motion.h1>
 
         {/* Minimalist Subtitle */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className="text-lg sm:text-xl text-zinc-500 max-w-2xl mx-auto mb-10 leading-relaxed font-medium"
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="text-base sm:text-lg md:text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed font-medium text-balance"
         >
-          {t("hero_sub")}
+          Scrape verified local decision-makers across Casablanca, Rabat & Marrakech, enrich WhatsApp phone numbers, and draft high-converting Darija & French pitches that close 10,000 to 30,000 MAD clients.
         </motion.p>
 
-        {/* Bright Coral CTA */}
+        {/* Action Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.5 }}
+          transition={{ duration: 0.7, delay: 0.3 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto mb-12"
         >
-          <Link href="/sign-up">
+          <Link href="/sign-up" className="w-full sm:w-auto">
             <Button
               size="lg"
-              className="h-14 px-10 text-lg font-bold bg-[#FF6B4A] hover:bg-[#E85A3B] text-white rounded-2xl shadow-[0_12px_24px_-8px_rgba(255,107,74,0.5)] transition-all hover:-translate-y-1"
+              className="w-full sm:w-auto h-13 px-8 text-sm sm:text-base font-bold bg-slate-950 hover:bg-slate-900 text-white rounded-2xl shadow-[0_10px_30px_rgba(15,23,42,0.18)] transition-all hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2"
             >
-              {t("hero_cta_primary")}
+              <span>Get Immediate Workspace Access</span>
+              <ArrowRight className="w-4 h-4 rtl:rotate-180" />
             </Button>
           </Link>
+
+          <a href="#vsl" className="w-full sm:w-auto">
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-full sm:w-auto h-13 px-7 text-sm sm:text-base font-bold bg-white hover:bg-slate-50 text-slate-800 border-slate-200/90 rounded-2xl shadow-xs transition-all hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2"
+            >
+              <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center">
+                <Play className="w-2.5 h-2.5 fill-slate-900 text-slate-900 ml-0.5" />
+              </div>
+              <span>Watch 12-Min Breakdown</span>
+            </Button>
+          </a>
         </motion.div>
 
+        {/* Live Verified Trust Metrics */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+          className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs sm:text-sm font-semibold text-slate-500 pb-4"
+        >
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>14,800+ Leads Extracted</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>84.6% WhatsApp Open Rate</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>Darija & French AI Copywriting</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>0 Coding Skills Required</span>
+          </div>
+        </motion.div>
       </div>
 
-      {/* === DASHBOARD VIDEO SHOWCASE === */}
+      {/* ── WORKSPACE DASHBOARD SHOWCASE (Eensell Workspace.png) ── */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.7 }}
-        className="relative z-20 container max-w-5xl mx-auto px-6 mt-16 sm:mt-24 pb-10"
+        transition={{ duration: 0.8, delay: 0.5 }}
+        className="relative z-20 container max-w-6xl mx-auto px-4 sm:px-6 mt-12 sm:mt-16"
       >
-        {/* Premium Thin Orange Frame */}
-        <div className="relative w-full p-[2px] sm:p-[3px] bg-gradient-to-br from-[#FF6B4A]/60 to-[#D14526]/60 backdrop-blur-md rounded-[1.5rem] lg:rounded-[2.5rem] shadow-[0_0_80px_-15px_rgba(255,107,74,0.4)]">
-          <div className="overflow-hidden rounded-xl lg:rounded-[2rem] bg-zinc-900 shadow-inner relative aspect-video">
-            <img
-              src="/dashboard.png"
-              alt="Eensell University Dashboard"
-              className="w-full h-full object-cover"
+        {/* Glow halo behind dashboard */}
+        <div className="absolute -inset-4 bg-gradient-to-r from-violet-200/50 via-cyan-100/40 to-emerald-100/50 rounded-[3rem] blur-2xl opacity-60 pointer-events-none" />
+
+        {/* Browser Frame */}
+        <div className="relative rounded-[2rem] sm:rounded-[2.5rem] p-2.5 sm:p-3.5 bg-white border border-slate-200/90 shadow-[0_25px_80px_-20px_rgba(15,23,42,0.14)]">
+          {/* macOS Browser Header Bar */}
+          <div className="px-4 py-3 bg-slate-50/90 border-b border-slate-200/70 rounded-t-[1.6rem] sm:rounded-t-[2.1rem] flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-rose-400" />
+              <div className="w-3 h-3 rounded-full bg-amber-400" />
+              <div className="w-3 h-3 rounded-full bg-emerald-400" />
+            </div>
+
+            <div className="flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-slate-200/80 text-[11px] font-mono text-slate-500 shadow-2xs">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <span>https://workspace.eensell.agency/overview</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="flex h-2 w-2 rounded-full bg-emerald-500" />
+              <span className="text-[11px] font-semibold text-slate-600 hidden sm:inline">
+                Live Cloud Engine
+              </span>
+            </div>
+          </div>
+
+          {/* Real Workspace Screenshot Image */}
+          <div className="relative overflow-hidden rounded-b-[1.5rem] sm:rounded-b-[2rem] bg-slate-900 border border-slate-200/60 shadow-inner">
+            <Image
+              src="/images/Eensell Workspace.png"
+              alt="Eensell Workspace Dashboard"
+              width={1800}
+              height={1100}
+              className="w-full h-auto object-cover"
+              priority
             />
+
+            {/* Subtle gloss reflections */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/10 pointer-events-none" />
+          </div>
+
+          {/* Floating Web3 Badge - Top Left */}
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", delay: 0.9 }}
+            className="hidden md:flex absolute -top-5 -left-4 items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-white/95 border border-slate-200 shadow-xl backdrop-blur-md"
+          >
+            <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+              <MapPin className="w-4 h-4" />
+            </div>
+            <div className="text-left">
+              <p className="text-[11px] font-black text-slate-900">Casablanca Scraper</p>
+              <p className="text-[10px] text-slate-500 font-medium">+184 Dental Clinics Qualified</p>
+            </div>
+          </motion.div>
+
+          {/* Floating Web3 Badge - Bottom Right */}
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", delay: 1.1 }}
+            className="hidden md:flex absolute -bottom-5 -right-4 items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-white/95 border border-slate-200 shadow-xl backdrop-blur-md"
+          >
+            <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+              <MessageSquare className="w-4 h-4" />
+            </div>
+            <div className="text-left">
+              <p className="text-[11px] font-black text-slate-900">WhatsApp Darija Pitch</p>
+              <p className="text-[10px] text-emerald-600 font-bold">✓✓ Client Meeting Booked</p>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* ── VERIFIED PARTNERS / INTEGRATIONS MARQUEE ── */}
+      <div className="relative z-20 w-full mt-20 pt-8 pb-4 border-t border-slate-100 bg-[#FAFAFA]/60">
+        <div className="container max-w-5xl mx-auto px-4 text-center">
+          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-6">
+            Natively Integrated With The Modern Tech Stack
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-14 opacity-70 grayscale hover:grayscale-0 transition-all">
+            <span className="font-extrabold text-sm sm:text-base text-slate-700 tracking-tight flex items-center gap-1.5">
+              <span className="text-[#4285F4]">G</span>
+              <span className="text-[#EA4335]">o</span>
+              <span className="text-[#FBBC05]">o</span>
+              <span className="text-[#4285F4]">g</span>
+              <span className="text-[#34A853]">l</span>
+              <span className="text-[#EA4335]">e</span> Maps
+            </span>
+
+            <span className="font-bold text-sm sm:text-base text-slate-700 tracking-tight flex items-center gap-1.5">
+              <span className="text-[#25D366]">●</span> WhatsApp Cloud
+            </span>
+
+            <span className="font-bold text-sm sm:text-base text-slate-700 tracking-tight flex items-center gap-1.5">
+              OpenAI GPT-4o
+            </span>
+
+            <span className="font-bold text-sm sm:text-base text-slate-700 tracking-tight flex items-center gap-1.5">
+              <span className="text-[#EA4335]">M</span> Gmail Engine
+            </span>
+
+            <span className="font-bold text-sm sm:text-base text-slate-700 tracking-tight flex items-center gap-1.5">
+              Stripe & CIH Bank
+            </span>
           </div>
         </div>
-      </motion.div>
-
-      {/* === FULL-WIDTH INFINITE MARQUEE === */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.9 }}
-        className="relative z-30 w-full bg-[#D14526] py-3 mt-8 border-y border-white/20 shadow-xl overflow-hidden"
-        dir="ltr"
-      >
-        <div className="marquee-track flex w-max items-center gap-8">
-          {[...Array(40)].map((_, i) => (
-            <div key={i} className="flex items-center gap-8 text-white font-bold text-sm sm:text-base tracking-widest uppercase whitespace-nowrap">
-              <span>Accès de 2 mois pour 200Dh</span>
-              <span className="text-white/40 text-xs">✦</span>
-            </div>
-          ))}
-        </div>
-      </motion.div>
-
+      </div>
     </section>
   );
 }
