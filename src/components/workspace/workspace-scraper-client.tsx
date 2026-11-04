@@ -318,35 +318,38 @@ export function WorkspaceScraperClient() {
 
   return (
     <div className="w-full px-3 sm:px-5 lg:px-6 py-4 sm:py-5 space-y-6 select-text">
-      {/* ── Notion Header ── */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-1.5 text-xs text-[#787774] dark:text-[#9B9A97]">
-          <span>Eensell Workspace</span>
-          <span>/</span>
-          <span className="text-[#37352F] dark:text-[#E6E6E5] font-medium">Google Maps Scraper</span>
-        </div>
-
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/10 flex items-center justify-center border border-slate-200 dark:border-white/10 shadow-xs">
-              <TargetRadarSticker className="w-6 h-6" />
+      {/* ── Top Header Banner with Distinct Background ── */}
+      <div className="relative overflow-hidden rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-white p-6 sm:p-8 shadow-xl">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center shadow-md shrink-0">
+              <TargetRadarSticker className="w-7 h-7" />
             </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5] flex items-center gap-2">
-                <span>Google Maps Lead Scraper</span>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-500/40">
+                  STEP 1 &bull; B2B LEAD GENERATION
+                </span>
+                <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  <GlowingPulseSticker className="w-2 h-2" color="#10B981" />
+                  Live Google Maps API
+                </span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
+                Google Maps Lead Scraper
               </h1>
-              <p className="text-xs text-[#787774] dark:text-[#9B9A97] mt-0.5">
-                Extract verified businesses by niche and city with ratings, phone numbers, and websites.
+              <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
+                Extract verified businesses by niche and city with ratings, phone numbers, and websites for instant outreach.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5 shrink-0">
             <Button
               onClick={handleExportCSV}
               variant="outline"
               size="sm"
-              className="text-xs font-medium border-[#EDEDEB] dark:border-[#2E2E2E] text-[#37352F] dark:text-[#E6E6E5] gap-1.5 h-8 px-3 rounded-md hover:bg-[#F7F6F3] dark:hover:bg-[#2A2A2A] cursor-pointer"
+              className="text-xs font-semibold bg-white/10 hover:bg-white/20 text-white border-white/20 gap-1.5 h-9 px-3.5 rounded-xl cursor-pointer shadow-xs backdrop-blur-md"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Export CSV</span>
@@ -355,26 +358,26 @@ export function WorkspaceScraperClient() {
             <Link href="/workspace/crm">
               <Button
                 size="sm"
-                className="font-medium text-xs bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 gap-1.5 h-8 px-3 rounded-md shadow-xs cursor-pointer"
+                className="font-bold text-xs bg-white hover:bg-slate-100 text-slate-950 gap-1.5 h-9 px-4 rounded-xl shadow-md cursor-pointer transition-transform hover:scale-[1.02]"
               >
-                <Users className="w-3.5 h-3.5" />
-                <span>Open CRM</span>
+                <Users className="w-3.5 h-3.5 text-slate-900" />
+                <span>Open CRM &rarr;</span>
               </Button>
             </Link>
           </div>
         </div>
       </div>
 
-      {/* ── Notion Callout ── */}
-      <div className="p-3.5 px-4 rounded-xl bg-[#FBFAF7] dark:bg-[#202020] border border-[#EDEDEB] dark:border-[#2E2E2E] flex items-start gap-3 text-xs shadow-2xs">
+      {/* ── Status Callout ── */}
+      <div className="p-4 rounded-2xl bg-slate-50 dark:bg-[#1E1E1E] border border-slate-200 dark:border-white/10 flex items-start gap-3.5 text-xs shadow-2xs">
         <GlowingPulseSticker className="w-4 h-4 mt-0.5 shrink-0" color="#10B981" />
         <div className="flex-1 space-y-1">
-          <p className="font-semibold text-[#37352F] dark:text-[#E6E6E5] flex items-center gap-2">
-            <span>{isLiveScraper ? "Outscraper Live API Active" : "Google Maps Verified Directory & Live Scraper"}</span>
+          <p className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+            <span>{isLiveScraper ? "Outscraper Live Google Maps API Connected" : "Google Maps Verified Directory & Live Scraper"}</span>
           </p>
-          <p className="text-[#787774] dark:text-[#9B9A97] leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-xs">
             Every query searches target local businesses. Connect your Outscraper API key in{" "}
-            <Link href="/workspace/settings" className="underline font-medium text-[#37352F] dark:text-[#E6E6E5]">
+            <Link href="/workspace/settings" className="underline font-bold text-slate-900 dark:text-white">
               Settings
             </Link>{" "}
             to scrape directly with live credits.
@@ -382,8 +385,20 @@ export function WorkspaceScraperClient() {
         </div>
       </div>
 
-      {/* ── Notion Search Controls ── */}
-      <div className="p-4 rounded-xl bg-[#FFFFFF] dark:bg-[#202020] border border-[#EDEDEB] dark:border-[#2E2E2E] space-y-3 shadow-2xs">
+      {/* ── Search Controls Section ── */}
+      <div className="p-5 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 space-y-4 shadow-xs">
+        <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-white/10">
+          <div>
+            <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+              <Search className="w-4.5 h-4.5 text-blue-600 dark:text-blue-400" />
+              <span>Search Target Niche & City</span>
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Specify your target Moroccan or international market to extract fresh business leads.
+            </p>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
           <div className="sm:col-span-5 relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#787774]">🏷️</span>
@@ -392,7 +407,7 @@ export function WorkspaceScraperClient() {
               value={niche}
               onChange={(e) => setNiche(e.target.value)}
               placeholder="Niche (e.g. Dental Clinics, Real Estate, Clinics...)"
-              className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-[#EDEDEB] dark:border-[#2E2E2E] bg-transparent text-xs text-[#37352F] dark:text-[#E6E6E5] placeholder-[#9B9A97] outline-none focus:border-slate-400 dark:focus:border-slate-500"
+              className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 outline-none focus:border-slate-800 dark:focus:border-white"
             />
           </div>
 
@@ -403,7 +418,7 @@ export function WorkspaceScraperClient() {
               value={city}
               onChange={(e) => setCity(e.target.value)}
               placeholder="City (e.g. Casablanca, Rabat, Marrakech, Dubai...)"
-              className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-[#EDEDEB] dark:border-[#2E2E2E] bg-transparent text-xs text-[#37352F] dark:text-[#E6E6E5] placeholder-[#9B9A97] outline-none focus:border-slate-400 dark:focus:border-slate-500"
+              className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 outline-none focus:border-slate-800 dark:focus:border-white"
             />
           </div>
 
@@ -411,12 +426,12 @@ export function WorkspaceScraperClient() {
             <Button
               onClick={handleRunScrape}
               disabled={isScraping}
-              className="w-full h-8 text-xs font-semibold bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 rounded-lg cursor-pointer"
+              className="w-full h-9 text-xs font-bold bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 rounded-xl cursor-pointer shadow-xs"
             >
               {isScraping ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" />
-                  <span>Scraping...</span>
+                  <span>Scraping Maps...</span>
                 </>
               ) : (
                 <>
@@ -430,15 +445,15 @@ export function WorkspaceScraperClient() {
 
         {/* Niche quick tags */}
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1">
-          <span className="text-[11px] text-[#787774] dark:text-[#9B9A97] font-medium shrink-0">Quick presets:</span>
+          <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold shrink-0">Quick presets:</span>
           {TARGET_NICHES.slice(0, 6).map((n) => (
             <button
               key={n}
               onClick={() => setNiche(n)}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors shrink-0 cursor-pointer ${
+              className={`px-3 py-1 rounded-lg text-[11px] font-semibold transition-colors shrink-0 cursor-pointer ${
                 niche === n
                   ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs"
-                  : "bg-[#F7F6F3] dark:bg-[#2A2A2A] text-[#787774] dark:text-[#9B9A97] hover:text-[#37352F] dark:hover:text-[#E6E6E5]"
+                  : "bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
               {n}
@@ -458,24 +473,24 @@ export function WorkspaceScraperClient() {
       />
 
       {/* ── Scraped Results Database Table ── */}
-      <div className="border border-[#EDEDEB] dark:border-[#2E2E2E] rounded-lg overflow-hidden bg-[#FFFFFF] dark:bg-[#202020]">
-        <div className="px-3.5 py-2.5 bg-[#F7F6F3] dark:bg-[#1E1E1E] border-b border-[#EDEDEB] dark:border-[#2E2E2E] flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-[#37352F] dark:text-[#E6E6E5]">
-              Extracted Businesses
+      <div className="border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden bg-white dark:bg-[#1C1C1E] shadow-xs">
+        <div className="px-5 py-4 bg-slate-50/80 dark:bg-[#1E1E1E] border-b border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+          <div className="flex items-center gap-3">
+            <span className="text-base font-black text-slate-900 dark:text-white">
+              Extracted Businesses Directory
             </span>
-            <span className="px-1.5 py-0.2 rounded bg-[#EFEFEE] dark:bg-[#2E2E2E] text-[10px] text-[#787774] dark:text-[#9B9A97] font-mono">
-              {results.length} results
+            <span className="px-2.5 py-0.5 rounded-full bg-slate-200 dark:bg-white/10 text-xs font-mono font-bold text-slate-700 dark:text-slate-300">
+              {results.length} companies
             </span>
             {!isLiveScraper && (
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-                Preview / Demo Mode
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                Verified Directory Preview
               </span>
             )}
           </div>
 
-          <span className="text-[11px] text-[#787774] dark:text-[#9B9A97]">
-            Click "Pitch" to generate cold copy with AI
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+            Click "+ CRM" to save, or launch direct outreach with "Email" or "WhatsApp"
           </span>
         </div>
 

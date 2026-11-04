@@ -253,51 +253,55 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
   };
 
   return (
-    <div className="w-full px-3 sm:px-5 lg:px-6 py-4 sm:py-5 space-y-6 select-text">
-      {/* ── 1. Executive Clean Hero Banner (No Orange Gradient, Crisp Premium Dark/Light) ── */}
-      <div className="relative overflow-hidden rounded-3xl border border-slate-200/90 dark:border-white/10 bg-white dark:bg-[#1C1C1E] p-6 sm:p-8 shadow-xs">
+    <div className="w-full px-3 sm:px-5 lg:px-6 py-4 sm:py-5 space-y-7 select-text">
+      {/* ── 1. Executive Top Greeting Banner (Distinct High-Contrast Background) ── */}
+      <div className="relative overflow-hidden rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white p-6 sm:p-9 shadow-xl">
+        {/* Subtle Ambient Decorative Glows */}
+        <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
+
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-2xl">
+          <div className="space-y-3 max-w-2xl">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-500/20">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-xs">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                 {t("ws_live_badge")}
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-white/10">
-                <Activity className="w-3.5 h-3.5 text-slate-500" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-slate-200 border border-white/15 backdrop-blur-md">
+                <Activity className="w-3.5 h-3.5 text-indigo-300" />
                 {t("ws_command_center_badge")}
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
               {getGreeting()}, {firstName} 👋
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-normal">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
               {t("ws_header_desc")}
             </p>
           </div>
 
-          {/* Quick Actions (Monochrome & Solid Dark/Light Buttons — No Orange Gradients) */}
+          {/* Quick Actions (High-Visibility Solid & Frosted Buttons) */}
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             <Link
               href="/workspace/settings"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-white/5 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 font-semibold text-xs border border-slate-200/90 dark:border-white/10 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs border border-white/20 transition-all cursor-pointer backdrop-blur-md shadow-xs"
             >
-              <Key className="w-3.5 h-3.5 text-slate-500" />
+              <Key className="w-3.5 h-3.5 text-slate-300" />
               <span>{t("ws_btn_api_settings")}</span>
             </Link>
 
             <Link
               href="/workspace/scraper"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-white/5 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 font-semibold text-xs border border-slate-200/90 dark:border-white/10 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs border border-white/20 transition-all cursor-pointer backdrop-blur-md shadow-xs"
             >
-              <MapPin className="w-3.5 h-3.5 text-slate-500" />
+              <MapPin className="w-3.5 h-3.5 text-slate-300" />
               <span>{t("ws_btn_scrape_leads")}</span>
             </Link>
 
             <button
               onClick={() => setIsAddRetainerOpen(true)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-bold text-xs shadow-sm transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-950 font-bold text-xs shadow-md transition-all cursor-pointer hover:scale-[1.02]"
             >
               <Plus className="w-4 h-4 stroke-[2.5]" />
               <span>{t("ws_btn_add_retainer")}</span>
@@ -306,8 +310,21 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
         </div>
       </div>
 
-      {/* ── 2. Four Interactive KPI Metric Widgets ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+      {/* ── 2. Performance Metrics Header & Cards ── */}
+      <div className="space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+          <div className="space-y-0.5">
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              <span>Agency Performance & Revenue</span>
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+              Live recurring cashflow (MRR), total extracted leads, client retainers, and outreach velocity.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
         {/* Metric 1: Verified Monthly Cashflow (MRR) */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -468,151 +485,184 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
             </Link>
           </div>
         </motion.div>
+        </div>
       </div>
 
       {/* ── 3. Core Ecosystem Apps Launcher Grid ── */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-slate-600 dark:text-slate-400" />
-            <span>{t("ws_apps_title")}</span>
-          </h2>
-          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-            {t("ws_apps_subtitle")}
-          </span>
+      <div className="space-y-4 pt-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-1">
+          <div className="space-y-0.5">
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <span>{t("ws_apps_title")}</span>
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+              {t("ws_apps_subtitle")}
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* App 1: Google Maps Scraper */}
           <Link
             href="/workspace/scraper"
-            className="p-5 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30 hover:shadow-md transition-all group relative overflow-hidden"
+            className="p-5 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30 hover:shadow-md transition-all group relative overflow-hidden flex flex-col justify-between space-y-3"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-base border border-blue-200/80 dark:border-blue-500/20 group-hover:scale-105 transition-transform">
-                <MapPin className="w-5 h-5" />
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-base border border-blue-200/80 dark:border-blue-500/20 group-hover:scale-105 transition-transform">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200/80 dark:border-blue-500/20 tracking-wider">
+                  STEP 1 &bull; {t("ws_app_tag_leadgen")}
+                </span>
               </div>
-              <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200/80 dark:border-blue-500/20">
-                {t("ws_app_tag_leadgen")}
-              </span>
+              <h3 className="font-black text-base text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1.5">
+                <span>{t("ws_nav_scraper")}</span>
+                <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                {t("ws_app_scraper_desc")}
+              </p>
             </div>
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1.5">
-              <span>{t("ws_nav_scraper")}</span>
-              <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-              {t("ws_app_scraper_desc")}
-            </p>
+            <div className="pt-2 border-t border-slate-100 dark:border-white/5 flex items-center text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform">
+              <span>Open Scraper &rarr;</span>
+            </div>
           </Link>
 
           {/* App 2: WhatsApp Outreach */}
           <Link
             href="/workspace/whatsapp"
-            className="p-5 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30 hover:shadow-md transition-all group relative overflow-hidden"
+            className="p-5 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30 hover:shadow-md transition-all group relative overflow-hidden flex flex-col justify-between space-y-3"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-base border border-emerald-200/80 dark:border-emerald-500/20 group-hover:scale-105 transition-transform">
-                <MessageSquare className="w-5 h-5" />
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-11 h-11 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-base border border-emerald-200/80 dark:border-emerald-500/20 group-hover:scale-105 transition-transform">
+                  <MessageSquare className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-500/20 tracking-wider">
+                  STEP 2 &bull; {t("ws_app_tag_messaging")}
+                </span>
               </div>
-              <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-500/20">
-                {t("ws_app_tag_messaging")}
-              </span>
+              <h3 className="font-black text-base text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors flex items-center gap-1.5">
+                <span>{t("ws_nav_whatsapp")}</span>
+                <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                {t("ws_app_whatsapp_desc")}
+              </p>
             </div>
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors flex items-center gap-1.5">
-              <span>{t("ws_nav_whatsapp")}</span>
-              <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-              {t("ws_app_whatsapp_desc")}
-            </p>
+            <div className="pt-2 border-t border-slate-100 dark:border-white/5 flex items-center text-xs font-bold text-emerald-600 dark:text-emerald-400 group-hover:translate-x-0.5 transition-transform">
+              <span>Open WhatsApp Studio &rarr;</span>
+            </div>
           </Link>
 
           {/* App 3: AI Drafter */}
           <Link
             href="/workspace/drafter"
-            className="p-5 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30 hover:shadow-md transition-all group relative overflow-hidden"
+            className="p-5 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30 hover:shadow-md transition-all group relative overflow-hidden flex flex-col justify-between space-y-3"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-800 dark:text-slate-200 flex items-center justify-center font-bold text-base border border-slate-200/80 dark:border-white/10 group-hover:scale-105 transition-transform">
-                <Mail className="w-5 h-5" />
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-11 h-11 rounded-xl bg-violet-50 dark:bg-violet-500/10 text-violet-600 dark:text-violet-400 flex items-center justify-center font-bold text-base border border-violet-200/80 dark:border-violet-500/20 group-hover:scale-105 transition-transform">
+                  <Mail className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-md bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-400 border border-violet-200/80 dark:border-violet-500/20 tracking-wider">
+                  STEP 3 &bull; {t("ws_app_tag_ai_copy")}
+                </span>
               </div>
-              <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-white/10">
-                {t("ws_app_tag_ai_copy")}
-              </span>
+              <h3 className="font-black text-base text-slate-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors flex items-center gap-1.5">
+                <span>{t("ws_nav_drafter")}</span>
+                <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                {t("ws_app_drafter_desc")}
+              </p>
             </div>
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-slate-600 dark:group-hover:text-white transition-colors flex items-center gap-1.5">
-              <span>{t("ws_nav_drafter")}</span>
-              <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-              {t("ws_app_drafter_desc")}
-            </p>
+            <div className="pt-2 border-t border-slate-100 dark:border-white/5 flex items-center text-xs font-bold text-violet-600 dark:text-violet-400 group-hover:translate-x-0.5 transition-transform">
+              <span>Open Cold Drafter &rarr;</span>
+            </div>
           </Link>
 
           {/* App 4: CRM Pipeline */}
           <Link
             href="/workspace/crm"
-            className="p-5 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30 hover:shadow-md transition-all group relative overflow-hidden"
+            className="p-5 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30 hover:shadow-md transition-all group relative overflow-hidden flex flex-col justify-between space-y-3"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-500/10 text-violet-600 dark:text-violet-400 flex items-center justify-center font-bold text-base border border-violet-200/80 dark:border-violet-500/20 group-hover:scale-105 transition-transform">
-                <Users className="w-5 h-5" />
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-base border border-blue-200/80 dark:border-blue-500/20 group-hover:scale-105 transition-transform">
+                  <Users className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200/80 dark:border-blue-500/20 tracking-wider">
+                  STEP 4 &bull; {t("ws_app_tag_pipeline")}
+                </span>
               </div>
-              <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-md bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-400 border border-violet-200/80 dark:border-violet-500/20">
-                {t("ws_app_tag_pipeline")}
-              </span>
+              <h3 className="font-black text-base text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1.5">
+                <span>{t("ws_nav_crm")}</span>
+                <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                {t("ws_app_crm_desc")}
+              </p>
             </div>
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors flex items-center gap-1.5">
-              <span>{t("ws_nav_crm")}</span>
-              <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-              {t("ws_app_crm_desc")}
-            </p>
+            <div className="pt-2 border-t border-slate-100 dark:border-white/5 flex items-center text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform">
+              <span>Open Pipeline CRM &rarr;</span>
+            </div>
           </Link>
 
           {/* App 5: Agency Invoices */}
           <Link
             href="/workspace/invoices"
-            className="p-5 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30 hover:shadow-md transition-all group relative overflow-hidden"
+            className="p-5 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30 hover:shadow-md transition-all group relative overflow-hidden flex flex-col justify-between space-y-3"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold text-base border border-teal-200/80 dark:border-teal-500/20 group-hover:scale-105 transition-transform">
-                <Receipt className="w-5 h-5" />
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-11 h-11 rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold text-base border border-teal-200/80 dark:border-teal-500/20 group-hover:scale-105 transition-transform">
+                  <Receipt className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-md bg-teal-50 dark:bg-teal-500/10 text-teal-700 dark:text-teal-400 border border-teal-200/80 dark:border-teal-500/20 tracking-wider">
+                  STEP 5 &bull; {t("ws_app_tag_finance")}
+                </span>
               </div>
-              <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-md bg-teal-50 dark:bg-teal-500/10 text-teal-700 dark:text-teal-400 border border-teal-200/80 dark:border-teal-500/20">
-                {t("ws_app_tag_finance")}
-              </span>
+              <h3 className="font-black text-base text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors flex items-center gap-1.5">
+                <span>{t("ws_nav_invoices")}</span>
+                <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                {t("ws_app_invoices_desc")}
+              </p>
             </div>
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors flex items-center gap-1.5">
-              <span>{t("ws_nav_invoices")}</span>
-              <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-              {t("ws_app_invoices_desc")}
-            </p>
+            <div className="pt-2 border-t border-slate-100 dark:border-white/5 flex items-center text-xs font-bold text-teal-600 dark:text-teal-400 group-hover:translate-x-0.5 transition-transform">
+              <span>Open Invoices & Billing &rarr;</span>
+            </div>
           </Link>
 
           {/* App 6: Notes & Playbooks */}
           <Link
             href="/workspace/notes"
-            className="p-5 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30 hover:shadow-md transition-all group relative overflow-hidden"
+            className="p-5 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 hover:border-slate-400 dark:hover:border-white/30 hover:shadow-md transition-all group relative overflow-hidden flex flex-col justify-between space-y-3"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300 flex items-center justify-center font-bold text-base border border-slate-200/80 dark:border-white/10 group-hover:scale-105 transition-transform">
-                <FileText className="w-5 h-5" />
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <div className="w-11 h-11 rounded-xl bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-300 flex items-center justify-center font-bold text-base border border-slate-200/80 dark:border-white/10 group-hover:scale-105 transition-transform">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-white/10 tracking-wider">
+                  STEP 6 &bull; {t("ws_app_tag_knowledge")}
+                </span>
               </div>
-              <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-white/10">
-                {t("ws_app_tag_knowledge")}
-              </span>
+              <h3 className="font-black text-base text-slate-900 dark:text-white group-hover:text-slate-600 dark:group-hover:text-white transition-colors flex items-center gap-1.5">
+                <span>{t("ws_nav_notes")}</span>
+                <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                {t("ws_app_notes_desc")}
+              </p>
             </div>
-            <h3 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-slate-600 dark:group-hover:text-white transition-colors flex items-center gap-1.5">
-              <span>{t("ws_nav_notes")}</span>
-              <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-              {t("ws_app_notes_desc")}
-            </p>
+            <div className="pt-2 border-t border-slate-100 dark:border-white/5 flex items-center text-xs font-bold text-slate-700 dark:text-slate-300 group-hover:translate-x-0.5 transition-transform">
+              <span>Open Notes & Playbooks &rarr;</span>
+            </div>
           </Link>
         </div>
       </div>
@@ -622,13 +672,13 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
         {/* Left Column: Retainers Table (8 cols) */}
         <div className="xl:col-span-8 space-y-4">
           <div className="p-6 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 shadow-xs space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-white/10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200/90 dark:border-white/10">
               <div>
-                <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
-                  <Building2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+                  <Building2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                   <span>{t("ws_retainers_title")}</span>
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                   {t("ws_retainers_subtitle")}
                 </p>
               </div>
@@ -637,9 +687,9 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
                 <Button
                   onClick={() => setIsAddRetainerOpen(true)}
                   size="sm"
-                  className="h-8 px-3 text-xs bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-semibold rounded-xl cursor-pointer"
+                  className="h-9 px-3.5 text-xs bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 font-bold rounded-xl cursor-pointer shadow-xs"
                 >
-                  <Plus className="w-3.5 h-3.5 mr-1" />
+                  <Plus className="w-3.5 h-3.5 mr-1 stroke-[2.5]" />
                   <span>{t("ws_btn_add_retainer")}</span>
                 </Button>
               </div>
@@ -772,13 +822,13 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
         <div className="xl:col-span-4 space-y-6">
           {/* Card 1: Daily Acquisition Priorities */}
           <div className="p-6 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 shadow-xs space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200/80 dark:border-white/10">
               <div>
-                <h3 className="font-bold text-xs uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-1.5">
-                  <Target className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+                  <Target className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                   <span>{t("ws_tasks_title")}</span>
                 </h3>
-                <span className="text-xs text-slate-500 dark:text-slate-400">
+                <span className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 block">
                   {completedTasksCount} / {tasks.length} {t("ws_tasks_completed_count")}
                 </span>
               </div>
@@ -862,14 +912,14 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
 
           {/* Card 2: API & System Readiness */}
           <div className="p-6 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 shadow-xs space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="font-bold text-xs uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200/80 dark:border-white/10">
+              <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 <span>{t("ws_health_title")}</span>
               </h3>
               <Link
                 href="/workspace/settings"
-                className="text-xs font-semibold text-slate-700 dark:text-slate-300 hover:underline flex items-center gap-1"
+                className="text-xs font-bold text-slate-700 dark:text-slate-300 hover:underline flex items-center gap-1"
               >
                 <span>{t("ws_health_manage_keys")}</span>
                 <ChevronRight className={cn("w-3.5 h-3.5", isRTL && "rotate-180")} />

@@ -239,48 +239,47 @@ export function WorkspaceSheetsClient({
 
   return (
     <div className="w-full px-3 sm:px-5 lg:px-6 py-4 sm:py-5 space-y-6 select-text">
-      {/* ── Notion Header ── */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-1.5 text-xs text-[#787774] dark:text-[#9B9A97]">
-          <span>Eensell Workspace</span>
-          <span>/</span>
-          <span className="text-[#37352F] dark:text-[#E6E6E5] font-medium">Agency Sheets</span>
-        </div>
-
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/10 flex items-center justify-center border border-slate-200 dark:border-white/10 shadow-xs">
-              <VerifiedCheckBadge className="w-6 h-6" />
+      {/* ── Top Header Banner with Distinct Background ── */}
+      <div className="relative overflow-hidden rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950 text-white p-6 sm:p-8 shadow-xl">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center shadow-md shrink-0">
+              <VerifiedCheckBadge className="w-7 h-7" />
             </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5] flex items-center gap-2">
-                <span>Agency Master Database</span>
-                <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/40">
-                  <GlowingPulseSticker className="w-2.5 h-2.5" color="#10B981" />
-                  Auto-Save
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-teal-500/20 text-teal-300 border border-teal-500/40">
+                  DATABASE &bull; AGENCY SPREADSHEETS
                 </span>
+                <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  <GlowingPulseSticker className="w-2 h-2" color="#10B981" />
+                  Auto-Save Active
+                </span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
+                Agency Master Database
               </h1>
-              <p className="text-xs text-[#787774] dark:text-[#9B9A97] mt-0.5">
-                Notion-style data grid to track clients, retainers, and deal stages.
+              <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
+                Notion-style live data grid to track clients, phone numbers, retainers, and deal stages. Edit inline with instant DB auto-save.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5 shrink-0">
             <Button
               onClick={handleAddRow}
               size="sm"
-              className="font-medium text-xs bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 gap-1.5 h-8 px-3 rounded-lg shadow-xs cursor-pointer"
+              className="font-bold text-xs bg-white hover:bg-slate-100 text-slate-950 gap-1.5 h-9 px-4 rounded-xl shadow-md cursor-pointer transition-transform hover:scale-[1.02]"
             >
-              <Plus className="w-3.5 h-3.5" />
-              <span>New Row</span>
+              <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>Add New Row</span>
             </Button>
 
             <Button
               onClick={handleExportCSV}
               variant="outline"
               size="sm"
-              className="text-xs font-medium border-[#EDEDEB] dark:border-[#2E2E2E] text-[#37352F] dark:text-[#E6E6E5] gap-1.5 h-8 px-3 rounded-lg hover:bg-[#F7F6F3] dark:hover:bg-[#2A2A2A] cursor-pointer"
+              className="text-xs font-semibold bg-white/10 hover:bg-white/20 text-white border-white/20 gap-1.5 h-9 px-3.5 rounded-xl cursor-pointer shadow-xs backdrop-blur-md"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Export CSV</span>
@@ -290,14 +289,18 @@ export function WorkspaceSheetsClient({
       </div>
 
       {/* ── Summary Cards ── */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-        <div className="p-3 rounded-lg bg-[#FFFFFF] dark:bg-[#202020] border border-[#EDEDEB] dark:border-[#2E2E2E]">
-          <span className="text-[#787774] dark:text-[#9B9A97]">Total Leads Tracked</span>
-          <div className="text-lg font-bold text-[#37352F] dark:text-[#E6E6E5] mt-0.5">{rows.length}</div>
-        </div>
-        <div className="p-3 rounded-lg bg-[#FFFFFF] dark:bg-[#202020] border border-[#EDEDEB] dark:border-[#2E2E2E]">
-          <span className="text-[#787774] dark:text-[#9B9A97]">Active Monthly Retainers</span>
-          <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
+      <div className="space-y-3">
+        <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+          <span>Database Summary Metrics</span>
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+          <div className="p-4 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 shadow-xs">
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Leads Tracked</span>
+            <div className="text-2xl font-black text-slate-900 dark:text-white mt-1">{rows.length}</div>
+          </div>
+          <div className="p-4 rounded-2xl bg-white dark:bg-[#1C1C1E] border border-slate-200/90 dark:border-white/10 shadow-xs">
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Active Retainers</span>
+            <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
             {closedValue.toLocaleString()} MAD
           </div>
         </div>
@@ -314,6 +317,7 @@ export function WorkspaceSheetsClient({
           </div>
         </div>
       </div>
+    </div>
 
       {/* ── Search & Filter Bar ── */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 text-xs">

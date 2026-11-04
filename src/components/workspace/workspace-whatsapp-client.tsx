@@ -293,52 +293,49 @@ export function WorkspaceWhatsappClient() {
 
   return (
     <div className="w-full px-3 sm:px-5 lg:px-6 py-4 sm:py-5 space-y-6 select-text">
-      {/* ── Top Bar ── */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#EDEDEB] dark:border-[#2E2E2E]">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/40">
-              <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
-              WHATSAPP OUTREACH STUDIO &bull; 1-CLICK LAUNCH
-            </span>
-            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/40">
-              <GlowingPulseSticker className="w-2.5 h-2.5" color="#10B981" />
-              Active
-            </span>
-          </div>
-
-          <div className="flex items-center gap-3 pt-1">
-            <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/10 flex items-center justify-center border border-slate-200 dark:border-white/10 shadow-xs shrink-0">
-              <ChatBubbleSticker className="w-6 h-6" />
+      {/* ── Top Header Banner with Distinct Background ── */}
+      <div className="relative overflow-hidden rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 text-white p-6 sm:p-8 shadow-xl">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center shadow-md shrink-0">
+              <ChatBubbleSticker className="w-7 h-7" />
             </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5]">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  STEP 2 &bull; DIRECT WHATSAPP OUTREACH
+                </span>
+                <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  <GlowingPulseSticker className="w-2 h-2" color="#10B981" />
+                  1-Click Direct Launch
+                </span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
                 WhatsApp Outreach Studio
               </h1>
-              <p className="text-xs sm:text-sm text-[#787774] dark:text-[#9B9A97]">
-                Launch direct WhatsApp conversations, test audio voice notes, and preview hooks inside an iPhone 18 Pro Max frame.
+              <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
+                Launch personalized WhatsApp conversations, preview audio voice notes, and test proven Darija & French angles inside an interactive device frame.
               </p>
             </div>
           </div>
-        </div>
 
-        {/* Switcher & Actions */}
-        <div className="flex flex-wrap items-center gap-2.5">
-          <Link
-            href="/workspace/drafter"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-violet-50 text-violet-700 dark:bg-violet-950/50 dark:text-violet-300 border border-violet-200 dark:border-violet-800/40 hover:bg-violet-100 transition-all cursor-pointer"
-          >
-            <Mail className="w-3.5 h-3.5" />
-            <span>Switch to Cold Email &rarr;</span>
-          </Link>
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <Link
+              href="/workspace/drafter"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all cursor-pointer backdrop-blur-md shadow-xs"
+            >
+              <Mail className="w-3.5 h-3.5 text-violet-300" />
+              <span>Cold Email Drafter &rarr;</span>
+            </Link>
 
-          <Button
-            onClick={handleLaunchWhatsApp}
-            className="inline-flex items-center gap-1.5 h-8 px-4 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs cursor-pointer"
-          >
-            <Send className="w-3.5 h-3.5" />
-            <span>Launch on WhatsApp</span>
-          </Button>
+            <Button
+              onClick={handleLaunchWhatsApp}
+              className="inline-flex items-center gap-1.5 h-9 px-4 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-md cursor-pointer transition-transform hover:scale-[1.02]"
+            >
+              <Send className="w-3.5 h-3.5" />
+              <span>Launch on WhatsApp</span>
+            </Button>
+          </div>
         </div>
       </div>
 

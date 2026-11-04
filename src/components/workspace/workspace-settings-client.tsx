@@ -149,52 +149,50 @@ export function WorkspaceSettingsClient({
 
   return (
     <div className="w-full px-3 sm:px-5 lg:px-6 py-4 sm:py-5 space-y-6 select-text">
-      {/* ── Executive Header ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#EDEDEB] dark:border-[#2E2E2E]">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/40">
-              <Key className="w-3.5 h-3.5" />
-              SYSTEM INFRASTRUCTURE &bull; CREDENTIALS
-            </span>
-            <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/40">
-              <GlowingPulseSticker className="w-2.5 h-2.5" color="#10B981" />
-              Secured
-            </span>
-          </div>
-
-          <div className="flex items-center gap-3 pt-1">
-            <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/10 flex items-center justify-center border border-slate-200 dark:border-white/10 shadow-xs shrink-0">
-              <ShieldSecureSticker className="w-6 h-6" />
+      {/* ── Top Header Banner with Distinct Background ── */}
+      <div className="relative overflow-hidden rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-white p-6 sm:p-8 shadow-xl">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center shadow-md shrink-0">
+              <ShieldSecureSticker className="w-7 h-7" />
             </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#37352F] dark:text-[#E6E6E5]">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-500/40">
+                  SYSTEM INFRASTRUCTURE &bull; BYOK CREDENTIALS
+                </span>
+                <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  <GlowingPulseSticker className="w-2.5 h-2.5" color="#10B981" />
+                  Encrypted & Secured
+                </span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
                 Workspace Settings & Integrations
               </h1>
-              <p className="text-xs sm:text-sm text-[#787774] dark:text-[#9B9A97]">
-                Configure your AI keys, Google Maps scraper tokens, and Gmail SMTP for autonomous client acquisition.
+              <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
+                Configure your own OpenAI GPT-4o keys, Outscraper tokens, ElevenLabs voices, and Gmail SMTP for completely autonomous client acquisition.
               </p>
             </div>
           </div>
-        </div>
 
-        <Button
-          onClick={() => handleSave()}
-          disabled={isSaving}
-          className="h-9 px-4 rounded-lg text-xs font-semibold bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 shadow-xs cursor-pointer flex items-center gap-1.5 disabled:opacity-50 shrink-0"
-        >
-          {isSaving ? (
-            <>
-              <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-              <span>Saving Changes...</span>
-            </>
-          ) : (
-            <>
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Save All Changes</span>
-            </>
-          )}
-        </Button>
+          <Button
+            onClick={() => handleSave()}
+            disabled={isSaving}
+            className="h-10 px-5 rounded-xl text-xs font-bold bg-white hover:bg-slate-100 text-slate-950 shadow-md cursor-pointer flex items-center gap-2 disabled:opacity-50 shrink-0 transition-transform hover:scale-[1.02]"
+          >
+            {isSaving ? (
+              <>
+                <RefreshCw className="w-3.5 h-3.5 animate-spin text-slate-900" />
+                <span>Saving Credentials...</span>
+              </>
+            ) : (
+              <>
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span>Save All Credentials</span>
+              </>
+            )}
+          </Button>
+        </div>
       </div>
 
       {/* ── Quick Health & Integration Status Pills ── */}
