@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Inter, Cairo, Caveat, Aref_Ruqaa } from "next/font/google";
+import { Inter, IBM_Plex_Sans_Arabic, Caveat, Aref_Ruqaa } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
@@ -10,9 +10,11 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
-const cairo = Cairo({
+const ibmPlexArabic = IBM_Plex_Sans_Arabic({
   subsets: ["arabic"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-arabic",
+  display: "swap",
 });
 
 const caveat = Caveat({
@@ -116,7 +118,7 @@ export default function RootLayout({
           <link rel="preconnect" href="https://flagcdn.com" />
           <link rel="dns-prefetch" href="https://flagcdn.com" />
         </head>
-        <body className={`${inter.variable} ${cairo.variable} ${caveat.variable} ${arefRuqaa.variable} font-sans antialiased`}>
+        <body className={`${inter.variable} ${ibmPlexArabic.variable} ${caveat.variable} ${arefRuqaa.variable} font-sans antialiased`}>
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
           <ActivityTracker />
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>

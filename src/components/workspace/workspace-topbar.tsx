@@ -12,6 +12,7 @@ import {
   CheckCheck,
   ChevronDown,
   LayoutDashboard,
+  Compass,
   MapPin,
   Users,
   Table2,
@@ -45,6 +46,10 @@ const ROUTE_LABELS: Record<string, RouteInfo> = {
   "/workspace": {
     title: { fr: "Vue d'ensemble & Revenus", ar: "لوحة التحكم والإيرادات", en: "Overview & Revenue" },
     icon: LayoutDashboard,
+  },
+  "/workspace/onboarding": {
+    title: { fr: "Guide de Démarrage Agence", ar: "دليل البداية السريعة للوكالة", en: "Agency Onboarding Guide" },
+    icon: Compass,
   },
   "/workspace/scraper": {
     title: { fr: "Google Maps Scraper", ar: "استخراج بيانات خرائط جوجل", en: "Google Maps Scraper" },

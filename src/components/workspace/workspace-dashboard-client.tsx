@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   DollarSign,
+  Compass,
   TrendingUp,
   Users,
   Plus,
@@ -283,6 +284,14 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
 
           {/* Quick Actions (High-Visibility Solid & Frosted Buttons) */}
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <Link
+              href="/workspace/onboarding"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 font-semibold text-xs border border-emerald-500/40 transition-all cursor-pointer backdrop-blur-md shadow-xs"
+            >
+              <Compass className="w-3.5 h-3.5 text-emerald-400" />
+              <span>{t("ws_nav_onboarding")}</span>
+            </Link>
+
             <Link
               href="/workspace/settings"
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs border border-white/20 transition-all cursor-pointer backdrop-blur-md shadow-xs"

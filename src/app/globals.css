@@ -129,13 +129,47 @@
     @apply bg-background text-foreground font-sans;
   }
   .font-arabic {
-    font-family: var(--font-arabic), var(--font-sans), sans-serif;
+    font-family: var(--font-arabic), "IBM Plex Sans Arabic", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
   
-  /* Reset direction issues */
-  [dir="rtl"] {
+  /* Reset direction issues and enforce premier modern Arabic typography */
+  [dir="rtl"],
+  [dir="rtl"] body,
+  html[dir="rtl"],
+  .rtl-content,
+  :lang(ar) {
+    font-family: var(--font-arabic), "IBM Plex Sans Arabic", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
     text-align: right;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3,
+  [dir="rtl"] h4,
+  [dir="rtl"] h5,
+  [dir="rtl"] h6,
+  [dir="rtl"] p,
+  [dir="rtl"] span,
+  [dir="rtl"] a,
+  [dir="rtl"] button,
+  [dir="rtl"] input,
+  [dir="rtl"] textarea {
+    font-family: var(--font-arabic), "IBM Plex Sans Arabic", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  }
+
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3,
+  [dir="rtl"] h4,
+  [dir="rtl"] h5,
+  [dir="rtl"] h6 {
+    letter-spacing: 0 !important;
+    line-height: 1.32;
+  }
+
   [dir="ltr"] {
     text-align: left;
   }

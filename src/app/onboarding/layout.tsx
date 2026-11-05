@@ -28,9 +28,9 @@ export default async function OnboardingLayout({
   ) {
     redirect("/pending");
   }
-  // If onboarding is already complete, go to dashboard
+  // If onboarding is already complete, direct to workspace onboarding guide
   if (user.onboardingCompleted) {
-    redirect("/dashboard");
+    redirect("/workspace/onboarding");
   }
 
   return <>{children}</>;

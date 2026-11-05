@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { UserButton, useUser } from "@clerk/nextjs";
 import {
   LayoutDashboard,
+  Compass,
   MapPin,
   Users,
   Send,
@@ -35,6 +36,7 @@ interface NavEntry {
 
 const workspaceNav: NavEntry[] = [
   { titleKey: "ws_nav_overview", href: "/workspace", icon: LayoutDashboard },
+  { titleKey: "ws_nav_onboarding", href: "/workspace/onboarding", icon: Compass },
   { titleKey: "ws_nav_scraper", href: "/workspace/scraper", icon: MapPin },
   { titleKey: "ws_nav_crm", href: "/workspace/crm", icon: Users },
   { titleKey: "ws_nav_campaigns", href: "/workspace/campaigns", icon: Send },
