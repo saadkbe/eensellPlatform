@@ -70,7 +70,7 @@ export function UniversitySection() {
       code: "M6",
       title: t("uni_m6_title"),
       desc: t("uni_m6_desc"),
-      image: "/modules/mod17_marketing.png",
+      image: "/modules/mod8_business.png",
       lessons: t("uni_m6_lessons"),
       tag: t("uni_m6_tag"),
     },
@@ -78,25 +78,9 @@ export function UniversitySection() {
       code: "M7",
       title: t("uni_m7_title"),
       desc: t("uni_m7_desc"),
-      image: "/modules/mod8_business.png",
+      image: "/modules/mod9_client.png",
       lessons: t("uni_m7_lessons"),
       tag: t("uni_m7_tag"),
-    },
-    {
-      code: "M8",
-      title: t("uni_m8_title"),
-      desc: t("uni_m8_desc"),
-      image: "/modules/mod9_client.png",
-      lessons: t("uni_m8_lessons"),
-      tag: t("uni_m8_tag"),
-    },
-    {
-      code: "M9",
-      title: t("uni_m9_title"),
-      desc: t("uni_m9_desc"),
-      image: "/modules/mod15_money.png",
-      lessons: t("uni_m9_lessons"),
-      tag: t("uni_m9_tag"),
     },
   ];
 
@@ -167,7 +151,7 @@ export function UniversitySection() {
           </motion.p>
         </div>
 
-        {/* ── 9 AI LIBRARY COURSES WITH AI GENERATED THUMBNAILS ── */}
+        {/* ── 7 AI LIBRARY COURSES WITH AI GENERATED THUMBNAILS ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
           {courses.map((course, idx) => (
             <motion.div
@@ -280,7 +264,7 @@ export function UniversitySection() {
               size="lg"
               className="h-11 px-7 rounded-xl text-xs sm:text-sm font-bold bg-slate-950 hover:bg-slate-900 text-white shadow-md cursor-pointer transition-transform hover:scale-[1.02]"
             >
-              <span>Unlock All 9 Courses with Eensell V2 &bull; 499 MAD</span>
+              <span>Unlock All 7 Courses with Eensell V2 &bull; 499 MAD</span>
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Link>

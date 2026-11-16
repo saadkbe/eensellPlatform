@@ -171,11 +171,60 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
           )}
         </div>
 
-        {/* Mobile Menu Toggle */}
+        {/* Mobile Language Selector & Menu Toggle */}
         {!hideLinks && (
-          <div className="lg:hidden">
+          <div className="lg:hidden flex items-center gap-2">
+            {/* Quick Mobile Language Pill */}
+            <div className="relative">
+              <button
+                onClick={() => setIsLangOpen(!isLangOpen)}
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 transition-colors border border-slate-200/80 shadow-2xs cursor-pointer"
+                aria-label="Toggle Language"
+              >
+                <img
+                  src={languages.find((l) => l.code === language)?.flagUrl}
+                  alt={language}
+                  className="w-4 h-auto rounded-[2px] shadow-2xs border border-slate-200"
+                />
+                <span className="font-bold text-[11px] uppercase">
+                  {language}
+                </span>
+                <ChevronDown
+                  className={`w-3 h-3 text-slate-500 transition-transform ${
+                    isLangOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {isLangOpen && (
+                <div className="absolute top-full mt-2 right-0 rtl:right-auto rtl:left-0 bg-white shadow-2xl border border-slate-200 rounded-2xl py-1.5 w-36 flex flex-col z-50">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => {
+                        setLanguage(lang.code);
+                        setIsLangOpen(false);
+                      }}
+                      className={`flex items-center gap-2 px-3 py-2 hover:bg-slate-50 transition-colors w-full text-left rtl:text-right cursor-pointer ${
+                        language === lang.code
+                          ? "bg-slate-100 font-bold text-slate-950"
+                          : "font-medium text-slate-600"
+                      }`}
+                    >
+                      <img
+                        src={lang.flagUrl}
+                        alt={lang.code}
+                        className="w-4 h-auto rounded-[2px] shadow-2xs border border-slate-200"
+                      />
+                      <span className="text-xs">{lang.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <button
-              className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 transition-colors"
+              className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 transition-colors cursor-pointer"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle Navigation Menu"
             >
@@ -192,6 +241,35 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
           animate={{ opacity: 1, y: 0 }}
           className="absolute top-full left-0 right-0 w-full px-4 py-4 bg-white/98 backdrop-blur-2xl border-b border-slate-200 shadow-xl lg:hidden"
         >
+          {/* Mobile In-Menu Language Segmented Control */}
+          <div className="pb-3 mb-3 border-b border-slate-100">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
+              {language === "ar" ? "اللغة / Language" : language === "fr" ? "Langue" : "Language"}
+            </span>
+            <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-100 rounded-xl">
+              {languages.map((lang) => (
+                <button
+                  key={lang.code}
+                  onClick={() => {
+                    setLanguage(lang.code);
+                  }}
+                  className={`flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    language === lang.code
+                      ? "bg-white text-slate-950 shadow-xs"
+                      : "text-slate-600 hover:text-slate-950"
+                  }`}
+                >
+                  <img
+                    src={lang.flagUrl}
+                    alt={lang.code}
+                    className="w-3.5 h-auto rounded-[2px]"
+                  />
+                  <span>{lang.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="flex flex-col gap-3 text-sm font-bold text-slate-800 pb-4 border-b border-slate-100">
             <a href="#vsl-player" onClick={() => setIsMobileMenuOpen(false)}>
               {t("nav_vsl")}

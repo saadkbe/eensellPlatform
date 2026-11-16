@@ -87,7 +87,9 @@ export default async function CareerPage() {
     };
   });
 
-  const progressPercent = Math.round((completedCoursesCount / 9) * 100);
+  const progressPercent = COURSE_CATEGORIES.length > 0 
+    ? Math.round((completedCoursesCount / COURSE_CATEGORIES.length) * 100) 
+    : 0;
 
   return (
     <div className="space-y-6 pb-10">

@@ -67,7 +67,7 @@ export const translations = {
 
     // ── V2 University Section ──
     uni_badge: "منهج جامعة إينسيل V2 الكامل",
-    uni_title_1: "تسع وحدات تعليمية لاحتراف",
+    uni_title_1: "سبع وحدات تعليمية لاحتراف",
     uni_title_2: "نموذج وكالات الذكاء الاصطناعي B2B.",
     uni_sub: "من الصفر تماماً حتى توقيع أول عقد بقيمة 10,000 إلى 30,000 درهم في 60 يوماً. محتوى عملي مسجل وموجّه خصيصاً لواقع السوق المغربي.",
 
@@ -96,15 +96,15 @@ export const translations = {
     uni_m5_lessons: "وحدتان",
     uni_m5_tag: "الفيديو والمحتوى",
 
-    uni_m6_title: "بناء المنتجات الرقمية والـ Micro-SaaS",
-    uni_m6_desc: "تصميم وتغليف وبيع منتجات رقمية، قوالب ذكية، وحلول برمجية مصغرة تعتمد على الذكاء الاصطناعي باشتراكات دورية.",
-    uni_m6_lessons: "وحدة 1",
-    uni_m6_tag: "المنتجات الرقمية",
+    uni_m6_title: "بناء وإطلاق وكالة ذكاء اصطناعي (AI Business)",
+    uni_m6_desc: "تأسيس وكالتك من الصفر: تسعير الخدمات، صياغة العقود القانونية، تغليف العروض وبناء نماذج دخل مستدامة ومربحة.",
+    uni_m6_lessons: "وحدتان",
+    uni_m6_tag: "بناء الوكالة والعقود",
 
-    uni_m7_title: "الحصول على العملاء وإبرام الصفقات B2B",
-    uni_m7_desc: "نظام التواصل المتكامل خطوة بخطوة: استخراج الشركات، رسائل وتسجيلات الواتساب بالدارجة، وتجاوز رفض السكرتارية.",
+    uni_m7_title: "استخراج العملاء وإبرام الصفقات B2B (Outreach)",
+    uni_m7_desc: "نظام التواصل المتكامل خطوة بخطوة: استخراج الشركات، رسائل وتسجيلات الواتساب بالدارجة، وتجاوز رفض السكرتارية وتوقيع العقود.",
     uni_m7_lessons: "وحدتان",
-    uni_m7_tag: "جلب العملاء",
+    uni_m7_tag: "جلب العملاء والتواصل",
 
     uni_m8_title: "الإغلاق وتحديد الأسعار والعقود القانونية",
     uni_m8_desc: "كيفية تسعير خدماتك بين 10,000 و 30,000 درهم، كتابة العقود المغربية، وتحصيل دفعة مقدمة 50% بنجاح وأمان.",
@@ -153,7 +153,7 @@ export const translations = {
     pricing_v2_frequency: "دفع لمرة واحدة فقط • وصول دائم للبرنامج والتحدي",
     pricing_v2_inc_heading: "ما يتضمنه هذا البرنامج المتكامل:",
     pricing_v2_inc_1: "تحدي الـ 60 يوماً العملي لمساعدتك على إبرام أول صفقة مدفوعة.",
-    pricing_v2_inc_2: "تسع وحدات تعليمية تفصيلية تغطي نموذج عمل الوكالات في السوق المغربي.",
+    pricing_v2_inc_2: "سبع وحدات تعليمية تفصيلية تغطي نموذج عمل الوكالات في السوق المغربي.",
     pricing_v2_inc_3: "موارد أعمال حقيقية (نماذج عروض عمل، Devis مغربي قانوني، ونصوص تواصل بالدارجة).",
     pricing_v2_inc_4: "سيناريوهات أتمتة جاهزة للتشغيل (Make.com وروبوتات واتساب تفاعلية).",
     pricing_v2_inc_5: "لوحة تحكم خاصة ومتابعة مستمرة لنسبة إنجازك للدروس والتحديات.",
@@ -766,7 +766,7 @@ export const translations = {
 
     // ── V2 University Section ──
     uni_badge: "Programme Complet Eensell University V2",
-    uni_title_1: "Neuf Modules Structurés pour Maîtriser",
+    uni_title_1: "Sept Modules Structurés pour Maîtriser",
     uni_title_2: "le Modèle d'Agence IA B2B.",
     uni_sub: "Du débutant complet à la signature de votre premier contrat de 10 000 à 30 000 MAD en 60 jours. Contenu enregistré, pratique et adapté au Maroc.",
 
@@ -795,15 +795,15 @@ export const translations = {
     uni_m5_lessons: "2 Modules",
     uni_m5_tag: "Vidéo & Création",
 
-    uni_m6_title: "Produits Digitaux & Micro-SaaS",
-    uni_m6_desc: "Créez, packagez et vendez des produits digitaux IA, des GPTs sur-mesure et des micro-logiciels avec abonnements récurrents.",
-    uni_m6_lessons: "1 Module",
-    uni_m6_tag: "Micro-SaaS",
+    uni_m6_title: "Lancement d'Agence IA & Modèles d'Affaires",
+    uni_m6_desc: "Structurez votre agence IA de zéro : tarification, contrats légaux, packaging d'offres scalables et modèles récurrents.",
+    uni_m6_lessons: "2 Modules",
+    uni_m6_tag: "Agence & Business",
 
-    uni_m7_title: "Freelance & Prospection de Clients B2B",
-    uni_m7_desc: "Système complet d'acquisition : extraction Google Maps, messages et vocaux WhatsApp en Darija, et franchissement du barrage secrétaire.",
+    uni_m7_title: "Acquisition de Clients B2B & Prospection",
+    uni_m7_desc: "Système complet d'acquisition : extraction Google Maps, messages et vocaux WhatsApp en Darija, et signature du premier contrat.",
     uni_m7_lessons: "2 Modules",
-    uni_m7_tag: "Acquisition",
+    uni_m7_tag: "Prospection & Vente",
 
     uni_m8_title: "Closing, Tarification & Contrats Légaux",
     uni_m8_desc: "Comment fixer vos forfaits entre 10 000 et 30 000 MAD, rédiger des contrats conformes au Maroc et encaisser 50% d'acompte en sécurité.",
@@ -852,7 +852,7 @@ export const translations = {
     pricing_v2_frequency: "Paiement unique • Accès complet au programme et au challenge",
     pricing_v2_inc_heading: "Ce qui est inclus dans le programme :",
     pricing_v2_inc_1: "Challenge d'implémentation de 60 jours pour signer votre premier client B2B.",
-    pricing_v2_inc_2: "Neuf modules d'apprentissage complets sur le modèle d'agence IA au Maroc.",
+    pricing_v2_inc_2: "Sept modules d'apprentissage complets sur le modèle d'agence IA au Maroc.",
     pricing_v2_inc_3: "Ressources business pratiques (présentations, devis marocains légaux, scripts en Darija).",
     pricing_v2_inc_4: "Workflows d'automatisation prêts à l'emploi (Make.com, Voiceflow, bots WhatsApp).",
     pricing_v2_inc_5: "Tableau de bord étudiant et suivi de progression avec objectifs par étape.",
@@ -1465,7 +1465,7 @@ export const translations = {
 
     // ── V2 University Section ──
     uni_badge: "Eensell University V2 Curriculum",
-    uni_title_1: "Nine Structured Modules to Master",
+    uni_title_1: "Seven Structured Modules to Master",
     uni_title_2: "The B2B AI Agency Model.",
     uni_sub: "From complete beginner to signing your first 10,000 to 30,000 MAD retainer in 60 days. Everything is recorded, localized, and practical.",
 
@@ -1494,15 +1494,15 @@ export const translations = {
     uni_m5_lessons: "2 Modules",
     uni_m5_tag: "Video & Content",
 
-    uni_m6_title: "Digital Products & Micro-SaaS",
-    uni_m6_desc: "Create, package, and monetize AI digital assets, custom GPTs, templates, and subscription-ready micro-software tools.",
-    uni_m6_lessons: "1 Module",
-    uni_m6_tag: "Micro-SaaS",
+    uni_m6_title: "Building an AI Agency & Business Models",
+    uni_m6_desc: "Set up your AI business from scratch: pricing models, legal contracts, high-ticket offer packaging, and recurring retainers.",
+    uni_m6_lessons: "2 Modules",
+    uni_m6_tag: "Agency & Business",
 
-    uni_m7_title: "Freelancing & Agency Client Acquisition",
-    uni_m7_desc: "Step-by-step outreach system: Google Maps lead scraping, cold WhatsApp audio pitches in Darija, and overcoming gatekeeper objections.",
+    uni_m7_title: "B2B Client Acquisition & Outreach",
+    uni_m7_desc: "Step-by-step outreach system: Google Maps lead scraping, cold WhatsApp audio pitches in Darija, and closing paying clients.",
     uni_m7_lessons: "2 Modules",
-    uni_m7_tag: "Acquisition",
+    uni_m7_tag: "Client Acquisition",
 
     uni_m8_title: "Closing, Pricing & Legal Contracts",
     uni_m8_desc: "How to quote 10,000 to 30,000 MAD retainers, draft Moroccan legal service contracts, collect 50% deposits, and handle invoicing.",
@@ -1551,7 +1551,7 @@ export const translations = {
     pricing_v2_frequency: "One-time program purchase • Lifetime challenge & course access",
     pricing_v2_inc_heading: "What's Included in the Program:",
     pricing_v2_inc_1: "60-day implementation challenge to land your first paid B2B AI client.",
-    pricing_v2_inc_2: "Nine structured learning modules covering the complete Moroccan agency model.",
+    pricing_v2_inc_2: "Seven structured learning modules covering the complete Moroccan agency model.",
     pricing_v2_inc_3: "Practical AI business resources (proposal decks, legal Moroccan devis, Darija scripts).",
     pricing_v2_inc_4: "Ready-to-use automation workflows (Make.com, Voiceflow, WhatsApp bots).",
     pricing_v2_inc_5: "Student dashboard and progress tracking with completion milestones.",

@@ -1,10 +1,9 @@
 // ═══════════════════════════════════════════════════════════
-// Eensell University — 9-Course Virtual Grouping Layer
+// Eensell University — 7-Course Virtual Grouping Layer
 // ═══════════════════════════════════════════════════════════
 //
-// This file maps the existing 20 database modules into 9
-// logical "courses" for the AI Library view. No modules are
-// deleted or merged — this is a UI-level grouping only.
+// This file maps database modules into 7 logical "courses"
+// for the AI Library view: 4 active courses + 3 coming soon.
 //
 // Each course references modules by their `order` field in
 // the database. At runtime, we resolve these to actual
@@ -12,7 +11,7 @@
 
 export type CourseCategory = {
   id: string;
-  code: string;      // "M1" – "M9"
+  code: string;      // "M1" – "M7"
   title: string;
   description: string;
   icon: string;       // lucide icon name
@@ -69,38 +68,20 @@ export const COURSE_CATEGORIES: CourseCategory[] = [
   {
     id: "course-6",
     code: "M6",
-    title: "AI Content & Marketing Systems",
-    description: "Master AI-powered copywriting, direct-response marketing, and personal brand building.",
-    icon: "Megaphone",
-    color: "from-indigo-500 to-blue-600",
-    moduleOrders: [16, 10], // AI Marketing & Copywriting + Personal Branding
+    title: "Building an AI Business",
+    description: "Set up your AI business from scratch — legal, pricing, offer structuring, and scalable product models.",
+    icon: "Building2",
+    color: "from-sky-500 to-blue-500",
+    moduleOrders: [8, 12, 10], // Building AI Business + AI SaaS & Startup Ideas + Personal Branding
   },
   {
     id: "course-7",
     code: "M7",
-    title: "Building an AI Business",
-    description: "Set up your AI business from scratch — legal, pricing, structure, and scalable product ideas.",
-    icon: "Building2",
-    color: "from-sky-500 to-blue-500",
-    moduleOrders: [8, 12], // Building AI Business + AI SaaS & Startup Ideas
-  },
-  {
-    id: "course-8",
-    code: "M8",
     title: "AI Client Acquisition & Outreach",
-    description: "Learn cold outreach, lead scraping, freelancing strategies, and close your first paying client.",
+    description: "Learn cold outreach, lead scraping, freelancing strategies, and close your first paying clients.",
     icon: "Users",
     color: "from-green-500 to-emerald-600",
-    moduleOrders: [9, 11], // Client Acquisition + Freelancing
-  },
-  {
-    id: "course-9",
-    code: "M9",
-    title: "AI Monetization & Future Trends",
-    description: "Discover fast-cash AI services, e-commerce, productivity systems, and stay ahead with emerging AI trends.",
-    icon: "Rocket",
-    color: "from-fuchsia-500 to-purple-500",
-    moduleOrders: [15, 18, 14, 19], // Money-Making + E-commerce + Productivity + Trends
+    moduleOrders: [9, 11, 16], // Client Acquisition + Freelancing + Marketing/Copywriting
   },
 ];
 

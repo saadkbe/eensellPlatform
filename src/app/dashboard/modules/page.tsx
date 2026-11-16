@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { 
   BookOpen, Lock, PlayCircle, CheckCircle2, Clock, 
-  Brain, Wand2, Video, Zap, Megaphone, Building2, Users, DollarSign, Rocket,
+  Brain, Wand2, Video, Zap, Megaphone, Building2, Users, DollarSign, Rocket, LayoutTemplate,
   Sparkles, ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ import Image from "next/image";
 import { COURSE_CATEGORIES } from "@/data/course-mapping";
 
 const iconMap: Record<string, any> = {
-  Brain, Wand2, Video, Zap, Megaphone, Building2, Users, DollarSign, Rocket
+  Brain, Wand2, Video, Zap, Megaphone, Building2, Users, DollarSign, Rocket, LayoutTemplate
 };
 
 export const dynamic = "force-dynamic";
