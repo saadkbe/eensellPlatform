@@ -1,0 +1,254 @@
+{
+    "name": "Eensell V2 - WhatsApp AI Appointment Setter (Calendar + Sheets)",
+    "flow": [
+        {
+            "id": 1,
+            "module": "whatsapp-business-cloud:watchEvents",
+            "version": 1,
+            "parameters": {},
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 0,
+                    "messages": [
+                        {
+                            "category": "setupreq",
+                            "severity": "error",
+                            "message": "Webhook: Value must not be empty."
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": 2,
+            "module": "datastore:GetRecord",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "key": "{{1.messages[].from}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 260,
+                    "y": 0,
+                    "messages": [
+                        {
+                            "category": "setup",
+                            "severity": "error",
+                            "message": "Data store: Value must not be empty."
+                        }
+                    ]
+                },
+                "setupValidation": {
+                    "version": 1,
+                    "configuration": "d783c01e1f04b2c1",
+                    "result": {
+                        "valid": false,
+                        "fields": [
+                            {
+                                "domain": "parameters",
+                                "path": "datastore",
+                                "label": "Data store",
+                                "errors": [
+                                    {
+                                        "message": "Value must not be empty.",
+                                        "code": "validate-bundle-param-required"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "id": 4,
+            "module": "openai-gpt-3:CreateCompletion",
+            "version": 1,
+            "metadata": {
+                "designer": {
+                    "x": 550,
+                    "y": 0,
+                    "messages": [
+                        {
+                            "category": "setupreq",
+                            "severity": "error",
+                            "message": "This module doesn't have a connection. Create a connection in the module settings to continue."
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": 5,
+            "module": "json:ParseJSON",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "json": "{{4.choices[].message.content}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 820,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "id": 6,
+            "module": "datastore:AddRecord",
+            "version": 1,
+            "parameters": {
+                "overwrite": true
+            },
+            "mapper": {
+                "key": "{{1.messages[].from}}",
+                "data": {
+                    "history": "{{2.data.history}}\nUser: {{1.messages[].text.body}}\nAI: {{5.reply}}"
+                }
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1080,
+                    "y": 0,
+                    "messages": [
+                        {
+                            "category": "setupreq",
+                            "severity": "error",
+                            "message": "Data store: Value must not be empty."
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": 7,
+            "module": "whatsapp-business-cloud:sendMessage",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "to": "{{1.messages[].from}}",
+                "type": "text",
+                "text": {
+                    "body": "{{5.reply}}"
+                }
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1340,
+                    "y": 0,
+                    "messages": [
+                        {
+                            "category": "setupreq",
+                            "severity": "error",
+                            "message": "This module doesn't have a connection. Create a connection in the module settings to continue."
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": 8,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 1600,
+                    "y": 0
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 9,
+                            "module": "google-calendar:createAnEvent",
+                            "version": 5,
+                            "filter": {
+                                "name": "Lead Confirmed & Ready to Book",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{5.status}}",
+                                            "b": "BOOKED",
+                                            "o": "text:equal"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1880,
+                                    "y": 0,
+                                    "messages": [
+                                        {
+                                            "category": "setupreq",
+                                            "severity": "error",
+                                            "message": "This module doesn't have a connection. Create a connection in the module settings to continue."
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "id": 10,
+                            "module": "google-sheets:addRow",
+                            "version": 2,
+                            "parameters": {
+                                "insertDataOption": "INSERT_ROWS",
+                                "valueInputOption": "USER_ENTERED",
+                                "includesHeaders": true
+                            },
+                            "mapper": {
+                                "values": {
+                                    "0": "{{formatDate(now; \"YYYY-MM-DD HH:mm\")}}",
+                                    "1": "{{5.lead_name}}",
+                                    "2": "{{1.messages[].from}}",
+                                    "3": "{{5.lead_email}}",
+                                    "4": "{{5.lead_need}}",
+                                    "5": "{{5.meeting_start_iso}}",
+                                    "6": "Booked (15m Call)"
+                                }
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2160,
+                                    "y": 0,
+                                    "messages": [
+                                        {
+                                            "category": "setupreq",
+                                            "severity": "error",
+                                            "message": "This module doesn't have a connection. Create a connection in the module settings to continue."
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "sequential": true,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu2.make.com",
+        "notes": []
+    }
+}

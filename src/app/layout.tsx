@@ -29,6 +29,7 @@ const arefRuqaa = Aref_Ruqaa({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://eensell.com"),
   title: {
     default: "Eensell University | Premium Education Platform",
     template: "%s | Eensell University",
@@ -43,6 +44,21 @@ export const metadata: Metadata = {
     "premium courses",
   ],
   authors: [{ name: "Eensell" }],
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon-48.png", sizes: "48x48", type: "image/png" },
+      { url: "/icon-96.png", sizes: "96x96", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
+  manifest: "/site.webmanifest",
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -50,12 +66,21 @@ export const metadata: Metadata = {
     title: "Eensell University | Premium Education Platform",
     description:
       "Premium AI-powered education platform for mastering modern skills.",
+    images: [
+      {
+        url: "/icon-512.png",
+        width: 512,
+        height: 512,
+        alt: "Eensell University Logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Eensell University | Premium Education Platform",
     description:
       "Premium AI-powered education platform for mastering modern skills.",
+    images: ["/icon-512.png"],
   },
   robots: {
     index: true,
@@ -117,6 +142,20 @@ export default function RootLayout({
         <head>
           <link rel="preconnect" href="https://flagcdn.com" />
           <link rel="dns-prefetch" href="https://flagcdn.com" />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "EducationalOrganization",
+                "name": "Eensell University",
+                "url": "https://eensell.com",
+                "logo": "https://eensell.com/icon-512.png",
+                "description":
+                  "Premium AI-powered education platform for Moroccan & international entrepreneurs.",
+              }),
+            }}
+          />
         </head>
         <body className={`${inter.variable} ${cairo.variable} ${caveat.variable} ${arefRuqaa.variable} font-sans antialiased`}>
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
