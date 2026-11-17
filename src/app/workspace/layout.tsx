@@ -27,8 +27,10 @@ export default async function WorkspaceLayout({
     redirect("/pending");
   }
 
-  if (dbUser.role !== "ADMIN" && dbUser.tier === "FREE_LIBRARY") {
-    redirect("/dashboard/modules?upgrade=true");
+  // Only PRO members and Admins have access to Eensell Workspace OS
+  const isPro = dbUser.role === "ADMIN" || dbUser.isPro || dbUser.tier === "PRO";
+  if (!isPro) {
+    redirect("/dashboard?upgrade_pro=true");
   }
 
   return (

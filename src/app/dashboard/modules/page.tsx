@@ -56,8 +56,7 @@ export default async function ModulesPage({
       : null,
   ]);
 
-  const isFreeLibrary = dbUser?.tier === "FREE_LIBRARY" && dbUser?.role !== "ADMIN";
-  const showUpgradeBanner = isFreeLibrary || resolvedParams.upgrade === "true";
+  const showUpgradeBanner = resolvedParams.upgrade === "true";
 
   const completedLessonIds = new Set(userProgress.map((p) => p.lessonId));
 

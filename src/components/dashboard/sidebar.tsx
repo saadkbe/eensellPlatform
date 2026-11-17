@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { UserButton, SignOutButton, useUser } from "@clerk/nextjs";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -23,18 +23,21 @@ import {
   MoreHorizontal,
   Zap,
   ArrowUpRight,
+  Crown,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 import { TranslationKey } from "@/lib/translations";
+import { WorkspaceProModal } from "@/components/workspace/workspace-pro-modal";
 
 export interface DashboardSidebarProps {
   hasNewLesson?: boolean;
-  userTier?: "FREE_LIBRARY" | "UNIVERSITY_V2" | string;
+  userTier?: "FREE_LIBRARY" | "UNIVERSITY_V2" | "PRO" | string;
   userRole?: "ADMIN" | "ACTIVE_USER" | "PENDING_USER" | string;
+  isPro?: boolean;
 }
 
 type NavItem = {
@@ -113,19 +116,22 @@ function SidebarContent({
   pathname,
   setMobileOpen,
   isAdmin,
-  isFreeLibrary,
+  isPro,
+  onOpenProModal,
   isActive,
   hasNewLesson,
 }: {
   pathname: string;
   setMobileOpen: (open: boolean) => void;
   isAdmin: boolean;
-  isFreeLibrary: boolean;
+  isPro: boolean;
+  onOpenProModal: () => void;
   isActive: (href: string) => boolean;
   hasNewLesson: boolean;
 }) {
   const { t, dir } = useLanguage();
-  const sections = isFreeLibrary ? freeLibraryNavSections : v2NavSections;
+  // All active students have full access to all V2 dashboard sections
+  const sections = v2NavSections;
 
   return (
     <div className="flex flex-col h-full" dir={dir}>
@@ -138,33 +144,66 @@ function SidebarContent({
         />
       </div>
 
-      {/* ── Eensell Workspace OS Quick Launch Button (Positioned OVER / ABOVE the sidebar pages) ── */}
+      {/* ── Eensell Workspace OS Quick Launch / PRO Upgrade Button ── */}
       <div className="px-3.5 pt-3 pb-1 shrink-0">
-        <Link
-          href="/workspace"
-          onClick={() => setMobileOpen(false)}
-          className="group flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-violet-500/10 via-primary/5 to-purple-500/10 hover:from-violet-500/15 hover:to-primary/15 dark:from-violet-950/40 dark:to-slate-900/40 border border-violet-500/25 dark:border-violet-500/30 hover:border-violet-500/50 transition-all duration-200 shadow-sm hover:shadow"
-        >
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-              <Zap className="w-4 h-4 fill-white" />
-            </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs font-bold text-foreground group-hover:text-primary transition-colors truncate">
-                  {t("nav_workspace")}
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+        {isPro ? (
+          <Link
+            href="/workspace"
+            onClick={() => setMobileOpen(false)}
+            className="group flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-violet-500/10 via-primary/5 to-purple-500/10 hover:from-violet-500/15 hover:to-primary/15 dark:from-violet-950/40 dark:to-slate-900/40 border border-violet-500/25 dark:border-violet-500/30 hover:border-violet-500/50 transition-all duration-200 shadow-sm hover:shadow"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+                <Zap className="w-4 h-4 fill-white" />
               </div>
-              <p className="text-[10px] text-muted-foreground truncate font-medium">
-                {t("nav_workspace_sub")}
-              </p>
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-foreground group-hover:text-primary transition-colors truncate">
+                    {t("nav_workspace")}
+                  </span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                </div>
+                <p className="text-[10px] text-muted-foreground truncate font-medium">
+                  {t("nav_workspace_sub")}
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="w-6 h-6 rounded-md bg-white/80 dark:bg-white/5 border border-border/80 flex items-center justify-center text-muted-foreground group-hover:text-primary group-hover:border-primary/40 shrink-0 transition-all">
-            <ArrowUpRight className="w-3.5 h-3.5" />
-          </div>
-        </Link>
+            <div className="w-6 h-6 rounded-md bg-white/80 dark:bg-white/5 border border-border/80 flex items-center justify-center text-muted-foreground group-hover:text-primary group-hover:border-primary/40 shrink-0 transition-all">
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </div>
+          </Link>
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              setMobileOpen(false);
+              onOpenProModal();
+            }}
+            className="w-full text-left group flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-amber-500/10 hover:from-amber-500/20 hover:to-orange-500/20 dark:from-amber-950/40 dark:to-slate-900/40 border border-amber-500/35 hover:border-amber-500/60 transition-all duration-200 shadow-sm hover:shadow cursor-pointer"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-slate-950 shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+                <Crown className="w-4 h-4 fill-slate-950 text-slate-950" />
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-foreground group-hover:text-amber-500 transition-colors truncate">
+                    {t("nav_workspace")}
+                  </span>
+                  <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-amber-500 text-slate-950">
+                    PRO 499 MAD
+                  </span>
+                </div>
+                <p className="text-[10px] text-amber-500/90 truncate font-semibold">
+                  Upgrade to unlock OS
+                </p>
+              </div>
+            </div>
+            <div className="w-6 h-6 rounded-md bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-slate-950 shrink-0 transition-all">
+              <Crown className="w-3.5 h-3.5" />
+            </div>
+          </button>
+        )}
       </div>
 
       {/* Navigation Sections */}
@@ -249,47 +288,33 @@ function SidebarContent({
         )}
       </nav>
 
-      {/* Upgrade Banner for 60-Day Challenge V1 members */}
-      {isFreeLibrary && (
-        <div className="mx-4 mb-4 p-4 rounded-2xl bg-gradient-to-b from-primary/15 via-primary/5 to-card border border-primary/25 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-primary/20 rounded-full blur-2xl pointer-events-none -mr-8 -mt-8" />
-          <div className="flex items-center gap-2 mb-1.5 relative z-10">
-            <div className="w-6 h-6 rounded-lg bg-primary/20 flex items-center justify-center text-primary shrink-0">
-              <Sparkles className="w-3.5 h-3.5" />
-            </div>
-            <h4 className="text-xs font-bold text-foreground tracking-tight">
-              {t("nav_upgrade_v1_title")}
-            </h4>
-          </div>
-          <p className="text-[11px] text-muted-foreground mb-3 leading-relaxed relative z-10">
-            {t("nav_upgrade_v1_desc")}
-          </p>
-          <Link href="/upgrade" onClick={() => setMobileOpen(false)} className="block relative z-10">
-            <Button
-              size="sm"
-              className="w-full text-xs font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20"
-            >
-              {t("nav_upgrade_v1_btn")}
-            </Button>
-          </Link>
-        </div>
-      )}
-
-
-
-      {/* User section */}
+      {/* User section with PRO badge */}
       <div className="px-5 py-5 border-t border-border mt-auto">
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-4 px-2">
-            <UserButton
-              appearance={{
-                elements: {
-                  avatarBox: "w-10 h-10",
-                },
-              }}
-            />
+            <div className="relative shrink-0">
+              <UserButton
+                appearance={{
+                  elements: {
+                    avatarBox: "w-10 h-10",
+                  },
+                }}
+              />
+              {isPro && (
+                <span className="absolute -top-1.5 -right-1.5 z-10 flex items-center justify-center px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-white bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.6)] border border-amber-300/50 pointer-events-none">
+                  PRO
+                </span>
+              )}
+            </div>
             <div className="flex-1 min-w-0">
-              <p className="text-base text-foreground font-medium truncate">{t("nav_account")}</p>
+              <div className="flex items-center gap-1.5">
+                <p className="text-base text-foreground font-medium truncate">{t("nav_account")}</p>
+                {isPro && (
+                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 text-[9px] font-black uppercase rounded bg-amber-500/15 text-amber-500 border border-amber-500/30">
+                    <Crown className="w-2.5 h-2.5 fill-amber-500" /> PRO
+                  </span>
+                )}
+              </div>
               <p className="text-sm text-muted-foreground truncate">{t("nav_manage_profile")}</p>
             </div>
             <ThemeToggle />
@@ -313,18 +338,35 @@ export function DashboardSidebar({
   hasNewLesson = false,
   userTier,
   userRole,
+  isPro = false,
 }: DashboardSidebarProps) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [proModalOpen, setProModalOpen] = useState(false);
   const { user } = useUser();
   const { dir, t } = useLanguage();
 
   const effectiveRole = userRole || (user?.publicMetadata?.role as string) || "PENDING_USER";
   const isAdmin = effectiveRole === "ADMIN";
   const effectiveTier = userTier || (user?.publicMetadata?.tier as string) || "FREE_LIBRARY";
-  const isFreeLibrary = !isAdmin && effectiveTier === "FREE_LIBRARY";
+  const isProUser = Boolean(
+    isPro ||
+    isAdmin ||
+    effectiveTier === "PRO" ||
+    (user?.publicMetadata?.isPro as boolean) ||
+    (user?.publicMetadata?.tier === "PRO")
+  );
 
-  const bottomNavItems = isFreeLibrary ? freeBottomNavItems : v2BottomNavItems;
+  // Automatically trigger PRO modal if redirected with ?upgrade_pro=true
+  useEffect(() => {
+    if (searchParams?.get("upgrade_pro") === "true") {
+      setProModalOpen(true);
+    }
+  }, [searchParams]);
+
+  // All active students get the full V2 bottom navigation items
+  const bottomNavItems = v2BottomNavItems;
 
   const isActive = (href: string) => {
     if (href === "/dashboard") return pathname === "/dashboard";
@@ -333,6 +375,12 @@ export function DashboardSidebar({
 
   return (
     <>
+      {/* Workspace PRO Upgrade Modal */}
+      <WorkspaceProModal
+        isOpen={proModalOpen}
+        onClose={() => setProModalOpen(false)}
+      />
+
       {/* Mobile header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-4 bg-background/95 backdrop-blur-xl border-b border-border">
         <div className="flex items-center">
@@ -342,14 +390,21 @@ export function DashboardSidebar({
             className="h-10 w-auto object-contain origin-left scale-[3] brightness-0 dark:invert"
           />
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="text-muted-foreground hover:text-foreground hover:bg-secondary"
-        >
-          {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </Button>
+        <div className="flex items-center gap-2">
+          {isProUser && (
+            <span className="flex items-center gap-1 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white bg-gradient-to-r from-amber-500 to-orange-500 rounded-full shadow-sm border border-amber-300/40">
+              <Crown className="w-3 h-3 fill-white" /> PRO
+            </span>
+          )}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="text-muted-foreground hover:text-foreground hover:bg-secondary"
+          >
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </Button>
+        </div>
       </div>
 
       {/* Mobile Bottom Navigation Bar */}
@@ -435,7 +490,8 @@ export function DashboardSidebar({
                 pathname={pathname}
                 setMobileOpen={setMobileOpen}
                 isAdmin={isAdmin}
-                isFreeLibrary={isFreeLibrary}
+                isPro={isProUser}
+                onOpenProModal={() => setProModalOpen(true)}
                 isActive={isActive}
                 hasNewLesson={hasNewLesson}
               />
@@ -455,7 +511,8 @@ export function DashboardSidebar({
           pathname={pathname}
           setMobileOpen={setMobileOpen}
           isAdmin={isAdmin}
-          isFreeLibrary={isFreeLibrary}
+          isPro={isProUser}
+          onOpenProModal={() => setProModalOpen(true)}
           isActive={isActive}
           hasNewLesson={hasNewLesson}
         />

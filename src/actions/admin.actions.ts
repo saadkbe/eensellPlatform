@@ -214,6 +214,47 @@ export async function deleteUser(userId: string) {
   revalidatePath("/admin");
 }
 
+// Toggle a user's PRO membership (Grants or revokes Eensell Workspace OS access)
+export async function toggleUserPro(userId: string, isPro: boolean) {
+  await requireAdmin();
+
+  const user = await db.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) throw new Error("User not found");
+
+  const newTier = isPro ? "PRO" : (user.tier === "PRO" ? "UNIVERSITY_V2" : user.tier);
+
+  const updated = await db.user.update({
+    where: { id: userId },
+    data: {
+      isPro,
+      tier: newTier,
+    },
+  });
+
+  // Update Clerk user metadata
+  try {
+    const clerk = await clerkClient();
+    await clerk.users.updateUserMetadata(user.clerkId, {
+      publicMetadata: {
+        isPro,
+        tier: newTier,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating Clerk metadata for PRO:", error);
+  }
+
+  revalidatePath("/admin/users");
+  revalidatePath("/admin");
+  revalidatePath("/dashboard");
+  revalidatePath("/workspace");
+
+  return updated;
+}
+
 // Get admin dashboard stats
 export async function getAdminStats() {
   await requireAdmin();

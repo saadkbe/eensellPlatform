@@ -66,15 +66,18 @@ export async function GET() {
   ]);
 
   const BASELINE_PAID_STUDENTS = 115;
-  const PRICE_PER_STUDENT = 200;
+  const HISTORICAL_PRICE_PER_STUDENT = 200; // Historical cohort kept at 200 MAD previously paid
+  const BASELINE_REVENUE = BASELINE_PAID_STUDENTS * HISTORICAL_PRICE_PER_STUDENT; // 23,000 MAD
+  const NEW_STUDENT_PRICE = 499; // Every new student confirmed and activated is worth 499 MAD
+
   const newChallengePaidStudents = await db.user.count({
     where: {
       role: { not: "ADMIN" },
-      tier: "UNIVERSITY_V2",
+      tier: { in: ["UNIVERSITY_V2", "PRO"] },
       status: "ACTIVE",
     },
   });
-  const revenue = (BASELINE_PAID_STUDENTS + newChallengePaidStudents) * PRICE_PER_STUDENT;
+  const revenue = BASELINE_REVENUE + (newChallengePaidStudents * NEW_STUDENT_PRICE);
   const paidActiveUsers = BASELINE_PAID_STUDENTS + newChallengePaidStudents;
 
   return NextResponse.json({

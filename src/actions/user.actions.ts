@@ -53,7 +53,8 @@ export async function getOrCreateUser() {
 
   if (existingUser) {
     const currentTierClaim = (clerkUser.publicMetadata as any)?.tier;
-    if (currentTierClaim !== existingUser.tier) {
+    const currentIsProClaim = (clerkUser.publicMetadata as any)?.isPro;
+    if (currentTierClaim !== existingUser.tier || currentIsProClaim !== existingUser.isPro) {
       syncClerkMetadata(existingUser, clerkUser).catch((e) =>
         console.error("Background Clerk tier sync error:", e)
       );
@@ -181,17 +182,21 @@ async function syncClerkMetadata(user: any, clerkUser: any) {
     const clerkRole = (sessionClaims?.metadata as any)?.role;
     const clerkStatus = (sessionClaims?.metadata as any)?.status;
     const clerkTier = (sessionClaims?.metadata as any)?.tier;
+    const clerkIsPro = (sessionClaims?.metadata as any)?.isPro;
 
     const { clerkClient } = await import("@clerk/nextjs/server");
     const client = await clerkClient();
 
-    // Sync Role/Status/Tier Metadata
-    if (clerkRole !== user.role || clerkStatus !== user.status || clerkTier !== user.tier) {
+    const isPro = Boolean(user.isPro || user.tier === "PRO");
+
+    // Sync Role/Status/Tier/Pro Metadata
+    if (clerkRole !== user.role || clerkStatus !== user.status || clerkTier !== user.tier || clerkIsPro !== isPro) {
       await client.users.updateUserMetadata(user.clerkId, {
         publicMetadata: {
           role: user.role,
           status: user.status,
           tier: user.tier || "FREE_LIBRARY",
+          isPro,
         }
       });
     }

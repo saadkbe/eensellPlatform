@@ -662,9 +662,14 @@ export function WorkspaceTopBar() {
           )}
         </button>
 
-        {/* ── User Profile Avatar ── */}
+        {/* ── User Profile Avatar with PRO Badge ── */}
         <div className="ml-1 pl-2 border-l border-[#EDEDEB] dark:border-[#2E2E2E] flex items-center">
-          <UserButton />
+          <div className="relative flex items-center">
+            <UserButton />
+            <span className="absolute -top-1.5 -right-1.5 z-10 flex items-center justify-center px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-white bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.6)] border border-amber-300/50 pointer-events-none">
+              PRO
+            </span>
+          </div>
         </div>
       </div>
     </header>

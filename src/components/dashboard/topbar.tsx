@@ -2,12 +2,14 @@
 
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Search, Calendar, ChevronRight, HelpCircle, MessageSquare, ChevronDown } from "lucide-react";
+import { Search, Calendar, ChevronRight, HelpCircle, MessageSquare, ChevronDown, Crown } from "lucide-react";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 import { Language, TranslationKey } from "@/lib/translations";
 import { NotificationBell } from "./notification-bell";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@clerk/nextjs";
+import { WorkspaceProModal } from "@/components/workspace/workspace-pro-modal";
 import {
   Tooltip,
   TooltipContent,
@@ -36,11 +38,20 @@ const ROUTE_NAME_MAP: Record<string, TranslationKey> = {
   tools: "nav_tools",
 };
 
-export function TopBar() {
+export function TopBar({ isPro = false }: { isPro?: boolean }) {
   const pathname = usePathname();
   const [currentDate, setCurrentDate] = useState("");
   const [isLangOpen, setIsLangOpen] = useState(false);
+  const [proModalOpen, setProModalOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
+  const { user } = useUser();
+
+  const effectivePro = Boolean(
+    isPro ||
+    (user?.publicMetadata?.isPro as boolean) ||
+    (user?.publicMetadata?.tier === "PRO") ||
+    (user?.publicMetadata?.role === "ADMIN")
+  );
 
   // Render date client-side only to avoid hydration mismatch
   useEffect(() => {
@@ -74,24 +85,45 @@ export function TopBar() {
 
   return (
     <div className="sticky top-16 lg:top-0 z-40 w-full flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3.5 bg-card/90 backdrop-blur-xl border-b border-border transition-all duration-300 shadow-sm">
+      <WorkspaceProModal
+        isOpen={proModalOpen}
+        onClose={() => setProModalOpen(false)}
+      />
+
       <div className="flex items-center">
         {breadcrumbs.length > 0 ? breadcrumbs : <span className="text-foreground font-bold text-xl sm:text-2xl tracking-tight">{t("topbar_home")}</span>}
       </div>
       
       <div className="flex items-center gap-3 sm:gap-4">
         {/* Eensell Workspace Luxury Black Pill Button */}
-        <Link href="/workspace" className="group shrink-0">
-          <div className="flex items-center gap-2 sm:gap-2.5 h-11 px-3.5 sm:px-5 rounded-full bg-slate-950 hover:bg-black text-white border border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.2)] hover:shadow-[0_0_22px_rgba(245,158,11,0.4)] transition-all font-bold text-xs sm:text-sm cursor-pointer">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500" />
-            </span>
-            <span className="tracking-wide whitespace-nowrap">{t("nav_workspace")}</span>
-            <span className="hidden sm:inline-flex text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold tracking-wider">
-              {t("ws_topbar_live_os")}
-            </span>
-          </div>
-        </Link>
+        {effectivePro ? (
+          <Link href="/workspace" className="group shrink-0">
+            <div className="flex items-center gap-2 sm:gap-2.5 h-11 px-3.5 sm:px-5 rounded-full bg-slate-950 hover:bg-black text-white border border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.2)] hover:shadow-[0_0_22px_rgba(245,158,11,0.4)] transition-all font-bold text-xs sm:text-sm cursor-pointer">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500" />
+              </span>
+              <span className="tracking-wide whitespace-nowrap">{t("nav_workspace")}</span>
+              <span className="hidden sm:inline-flex text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold tracking-wider">
+                {t("ws_topbar_live_os")}
+              </span>
+            </div>
+          </Link>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setProModalOpen(true)}
+            className="group shrink-0 text-left"
+          >
+            <div className="flex items-center gap-2 sm:gap-2.5 h-11 px-3.5 sm:px-5 rounded-full bg-slate-950 hover:bg-black text-white border border-amber-500/50 shadow-[0_0_18px_rgba(245,158,11,0.3)] hover:shadow-[0_0_26px_rgba(245,158,11,0.5)] transition-all font-bold text-xs sm:text-sm cursor-pointer">
+              <Crown className="w-3.5 h-3.5 text-amber-400 fill-amber-400 shrink-0" />
+              <span className="tracking-wide whitespace-nowrap">{t("nav_workspace")}</span>
+              <span className="inline-flex text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-amber-500 text-slate-950 font-black tracking-wider">
+                PRO 499 MAD
+              </span>
+            </div>
+          </button>
+        )}
 
         {/* Language Toggle */}
         <div className="relative">

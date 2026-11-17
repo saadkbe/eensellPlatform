@@ -41,20 +41,13 @@ export default async function DashboardLayout({
     redirect("/pending");
   }
 
-  // Tier-based route protection for legacy/V1 members (they only access AI Library & uploads)
-  const pathname = headerList.get("x-pathname") || "";
-  if (dbUser && dbUser.role !== "ADMIN" && dbUser.tier === "FREE_LIBRARY") {
-    const isExactDashboard = pathname === "/dashboard" || pathname === "/dashboard/";
-    const isV2Route = V2_ONLY_ROUTES.some((route) => pathname.startsWith(route));
-    if (isExactDashboard || isV2Route) {
-      redirect("/dashboard/modules?upgrade=true");
-    }
-  } else if (dbUser && dbUser.tier === "UNIVERSITY_V2") {
-    // Approved V2 members undergo the 60-Day Challenge onboarding flow
-    if (!dbUser.onboardingCompleted) {
-      redirect("/onboarding");
-    }
+  // All active students have full access to the V2 Dashboard.
+  // Approved V2 members who haven't finished onboarding complete the flow
+  if (dbUser && dbUser.tier === "UNIVERSITY_V2" && !dbUser.onboardingCompleted) {
+    redirect("/onboarding");
   }
+
+  const isPro = Boolean(dbUser?.isPro || dbUser?.tier === "PRO" || dbUser?.role === "ADMIN");
 
   return (
     <div className="min-h-screen bg-background">
@@ -62,9 +55,10 @@ export default async function DashboardLayout({
         hasNewLesson={hasNewLesson} 
         userTier={dbUser?.tier}
         userRole={dbUser?.role}
+        isPro={isPro}
       />
       <MainLayoutWrapper>
-        <TopBar />
+        <TopBar isPro={isPro} />
         {dbUser && <WalkthroughProvider hasSeenWalkthrough={dbUser.hasSeenWalkthrough} />}
         <div className="flex-1 px-3 sm:px-5 lg:px-6 py-5 w-full">
           <PageTransition>

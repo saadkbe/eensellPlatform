@@ -84,16 +84,6 @@ export default clerkMiddleware(async (auth, req) => {
       return NextResponse.redirect(new URL("/pending", req.url));
     }
 
-    // Active legacy/V1 members (FREE_LIBRARY tier) only access the AI Library & uploads
-    if (userRole !== "ADMIN" && userTier === "FREE_LIBRARY") {
-      const pathname = req.nextUrl.pathname;
-      const isExactDashboard = pathname === "/dashboard" || pathname === "/dashboard/";
-      const isV2Route = V2_ONLY_ROUTES.some((route) => pathname.startsWith(route));
-      if (isExactDashboard || isV2Route) {
-        return NextResponse.redirect(new URL("/dashboard/modules?upgrade=true", req.url));
-      }
-    }
-
     // If no status set yet (new user), we let them pass to the dashboard.
     // The dashboard/layout.tsx will verify their actual database status and redirect if necessary.
     return NextResponse.next({

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,14 +14,68 @@ import {
   ShieldCheck,
   CheckCircle2,
   Volume2,
+  VolumeX,
   Maximize2,
 } from "lucide-react";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 
 export function HeroSection() {
   const { dir, t, isRTL, language } = useLanguage();
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Autoplay with sound on landing
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // First attempt: Autoplay with sound unmuted
+    video.muted = false;
+    const playPromise = video.play();
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          setIsPlaying(true);
+          setIsMuted(false);
+        })
+        .catch((error) => {
+          // If browser policy blocks sound autoplay on initial load:
+          // Play muted immediately and allow instant unmute on first user click anywhere
+          console.log("Unmuted autoplay restricted by browser policy; starting muted:", error);
+          video.muted = true;
+          setIsMuted(true);
+          video.play().then(() => setIsPlaying(true)).catch(() => {});
+        });
+    }
+
+    const handleFirstUserGesture = () => {
+      if (videoRef.current && videoRef.current.muted) {
+        videoRef.current.muted = false;
+        setIsMuted(false);
+      }
+      window.removeEventListener("click", handleFirstUserGesture);
+      window.removeEventListener("touchstart", handleFirstUserGesture);
+    };
+
+    window.addEventListener("click", handleFirstUserGesture, { once: true });
+    window.addEventListener("touchstart", handleFirstUserGesture, { once: true });
+
+    return () => {
+      window.removeEventListener("click", handleFirstUserGesture);
+      window.removeEventListener("touchstart", handleFirstUserGesture);
+    };
+  }, []);
+
+  const handleUnmute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (videoRef.current) {
+      videoRef.current.muted = false;
+      setIsMuted(false);
+      videoRef.current.play().catch(() => {});
+    }
+  };
 
   const handlePlayToggle = () => {
     if (!videoRef.current) {
@@ -33,6 +87,8 @@ export function HeroSection() {
       videoRef.current.pause();
       setIsPlaying(false);
     } else {
+      videoRef.current.muted = false;
+      setIsMuted(false);
       videoRef.current.play();
       setIsPlaying(true);
     }
@@ -134,120 +190,36 @@ export function HeroSection() {
         transition={{ duration: 0.6, delay: 0.25 }}
         className="relative z-20 container max-w-4xl mx-auto px-4 sm:px-6"
       >
-        <div className="relative rounded-[2rem] sm:rounded-[2.4rem] p-2 sm:p-3 bg-slate-950 border border-slate-800 shadow-[0_25px_80px_-15px_rgba(249,115,22,0.25)]">
-          {/* Top Video Player Bar */}
-          <div className="px-3.5 py-2.5 bg-slate-900/90 border-b border-slate-800 rounded-t-[1.6rem] flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
-              </span>
-              <span className="text-[11px] font-black uppercase tracking-wider text-white">
+        <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.25)]">
+          <video
+            ref={videoRef}
+            src="/landingpagevideo.mp4"
+            poster="/images/VSL THUMB.jpg"
+            className="w-full aspect-video object-cover block"
+            controls
+            autoPlay
+            playsInline
+            onEnded={() => setIsPlaying(false)}
+            onPause={() => setIsPlaying(false)}
+            onPlay={() => setIsPlaying(true)}
+          />
+
+          {/* Floating unmute helper button if initial unmuted autoplay was gated by browser policy */}
+          {isMuted && (
+            <button
+              onClick={handleUnmute}
+              className="absolute bottom-5 right-5 sm:bottom-6 sm:right-6 z-30 flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full bg-slate-950/90 hover:bg-black text-white border border-white/20 shadow-xl backdrop-blur-md text-xs sm:text-sm font-bold transition-all hover:scale-105 cursor-pointer"
+            >
+              <VolumeX className="w-4 h-4 text-amber-400" />
+              <span>
                 {isRTL
-                  ? "فيديو الشرح المباشر (12 دقيقة)"
+                  ? "انقر لتشغيل الصوت 🔊"
                   : language === "fr"
-                  ? "MASTERCLASS VIDÉO (12 MIN)"
-                  : "VIDEO MASTERCLASS (12 MIN)"}
+                  ? "Activer le son 🔊"
+                  : "Tap to unmute sound 🔊"}
               </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-white/10 text-white/90 border border-white/10">
-                1080p HD
-              </span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
-                <Volume2 className="w-3 h-3" />
-                <span>{isRTL ? "الصوت متاح" : "Sound On"}</span>
-              </span>
-            </div>
-          </div>
-
-          {/* Video Container */}
-          <div className="relative aspect-video rounded-b-[1.5rem] overflow-hidden bg-slate-950 group">
-            <video
-              ref={videoRef}
-              src="/landingpagevideo.mp4"
-              poster="/images/VSL THUMB.jpg"
-              className="w-full h-full object-cover"
-              controls={isPlaying}
-              playsInline
-              onEnded={() => setIsPlaying(false)}
-              onPause={() => setIsPlaying(false)}
-              onPlay={() => setIsPlaying(true)}
-            />
-
-            {/* Poster Overlay when Paused */}
-            <AnimatePresence>
-              {!isPlaying && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  onClick={handlePlayToggle}
-                  className="absolute inset-0 cursor-pointer flex flex-col justify-between p-4 sm:p-6 bg-slate-950/40 backdrop-blur-[0.5px] transition-all group-hover:bg-slate-950/30 z-10"
-                >
-                  <Image
-                    src="/images/VSL THUMB.jpg"
-                    alt="VSL Masterclass Thumbnail"
-                    fill
-                    className="object-cover -z-10 brightness-[0.85] group-hover:scale-[1.01] transition-transform duration-500"
-                    priority
-                  />
-
-                  {/* Dark Vignette Gradients */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/30 to-slate-950/70 -z-10 pointer-events-none" />
-
-                  {/* Top Floating Badge */}
-                  <div className="flex items-center justify-between">
-                    <div className="px-3 py-1.5 rounded-full bg-slate-950/80 border border-white/20 backdrop-blur-md text-white text-[11px] sm:text-xs font-bold shadow-lg flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                      <span>{t("hero_v2_vsl_badge")}</span>
-                    </div>
-                    <span className="px-2.5 py-1 rounded-lg bg-black/60 text-white/90 text-[10px] font-mono tracking-wider backdrop-blur-md border border-white/10">
-                      12:45
-                    </span>
-                  </div>
-
-                  {/* Center Ultra-Prominent Play Button with Ripple & Click-To-Watch Pill */}
-                  <div className="flex flex-col items-center justify-center my-auto text-center py-2 sm:py-4">
-                    <div className="relative flex items-center justify-center">
-                      <div className="absolute w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-[#FF6B4A]/30 animate-ping pointer-events-none" />
-                      <div className="absolute w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white/20 pointer-events-none" />
-                      <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-tr from-[#FF6B4A] via-orange-500 to-amber-400 text-white flex items-center justify-center shadow-[0_0_40px_rgba(255,107,74,0.6)] transition-all duration-300 group-hover:scale-110">
-                        <Play className="w-7 h-7 sm:w-9 sm:h-9 ml-1 text-white fill-white" />
-                      </div>
-                    </div>
-
-                    <div className="mt-4 px-4 sm:px-6 py-2 rounded-full bg-white text-slate-950 font-black text-xs sm:text-sm tracking-wide shadow-2xl flex items-center gap-2 group-hover:scale-105 transition-transform">
-                      <Play className="w-3.5 h-3.5 fill-slate-950 text-slate-950 shrink-0" />
-                      <span>
-                        {isRTL
-                          ? "اضغط هنا لبدء مشاهدة الفيديو (مع الصوت 🔊)"
-                          : language === "fr"
-                          ? "CLIQUEZ POUR LIRE LA VIDÉO (SON 🔊)"
-                          : "CLICK TO WATCH FULL VIDEO (SOUND ON 🔊)"}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Realistic Interactive Bottom Video Player Bar */}
-                  <div className="w-full bg-black/70 backdrop-blur-md rounded-xl p-2 sm:p-2.5 border border-white/10 flex items-center gap-3 text-white text-[11px] font-mono">
-                    <div className="w-6 h-6 rounded-md bg-white/10 flex items-center justify-center text-white shrink-0">
-                      <Play className="w-3 h-3 fill-white" />
-                    </div>
-                    <span className="shrink-0 text-white/90">00:00 / 12:45</span>
-                    <div className="flex-1 h-1.5 bg-white/20 rounded-full overflow-hidden relative">
-                      <div className="h-full bg-gradient-to-r from-[#FF6B4A] to-amber-400 w-1/4 rounded-full" />
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0 text-white/80">
-                      <Volume2 className="w-3.5 h-3.5" />
-                      <span className="text-[10px] bg-white/15 px-1.5 py-0.5 rounded font-sans font-bold text-white">HD</span>
-                      <Maximize2 className="w-3.5 h-3.5" />
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+            </button>
+          )}
         </div>
 
         {/* Live Verified Trust Metrics below the Video */}

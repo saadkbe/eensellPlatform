@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { approveUser, rejectUser, suspendUser, deleteUser } from "@/actions/admin.actions";
+import { approveUser, rejectUser, suspendUser, deleteUser, toggleUserPro } from "@/actions/admin.actions";
 import { toast } from "sonner";
-import { UserCheck, UserX, Ban, Trash2, MoreHorizontal, Search } from "lucide-react";
+import { UserCheck, UserX, Ban, Trash2, MoreHorizontal, Search, Crown, ShieldOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +18,8 @@ type User = {
   id: string; email: string; firstName: string | null; lastName: string | null;
   role: "ADMIN" | "ACTIVE_USER" | "PENDING_USER";
   status: "PENDING" | "ACTIVE" | "SUSPENDED" | "REJECTED";
+  tier?: string;
+  isPro?: boolean;
   createdAt: Date;
 };
 
@@ -33,6 +35,24 @@ export function UserTable({ initialUsers }: { initialUsers: User[] }) {
     const matchFilter = filter === "all" || u.status === filter;
     return matchSearch && matchFilter;
   });
+
+  const handleTogglePro = (userId: string, isPro: boolean) => {
+    startTransition(async () => {
+      try {
+        await toggleUserPro(userId, isPro);
+        toast.success(isPro ? "User marked as PRO (499 MAD)" : "User PRO revoked");
+        setUsers((prev) =>
+          prev.map((u) =>
+            u.id === userId
+              ? { ...u, isPro, tier: isPro ? "PRO" : "UNIVERSITY_V2" }
+              : u
+          )
+        );
+      } catch (err: any) {
+        toast.error(err?.message || "Failed to update PRO status");
+      }
+    });
+  };
 
   const handleAction = (action: string, userId: string) => {
     startTransition(async () => {
@@ -84,19 +104,39 @@ export function UserTable({ initialUsers }: { initialUsers: User[] }) {
           ) : filtered.map((user) => {
             const statusInfo = STATUS_LABELS[user.status];
             const roleInfo = ROLE_LABELS[user.role];
+            const isUserPro = Boolean(user.isPro || user.tier === "PRO");
             return (
               <div key={user.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-background/40 backdrop-blur-sm border border-border/50 hover:border-primary/30 hover:shadow-md transition-all">
                 <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 text-base font-bold text-primary">
-                    {(user.firstName?.[0] || user.email[0]).toUpperCase()}
+                  <div className="relative shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-base font-bold text-primary">
+                      {(user.firstName?.[0] || user.email[0]).toUpperCase()}
+                    </div>
+                    {isUserPro && (
+                      <span className="absolute -top-1 -right-1 flex items-center justify-center px-1.5 py-0.2 text-[8px] font-black uppercase text-white bg-gradient-to-r from-amber-500 to-orange-500 rounded-full shadow-sm border border-amber-300/40">
+                        PRO
+                      </span>
+                    )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-base text-foreground font-semibold truncate">{user.firstName || ""} {user.lastName || ""}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-base text-foreground font-semibold truncate">{user.firstName || ""} {user.lastName || ""}</p>
+                      {isUserPro && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-sm border border-amber-300/40">
+                          <Crown className="w-3 h-3 fill-white" /> PRO
+                        </span>
+                      )}
+                    </div>
                     <p className="text-sm text-muted-foreground truncate mt-0.5">{user.email}</p>
                   </div>
                 </div>
                 <div className="flex items-center justify-between w-full sm:w-auto gap-3 shrink-0">
                   <div className="flex gap-2">
+                    {isUserPro && (
+                      <Badge className="text-xs px-2.5 py-0.5 bg-amber-500/15 text-amber-400 border border-amber-500/30 font-semibold">
+                        Workspace OS
+                      </Badge>
+                    )}
                     <Badge className={`text-xs px-2.5 py-0.5 hidden sm:inline-flex ${roleInfo.color}`}>{roleInfo.label}</Badge>
                     <Badge className={`text-xs px-2.5 py-0.5 ${statusInfo.color}`}>{statusInfo.label}</Badge>
                   </div>
@@ -110,6 +150,26 @@ export function UserTable({ initialUsers }: { initialUsers: User[] }) {
                         }
                       />
                       <DropdownMenuContent align="end" className="bg-card border-border text-foreground">
+                        {user.status === "ACTIVE" && (
+                          <>
+                            {isUserPro ? (
+                              <DropdownMenuItem
+                                onClick={() => handleTogglePro(user.id, false)}
+                                className="text-amber-500 focus:text-amber-500 focus:bg-amber-500/10 text-xs font-semibold"
+                              >
+                                <ShieldOff className="w-3.5 h-3.5 mr-2" /> Revoke PRO
+                              </DropdownMenuItem>
+                            ) : (
+                              <DropdownMenuItem
+                                onClick={() => handleTogglePro(user.id, true)}
+                                className="text-amber-400 focus:text-amber-400 focus:bg-amber-400/10 text-xs font-bold"
+                              >
+                                <Crown className="w-3.5 h-3.5 mr-2 text-amber-400 fill-amber-400" /> Mark as PRO (499 MAD)
+                              </DropdownMenuItem>
+                            )}
+                            <DropdownMenuSeparator className="bg-border" />
+                          </>
+                        )}
                         {user.status !== "ACTIVE" && (
                           <DropdownMenuItem onClick={() => handleAction("approve", user.id)} className="text-success focus:text-success focus:bg-success/10 text-xs">
                             <UserCheck className="w-3.5 h-3.5 mr-2" /> Approve

@@ -4,8 +4,11 @@ import { db } from "@/lib/db";
 
 // Baseline paid students from the initial cohort: 115 students @ 200 MAD
 const BASELINE_PAID_STUDENTS = 115;
-const PRICE_PER_STUDENT = 200;
-const BASELINE_REVENUE = BASELINE_PAID_STUDENTS * PRICE_PER_STUDENT; // 23,000 MAD
+const HISTORICAL_PRICE_PER_STUDENT = 200; // Historical cohort kept at 200 MAD previously paid
+const BASELINE_REVENUE = BASELINE_PAID_STUDENTS * HISTORICAL_PRICE_PER_STUDENT; // 23,000 MAD
+
+// Every new student confirmed and activated from now on is worth 499 MAD
+const NEW_STUDENT_PRICE = 499;
 
 export async function GET(req: Request) {
   try {
@@ -54,25 +57,25 @@ export async function GET(req: Request) {
         orderBy: { createdAt: "desc" },
         take: 8,
       }),
-      // Newly paid students in current challenge (non-admin, UNIVERSITY_V2 tier, ACTIVE)
+      // Newly paid & confirmed students (non-admin, UNIVERSITY_V2 or PRO tier, ACTIVE)
       db.user.count({
         where: {
           role: { not: "ADMIN" },
-          tier: "UNIVERSITY_V2",
+          tier: { in: ["UNIVERSITY_V2", "PRO"] },
           status: "ACTIVE",
           ...dateFilter,
         },
       }),
     ]);
 
-    // Calculate real revenue and active paid students
+    // Calculate real revenue and active paid students (historical students @ 200 MAD, new students @ 499 MAD)
     const activeUsers = hasDateFilter
       ? newChallengePaidStudents
       : BASELINE_PAID_STUDENTS + newChallengePaidStudents;
 
     const revenue = hasDateFilter
-      ? newChallengePaidStudents * PRICE_PER_STUDENT
-      : BASELINE_REVENUE + newChallengePaidStudents * PRICE_PER_STUDENT;
+      ? newChallengePaidStudents * NEW_STUDENT_PRICE
+      : BASELINE_REVENUE + newChallengePaidStudents * NEW_STUDENT_PRICE;
 
     return NextResponse.json({
       stats: {
