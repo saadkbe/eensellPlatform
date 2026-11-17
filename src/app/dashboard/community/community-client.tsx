@@ -906,7 +906,7 @@ export function CommunityClient({
           {/* Quick CTA Actions */}
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <a
-              href="https://discord.gg/ZGtYg2AqC"
+              href="https://discord.gg/7Z4Mj49cB"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-[#5865F2]/10 hover:bg-[#5865F2]/15 text-[#5865F2] font-bold text-xs border border-[#5865F2]/30 shadow-xs transition-all hover:scale-105"
@@ -918,9 +918,9 @@ export function CommunityClient({
 
             <button
               onClick={() => setDialogOpen(true)}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-primary via-orange-500 to-amber-500 hover:opacity-95 text-white font-black text-xs shadow-md shadow-primary/20 transition-all hover:scale-105 cursor-pointer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-slate-950 hover:bg-slate-900 text-white font-bold text-xs shadow-sm transition-all hover:scale-105 cursor-pointer"
             >
-              <Plus className="w-4 h-4 stroke-[3]" />
+              <Plus className="w-4 h-4" />
               <span>Create Post</span>
             </button>
           </div>
@@ -985,7 +985,7 @@ export function CommunityClient({
 
               <button
                 onClick={() => setDialogOpen(true)}
-                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-xs transition-all cursor-pointer shadow-xs"
+                className="hidden sm:inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-900 text-white font-bold text-xs transition-all cursor-pointer shadow-sm"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Post</span>
@@ -1159,7 +1159,7 @@ export function CommunityClient({
               </div>
               <button
                 onClick={() => setDialogOpen(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold text-xs cursor-pointer shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-900 text-white font-bold text-xs cursor-pointer shadow-sm transition-all"
               >
                 <Plus className="w-4 h-4" />
                 <span>Create First Post</span>
@@ -1193,7 +1193,7 @@ export function CommunityClient({
             </p>
 
             <a
-              href="https://discord.gg/ZGtYg2AqC"
+              href="https://discord.gg/7Z4Mj49cB"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#5865F2] hover:bg-[#4752C4] text-white font-extrabold text-xs shadow-md shadow-[#5865F2]/20 transition-all hover:scale-[1.02]"
@@ -1551,7 +1551,7 @@ export function CommunityClient({
                 type="button"
                 onClick={handleCreatePost}
                 disabled={isPending || !postTitle.trim() || !postContent.trim()}
-                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-orange-500 hover:opacity-95 text-white font-black text-xs transition-all shadow-md shadow-primary/20 cursor-pointer disabled:opacity-50 flex items-center gap-2"
+                className="px-6 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-900 text-white font-bold text-xs transition-all shadow-sm cursor-pointer disabled:opacity-50 flex items-center gap-2"
               >
                 {isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 <span>Publish Post</span>
