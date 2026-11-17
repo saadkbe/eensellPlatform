@@ -144,7 +144,7 @@ export function AdminOverviewClient() {
           url += `?from=${fromDate.toISOString().split("T")[0]}&to=${toDate.toISOString().split("T")[0]}`;
         }
 
-        const res = await fetch(url);
+        const res = await fetch(url, { cache: "no-store" });
         if (!res.ok) throw new Error("Failed to fetch overview data");
         const json = await res.json();
         setData(json);

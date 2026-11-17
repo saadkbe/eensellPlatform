@@ -224,7 +224,7 @@ export async function toggleUserPro(userId: string, isPro: boolean) {
 
   if (!user) throw new Error("User not found");
 
-  const newTier = isPro ? "PRO" : (user.tier === "PRO" ? "UNIVERSITY_V2" : user.tier);
+  const newTier = isPro ? "PRO" : (user.tier === "PRO" ? "FREE_LIBRARY" : user.tier);
 
   const updated = await db.user.update({
     where: { id: userId },

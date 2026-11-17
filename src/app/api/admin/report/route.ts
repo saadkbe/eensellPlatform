@@ -65,20 +65,33 @@ export async function GET() {
     }),
   ]);
 
-  const BASELINE_PAID_STUDENTS = 115;
-  const HISTORICAL_PRICE_PER_STUDENT = 200; // Historical cohort kept at 200 MAD previously paid
-  const BASELINE_REVENUE = BASELINE_PAID_STUDENTS * HISTORICAL_PRICE_PER_STUDENT; // 23,000 MAD
-  const NEW_STUDENT_PRICE = 499; // Every new student confirmed and activated is worth 499 MAD
+  const BASELINE_PAID_STUDENTS = 116;
+  const HISTORICAL_PRICE_PER_STUDENT = 200; // Historical cohort of 116 students @ 200 MAD
+  const BASELINE_REVENUE = BASELINE_PAID_STUDENTS * HISTORICAL_PRICE_PER_STUDENT; // 23,200 MAD
+  const PRO_UPGRADE_PRICE = 499;
+  const NEW_STUDENT_PRICE = 499;
 
-  const newChallengePaidStudents = await db.user.count({
+  // Pro members (marking any user from the 116 as PRO adds 499 MAD)
+  const totalProUsers = await db.user.count({
     where: {
       role: { not: "ADMIN" },
-      tier: { in: ["UNIVERSITY_V2", "PRO"] },
       status: "ACTIVE",
+      OR: [{ isPro: true }, { tier: "PRO" }],
     },
   });
-  const revenue = BASELINE_REVENUE + (newChallengePaidStudents * NEW_STUDENT_PRICE);
-  const paidActiveUsers = BASELINE_PAID_STUDENTS + newChallengePaidStudents;
+
+  // Newly activated non-pro students (beyond the 116)
+  const newConfirmedStudents = await db.user.count({
+    where: {
+      role: { not: "ADMIN" },
+      status: "ACTIVE",
+      tier: "UNIVERSITY_V2",
+      isPro: false,
+    },
+  });
+
+  const revenue = BASELINE_REVENUE + (totalProUsers * PRO_UPGRADE_PRICE) + (newConfirmedStudents * NEW_STUDENT_PRICE);
+  const paidActiveUsers = BASELINE_PAID_STUDENTS + newConfirmedStudents;
 
   return NextResponse.json({
     generatedAt: new Date().toISOString(),

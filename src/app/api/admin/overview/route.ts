@@ -2,12 +2,16 @@ import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 
-// Baseline paid students from the initial cohort: 115 students @ 200 MAD
-const BASELINE_PAID_STUDENTS = 115;
-const HISTORICAL_PRICE_PER_STUDENT = 200; // Historical cohort kept at 200 MAD previously paid
-const BASELINE_REVENUE = BASELINE_PAID_STUDENTS * HISTORICAL_PRICE_PER_STUDENT; // 23,000 MAD
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
-// Every new student confirmed and activated from now on is worth 499 MAD
+// Baseline paid students from the initial cohort: 116 students @ 200 MAD
+const BASELINE_PAID_STUDENTS = 116;
+const HISTORICAL_PRICE_PER_STUDENT = 200; // Historical cohort kept at 200 MAD previously paid
+const BASELINE_REVENUE = BASELINE_PAID_STUDENTS * HISTORICAL_PRICE_PER_STUDENT; // 23,200 MAD
+
+// Every PRO upgrade and every new confirmed student is worth 499 MAD
+const PRO_UPGRADE_PRICE = 499;
 const NEW_STUDENT_PRICE = 499;
 
 export async function GET(req: Request) {
@@ -22,7 +26,7 @@ export async function GET(req: Request) {
     const fromStr = searchParams.get("from");
     const toStr = searchParams.get("to");
 
-    let dateFilter = {};
+    let dateFilter: { createdAt?: { gte: Date; lt: Date } } = {};
     const hasDateFilter = Boolean(fromStr && toStr);
 
     if (hasDateFilter && fromStr && toStr) {
@@ -45,7 +49,8 @@ export async function GET(req: Request) {
       totalModules,
       totalLessons,
       recentSignups,
-      newChallengePaidStudents,
+      totalProUsers,
+      newConfirmedStudents,
     ] = await Promise.all([
       db.user.count({ where: { role: { not: "ADMIN" }, ...dateFilter } }),
       db.user.count({ where: { status: "PENDING", ...dateFilter } }),
@@ -57,38 +62,58 @@ export async function GET(req: Request) {
         orderBy: { createdAt: "desc" },
         take: 8,
       }),
-      // Newly paid & confirmed students (non-admin, UNIVERSITY_V2 or PRO tier, ACTIVE)
+      // Pro members: each user marked as PRO adds 499 MAD to the balance
       db.user.count({
         where: {
           role: { not: "ADMIN" },
-          tier: { in: ["UNIVERSITY_V2", "PRO"] },
           status: "ACTIVE",
-          ...dateFilter,
+          OR: [{ isPro: true }, { tier: "PRO" }],
+          ...(hasDateFilter && dateFilter.createdAt ? { updatedAt: dateFilter.createdAt } : {}),
+        },
+      }),
+      // Newly activated non-pro students (beyond the 116)
+      db.user.count({
+        where: {
+          role: { not: "ADMIN" },
+          status: "ACTIVE",
+          tier: "UNIVERSITY_V2",
+          isPro: false,
+          ...(hasDateFilter && dateFilter.createdAt ? { createdAt: dateFilter.createdAt } : {}),
         },
       }),
     ]);
 
-    // Calculate real revenue and active paid students (historical students @ 200 MAD, new students @ 499 MAD)
+    // Calculate active paid students and total revenue balance
     const activeUsers = hasDateFilter
-      ? newChallengePaidStudents
-      : BASELINE_PAID_STUDENTS + newChallengePaidStudents;
+      ? newConfirmedStudents
+      : BASELINE_PAID_STUDENTS + newConfirmedStudents;
 
+    // Balance: 116 historical students @ 200 MAD + (499 MAD for each user marked as PRO) + (499 MAD for each new student)
     const revenue = hasDateFilter
-      ? newChallengePaidStudents * NEW_STUDENT_PRICE
-      : BASELINE_REVENUE + newChallengePaidStudents * NEW_STUDENT_PRICE;
+      ? (totalProUsers * PRO_UPGRADE_PRICE) + (newConfirmedStudents * NEW_STUDENT_PRICE)
+      : BASELINE_REVENUE + (totalProUsers * PRO_UPGRADE_PRICE) + (newConfirmedStudents * NEW_STUDENT_PRICE);
 
-    return NextResponse.json({
-      stats: {
-        totalUsers,
-        activeUsers, // 115 for All Time (0 for new challenge)
-        pendingUsers,
-        suspendedUsers,
-        totalModules,
-        totalLessons,
-        revenue, // 23,000 MAD for All Time (0 MAD for new challenge)
+    return NextResponse.json(
+      {
+        stats: {
+          totalUsers,
+          activeUsers,
+          pendingUsers,
+          suspendedUsers,
+          totalModules,
+          totalLessons,
+          revenue,
+        },
+        recentSignups,
       },
-      recentSignups,
-    });
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      }
+    );
   } catch (error) {
     console.error("[ADMIN_OVERVIEW_GET]", error);
     return NextResponse.json({ error: "Internal Error" }, { status: 500 });
