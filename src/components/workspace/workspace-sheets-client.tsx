@@ -240,26 +240,26 @@ export function WorkspaceSheetsClient({
   return (
     <div className="w-full px-3 sm:px-5 lg:px-6 py-4 sm:py-5 space-y-6 select-text">
       {/* ── Top Header Banner with Distinct Background ── */}
-      <div className="relative overflow-hidden rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950 text-white p-6 sm:p-8 shadow-xl">
+      <div className="relative overflow-hidden rounded-3xl border border-amber-400/40 bg-gradient-to-r from-orange-600 via-amber-500 to-yellow-500 text-white p-6 sm:p-8 shadow-xl shadow-orange-500/10">
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center shadow-md shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-white/20 border border-white/30 backdrop-blur-md flex items-center justify-center shadow-md shrink-0">
               <VerifiedCheckBadge className="w-7 h-7" />
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-teal-500/20 text-teal-300 border border-teal-500/40">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-white/20 text-white border border-white/30 backdrop-blur-md">
                   DATABASE &bull; AGENCY SPREADSHEETS
                 </span>
-                <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                  <GlowingPulseSticker className="w-2 h-2" color="#10B981" />
+                <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-black/20 text-white border border-white/20 backdrop-blur-md">
+                  <GlowingPulseSticker className="w-2 h-2" color="#FFFFFF" />
                   Auto-Save Active
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight drop-shadow-xs">
                 Agency Master Database
               </h1>
-              <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
+              <p className="text-xs sm:text-sm text-amber-50 max-w-xl leading-relaxed">
                 Notion-style live data grid to track clients, phone numbers, retainers, and deal stages. Edit inline with instant DB auto-save.
               </p>
             </div>
@@ -269,7 +269,7 @@ export function WorkspaceSheetsClient({
             <Button
               onClick={handleAddRow}
               size="sm"
-              className="font-bold text-xs bg-white hover:bg-slate-100 text-slate-950 gap-1.5 h-9 px-4 rounded-xl shadow-md cursor-pointer transition-transform hover:scale-[1.02]"
+              className="font-bold text-xs bg-slate-950 hover:bg-slate-900 text-white gap-1.5 h-9 px-4 rounded-xl shadow-md cursor-pointer transition-transform hover:scale-[1.02] border border-white/10"
             >
               <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Add New Row</span>
