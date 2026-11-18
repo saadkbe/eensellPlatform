@@ -84,14 +84,23 @@ export function TopBar({ isPro = false }: { isPro?: boolean }) {
   });
 
   return (
-    <div className="sticky top-16 lg:top-0 z-40 w-full flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3.5 bg-card/90 backdrop-blur-xl border-b border-border transition-all duration-300 shadow-sm">
+    <div className="sticky top-0 z-40 w-full flex items-center justify-between px-3.5 sm:px-6 lg:px-8 py-3 bg-card/90 backdrop-blur-xl border-b border-border transition-all duration-300 shadow-sm">
       <WorkspaceProModal
         isOpen={proModalOpen}
         onClose={() => setProModalOpen(false)}
       />
 
-      <div className="flex items-center">
-        {breadcrumbs.length > 0 ? breadcrumbs : <span className="text-foreground font-bold text-xl sm:text-2xl tracking-tight">{t("topbar_home")}</span>}
+      <div className="flex items-center gap-2.5 min-w-0">
+        <Link href="/dashboard" className="lg:hidden flex items-center shrink-0 pr-1">
+          <img
+            src="/logo2.png"
+            alt="Eensell"
+            className="h-8 w-auto object-contain brightness-0 dark:invert"
+          />
+        </Link>
+        <div className="min-w-0">
+          {breadcrumbs.length > 0 ? breadcrumbs : <span className="text-foreground font-bold text-base sm:text-2xl tracking-tight truncate block">{t("topbar_home")}</span>}
+        </div>
       </div>
       
       <div className="flex items-center gap-3 sm:gap-4">

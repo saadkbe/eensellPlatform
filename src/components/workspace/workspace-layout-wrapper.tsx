@@ -22,7 +22,7 @@ export function WorkspaceMainWrapper({ children }: { children: React.ReactNode }
   return (
     <main
       className={cn(
-        "flex-1 min-w-0 flex flex-col min-h-screen relative transition-all duration-150",
+        "flex-1 min-w-0 flex flex-col min-h-screen relative transition-all duration-150 pb-24 lg:pb-0",
         isRTL ? "lg:pr-60" : "lg:pl-60"
       )}
     >

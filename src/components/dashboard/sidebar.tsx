@@ -102,8 +102,8 @@ const freeLibraryNavSections: NavSection[] = [
 const v2BottomNavItems = [
   { label: "Dashboard", labelKey: "nav_dashboard" as TranslationKey, href: "/dashboard", icon: LayoutDashboard },
   { label: "AI Library", labelKey: "nav_modules" as TranslationKey, href: "/dashboard/modules", icon: BookOpen },
+  { label: "Roadmap", labelKey: "nav_challenge" as TranslationKey, href: "/dashboard/challenge", icon: Target },
   { label: "Community", labelKey: "nav_community" as TranslationKey, href: "/dashboard/community", icon: MessageSquare },
-  { label: "Live Calls", labelKey: "nav_live_calls" as TranslationKey, href: "/dashboard/live-calls", icon: Video },
 ];
 
 const freeBottomNavItems = [
@@ -345,7 +345,7 @@ export function DashboardSidebar({
   const [mobileOpen, setMobileOpen] = useState(false);
   const [proModalOpen, setProModalOpen] = useState(false);
   const { user } = useUser();
-  const { dir, t } = useLanguage();
+  const { dir, t, isRTL, language } = useLanguage();
 
   const effectiveRole = userRole || (user?.publicMetadata?.role as string) || "PENDING_USER";
   const isAdmin = effectiveRole === "ADMIN";
@@ -381,39 +381,15 @@ export function DashboardSidebar({
         onClose={() => setProModalOpen(false)}
       />
 
-      {/* Mobile header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-4 bg-background/95 backdrop-blur-xl border-b border-border">
-        <div className="flex items-center">
-          <img
-            src="/logo2.png"
-            alt="Eensell University"
-            className="h-10 w-auto object-contain origin-left scale-[3] brightness-0 dark:invert"
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          {isProUser && (
-            <span className="flex items-center gap-1 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white bg-gradient-to-r from-amber-500 to-orange-500 rounded-full shadow-sm border border-amber-300/40">
-              <Crown className="w-3 h-3 fill-white" /> PRO
-            </span>
-          )}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="text-muted-foreground hover:text-foreground hover:bg-secondary"
-          >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </Button>
-        </div>
-      </div>
-
-      {/* Mobile Bottom Navigation Bar */}
-      <div
+      {/* ── Native Mobile Bottom Navigation Bar ── */}
+      <nav
+        dir={dir}
+        aria-label="Mobile Navigation"
         className={cn(
-          "lg:hidden fixed bottom-4 left-4 right-4 z-50 bg-background/80 backdrop-blur-2xl border border-border shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-3xl safe-area-pb"
+          "lg:hidden fixed bottom-3 inset-x-3 sm:bottom-4 sm:inset-x-8 max-w-lg mx-auto z-40 bg-card/95 backdrop-blur-2xl border border-border shadow-[0_8px_32px_rgba(0,0,0,0.16)] rounded-2xl sm:rounded-3xl p-1.5 safe-area-pb"
         )}
       >
-        <div className="flex items-center justify-around px-2 py-2">
+        <div className="flex items-center justify-around">
           {bottomNavItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
@@ -422,7 +398,7 @@ export function DashboardSidebar({
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center justify-center gap-1 py-2 px-3 rounded-2xl transition-all duration-300 relative min-w-[64px] z-10",
+                  "flex flex-col items-center justify-center gap-1 py-1.5 px-2.5 sm:px-3 rounded-xl sm:rounded-2xl transition-all duration-300 relative min-w-[56px] sm:min-w-[64px] z-10",
                   active
                     ? "text-primary"
                     : "text-muted-foreground hover:text-foreground"
@@ -432,12 +408,12 @@ export function DashboardSidebar({
                   <>
                     <motion.div
                       layoutId="bottomNavActive"
-                      className="absolute inset-0 bg-primary/10 rounded-2xl -z-10"
+                      className="absolute inset-0 bg-primary/10 rounded-xl sm:rounded-2xl -z-10"
                       transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     />
                     <motion.div
                       layoutId="bottomNavDot"
-                      className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]"
+                      className="absolute -bottom-0.5 w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]"
                       transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     />
                   </>
@@ -446,7 +422,7 @@ export function DashboardSidebar({
                 <span
                   className={cn(
                     "text-[10px] font-semibold leading-tight",
-                    active ? "text-primary" : "text-muted-foreground"
+                    active ? "text-primary font-bold" : "text-muted-foreground"
                   )}
                 >
                   {item.labelKey ? t(item.labelKey) : item.label}
@@ -454,53 +430,196 @@ export function DashboardSidebar({
               </Link>
             );
           })}
-          {/* More button — opens sidebar */}
+
+          {/* More button — opens mobile-native bottom sheet (NOT a desktop sidebar) */}
           <button
             onClick={() => setMobileOpen(true)}
-            className="flex flex-col items-center justify-center gap-1 py-2 px-3 rounded-2xl text-muted-foreground hover:text-foreground transition-all duration-300 min-w-[64px] z-10"
+            className="flex flex-col items-center justify-center gap-1 py-1.5 px-2.5 sm:px-3 rounded-xl sm:rounded-2xl text-muted-foreground hover:text-foreground transition-all duration-300 min-w-[56px] sm:min-w-[64px] z-10 cursor-pointer"
           >
             <MoreHorizontal className="w-5 h-5" />
             <span className="text-[10px] font-medium leading-tight">{t("nav_settings")}</span>
           </button>
         </div>
-      </div>
+      </nav>
 
-      {/* Mobile sidebar overlay */}
+      {/* ── Native Mobile Bottom Sheet (Slides up, not a side drawer) ── */}
       <AnimatePresence>
         {mobileOpen && (
           <>
+            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileOpen(false)}
-              className="lg:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+              className="lg:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs"
             />
-            <motion.aside
-              initial={{ x: -270 }}
-              animate={{ x: 0 }}
-              exit={{ x: -270 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className={cn(
-                "lg:hidden fixed top-0 z-50 w-[270px] h-screen bg-card border-border",
-                dir === "rtl" ? "right-0 border-l" : "left-0 border-r"
-              )}
+
+            {/* Bottom Sheet Modal */}
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 28, stiffness: 300 }}
+              dir={dir}
+              className="lg:hidden fixed bottom-0 inset-x-0 z-50 max-h-[85vh] bg-card border-t border-border rounded-t-3xl shadow-2xl flex flex-col overflow-hidden"
             >
-              <SidebarContent
-                pathname={pathname}
-                setMobileOpen={setMobileOpen}
-                isAdmin={isAdmin}
-                isPro={isProUser}
-                onOpenProModal={() => setProModalOpen(true)}
-                isActive={isActive}
-                hasNewLesson={hasNewLesson}
-              />
-            </motion.aside>
+              {/* Grab Handle */}
+              <div className="w-12 h-1.5 rounded-full bg-muted-foreground/30 mx-auto mt-3 mb-1 shrink-0" />
+
+              {/* Sheet Header */}
+              <div className="px-5 py-3 border-b border-border flex items-center justify-between shrink-0">
+                <div className="flex items-center gap-2.5">
+                  <img
+                    src="/logo2.png"
+                    alt="Eensell University"
+                    className="h-8 w-auto object-contain brightness-0 dark:invert"
+                  />
+                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    {isRTL
+                      ? "كافة الوحدات والأدوات"
+                      : language === "fr"
+                      ? "Tous les Modules & Outils"
+                      : "All Modules & Navigation"}
+                  </span>
+                </div>
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  className="p-1.5 rounded-xl hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Sheet Scrollable Body */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-5 no-scrollbar">
+                {/* Eensell Workspace OS Quick Action */}
+                <div className="shrink-0">
+                  {isProUser ? (
+                    <Link
+                      href="/workspace"
+                      onClick={() => setMobileOpen(false)}
+                      className="group flex items-center justify-between p-3 rounded-2xl bg-gradient-to-r from-violet-500/10 via-primary/5 to-purple-500/10 border border-violet-500/25 shadow-sm"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white shadow-sm">
+                          <Zap className="w-4 h-4 fill-white" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-bold text-foreground">
+                              {t("nav_workspace")}
+                            </span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          </div>
+                          <p className="text-xs text-muted-foreground font-medium">
+                            {t("nav_workspace_sub")}
+                          </p>
+                        </div>
+                      </div>
+                      <ArrowUpRight className="w-4 h-4 text-primary" />
+                    </Link>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMobileOpen(false);
+                        setProModalOpen(true);
+                      }}
+                      className="w-full text-left group flex items-center justify-between p-3 rounded-2xl bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-amber-500/10 border border-amber-500/35 shadow-sm cursor-pointer"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-slate-950 shadow-sm">
+                          <Crown className="w-4 h-4 fill-slate-950 text-slate-950" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-sm font-bold text-foreground">
+                              {t("nav_workspace")}
+                            </span>
+                            <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-amber-500 text-slate-950">
+                              PRO 499 MAD
+                            </span>
+                          </div>
+                          <p className="text-xs text-amber-500 font-semibold">
+                            Upgrade to unlock OS
+                          </p>
+                        </div>
+                      </div>
+                      <Crown className="w-4 h-4 text-amber-500" />
+                    </button>
+                  )}
+                </div>
+
+                {/* All Sections */}
+                {v2NavSections.map((section, sIndex) => (
+                  <div key={section.label || sIndex} className="space-y-2">
+                    <p className="px-1 text-[11px] font-bold uppercase tracking-wider text-muted-foreground/70">
+                      {section.labelKey ? t(section.labelKey) : section.label}
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {section.items.map((item) => {
+                        const Icon = item.icon;
+                        const active = isActive(item.href);
+                        return (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            onClick={() => setMobileOpen(false)}
+                            className={cn(
+                              "flex items-center gap-2.5 p-2.5 rounded-xl border transition-all text-xs font-medium",
+                              active
+                                ? "bg-primary text-primary-foreground border-primary font-bold shadow-sm"
+                                : "border-border/60 hover:bg-secondary text-muted-foreground hover:text-foreground"
+                            )}
+                          >
+                            <Icon className="w-4 h-4 shrink-0" />
+                            <span className="truncate">{item.titleKey ? t(item.titleKey) : item.title}</span>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+
+                {isAdmin && (
+                  <div>
+                    <Link
+                      href="/admin"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center gap-3 p-3 rounded-xl text-sm font-bold text-destructive hover:bg-destructive/10 border border-destructive/20"
+                    >
+                      <Shield className="w-5 h-5 shrink-0" />
+                      <span>{t("nav_admin")}</span>
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              {/* Sheet Footer */}
+              <div className="p-4 border-t border-border bg-card/95 shrink-0 flex items-center justify-between">
+                <div className="flex items-center gap-3 min-w-0">
+                  <UserButton />
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-foreground truncate">{user?.fullName || "Student"}</p>
+                    <p className="text-[11px] text-muted-foreground truncate">{user?.primaryEmailAddress?.emailAddress}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <ThemeToggle />
+                  <SignOutButton>
+                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                      <LogOut className="w-4 h-4" />
+                    </Button>
+                  </SignOutButton>
+                </div>
+              </div>
+            </motion.div>
           </>
         )}
       </AnimatePresence>
 
-      {/* Desktop sidebar */}
+      {/* ── Desktop Sidebar (Only visible on lg screens and up) ── */}
       <aside
         className={cn(
           "hidden lg:flex lg:flex-col fixed top-0 h-screen w-[270px] bg-card border-border z-30",
