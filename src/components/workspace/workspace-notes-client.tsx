@@ -209,28 +209,28 @@ export function WorkspaceNotesClient({ initialNotes = [] }: WorkspaceNotesClient
   return (
     <div className="w-full px-3 sm:px-5 lg:px-6 py-4 sm:py-5 space-y-6 select-text">
       {/* ── Top Header Banner with Distinct Background ── */}
-      <div className="relative overflow-hidden rounded-3xl border border-amber-400/40 bg-gradient-to-r from-orange-600 via-amber-500 to-yellow-500 text-white p-6 sm:p-8 shadow-xl shadow-orange-500/10">
+      <div className="relative overflow-hidden rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white p-6 sm:p-8 shadow-xl">
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-white/20 border border-white/30 backdrop-blur-md flex items-center justify-center shadow-md shrink-0">
-              <FileText className="w-7 h-7 text-white" />
+            <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center shadow-md shrink-0">
+              <FileText className="w-7 h-7 text-indigo-300" />
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-white/20 text-white border border-white/30 backdrop-blur-md">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/40">
                   STEP 6 &bull; AGENCY KNOWLEDGE BASE
                 </span>
                 {isSaving && (
-                  <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-white bg-black/20 px-2.5 py-0.5 rounded-full backdrop-blur-md border border-white/20">
-                    <Loader2 className="w-3 h-3 animate-spin text-white" />
+                  <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-slate-300 bg-white/10 px-2.5 py-0.5 rounded-full backdrop-blur-md">
+                    <Loader2 className="w-3 h-3 animate-spin text-indigo-400" />
                     <span>Auto-Saving...</span>
                   </span>
                 )}
               </div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight drop-shadow-xs">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
                 Notes & Agency Playbooks
               </h1>
-              <p className="text-xs sm:text-sm text-amber-50 max-w-xl leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
                 Objection handling scripts, client meeting debriefs, and strategic notes saved permanently in your private database.
               </p>
             </div>

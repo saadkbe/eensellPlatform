@@ -24,6 +24,9 @@ const TransformationSection = dynamic(() =>
     (mod) => mod.TransformationSection
   )
 );
+const FounderSection = dynamic(() =>
+  import("@/components/landing/FounderSection").then((mod) => mod.FounderSection)
+);
 const PricingSection = dynamic(() =>
   import("@/components/landing/PricingSection").then((mod) => mod.PricingSection)
 );
@@ -68,11 +71,14 @@ export default function HomePage() {
         <div id="how-it-works">
           <TransformationSection />
         </div>
-        <div id="pricing">
-          <PricingSection />
+        <div id="founder">
+          <FounderSection />
         </div>
         <div id="testimonials">
           <SocialProofSection />
+        </div>
+        <div id="pricing">
+          <PricingSection />
         </div>
         <div id="certificate">
           <CertificateSection />

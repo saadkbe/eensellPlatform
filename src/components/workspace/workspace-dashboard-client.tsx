@@ -255,29 +255,29 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
 
   return (
     <div className="w-full px-3 sm:px-5 lg:px-6 py-4 sm:py-5 space-y-7 select-text">
-      {/* ── 1. Executive Top Greeting Banner (Orange-Yellowish Brand Gradient) ── */}
-      <div className="relative overflow-hidden rounded-3xl border border-amber-400/40 bg-gradient-to-r from-orange-600 via-amber-500 to-yellow-500 text-white p-6 sm:p-9 shadow-xl shadow-orange-500/10">
+      {/* ── 1. Executive Top Greeting Banner (Distinct High-Contrast Background) ── */}
+      <div className="relative overflow-hidden rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white p-6 sm:p-9 shadow-xl">
         {/* Subtle Ambient Decorative Glows */}
-        <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-yellow-300/25 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-orange-400/25 blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-3 max-w-2xl">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-white border border-white/30 backdrop-blur-md shadow-xs">
-                <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-xs">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                 {t("ws_live_badge")}
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-black/20 text-white border border-white/20 backdrop-blur-md">
-                <Activity className="w-3.5 h-3.5 text-amber-200" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-slate-200 border border-white/15 backdrop-blur-md">
+                <Activity className="w-3.5 h-3.5 text-indigo-300" />
                 {t("ws_command_center_badge")}
               </span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight drop-shadow-xs">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
               {getGreeting()}, {firstName} 👋
             </h1>
-            <p className="text-xs sm:text-sm text-amber-50 leading-relaxed font-normal">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
               {t("ws_header_desc")}
             </p>
           </div>
@@ -286,31 +286,31 @@ export function WorkspaceDashboardClient({ initialData }: WorkspaceDashboardProp
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             <Link
               href="/workspace/onboarding"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-semibold text-xs border border-white/30 transition-all cursor-pointer backdrop-blur-md shadow-xs"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 font-semibold text-xs border border-emerald-500/40 transition-all cursor-pointer backdrop-blur-md shadow-xs"
             >
-              <Compass className="w-3.5 h-3.5 text-amber-200" />
+              <Compass className="w-3.5 h-3.5 text-emerald-400" />
               <span>{t("ws_nav_onboarding")}</span>
             </Link>
 
             <Link
               href="/workspace/settings"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-semibold text-xs border border-white/30 transition-all cursor-pointer backdrop-blur-md shadow-xs"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs border border-white/20 transition-all cursor-pointer backdrop-blur-md shadow-xs"
             >
-              <Key className="w-3.5 h-3.5 text-amber-200" />
+              <Key className="w-3.5 h-3.5 text-slate-300" />
               <span>{t("ws_btn_api_settings")}</span>
             </Link>
 
             <Link
               href="/workspace/scraper"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-semibold text-xs border border-white/30 transition-all cursor-pointer backdrop-blur-md shadow-xs"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs border border-white/20 transition-all cursor-pointer backdrop-blur-md shadow-xs"
             >
-              <MapPin className="w-3.5 h-3.5 text-amber-200" />
+              <MapPin className="w-3.5 h-3.5 text-slate-300" />
               <span>{t("ws_btn_scrape_leads")}</span>
             </Link>
 
             <button
               onClick={() => setIsAddRetainerOpen(true)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-900 text-white font-bold text-xs shadow-md transition-all cursor-pointer hover:scale-[1.02] border border-white/10"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-950 font-bold text-xs shadow-md transition-all cursor-pointer hover:scale-[1.02]"
             >
               <Plus className="w-4 h-4 stroke-[2.5]" />
               <span>{t("ws_btn_add_retainer")}</span>

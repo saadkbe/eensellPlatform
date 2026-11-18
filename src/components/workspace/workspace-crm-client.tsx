@@ -121,26 +121,26 @@ export function WorkspaceCrmClient({
   return (
     <div className="w-full px-3 sm:px-5 lg:px-6 py-4 sm:py-5 space-y-6 select-text">
       {/* ── Top Header Banner with Distinct Background ── */}
-      <div className="relative overflow-hidden rounded-3xl border border-amber-400/40 bg-gradient-to-r from-orange-600 via-amber-500 to-yellow-500 text-white p-6 sm:p-8 shadow-xl shadow-orange-500/10">
+      <div className="relative overflow-hidden rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white p-6 sm:p-8 shadow-xl">
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-white/20 border border-white/30 backdrop-blur-md flex items-center justify-center shadow-md shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center shadow-md shrink-0">
               <VerifiedCheckBadge className="w-7 h-7" />
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-white/20 text-white border border-white/30 backdrop-blur-md">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-violet-500/20 text-violet-300 border border-violet-500/40">
                   STEP 4 &bull; PIPELINE & DEAL TRACKING
                 </span>
-                <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-black/20 text-white border border-white/20 backdrop-blur-md">
-                  <GlowingPulseSticker className="w-2 h-2" color="#FFFFFF" />
+                <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  <GlowingPulseSticker className="w-2 h-2" color="#10B981" />
                   Live Sync
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight drop-shadow-xs">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
                 Client Pipeline & CRM
               </h1>
-              <p className="text-xs sm:text-sm text-amber-50 max-w-xl leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
                 Track target prospects, follow up on outreach, manage reply notes, and close booked client meetings.
               </p>
             </div>
@@ -149,7 +149,7 @@ export function WorkspaceCrmClient({
           <div className="flex items-center gap-2.5 shrink-0">
             <Link
               href="/workspace/scraper"
-              className="flex items-center gap-1.5 h-9 px-4 rounded-xl bg-slate-950 hover:bg-slate-900 text-white text-xs font-bold shadow-md transition-transform hover:scale-[1.02] cursor-pointer border border-white/10"
+              className="flex items-center gap-1.5 h-9 px-4 rounded-xl bg-white hover:bg-slate-100 text-slate-950 text-xs font-bold shadow-md transition-transform hover:scale-[1.02] cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Scrape New Leads &rarr;</span>
@@ -157,7 +157,7 @@ export function WorkspaceCrmClient({
 
             <Link
               href="/workspace/sheets"
-              className="flex items-center gap-1.5 h-9 px-3.5 rounded-xl bg-white/20 hover:bg-white/30 text-white border border-white/30 text-xs font-semibold shadow-xs transition-colors cursor-pointer backdrop-blur-md"
+              className="flex items-center gap-1.5 h-9 px-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-semibold shadow-xs transition-colors cursor-pointer backdrop-blur-md"
             >
               <span>View Full Table</span>
             </Link>

@@ -244,15 +244,15 @@ Wash Momkin nwrrih lik f 2 minutes f appel Zoom kiffash kaykheddem?`;
   return (
     <div dir={dir} className="w-full max-w-6xl mx-auto space-y-8 select-text pb-20">
       {/* ── Top Header Hero Banner ── */}
-      <div className="relative rounded-3xl p-6 sm:p-10 bg-gradient-to-r from-orange-600 via-amber-500 to-yellow-500 text-white border border-amber-400/40 shadow-xl shadow-orange-500/10 overflow-hidden">
+      <div className="relative rounded-3xl p-6 sm:p-10 bg-white dark:bg-[#1E1E1E] border border-slate-200/90 dark:border-[#2E2E2E] shadow-sm overflow-hidden">
         {/* Subtle decorative lighting */}
-        <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-yellow-300/20 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-orange-400/20 blur-3xl pointer-events-none" />
+        <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-emerald-500 via-indigo-500 to-[#FF6B4A]" />
+        <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-white border border-white/30 backdrop-blur-md text-xs font-bold tracking-wide uppercase">
-              <Compass className="w-3.5 h-3.5 text-amber-200" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-bold tracking-wide uppercase">
+              <Compass className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>
                 {language === "ar"
                   ? "دليل الإطلاق السريع • Eensell Workspace OS"
@@ -262,23 +262,32 @@ Wash Momkin nwrrih lik f 2 minutes f appel Zoom kiffash kaykheddem?`;
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight leading-tight drop-shadow-xs">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-950 dark:text-white tracking-tight leading-tight">
               {language === "ar" ? (
                 <>
-                  خارطة الطريق العملية لإطلاق وكالتك للذكاء الاصطناعي بالمغرب.
+                  خارطة الطريق العملية لإطلاق{" "}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-indigo-600 to-[#FF6B4A]">
+                    وكالتك للذكاء الاصطناعي بالمغرب.
+                  </span>
                 </>
               ) : language === "fr" ? (
                 <>
-                  La Feuille de Route pour Lancer Votre Agence IA au Maroc.
+                  La Feuille de Route pour Lancer{" "}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-indigo-600 to-[#FF6B4A]">
+                    Votre Agence IA au Maroc.
+                  </span>
                 </>
               ) : (
                 <>
-                  The Step-by-Step Blueprint to Scale Your Moroccan B2B AI Agency.
+                  The Step-by-Step Blueprint to Scale{" "}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-indigo-600 to-[#FF6B4A]">
+                    Your Moroccan B2B AI Agency.
+                  </span>
                 </>
               )}
             </h1>
 
-            <p className="text-xs sm:text-sm text-amber-50 font-medium leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
               {language === "ar"
                 ? "دليل تطبيقي شامل لربط مفاتيحك، استخراج بيانات أصحاب القرار في كازا والرباط ومراكش، إرسال عروض الواتساب بالدارجة، وتوقيع عقود شهرية بين 10,000 و 30,000 درهم."
                 : language === "fr"
@@ -288,12 +297,12 @@ Wash Momkin nwrrih lik f 2 minutes f appel Zoom kiffash kaykheddem?`;
           </div>
 
           {/* Progress Card */}
-          <div className="bg-slate-950/40 text-white p-5 rounded-2xl border border-white/20 backdrop-blur-md shrink-0 w-full md:w-64 flex flex-col justify-between shadow-lg">
+          <div className="bg-slate-50 dark:bg-[#181818] p-5 rounded-2xl border border-slate-200/80 dark:border-[#2C2C2C] shrink-0 w-full md:w-64 flex flex-col justify-between">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-amber-100">
+              <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
                 {language === "ar" ? "نسبة الإنجاز" : language === "fr" ? "Progression" : "Progress"}
               </span>
-              <span className="text-xs font-black text-white font-mono">
+              <span className="text-xs font-black text-emerald-600 dark:text-emerald-400 font-mono">
                 {progressPercent}%
               </span>
             </div>

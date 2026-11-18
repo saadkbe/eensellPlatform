@@ -12,8 +12,11 @@ export function SocialProofSection() {
     "https://randomuser.me/api/portraits/men/32.jpg",
     "https://randomuser.me/api/portraits/women/44.jpg",
     "https://randomuser.me/api/portraits/men/46.jpg",
+    "https://randomuser.me/api/portraits/men/52.jpg",
     "https://randomuser.me/api/portraits/women/68.jpg",
+    "https://randomuser.me/api/portraits/men/75.jpg",
     "https://randomuser.me/api/portraits/women/90.jpg",
+    "https://randomuser.me/api/portraits/men/86.jpg",
   ];
 
   const testimonials = [
@@ -22,6 +25,9 @@ export function SocialProofSection() {
     { nameKey: "social_t3_name", roleKey: "social_t3_role", incomeKey: "social_t3_income", contentKey: "social_t3_content", image: avatars[2] },
     { nameKey: "social_t4_name", roleKey: "social_t4_role", incomeKey: "social_t4_income", contentKey: "social_t4_content", image: avatars[3] },
     { nameKey: "social_t5_name", roleKey: "social_t5_role", incomeKey: "social_t5_income", contentKey: "social_t5_content", image: avatars[4] },
+    { nameKey: "social_t6_name", roleKey: "social_t6_role", incomeKey: "social_t6_income", contentKey: "social_t6_content", image: avatars[5] },
+    { nameKey: "social_t7_name", roleKey: "social_t7_role", incomeKey: "social_t7_income", contentKey: "social_t7_content", image: avatars[6] },
+    { nameKey: "social_t8_name", roleKey: "social_t8_role", incomeKey: "social_t8_income", contentKey: "social_t8_content", image: avatars[7] },
   ];
 
   return (
@@ -106,10 +112,7 @@ export function SocialProofSection() {
             
             <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-zinc-900 mb-8 leading-[1.3] relative">
               <span className="absolute -top-6 -left-6 text-6xl text-[#FF6B4A] opacity-20 font-serif">"</span>
-              {/* Featured Quote Placeholder. Update this tomorrow with the best quote from the interview. */}
-              {isRTL 
-                ? "لقد تغيرت حياتي تماماً. من صفر خبرة إلى تحقيق أول عميل لي في أقل من 30 يوماً!"
-                : "It completely changed my life. From zero experience to landing my first client in under 30 days!"}
+              {t("social_featured_quote" as TranslationKey)}
             </h3>
 
             <div className="flex items-center gap-5 pt-6 border-t border-zinc-200/80">
@@ -118,10 +121,10 @@ export function SocialProofSection() {
               </div>
               <div>
                 <p className="font-bold text-zinc-900 text-lg">
-                  {isRTL ? "لينا أمجادي." : "Lina Amjadi."}
+                  {t("social_featured_name" as TranslationKey)}
                 </p>
                 <p className="text-sm font-medium text-[#FF6B4A] uppercase tracking-wider">
-                  {isRTL ? "قصة نجاح مميزة" : "Featured Success Story"}
+                  {t("social_featured_badge" as TranslationKey)}
                 </p>
               </div>
             </div>
