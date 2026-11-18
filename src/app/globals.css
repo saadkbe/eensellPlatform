@@ -280,7 +280,7 @@
     display: flex;
     width: max-content;
     will-change: transform;
-    animation: marquee-courses 42s linear infinite;
+    animation: marquee-courses 50s linear infinite;
   }
   .courses-marquee-track:hover {
     animation-play-state: paused;

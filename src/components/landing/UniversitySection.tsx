@@ -76,7 +76,90 @@ export function UniversitySection() {
       lessons: t("uni_m7_lessons"),
       tag: t("uni_m7_tag"),
     },
+    {
+      code: "M8",
+      title: t("uni_m8_title"),
+      desc: t("uni_m8_desc"),
+      image: "/modules/mod15_money.png",
+      lessons: t("uni_m8_lessons"),
+      tag: t("uni_m8_tag"),
+    },
+    {
+      code: "M9",
+      title: t("uni_m9_title"),
+      desc: t("uni_m9_desc"),
+      image: "/modules/mod18_prompt.png",
+      lessons: t("uni_m9_lessons"),
+      tag: t("uni_m9_tag"),
+    },
   ];
+
+  // Double courses for seamless infinite loop
+  const displayCourses = [...courses, ...courses];
+
+  const renderCourseCards = (trackPrefix: string) => (
+    <div className="flex shrink-0 items-stretch gap-6 sm:gap-7 pr-6 sm:pr-7">
+      {displayCourses.map((course, idx) => (
+        <div
+          key={`${trackPrefix}-${idx}`}
+          dir={dir}
+          className="w-[285px] sm:w-[325px] md:w-[345px] shrink-0 bg-white rounded-3xl border border-slate-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_18px_45px_rgba(15,23,42,0.1)] hover:border-slate-300 transition-all duration-300 flex flex-col justify-between overflow-hidden group select-none cursor-pointer"
+        >
+          <div>
+            {/* 1:1 Aspect Square Artwork Box - Completely Uncropped */}
+            <div className="relative aspect-square w-full overflow-hidden bg-slate-950 rounded-t-3xl border-b border-slate-100">
+              <Image
+                src={course.image}
+                alt={course.title}
+                fill
+                sizes="(max-width: 640px) 285px, 345px"
+                className="object-contain p-2 group-hover:scale-105 transition-transform duration-500"
+              />
+
+              {/* Gradient shade for bottom readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-black/10 pointer-events-none" />
+
+              {/* Top Badges */}
+              <div className="absolute top-3 inset-x-3 flex items-center justify-between pointer-events-none z-10">
+                <span className="px-2.5 py-1 rounded-full text-[11px] font-black bg-slate-950/85 backdrop-blur-md text-white border border-white/20 font-mono shadow-sm">
+                  {course.code}
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/95 backdrop-blur-md text-slate-900 border border-slate-200/80 shadow-sm">
+                  {course.tag}
+                </span>
+              </div>
+
+              {/* Bottom Duration Badge */}
+              <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/85 backdrop-blur-md text-white text-[11px] font-semibold border border-white/10 z-10 pointer-events-none">
+                <Play className="w-3 h-3 fill-orange-500 text-orange-500" />
+                <span>{course.lessons}</span>
+              </div>
+            </div>
+
+            {/* Course Content */}
+            <div className="p-5 sm:p-6 text-left rtl:text-right">
+              <h3 className="text-base sm:text-lg font-black text-slate-950 mb-2 leading-snug group-hover:text-indigo-600 transition-colors line-clamp-2">
+                {course.title}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-3">
+                {course.desc}
+              </p>
+            </div>
+          </div>
+
+          {/* Bottom Card Footer */}
+          <div className="px-5 sm:px-6 pb-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-700">
+            <span className="flex items-center gap-1.5 text-emerald-700 font-bold">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Full Access
+            </span>
+            <span className="text-[11px] text-slate-400 group-hover:text-slate-900 transition-colors font-mono">
+              V2 Included &rarr;
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 
   const universityPillars = [
     {
@@ -165,72 +248,15 @@ export function UniversitySection() {
       </div>
 
       {/* ── CONTINUOUS INFINITE LINEAR MARQUEE (ENTIRE UN-CROPPED GRAPHICS) ── */}
-      <div className="relative w-full overflow-hidden mb-16 sm:mb-20 py-2">
+      <div className="relative w-full overflow-hidden mb-16 sm:mb-20 py-2 [direction:ltr]">
         {/* Soft edge blur / gradient masks on left & right */}
         <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-28 md:w-44 bg-gradient-to-r from-white via-white/85 to-transparent z-20 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 md:w-44 bg-gradient-to-l from-white via-white/85 to-transparent z-20 pointer-events-none" />
 
-        {/* Moving Track */}
-        <div dir="ltr" className="courses-marquee-track gap-6 sm:gap-7 px-4">
-          {[...courses, ...courses].map((course, idx) => (
-            <div
-              key={idx}
-              dir={dir}
-              className="w-[285px] sm:w-[325px] md:w-[345px] shrink-0 bg-white rounded-3xl border border-slate-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_18px_45px_rgba(15,23,42,0.1)] hover:border-slate-300 transition-all duration-300 flex flex-col justify-between overflow-hidden group select-none cursor-pointer"
-            >
-              <div>
-                {/* 1:1 Aspect Square Artwork Box - Completely Uncropped */}
-                <div className="relative aspect-square w-full overflow-hidden bg-slate-950 rounded-t-3xl border-b border-slate-100">
-                  <Image
-                    src={course.image}
-                    alt={course.title}
-                    fill
-                    sizes="(max-width: 640px) 285px, 345px"
-                    className="object-contain p-2 group-hover:scale-105 transition-transform duration-500"
-                  />
-
-                  {/* Gradient shade for bottom readability */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-black/10 pointer-events-none" />
-
-                  {/* Top Badges */}
-                  <div className="absolute top-3 inset-x-3 flex items-center justify-between pointer-events-none z-10">
-                    <span className="px-2.5 py-1 rounded-full text-[11px] font-black bg-slate-950/85 backdrop-blur-md text-white border border-white/20 font-mono shadow-sm">
-                      {course.code}
-                    </span>
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/95 backdrop-blur-md text-slate-900 border border-slate-200/80 shadow-sm">
-                      {course.tag}
-                    </span>
-                  </div>
-
-                  {/* Bottom Duration Badge */}
-                  <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/85 backdrop-blur-md text-white text-[11px] font-semibold border border-white/10 z-10 pointer-events-none">
-                    <Play className="w-3 h-3 fill-orange-500 text-orange-500" />
-                    <span>{course.lessons}</span>
-                  </div>
-                </div>
-
-                {/* Course Content */}
-                <div className="p-5 sm:p-6 text-left rtl:text-right">
-                  <h3 className="text-base sm:text-lg font-black text-slate-950 mb-2 leading-snug group-hover:text-indigo-600 transition-colors line-clamp-2">
-                    {course.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-3">
-                    {course.desc}
-                  </p>
-                </div>
-              </div>
-
-              {/* Bottom Card Footer */}
-              <div className="px-5 sm:px-6 pb-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-slate-700">
-                <span className="flex items-center gap-1.5 text-emerald-700 font-bold">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> Full Access
-                </span>
-                <span className="text-[11px] text-slate-400 group-hover:text-slate-900 transition-colors font-mono">
-                  V2 Included &rarr;
-                </span>
-              </div>
-            </div>
-          ))}
+        {/* Dual Moving Tracks for Infinite Seamless Looping */}
+        <div className="flex w-max courses-marquee-track hover:[animation-play-state:paused]">
+          {renderCourseCards("track1")}
+          {renderCourseCards("track2")}
         </div>
       </div>
 

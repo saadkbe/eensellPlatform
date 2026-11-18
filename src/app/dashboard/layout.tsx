@@ -9,7 +9,6 @@ import { headers } from "next/headers";
 import { PageTransition } from "@/components/page-transition";
 import { MainLayoutWrapper } from "@/components/dashboard/main-layout-wrapper";
 import { getUserChallengeProgress } from "@/actions/challenge.actions";
-import { TaskAiChatbot } from "@/components/dashboard/challenge/task-ai-chatbot";
 
 export const dynamic = 'force-dynamic';
 
@@ -65,7 +64,6 @@ export default async function DashboardLayout({
             {children}
           </PageTransition>
         </div>
-        <TaskAiChatbot currentDayNumber={challengeProgress?.currentDay || 1} />
       </MainLayoutWrapper>
     </div>
   );
