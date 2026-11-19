@@ -90,6 +90,9 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  alternates: {
+    canonical: "https://www.eensell.com",
+  },
 };
 
 export const viewport: Viewport = {
@@ -105,6 +108,7 @@ import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 import { ActivityTracker } from "@/components/activity-tracker";
 import { LanguageProvider } from "@/components/landing/LanguageProvider";
+import { StructuredData } from "@/components/seo/StructuredData";
 
 export default function RootLayout({
   children,
@@ -146,20 +150,7 @@ export default function RootLayout({
         <head>
           <link rel="preconnect" href="https://flagcdn.com" />
           <link rel="dns-prefetch" href="https://flagcdn.com" />
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "EducationalOrganization",
-                "name": "Eensell University",
-                "url": "https://eensell.com",
-                "logo": "https://eensell.com/icon-512.png",
-                "description":
-                  "Premium AI-powered education platform for Moroccan & international entrepreneurs.",
-              }),
-            }}
-          />
+          <StructuredData />
         </head>
         <body className={`${inter.variable} ${cairo.variable} ${caveat.variable} ${arefRuqaa.variable} font-sans antialiased`}>
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
