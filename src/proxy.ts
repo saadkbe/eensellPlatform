@@ -24,6 +24,7 @@ const isPublicRoute = createRouteMatcher([
   "/icon(.*)",
   "/apple-icon(.*)",
   "/google(.*).html",
+  "/verify(.*)",
 ]);
 
 // Admin-only routes

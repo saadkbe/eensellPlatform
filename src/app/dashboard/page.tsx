@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { DashboardClient } from "@/components/dashboard/home/dashboard-client";
 import { getLeaderboard } from "@/actions/user.actions";
 import { getUserChallengeProgress } from "@/actions/challenge.actions";
+import { getUserStreak } from "@/actions/streak.actions";
 
 import { TranslationKey } from "@/lib/translations";
 
@@ -29,6 +30,7 @@ export default async function DashboardPage() {
     leaderboard,
     recentProgress,
     challengeProgress,
+    streakData,
   ] = await Promise.all([
     db.user.findUnique({
       where: { clerkId: userId || "" },
@@ -59,9 +61,11 @@ export default async function DashboardPage() {
       include: { lesson: { include: { module: true } } },
     }),
     getUserChallengeProgress(),
+    getUserStreak(),
   ]);
 
   const firstName = dbUser?.firstName || "there";
+  const studentName = [dbUser?.firstName, dbUser?.lastName].filter(Boolean).join(" ") || "Student";
   const completedLessons = dbUser?.progress.length || 0;
   const progressPercent = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
 
@@ -78,6 +82,8 @@ export default async function DashboardPage() {
   return (
     <DashboardClient
       firstName={firstName}
+      studentName={studentName}
+      userClerkId={userId}
       greetingKey={getGreetingKey()}
       totalModules={totalModules}
       completedLessons={completedLessons}
@@ -91,6 +97,7 @@ export default async function DashboardPage() {
       recentlyWatched={recentProgress}
       leaderboard={leaderboard}
       challengeProgress={challengeProgress}
+      streakData={streakData}
       userTier={dbUser?.tier}
     />
   );

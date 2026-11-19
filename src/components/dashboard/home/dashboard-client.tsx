@@ -31,6 +31,8 @@ import { useLanguage } from "@/components/landing/LanguageProvider";
 import { LeaderboardWidget } from "../leaderboard-widget";
 import { ReferralPromoModal } from "../referrals/referral-promo-modal";
 import { HeroSection } from "./hero-section";
+import { StreakWidget } from "./streak-widget";
+import { CertificateCard } from "../certificate/certificate-modal";
 
 // Animation Variants
 const containerVariants = {
@@ -62,6 +64,8 @@ const scaleVariants = {
 
 export function DashboardClient({
   firstName,
+  studentName,
+  userClerkId,
   greeting,
   greetingKey,
   totalModules,
@@ -76,6 +80,7 @@ export function DashboardClient({
   recentlyWatched = [],
   leaderboard = [],
   challengeProgress,
+  streakData,
   userTier,
 }: any) {
   const { t } = useLanguage();
@@ -521,26 +526,19 @@ export function DashboardClient({
         {/* ── RIGHT COLUMN (35% width) ── */}
         <div className="lg:col-span-4 space-y-6">
 
-          {/* Momentum Streak Flame */}
+          {/* Real Gamification Streak Tracker */}
           <motion.div variants={itemVariants}>
-            <Card className="bg-gradient-to-br from-orange-500/15 via-card to-card border-orange-500/25 shadow-sm rounded-2xl relative overflow-hidden group">
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 opacity-15 pointer-events-none group-hover:scale-105 transition-transform">
-                <Flame className="w-32 h-32 text-orange-500" />
-              </div>
-              <CardContent className="p-5 sm:p-6 relative z-10">
-                <div className="flex items-center gap-4">
-                  <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center shadow-lg shadow-orange-500/20 shrink-0 p-3">
-                    <Flame className="w-7 h-7 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-orange-500 uppercase tracking-widest">{t("dash_momentum")}</p>
-                    <p className="text-3xl font-black text-foreground tracking-tight">
-                      {completedLessons > 0 ? `${Math.min(completedLessons, 30)}` : "0"} <span className="text-base font-bold text-muted-foreground">{t("dash_days")}</span>
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            {streakData && <StreakWidget initialStreak={streakData} />}
+          </motion.div>
+
+          {/* Official Course Completion Certificate */}
+          <motion.div variants={itemVariants}>
+            <CertificateCard
+              studentName={studentName || firstName}
+              userClerkId={userClerkId}
+              isCompleted={progressPercent === 100}
+              progressPercent={progressPercent}
+            />
           </motion.div>
 
           {/* Leaderboard */}
