@@ -23,6 +23,7 @@ const isPublicRoute = createRouteMatcher([
   "/manifest.json",
   "/icon(.*)",
   "/apple-icon(.*)",
+  "/google(.*).html",
 ]);
 
 // Admin-only routes
