@@ -254,3 +254,86 @@ export async function updateOnboardingConfig(
     data,
   });
 }
+
+// ─── Complete 3-Step Clean Onboarding ───
+export async function completeThreeStepOnboarding(payload: {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  goal?: string;
+  incomeGoal?: string;
+  experienceLevel?: string;
+}) {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  const cleanFirstName = payload.firstName?.trim() || "";
+  const cleanLastName = payload.lastName?.trim() || "";
+  const cleanPhone = payload.phone?.trim() || "";
+
+  const updatedUser = await db.user.update({
+    where: { clerkId: userId },
+    data: {
+      firstName: cleanFirstName || undefined,
+      lastName: cleanLastName || undefined,
+      phone: cleanPhone || undefined,
+      goal: payload.goal || "agency",
+      incomeGoal: payload.incomeGoal || "$3K-$5K",
+      experienceLevel: payload.experienceLevel || "beginner",
+      onboardingCompleted: true,
+      onboardingStep: 3,
+      challengeStartDate: new Date(),
+    },
+  });
+
+  // Sync Name to Clerk
+  if (cleanFirstName) {
+    try {
+      const { clerkClient } = await import("@clerk/nextjs/server");
+      const client = await clerkClient();
+      await client.users.updateUser(userId, {
+        firstName: cleanFirstName,
+        lastName: cleanLastName,
+      });
+    } catch (e) {
+      console.error("[ONBOARDING_CLERK_SYNC_ERROR]", e);
+    }
+  }
+
+  // Ensure default onboarding missions exist
+  const existingMissions = await db.mission.count({ where: { userId: updatedUser.id } });
+  if (existingMissions === 0) {
+    await db.mission.createMany({
+      data: [
+        {
+          userId: updatedUser.id,
+          title: "Watch Course Orientation",
+          description: "Explore the core fundamentals of the 60-day curriculum.",
+          type: "watch_welcome",
+          isCompleted: true,
+          order: 1,
+        },
+        {
+          userId: updatedUser.id,
+          title: "Complete Your Agency Profile",
+          description: "WhatsApp and identity registered.",
+          type: "complete_profile",
+          isCompleted: true,
+          order: 2,
+        },
+        {
+          userId: updatedUser.id,
+          title: "Start Day 1 Mission",
+          description: "Open the 60-day roadmap and take immediate action.",
+          type: "first_lesson",
+          isCompleted: false,
+          order: 3,
+        },
+      ],
+    });
+  }
+
+  revalidatePath("/dashboard");
+  revalidatePath("/admin");
+  return { success: true };
+}

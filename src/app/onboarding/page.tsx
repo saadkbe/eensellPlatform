@@ -22,6 +22,7 @@ export default async function OnboardingPage() {
     <OnboardingClient
       user={{
         id: data.user.id,
+        email: data.user.email,
         firstName: data.user.firstName,
         lastName: data.user.lastName,
         imageUrl: data.user.imageUrl,
