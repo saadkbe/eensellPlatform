@@ -150,25 +150,25 @@ function SidebarContent({
           <Link
             href="/workspace"
             onClick={() => setMobileOpen(false)}
-            className="group flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-violet-500/10 via-primary/5 to-purple-500/10 hover:from-violet-500/15 hover:to-primary/15 dark:from-violet-950/40 dark:to-slate-900/40 border border-violet-500/25 dark:border-violet-500/30 hover:border-violet-500/50 transition-all duration-200 shadow-sm hover:shadow"
+            className="group flex items-center justify-between p-2.5 rounded-2xl bg-card/70 dark:bg-[#111218] hover:bg-card/90 dark:hover:bg-[#161720] border border-border/80 hover:border-primary/40 transition-all duration-200 shadow-xs"
           >
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-                <Zap className="w-4 h-4 fill-white" />
+              <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shadow-xs shrink-0 group-hover:scale-105 transition-transform">
+                <Zap className="w-4 h-4 fill-primary" />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs font-bold text-foreground group-hover:text-primary transition-colors truncate">
-                    {t("nav_workspace")}
+                    Workspace OS
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                 </div>
-                <p className="text-[10px] text-muted-foreground truncate font-medium">
+                <p className="text-[10px] text-muted-foreground truncate font-medium mt-0.5">
                   {t("nav_workspace_sub")}
                 </p>
               </div>
             </div>
-            <div className="w-6 h-6 rounded-md bg-white/80 dark:bg-white/5 border border-border/80 flex items-center justify-center text-muted-foreground group-hover:text-primary group-hover:border-primary/40 shrink-0 transition-all">
+            <div className="w-6 h-6 rounded-md bg-accent flex items-center justify-center text-muted-foreground group-hover:text-primary shrink-0 transition-all">
               <ArrowUpRight className="w-3.5 h-3.5" />
             </div>
           </Link>
@@ -179,28 +179,34 @@ function SidebarContent({
               setMobileOpen(false);
               onOpenProModal();
             }}
-            className="w-full text-left group flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-amber-500/10 hover:from-amber-500/20 hover:to-orange-500/20 dark:from-amber-950/40 dark:to-slate-900/40 border border-amber-500/35 hover:border-amber-500/60 transition-all duration-200 shadow-sm hover:shadow cursor-pointer"
+            className="w-full text-left group flex items-center justify-between p-2.5 rounded-2xl bg-card/70 dark:bg-[#111218] hover:bg-card/90 dark:hover:bg-[#161720] border border-border/80 hover:border-amber-500/40 transition-all duration-200 shadow-xs relative overflow-hidden cursor-pointer"
           >
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-slate-950 shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-                <Crown className="w-4 h-4 fill-slate-950 text-slate-950" />
+              <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-500 shrink-0 group-hover:scale-105 transition-transform">
+                <Crown className="w-4 h-4 fill-amber-500/20 text-amber-500" />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs font-bold text-foreground group-hover:text-amber-500 transition-colors truncate">
-                    {t("nav_workspace")}
+                    Workspace OS
                   </span>
-                  <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-amber-500 text-slate-950">
-                    PRO 499 MAD
+                  <span className="text-[9px] font-black uppercase px-1 py-0.2 rounded bg-amber-500/15 text-amber-500 border border-amber-500/30 shrink-0">
+                    PRO
                   </span>
                 </div>
-                <p className="text-[10px] text-amber-500/90 truncate font-semibold">
-                  Upgrade to unlock OS
+                <p className="text-[10px] text-muted-foreground truncate font-medium mt-0.5">
+                  Lead Scraper & CRM
                 </p>
               </div>
             </div>
-            <div className="w-6 h-6 rounded-md bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-slate-950 shrink-0 transition-all">
-              <Crown className="w-3.5 h-3.5" />
+
+            <div className="flex flex-col items-end shrink-0 pl-1.5">
+              <span className="text-[11px] font-black font-mono text-amber-500 dark:text-amber-400 whitespace-nowrap bg-amber-500/10 border border-amber-500/25 px-1.5 py-0.5 rounded-md leading-none">
+                499 MAD
+              </span>
+              <span className="text-[9px] font-semibold text-muted-foreground/80 whitespace-nowrap mt-1 leading-none">
+                Lifetime
+              </span>
             </div>
           </button>
         )}
@@ -526,27 +532,35 @@ export function DashboardSidebar({
                         setMobileOpen(false);
                         setProModalOpen(true);
                       }}
-                      className="w-full text-left group flex items-center justify-between p-3 rounded-2xl bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-amber-500/10 border border-amber-500/35 shadow-sm cursor-pointer"
+                      className="w-full text-left group flex items-center justify-between p-3 rounded-2xl bg-card/70 dark:bg-[#111218] border border-border/80 hover:border-amber-500/40 shadow-xs cursor-pointer transition-all"
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-slate-950 shadow-sm">
-                          <Crown className="w-4 h-4 fill-slate-950 text-slate-950" />
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-500 shrink-0">
+                          <Crown className="w-4 h-4 fill-amber-500/20 text-amber-500" />
                         </div>
-                        <div>
+                        <div className="min-w-0">
                           <div className="flex items-center gap-1.5">
                             <span className="text-sm font-bold text-foreground">
-                              {t("nav_workspace")}
+                              Workspace OS
                             </span>
-                            <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-amber-500 text-slate-950">
-                              PRO 499 MAD
+                            <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded-md bg-amber-500/15 text-amber-500 border border-amber-500/30 shrink-0">
+                              PRO
                             </span>
                           </div>
-                          <p className="text-xs text-amber-500 font-semibold">
-                            Upgrade to unlock OS
+                          <p className="text-xs text-muted-foreground font-medium mt-0.5">
+                            Lead Scraper & AI CRM
                           </p>
                         </div>
                       </div>
-                      <Crown className="w-4 h-4 text-amber-500" />
+
+                      <div className="flex flex-col items-end shrink-0 pl-2">
+                        <span className="text-xs font-black font-mono text-amber-500 dark:text-amber-400 whitespace-nowrap bg-amber-500/10 border border-amber-500/25 px-2 py-0.5 rounded-lg leading-none">
+                          499 MAD
+                        </span>
+                        <span className="text-[10px] font-semibold text-muted-foreground/80 whitespace-nowrap mt-1 leading-none">
+                          Lifetime
+                        </span>
+                      </div>
                     </button>
                   )}
                 </div>
