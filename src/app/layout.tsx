@@ -29,7 +29,7 @@ const arefRuqaa = Aref_Ruqaa({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://eensell.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://www.eensell.com"),
   title: {
     default: "Eensell University | Premium Education Platform",
     template: "%s | Eensell University",

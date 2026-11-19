@@ -23,4 +23,4 @@ Allow: /icon-192.png
 Allow: /icon-512.png
 Allow: /apple-icon.png
 
-Sitemap: https://eensell.com/sitemap.xml
+Sitemap: https://www.eensell.com/sitemap.xml
