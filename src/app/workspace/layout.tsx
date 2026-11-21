@@ -23,14 +23,23 @@ export default async function WorkspaceLayout({
     redirect("/sign-in");
   }
 
-  if (dbUser.role !== "ADMIN" && (dbUser.status === "PENDING" || dbUser.status === "REJECTED" || dbUser.status === "SUSPENDED")) {
+  // STRICT ACCESS CHECK:
+  // 1. Any user who is NOT ACTIVE is blocked immediately
+  if (dbUser.role !== "ADMIN" && dbUser.status !== "ACTIVE") {
     redirect("/pending");
   }
 
-  // Only PRO members and Admins have access to Eensell Workspace OS
-  const isPro = dbUser.role === "ADMIN" || dbUser.isPro || dbUser.tier === "PRO";
-  if (!isPro) {
-    redirect("/dashboard?upgrade_pro=true");
+  // 2. Only Admins, explicit PRO, or ACTIVE users with an active workspaceExpiresAt date get access
+  const isAdmin = dbUser.role === "ADMIN";
+  const isExplicitPro = dbUser.isPro || dbUser.tier === "PRO";
+  let hasActiveWorkspace = isAdmin || isExplicitPro;
+
+  if (!hasActiveWorkspace && dbUser.status === "ACTIVE" && dbUser.workspaceExpiresAt) {
+    hasActiveWorkspace = new Date() <= new Date(dbUser.workspaceExpiresAt);
+  }
+
+  if (!hasActiveWorkspace) {
+    redirect("/dashboard?workspace_expired=true");
   }
 
   return (

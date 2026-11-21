@@ -129,7 +129,7 @@ function SidebarContent({
   isActive: (href: string) => boolean;
   hasNewLesson: boolean;
 }) {
-  const { t, dir } = useLanguage();
+  const { t, dir, language } = useLanguage();
   // All active students have full access to all V2 dashboard sections
   const sections = v2NavSections;
 
@@ -202,10 +202,10 @@ function SidebarContent({
 
             <div className="flex flex-col items-end shrink-0 pl-1.5">
               <span className="text-[11px] font-black font-mono text-amber-500 dark:text-amber-400 whitespace-nowrap bg-amber-500/10 border border-amber-500/25 px-1.5 py-0.5 rounded-md leading-none">
-                499 MAD
+                199 MAD
               </span>
               <span className="text-[9px] font-semibold text-muted-foreground/80 whitespace-nowrap mt-1 leading-none">
-                Lifetime
+                {language === "ar" ? "شهرياً" : language === "fr" ? "/ Mois" : "/ Month"}
               </span>
             </div>
           </button>
@@ -364,9 +364,12 @@ export function DashboardSidebar({
     (user?.publicMetadata?.tier === "PRO")
   );
 
-  // Automatically trigger PRO modal if redirected with ?upgrade_pro=true
+  // Automatically trigger PRO / Recharge modal if redirected
   useEffect(() => {
-    if (searchParams?.get("upgrade_pro") === "true") {
+    if (
+      searchParams?.get("upgrade_pro") === "true" ||
+      searchParams?.get("workspace_expired") === "true"
+    ) {
       setProModalOpen(true);
     }
   }, [searchParams]);

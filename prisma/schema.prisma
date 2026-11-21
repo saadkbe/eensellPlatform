@@ -39,6 +39,7 @@ model User {
   status    UserStatus @default(PENDING)
   tier      MembershipTier @default(FREE_LIBRARY)
   isPro     Boolean    @default(false)
+  workspaceExpiresAt DateTime? // Expiration date for Eensell Workspace OS access
   onboardingCompleted Boolean @default(false)
   hasSeenWalkthrough  Boolean @default(false)
   goals     String?

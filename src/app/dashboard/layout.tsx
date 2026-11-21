@@ -9,6 +9,7 @@ import { headers } from "next/headers";
 import { PageTransition } from "@/components/page-transition";
 import { MainLayoutWrapper } from "@/components/dashboard/main-layout-wrapper";
 import { getUserChallengeProgress } from "@/actions/challenge.actions";
+import { PhoneCollectionModal } from "@/components/dashboard/phone-collection-modal";
 
 export const dynamic = 'force-dynamic';
 
@@ -46,10 +47,23 @@ export default async function DashboardLayout({
     redirect("/onboarding");
   }
 
-  const isPro = Boolean(dbUser?.isPro || dbUser?.tier === "PRO" || dbUser?.role === "ADMIN");
+  // Strict Workspace pass check:
+  // Admins & explicit PRO get full access.
+  // ONLY ACTIVE students with an active workspaceExpiresAt date get access.
+  const isAdmin = dbUser?.role === "ADMIN";
+  const isExplicitPro = Boolean(dbUser?.isPro || dbUser?.tier === "PRO");
+  let hasActiveWorkspace = Boolean(isAdmin || isExplicitPro);
+
+  if (!hasActiveWorkspace && dbUser && dbUser.status === "ACTIVE" && dbUser.workspaceExpiresAt) {
+    hasActiveWorkspace = new Date() <= new Date(dbUser.workspaceExpiresAt);
+  }
+
+  const isPro = hasActiveWorkspace;
+  const needsPhone = Boolean(dbUser && dbUser.status === "ACTIVE" && !dbUser.phone);
 
   return (
     <div className="min-h-screen bg-background">
+      {needsPhone && <PhoneCollectionModal isOpen={true} />}
       <DashboardSidebar 
         hasNewLesson={hasNewLesson} 
         userTier={dbUser?.tier}

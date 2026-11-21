@@ -23,10 +23,12 @@ import {
   Sliders,
   Globe,
   LucideIcon,
+  Zap,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { UserButton } from "@clerk/nextjs";
 import { motion, AnimatePresence } from "framer-motion";
+import { WorkspaceProModal } from "@/components/workspace/workspace-pro-modal";
 import {
   getUserNotifications,
   getUnreadNotificationCount,
@@ -293,6 +295,7 @@ export function WorkspaceTopBar() {
   const [isOpenNotifications, setIsOpenNotifications] = useState(false);
   const [isOpenLanguage, setIsOpenLanguage] = useState(false);
   const [isLoadingNotifications, setIsLoadingNotifications] = useState(false);
+  const [proModalOpen, setProModalOpen] = useState(false);
 
   const notificationsRef = useRef<HTMLDivElement | null>(null);
   const languageRef = useRef<HTMLDivElement | null>(null);
@@ -636,6 +639,16 @@ export function WorkspaceTopBar() {
           </AnimatePresence>
         </div>
 
+        {/* ── Recharge Pass Button ── */}
+        <button
+          type="button"
+          onClick={() => setProModalOpen(true)}
+          className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/25 text-xs font-bold transition-all cursor-pointer shadow-xs"
+        >
+          <Zap className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+          <span>{language === "ar" ? "تجديد الباقة (199 DH)" : language === "fr" ? "Recharger (199 MAD)" : "Recharge (199 MAD)"}</span>
+        </button>
+
         {/* ── Settings Button ── */}
         <Link
           href="/workspace/settings"
@@ -672,6 +685,11 @@ export function WorkspaceTopBar() {
           </div>
         </div>
       </div>
+
+      <WorkspaceProModal
+        isOpen={proModalOpen}
+        onClose={() => setProModalOpen(false)}
+      />
     </header>
   );
 }

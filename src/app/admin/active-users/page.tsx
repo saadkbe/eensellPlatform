@@ -36,6 +36,9 @@ export default async function ActiveUsersPage() {
       imageUrl: true,
       createdAt: true,
       role: true,
+      isPro: true,
+      phone: true,
+      workspaceExpiresAt: true,
       progress: {
         where: { isCompleted: true },
         select: { id: true }
@@ -52,6 +55,9 @@ export default async function ActiveUsersPage() {
     imageUrl: user.imageUrl,
     startDate: user.createdAt.toISOString(),
     role: user.role,
+    isPro: user.isPro,
+    phone: user.phone,
+    workspaceExpiresAt: user.workspaceExpiresAt ? user.workspaceExpiresAt.toISOString() : null,
     completedLessons: user.progress.length,
   }));
 

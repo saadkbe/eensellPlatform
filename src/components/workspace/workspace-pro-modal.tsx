@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,59 +15,96 @@ import {
   ShieldCheck,
   Zap,
   CreditCard,
+  Copy,
+  Check,
+  Building2,
+  Calendar,
+  Flame,
 } from "lucide-react";
-import Link from "next/link";
 import { useLanguage } from "@/components/landing/LanguageProvider";
+import { toast } from "sonner";
 
 interface WorkspaceProModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+type RechargePlan = "1month" | "3months" | "1year";
+
 export function WorkspaceProModal({ isOpen, onClose }: WorkspaceProModalProps) {
   const { language, dir } = useLanguage();
+  const [selectedPlan, setSelectedPlan] = useState<RechargePlan>("1month");
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   const isAr = language === "ar";
   const isFr = language === "fr";
 
   // Official WhatsApp support number for Eensell & Saad Kaabouche
   const waNumber = "212666065608";
-  const waMessage = encodeURIComponent(
-    isAr
-      ? "Salam Saad! أريد ترقية حسابي إلى Eensell PRO بسعر 499 درهم لفتح نظام Workspace OS."
-      : isFr
-      ? "Salam Saad! Je souhaite mettre à niveau mon compte vers Eensell PRO à 499 MAD pour débloquer Workspace OS."
-      : "Salam Saad! I want to upgrade my account to Eensell PRO at 499 MAD to unlock Workspace OS."
-  );
 
-  const waLink = `https://wa.me/${waNumber}?text=${waMessage}`;
+  const planDetails = {
+    "1month": {
+      price: 199,
+      duration: isAr ? "شهر واحد" : isFr ? "1 Mois" : "1 Month",
+      badge: isAr ? "الأكثر مرونة" : isFr ? "Le plus flexible" : "Most Flexible",
+      waText: isAr
+        ? "Salam Saad! أريد تجديد اشتراك Eensell Workspace OS لمدة شهر واحد (199 درهم)."
+        : isFr
+        ? "Salam Saad! Je souhaite recharger mon accès Eensell Workspace OS pour 1 Mois (199 MAD)."
+        : "Salam Saad! I want to recharge my Eensell Workspace OS access for 1 Month (199 MAD).",
+    },
+    "3months": {
+      price: 499,
+      duration: isAr ? "3 أشهر" : isFr ? "3 Mois" : "3 Months",
+      badge: isAr ? "الأكثر طلباً • وفر 100 درهم" : isFr ? "Le plus populaire • Économisez 100 MAD" : "Most Popular • Save 100 MAD",
+      waText: isAr
+        ? "Salam Saad! أريد تجديد اشتراك Eensell Workspace OS لمدة 3 أشهر (499 درهم) مع بونص Make.com Blueprints."
+        : isFr
+        ? "Salam Saad! Je souhaite recharger mon accès Eensell Workspace OS pour 3 Mois (499 MAD) avec le bonus Make.com Blueprints."
+        : "Salam Saad! I want to recharge my Eensell Workspace OS access for 3 Months (499 MAD) with the Make.com Blueprints bonus.",
+    },
+    "1year": {
+      price: 1499,
+      duration: isAr ? "سنة كاملة (12 شهر)" : isFr ? "1 An (12 Mois)" : "1 Year (12 Months)",
+      badge: isAr ? "وفر 900 درهم • جلسة خاصة" : isFr ? "Économisez 900 MAD • Session VIP" : "Save 900 MAD • VIP Session",
+      waText: isAr
+        ? "Salam Saad! أريد الحصول على باقة سنة كاملة لـ Eensell Workspace OS (1499 درهم) مع المراجعة الاستراتيجية الخاصة."
+        : isFr
+        ? "Salam Saad! Je souhaite recharger mon accès Eensell Workspace OS pour 1 An (1,499 MAD) avec l'audit stratégique privé."
+        : "Salam Saad! I want to recharge my Eensell Workspace OS access for 1 Year (1,499 MAD) with the private strategic audit.",
+    },
+  };
+
+  const activePlan = planDetails[selectedPlan];
+  const waLink = `https://wa.me/${waNumber}?text=${encodeURIComponent(activePlan.waText)}`;
+
+  const handleCopy = (value: string, label: string) => {
+    navigator.clipboard.writeText(value);
+    setCopiedKey(value);
+    toast.success(isAr ? `تم نسخ ${label} بنجاح!` : `Copié : ${label}`);
+    setTimeout(() => setCopiedKey(null), 2500);
+  };
 
   const perks = [
     {
       icon: MapPin,
       title: isAr ? "استخراج عملاء B2B من خرائط جوجل" : isFr ? "Scraper Google Maps B2B" : "Google Maps B2B Scraper",
-      desc: isAr ? "استخرج بيانات الشركات المحلية مع الهواتف والإيميلات بنقرة واحدة" : isFr ? "Extrayez des leads qualifiés avec téléphones et emails en 1 clic" : "Extract local qualified business leads with verified phone & email",
+      desc: isAr ? "استخرج الشركات المحلية وأرقام الواتساب المباشرة" : isFr ? "Prospectez des entreprises avec WhatsApp direct" : "Extract local qualified business leads with direct WhatsApp",
     },
     {
       icon: MessageSquare,
-      title: isAr ? "استوديو واتساب وأتمتة المواعيد" : isFr ? "Studio Outreach WhatsApp" : "WhatsApp Outreach Studio",
-      desc: isAr ? "حملات مراسلة ذكية وسيناريوهات إغلاق الصفقات الآلية" : isFr ? "Campagnes automatisées et scripts de prise de rendez-vous IA" : "Automated booking sequences and AI client acquisition templates",
+      title: isAr ? "استوديو واتساب بالدارجة والفرنسية" : isFr ? "Studio WhatsApp Darija & Français" : "Darija & French WhatsApp Studio",
+      desc: isAr ? "نماذج ورسائل صوتية تحقق أعلى نسبة استجابة" : isFr ? "Scripts et vocaux IA à fort taux de réponse" : "AI outreach scripts and audio notes with top reply rates",
     },
     {
       icon: Mail,
-      title: isAr ? "صياغة البريد البارد بالذكاء الاصطناعي" : isFr ? "Rédacteur AI Cold Email" : "AI Cold Email Drafter",
-      desc: isAr ? "إيميلات مخصصة تقنع العملاء وتحقق أعلى نسبة ردود" : isFr ? "Emails de prospection ultra-personnalisés à fort taux de réponse" : "Hyper-personalized outreach copy with proven high reply rates",
+      title: isAr ? "صياغة البريد البارد (GPT-4o)" : isFr ? "AI Cold Emailer (GPT-4o)" : "AI Cold Emailer (GPT-4o)",
+      desc: isAr ? "إيميلات مخصصة ومزامنة الإرسال بـ Gmail" : isFr ? "Prospection personnalisée connectée à Gmail" : "Custom outreach synchronized with personal Gmail",
     },
     {
       icon: Kanban,
-      title: isAr ? "نظام CRM ومتابعة العقود الشهرية" : isFr ? "CRM Agence & Pipeline de Deals" : "Agency CRM & Retainers",
-      desc: isAr ? "إدارة مراحل العملاء، الفواتير، والعقود المتكررة بسهولة" : isFr ? "Gérez vos prospects, clôtures et contrats récurrents facilement" : "Manage client pipelines, recurring monthly retainers & billing",
-    },
-    {
-      icon: Crown,
-      title: isAr ? "شارة PRO الرسمية على ملفك" : isFr ? "Badge PRO Officiel sur votre profil" : "Official PRO Badge on Profile",
-      desc: isAr ? "شارة ذهبية موثقة تظهر على حسابك ومجتمع الطلاب" : isFr ? "Badge exclusif affiché sur votre avatar et profil vérifié" : "Distinctive gold badge displayed across your community profile",
-      highlight: true,
+      title: isAr ? "نظام CRM وإدارة الفواتير والـ Devis" : isFr ? "CRM & Devis / Factures en MAD" : "Agency CRM & Invoices in MAD",
+      desc: isAr ? "متابعة مراحل الصفقات والـ Retainers الشهرية" : isFr ? "Suivi des deals et retainers récurrents" : "Deal tracking and monthly agency retainers",
     },
   ];
 
@@ -77,92 +115,163 @@ export function WorkspaceProModal({ isOpen, onClose }: WorkspaceProModalProps) {
         className="w-full max-w-xl sm:max-w-2xl p-0 overflow-hidden bg-[#0A0B10] text-white border border-white/[0.08] shadow-[0_24px_70px_rgba(0,0,0,0.85)] rounded-3xl"
       >
         <DialogTitle className="sr-only">
-          {isAr ? "ترقية الخطة إلى PRO بسعر 499 درهم" : "Upgrade Plan to PRO at 499 MAD"}
+          {isAr ? "تجديد اشتراك Eensell Workspace OS" : "Recharger l'accès Eensell Workspace OS"}
         </DialogTitle>
         <DialogDescription className="sr-only">
           {isAr
-            ? "افتح نظام Eensell Workspace OS وجميع أدوات الوكالة الحصرية"
-            : "Unlock Eensell Workspace OS and agency operational tools"}
+            ? "اختر باقة تجديد مساحة العمل لتفعيل استخراج العملاء ونظام الـ CRM"
+            : "Choisissez votre pass de recharge Workspace OS"}
         </DialogDescription>
 
-        {/* Ambient Top Glow & Minimal Grid */}
+        {/* Ambient Top Glow */}
         <div className="absolute inset-0 bg-gradient-to-br from-amber-500/[0.07] via-transparent to-orange-500/[0.04] pointer-events-none" />
         <div className="absolute -top-32 -right-32 w-80 h-80 bg-amber-500/10 rounded-full blur-[90px] pointer-events-none" />
-        <div
-          className="absolute inset-0 opacity-[0.02] pointer-events-none"
-          style={{
-            backgroundImage: `linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)`,
-            backgroundSize: "32px 32px",
-          }}
-        />
 
         {/* Modal Header */}
         <div className="relative z-10 p-6 sm:p-8 pb-3 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-bold tracking-wider uppercase mb-3">
-            <Crown className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-            <span>Eensell Workspace OS</span>
+            <Zap className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+            <span>{isAr ? "مساحة عمل الوكالة الذكية" : "Eensell Workspace OS"}</span>
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           </div>
 
           <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white mb-2">
             {isAr ? (
-              <>ترقية الخطة إلى <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-orange-400 bg-clip-text text-transparent font-mono">PRO</span></>
+              <>تجديد باقة <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-orange-400 bg-clip-text text-transparent font-mono">Workspace OS</span></>
             ) : isFr ? (
-              <>Passez au Plan <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-orange-400 bg-clip-text text-transparent font-mono">PRO</span></>
+              <>Recharger votre pass <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-orange-400 bg-clip-text text-transparent font-mono">Workspace OS</span></>
             ) : (
-              <>Upgrade License to <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-orange-400 bg-clip-text text-transparent font-mono">PRO OS</span></>
+              <>Recharge Your <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-orange-400 bg-clip-text text-transparent font-mono">Workspace OS</span> Pass</>
             )}
           </h2>
 
           <p className="text-xs sm:text-sm text-slate-400 max-w-lg mx-auto leading-relaxed">
             {isAr
-              ? "نظام التشغيل المتكامل لأصحاب الوكالات الذكية: استخراج العملاء، مراسلة الشركات، وإدارة العقود الشهرية بسهولة."
+              ? "استمر في استخراج بيانات العملاء، إرسال حملات الواتساب، وإدارة صفقات وكالتك بدون انقطاع."
               : isFr
-              ? "Le système opérationnel complet pour fondateurs d'agence IA : prospection B2B, outreach automatisé et gestion de retainers."
-              : "The complete agency operating system: scrape high-ticket leads, run automated WhatsApp outreach, and scale recurring client retainers."}
+              ? "Continuez à extraire des leads Maps qualifiés, envoyer vos campagnes et gérer votre CRM sans interruption."
+              : "Keep extracting verified leads, launching client outreach campaigns, and managing your agency CRM seamlessly."}
           </p>
 
-          {/* Pricing Highlight Pill */}
-          <div className="mt-4 inline-flex items-center gap-3 px-4 sm:px-5 py-2 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
-            <span className="text-xs text-slate-500 line-through">1,200 MAD</span>
-            <span className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight">499 MAD</span>
-            <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-              {isAr ? "وصول مدى الحياة" : isFr ? "Accès à vie" : "Lifetime Access"}
-            </span>
+          {/* ── Interactive 3 Plan Selector ── */}
+          <div className="mt-5 grid grid-cols-3 gap-2.5 max-w-lg mx-auto">
+            {/* 1 Month */}
+            <button
+              type="button"
+              onClick={() => setSelectedPlan("1month")}
+              className={`p-3 rounded-2xl border text-center transition-all cursor-pointer relative ${
+                selectedPlan === "1month"
+                  ? "bg-amber-500/15 border-amber-500/60 shadow-[0_0_20px_rgba(245,158,11,0.2)]"
+                  : "bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06]"
+              }`}
+            >
+              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                {isAr ? "شهر واحد" : isFr ? "1 Mois" : "1 Month"}
+              </div>
+              <div className="text-lg sm:text-xl font-black font-mono text-white">
+                199 <span className="text-xs font-bold text-amber-400">MAD</span>
+              </div>
+              <div className="text-[9px] text-slate-500 font-medium mt-0.5">
+                {isAr ? "اشتراك شهري" : isFr ? "Mensuel" : "Monthly"}
+              </div>
+            </button>
+
+            {/* 3 Months (Recommended) */}
+            <button
+              type="button"
+              onClick={() => setSelectedPlan("3months")}
+              className={`p-3 rounded-2xl border text-center transition-all cursor-pointer relative ${
+                selectedPlan === "3months"
+                  ? "bg-amber-500/20 border-amber-400 shadow-[0_0_25px_rgba(245,158,11,0.3)] ring-1 ring-amber-400/50"
+                  : "bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06]"
+              }`}
+            >
+              <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 text-[9px] font-black uppercase px-2 py-0.5 rounded-full shadow-sm whitespace-nowrap">
+                {isAr ? "الأفضل قيمة" : isFr ? "Le plus populaire" : "Best Value"}
+              </div>
+              <div className="text-[11px] font-bold text-amber-300 uppercase tracking-wider mb-1">
+                {isAr ? "3 أشهر" : isFr ? "3 Mois" : "3 Months"}
+              </div>
+              <div className="text-lg sm:text-xl font-black font-mono text-white">
+                499 <span className="text-xs font-bold text-amber-400">MAD</span>
+              </div>
+              <div className="text-[9px] text-emerald-400 font-semibold mt-0.5">
+                {isAr ? "وفر 100 درهم" : isFr ? "Éco. 100 MAD" : "Save 100 MAD"}
+              </div>
+            </button>
+
+            {/* 1 Year */}
+            <button
+              type="button"
+              onClick={() => setSelectedPlan("1year")}
+              className={`p-3 rounded-2xl border text-center transition-all cursor-pointer relative ${
+                selectedPlan === "1year"
+                  ? "bg-amber-500/15 border-amber-500/60 shadow-[0_0_20px_rgba(245,158,11,0.2)]"
+                  : "bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06]"
+              }`}
+            >
+              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                {isAr ? "سنة كاملة" : isFr ? "1 An" : "1 Year"}
+              </div>
+              <div className="text-lg sm:text-xl font-black font-mono text-white">
+                1,499 <span className="text-xs font-bold text-amber-400">MAD</span>
+              </div>
+              <div className="text-[9px] text-emerald-400 font-semibold mt-0.5">
+                {isAr ? "وفر 900 درهم" : isFr ? "Éco. 900 MAD" : "Save 900 MAD"}
+              </div>
+            </button>
           </div>
         </div>
 
         {/* Feature Cards Grid */}
         <div className="relative z-10 px-6 sm:px-8 py-2">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {perks.map((p, idx) => {
               const Icon = p.icon;
               return (
                 <div
                   key={idx}
-                  className={`flex items-start gap-3 p-3 rounded-2xl border transition-all ${
-                    p.highlight
-                      ? "sm:col-span-2 bg-gradient-to-r from-amber-500/[0.08] to-transparent border-amber-500/30"
-                      : "bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.04] hover:border-white/[0.12]"
-                  }`}
+                  className="flex items-start gap-2.5 p-2.5 rounded-xl border bg-white/[0.02] border-white/[0.06]"
                 >
-                  <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0 mt-0.5">
-                    <Icon className="w-4 h-4" />
+                  <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0 mt-0.5">
+                    <Icon className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <p className="text-xs font-bold text-white truncate">{p.title}</p>
-                      {p.highlight && (
-                        <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-amber-400 text-slate-950">
-                          PRO
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-[11px] text-slate-400 leading-snug mt-0.5 line-clamp-2">{p.desc}</p>
+                    <p className="text-xs font-bold text-white truncate">{p.title}</p>
+                    <p className="text-[10px] text-slate-400 leading-snug line-clamp-1">{p.desc}</p>
                   </div>
                 </div>
               );
             })}
+          </div>
+        </div>
+
+        {/* ── CIH Bank Quick Transfer Details ── */}
+        <div className="relative z-10 px-6 sm:px-8 pt-2">
+          <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <Building2 className="w-4 h-4 text-amber-400 shrink-0" />
+              <div className="min-w-0">
+                <span className="text-[10px] text-slate-400 block font-medium">CIH Bank • RIB (24 Chiffres)</span>
+                <span className="font-mono text-xs font-bold text-white tracking-wide truncate block">
+                  230825354630321100590031
+                </span>
+              </div>
+            </div>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={() => handleCopy("230825354630321100590031", "RIB CIH")}
+              className="h-8 px-2.5 text-xs rounded-xl border-white/10 hover:bg-white/10 text-white shrink-0 cursor-pointer"
+            >
+              {copiedKey === "230825354630321100590031" ? (
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+              ) : (
+                <Copy className="w-3.5 h-3.5" />
+              )}
+              <span className="ml-1.5">{copiedKey === "230825354630321100590031" ? "Copié" : "Copier"}</span>
+            </Button>
           </div>
         </div>
 
@@ -178,27 +287,16 @@ export function WorkspaceProModal({ isOpen, onClose }: WorkspaceProModalProps) {
               size="lg"
               className="w-full h-12 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs sm:text-sm shadow-[0_0_20px_rgba(245,158,11,0.3)] border-0 gap-2 cursor-pointer transition-transform hover:scale-[1.01]"
             >
-              <Zap className="w-4 h-4 fill-slate-950 text-slate-950" />
+              <MessageSquare className="w-4 h-4 fill-slate-950 text-slate-950" />
               <span>
                 {isAr
-                  ? "ترقية إلى PRO بـ 499 درهم (عبر واتساب)"
+                  ? `تأكيد باقة ${activePlan.duration} (${activePlan.price} درهم عبر واتساب)`
                   : isFr
-                  ? "Passer à PRO à 499 MAD (via WhatsApp)"
-                  : "Upgrade to PRO at 499 MAD (WhatsApp)"}
+                  ? `Confirmer le pass ${activePlan.duration} (${activePlan.price} MAD via WhatsApp)`
+                  : `Confirm ${activePlan.duration} Pass (${activePlan.price} MAD on WhatsApp)`}
               </span>
             </Button>
           </a>
-
-          <Link href="/upgrade/payment" onClick={onClose} className="w-full sm:w-auto">
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full sm:w-auto h-12 rounded-xl border-white/10 hover:bg-white/[0.06] text-white font-bold text-xs px-4 gap-1.5 cursor-pointer"
-            >
-              <CreditCard className="w-4 h-4 text-amber-400" />
-              <span>{isAr ? "تحويل بنكي (CIH)" : isFr ? "Virement Bancaire (CIH)" : "Bank Transfer (CIH)"}</span>
-            </Button>
-          </Link>
         </div>
 
         {/* Minimal Assurance Footer */}
@@ -206,10 +304,10 @@ export function WorkspaceProModal({ isOpen, onClose }: WorkspaceProModalProps) {
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
           <span>
             {isAr
-              ? "تفعيل فوري لكافة أدوات Workspace OS بمجرد تأكيد الوصل عبر واتساب أو التحويل البنكي"
+              ? "تفعيل فوري لـ Workspace OS بمجرد إرسال الوصل على واتساب • بياناتك وعملائك محفوظة دائماً"
               : isFr
-              ? "Activation immédiate d'Eensell OS dès confirmation du reçu sur WhatsApp ou virement bancaire"
-              : "Instant activation of Eensell Workspace OS upon payment receipt confirmation"}
+              ? "Activation immédiate dès envoi du reçu • Vos leads et données CRM restent toujours sauvegardés"
+              : "Instant activation upon WhatsApp confirmation • Your leads and CRM data are always preserved"}
           </span>
         </div>
       </DialogContent>

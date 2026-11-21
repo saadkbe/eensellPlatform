@@ -409,3 +409,38 @@ export const getLeaderboard = unstable_cache(
   ["leaderboard-top-10"],
   { revalidate: 30 }
 );
+
+// Save or update user WhatsApp phone number
+export async function updateUserPhone(rawPhone: string) {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  const cleaned = rawPhone.trim().replace(/[\s\-\(\)\.]/g, "");
+  if (!cleaned || cleaned.length < 8) {
+    throw new Error("Veuillez saisir un numéro de téléphone valide");
+  }
+
+  // Format to standard WhatsApp format (e.g. 2126XXXXXXXX)
+  let formatted = cleaned;
+  if (formatted.startsWith("+")) {
+    formatted = formatted.substring(1);
+  }
+  if (formatted.startsWith("0")) {
+    // 06... or 07... -> 2126...
+    formatted = `212${formatted.substring(1)}`;
+  } else if (!formatted.startsWith("212") && formatted.length === 9) {
+    // 6XXXXXXXX -> 2126XXXXXXXX
+    formatted = `212${formatted}`;
+  }
+
+  const updated = await db.user.update({
+    where: { clerkId: userId },
+    data: { phone: formatted },
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/admin/active-users");
+  revalidatePath("/admin/users");
+
+  return { success: true, phone: updated.phone };
+}

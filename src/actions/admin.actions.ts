@@ -58,12 +58,15 @@ export async function approveUser(userId: string) {
   try {
     await requireAdmin();
 
+    const oneMonthFromNow = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
     user = await db.user.update({
       where: { id: userId },
       data: {
         status: "ACTIVE",
         role: "ACTIVE_USER",
         tier: "UNIVERSITY_V2",
+        workspaceExpiresAt: oneMonthFromNow,
       },
     });
 
@@ -286,4 +289,35 @@ export async function getAdminStats() {
     totalLessons,
     recentSignups,
   };
+}
+
+// Extend or renew a user's Workspace OS access pass (1 month = 199 MAD, 3 months = 499 MAD, etc.)
+export async function extendWorkspacePass(userId: string, monthsToAdd: number) {
+  await requireAdmin();
+
+  const targetUser = await db.user.findUnique({ where: { id: userId } });
+  if (!targetUser) throw new Error("User not found");
+
+  const currentExpiry =
+    targetUser.workspaceExpiresAt && targetUser.workspaceExpiresAt > new Date()
+      ? new Date(targetUser.workspaceExpiresAt)
+      : new Date();
+
+  const newExpiry = new Date(
+    currentExpiry.getTime() + monthsToAdd * 30 * 24 * 60 * 60 * 1000
+  );
+
+  const updated = await db.user.update({
+    where: { id: userId },
+    data: {
+      workspaceExpiresAt: newExpiry,
+    },
+  });
+
+  revalidatePath("/admin/users");
+  revalidatePath("/admin/active-users");
+  revalidatePath("/workspace");
+  revalidatePath("/dashboard");
+
+  return updated;
 }
