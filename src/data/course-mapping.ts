@@ -27,7 +27,7 @@ export const COURSE_CATEGORIES: CourseCategory[] = [
     description: "Master the AI opportunity landscape, develop an entrepreneurial mindset, and understand the tools that power modern automation.",
     icon: "Brain",
     color: "from-violet-500 to-purple-600",
-    moduleOrders: [0], // AI Foundations & Opportunity Mindset
+    moduleOrders: [0],
   },
   {
     id: "course-2",
@@ -36,7 +36,7 @@ export const COURSE_CATEGORIES: CourseCategory[] = [
     description: "Deep-dive into the most powerful AI tools and master advanced prompting frameworks.",
     icon: "Wand2",
     color: "from-blue-500 to-cyan-500",
-    moduleOrders: [1, 17], // AI Tools Mastery + AI Prompt Engineering Mastery
+    moduleOrders: [1],
   },
   {
     id: "course-3",
@@ -45,7 +45,7 @@ export const COURSE_CATEGORIES: CourseCategory[] = [
     description: "Learn how to build high-converting websites and landing pages using AI.",
     icon: "LayoutTemplate",
     color: "from-pink-500 to-rose-500",
-    moduleOrders: [3], // AI Website & Landing Page Creation
+    moduleOrders: [2],
   },
   {
     id: "course-4",
@@ -54,7 +54,7 @@ export const COURSE_CATEGORIES: CourseCategory[] = [
     description: "Build powerful automations with Make.com, AI chatbots, WhatsApp bots, and intelligent AI agents.",
     icon: "Zap",
     color: "from-amber-500 to-orange-500",
-    moduleOrders: [2, 7], // AI Automation & Workflows + AI Chatbots & AI Agents
+    moduleOrders: [3],
   },
   {
     id: "course-5",
@@ -63,7 +63,7 @@ export const COURSE_CATEGORIES: CourseCategory[] = [
     description: "Build high-velocity content systems — from viral short-form to cinematic AI video production.",
     icon: "Video",
     color: "from-emerald-500 to-teal-500",
-    moduleOrders: [4, 5, 6, 13], // Content Creation + Viral Short-Form + Ads Video + Video Editing
+    moduleOrders: [4],
   },
   {
     id: "course-6",
@@ -72,7 +72,7 @@ export const COURSE_CATEGORIES: CourseCategory[] = [
     description: "Set up your AI business from scratch — legal, pricing, offer structuring, and scalable product models.",
     icon: "Building2",
     color: "from-sky-500 to-blue-500",
-    moduleOrders: [8, 12, 10], // Building AI Business + AI SaaS & Startup Ideas + Personal Branding
+    moduleOrders: [5],
   },
   {
     id: "course-7",
@@ -81,7 +81,7 @@ export const COURSE_CATEGORIES: CourseCategory[] = [
     description: "Learn cold outreach, lead scraping, freelancing strategies, and close your first paying clients.",
     icon: "Users",
     color: "from-green-500 to-emerald-600",
-    moduleOrders: [9, 11, 16], // Client Acquisition + Freelancing + Marketing/Copywriting
+    moduleOrders: [6],
   },
 ];
 

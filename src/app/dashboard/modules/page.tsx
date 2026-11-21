@@ -12,7 +12,6 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
-import { COURSE_CATEGORIES } from "@/data/course-mapping";
 
 const iconMap: Record<string, any> = {
   Brain, Wand2, Video, Zap, Megaphone, Building2, Users, DollarSign, Rocket, LayoutTemplate
@@ -118,7 +117,7 @@ export default async function ModulesPage({
       </div>
 
       {/* Courses Grid */}
-      {COURSE_CATEGORIES.length === 0 ? (
+      {modules.length === 0 ? (
         <div className="text-center py-20">
           <div className="w-16 h-16 rounded-2xl bg-card border border-border flex items-center justify-center mx-auto mb-4">
             <BookOpen className="w-7 h-7 text-muted-foreground" />
@@ -130,20 +129,16 @@ export default async function ModulesPage({
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
-          {COURSE_CATEGORIES.map((course, index) => {
-            const courseModules = modules
-              .filter((m) => course.moduleOrders.includes(m.order))
-              .sort((a, b) => a.order - b.order);
+          {modules.map((courseModule, index) => {
+            const courseCode = `M${index + 1}`;
+            const isPublished = courseModule.isPublished && courseModule.lessons.length > 0;
+            const courseImageUrl = courseModule.imageUrl;
+            const IconComponent = BookOpen;
 
-            const isPublished = courseModules.some((m) => m.isPublished);
-
-            const courseImageUrl = courseModules.find((m) => m.imageUrl)?.imageUrl;
-            const IconComponent = iconMap[course.icon] || BookOpen;
-
-            // For unpublished courses, they are "locked" and "upcoming"
+            // For unpublished or 0-lesson courses, they are "locked" and "upcoming"
             if (!isPublished) {
               return (
-                <div key={`upcoming-${course.id}`}>
+                <div key={`upcoming-${courseModule.id}`}>
                   <Card className="bg-black border-border/40 transition-all duration-500 group h-full overflow-hidden flex flex-col shadow-xl hover:shadow-2xl rounded-3xl p-0 gap-0 relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/[0.02] to-white/[0.05] pointer-events-none z-0" />
                     
@@ -152,7 +147,7 @@ export default async function ModulesPage({
                       {courseImageUrl ? (
                         <img 
                           src={courseImageUrl} 
-                          alt={course.title}
+                          alt={courseModule.title}
                           className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
                         />
                       ) : (
@@ -168,7 +163,7 @@ export default async function ModulesPage({
                       {/* Floating Badges on Image */}
                       <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
                         <span className="px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-xs font-black text-white uppercase tracking-widest border border-white/20 shadow-2xl">
-                          {course.code}
+                          {courseCode}
                         </span>
                         <Badge className="bg-amber-500 hover:bg-amber-400 text-white border-transparent text-xs shadow-[0_0_20px_rgba(245,158,11,0.5)] backdrop-blur-md font-black tracking-wider px-3 py-1 rounded-xl">
                           <Lock className="w-3.5 h-3.5 mr-1.5" />
@@ -179,10 +174,10 @@ export default async function ModulesPage({
 
                     <CardContent className="p-5 sm:p-6 pt-2 flex flex-col flex-1 z-20 bg-black">
                       <h3 className="text-lg sm:text-xl font-black text-white mb-2 tracking-tight leading-tight">
-                        {course.title}
+                        {courseModule.title}
                       </h3>
                       <p className="text-xs sm:text-sm text-slate-400/90 line-clamp-2 mb-6 leading-relaxed font-normal">
-                        {course.description || "This course is currently in production and will be dropping soon. Stay tuned!"}
+                        {courseModule.description || "This course is currently in production and will be dropping soon. Stay tuned!"}
                       </p>
 
                       <div className="mt-auto pt-4 border-t border-white/10">
@@ -202,9 +197,7 @@ export default async function ModulesPage({
             }
 
             // Published courses logic
-            const courseLessons = courseModules.flatMap((m) =>
-              m.lessons.map((l) => ({ ...l, moduleId: m.id }))
-            );
+            const courseLessons = courseModule.lessons.map((l) => ({ ...l, moduleId: courseModule.id }));
             const totalLessons = courseLessons.length;
             const completedCount = courseLessons.filter((l) =>
               completedLessonIds.has(l.id)
@@ -223,7 +216,7 @@ export default async function ModulesPage({
 
             return (
               <Link
-                key={course.id}
+                key={courseModule.id}
                 href={
                   firstLesson
                     ? `/dashboard/modules/${firstLesson.moduleId}/${firstLesson.id}`
@@ -239,7 +232,7 @@ export default async function ModulesPage({
                       {courseImageUrl ? (
                         <img 
                           src={courseImageUrl} 
-                          alt={course.title}
+                          alt={courseModule.title}
                           className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
                         />
                       ) : (
@@ -255,7 +248,7 @@ export default async function ModulesPage({
                       {/* Floating Badges on Image */}
                       <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
                         <span className="px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-xs font-black text-white uppercase tracking-widest border border-white/20 shadow-2xl">
-                          {course.code}
+                          {courseCode}
                         </span>
                         {isCompleted ? (
                           <Badge className="bg-emerald-500 hover:bg-emerald-400 text-white border-transparent text-xs shadow-[0_0_20px_rgba(16,185,129,0.5)] backdrop-blur-md font-black tracking-wider px-3 py-1 rounded-xl">
@@ -279,11 +272,11 @@ export default async function ModulesPage({
                   <CardContent className="p-5 sm:p-6 pt-2 flex flex-col flex-1 z-20 bg-black">
                     {/* Title & description */}
                     <h3 className="text-lg sm:text-xl font-black text-white mb-2 group-hover:text-primary transition-colors tracking-tight leading-tight">
-                      {course.title}
+                      {courseModule.title}
                     </h3>
-                    {course.description && (
+                    {courseModule.description && (
                       <p className="text-xs sm:text-sm text-slate-300/90 line-clamp-2 mb-5 leading-relaxed font-normal">
-                        {course.description}
+                        {courseModule.description}
                       </p>
                     )}
 

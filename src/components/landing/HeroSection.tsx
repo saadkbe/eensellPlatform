@@ -158,15 +158,15 @@ export function HeroSection() {
           </span>
         </motion.div>
 
-        {/* Refined, Prestigious Headline */}
+        {/* Refined, Personal & Hooky Headline */}
         <motion.h1
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-black text-slate-950 tracking-tight leading-[1.18] mb-4 max-w-3xl text-balance"
+          className="text-2xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-black text-slate-950 tracking-tight leading-[1.14] mb-5 max-w-3xl text-balance"
         >
           {t("hero_v2_title_1")}{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-orange-600 to-amber-600">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700">
             {t("hero_v2_title_2")}
           </span>
         </motion.h1>
@@ -176,7 +176,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="text-xs sm:text-sm md:text-base text-slate-600 max-w-xl mx-auto mb-6 leading-relaxed font-medium text-balance"
+          className="text-sm sm:text-base md:text-lg text-slate-600 max-w-2xl mx-auto mb-7 leading-relaxed font-normal text-balance"
         >
           {t("hero_v2_sub")}
         </motion.p>
