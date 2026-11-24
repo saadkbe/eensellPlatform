@@ -15,11 +15,11 @@ export function Footer() {
           <div className="flex flex-col items-center md:items-start gap-3">
             <Link href="/" className="flex items-center">
               <Image
-                src="/logo2-cropped.png"
+                src="/logo2-cropped-black.png"
                 alt="Eensell University"
                 width={376}
                 height={106}
-                className="h-9 sm:h-11 w-auto object-contain brightness-0 dark:invert"
+                className="h-9 sm:h-11 w-auto object-contain"
               />
             </Link>
             <p className="text-xs sm:text-sm text-slate-500 max-w-sm text-center md:text-left rtl:md:text-right leading-relaxed">

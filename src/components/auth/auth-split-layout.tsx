@@ -53,12 +53,12 @@ export function AuthSplitLayout({ children, mode }: AuthSplitLayoutProps) {
           {/* Official Brand Logo - Big, Crisp & Prominent */}
           <Link href="/" className="mb-7 transition-transform hover:scale-[1.03] flex items-center justify-center">
             <Image
-              src="/logo2-cropped.png"
+              src="/logo2-cropped-black.png"
               alt="Eensell University"
               width={376}
               height={106}
               priority
-              className="h-10 sm:h-12 w-auto object-contain brightness-0 dark:invert"
+              className="h-10 sm:h-12 w-auto object-contain"
             />
           </Link>
 
