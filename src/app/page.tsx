@@ -4,6 +4,9 @@ import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 
 // Dynamically import below-the-fold sections
+const VslSection = dynamic(() =>
+  import("@/components/landing/VslSection").then((mod) => mod.VslSection)
+);
 const WorkspaceShowcaseSection = dynamic(() =>
   import("@/components/landing/WorkspaceShowcaseSection").then(
     (mod) => mod.WorkspaceShowcaseSection
@@ -61,6 +64,7 @@ export default function HomePage() {
 
       <main>
         <HeroSection />
+        <VslSection />
         <div id="workspace">
           <WorkspaceShowcaseSection />
         </div>

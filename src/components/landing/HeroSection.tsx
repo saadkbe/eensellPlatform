@@ -97,7 +97,6 @@ const techStack = [
 
 export function HeroSection() {
   const { dir, t, isRTL, language } = useLanguage();
-  const [isPlayingVideo, setIsPlayingVideo] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -210,17 +209,18 @@ export function HeroSection() {
             </Button>
           </Link>
 
-          <Button
-            size="lg"
-            variant="outline"
-            onClick={() => setIsPlayingVideo(true)}
-            className="w-full sm:w-auto h-13 px-7 text-xs sm:text-sm md:text-base font-bold bg-slate-900/80 hover:bg-slate-800 text-white border-white/20 backdrop-blur-md rounded-2xl shadow-xl transition-all hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2.5"
-          >
-            <div className="w-5 h-5 rounded-full bg-orange-500/20 border border-orange-400/40 flex items-center justify-center">
-              <Play className="w-2.5 h-2.5 fill-orange-400 text-orange-400 ml-0.5" />
-            </div>
-            <span>{t("hero_v2_cta_secondary")}</span>
-          </Button>
+          <a href="#vsl-player" className="w-full sm:w-auto">
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-full sm:w-auto h-13 px-7 text-xs sm:text-sm md:text-base font-bold bg-slate-900/80 hover:bg-slate-800 text-white border-white/20 backdrop-blur-md rounded-2xl shadow-xl transition-all hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2.5"
+            >
+              <div className="w-5 h-5 rounded-full bg-orange-500/20 border border-orange-400/40 flex items-center justify-center">
+                <Play className="w-2.5 h-2.5 fill-orange-400 text-orange-400 ml-0.5 rtl:rotate-180" />
+              </div>
+              <span>{t("hero_v2_cta_secondary")}</span>
+            </Button>
+          </a>
         </motion.div>
 
         {/* Live Verified Trust Metrics below the Video */}
@@ -297,46 +297,6 @@ export function HeroSection() {
           </motion.div>
         </div>
       </div>
-
-      {/* ── CINEMATIC VSL VIDEO MODAL LIGHTBOX ── */}
-      <AnimatePresence>
-        {isPlayingVideo && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6"
-            onClick={() => setIsPlayingVideo(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.92, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.92, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-5xl rounded-3xl overflow-hidden bg-black border border-white/15 shadow-[0_25px_90px_rgba(0,0,0,0.9)] aspect-video"
-            >
-              {/* Close Button */}
-              <button
-                type="button"
-                onClick={() => setIsPlayingVideo(false)}
-                className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-slate-900/90 hover:bg-orange-600 text-white flex items-center justify-center transition-colors shadow-lg border border-white/20"
-                aria-label="Close presentation video"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <video
-                src="/landingpagevideo.mp4"
-                controls
-                autoPlay
-                playsInline
-                className="w-full h-full object-contain"
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }

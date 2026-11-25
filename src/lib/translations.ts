@@ -30,6 +30,12 @@ export const translations = {
     hero_v2_pill_4: "شهر مجاني فـ Workspace OS",
     hero_v2_vsl_badge: "شاهد الشرح الكامل في 12 دقيقة",
     hero_v2_vsl_title: "كيفاش تبدا وتسد أول كليان ديالك فالمغرب بالذكاء الاصطناعي خطوة بخطوة",
+    vsl_badge: "ماستر كلاس مجاني • 12 دقيقة شرح تطبيقي",
+    vsl_hook_title_1: "شاهد كيفاش تبني وكالة ذكاء اصطناعي فالمغرب",
+    vsl_hook_title_2: "وتسد أول كليان بـ 10,000+ درهم.",
+    vsl_hook_desc: "بدون تعقيدات تقنية وبلا كتابة سطر برمجة واحد. سعد كيشرح ليك السيستيم الكامل خطوة بخطوة، نماذج الأتمتة الجاهزة، وسكريبتات الواتساب بالدارجة لإغلاق الصفقات.",
+    vsl_cta_button: "انضم للجامعة واحصل على كل شيء دابا — 499 درهم",
+    vsl_guarantee_pill: "ضمان استرجاع 14 يوم • تفعيل فوري",
 
     // ── V2 Workspace OS Section ──
     ws_badge: "نظام التشغيل المتكامل لوكالات الذكاء الاصطناعي",
@@ -765,6 +771,12 @@ export const translations = {
     hero_v2_pill_4: "1 Mois Offert à Workspace OS",
     hero_v2_vsl_badge: "Regardez la Démo Complète de 12 Minutes",
     hero_v2_vsl_title: "Comment Démarrer et Signer Vos Premiers Clients au Maroc avec l'IA",
+    vsl_badge: "Masterclass Gratuite • 12 Minutes en Accès Libre",
+    vsl_hook_title_1: "Comment Bâtir une Vraie Agence IA au Maroc",
+    vsl_hook_title_2: "Et Signer Vos Premiers Clients à 10 000+ DH.",
+    vsl_hook_desc: "Zéro jargon technique, sans compétences en code. Saad vous montre pas-à-pas le système complet, les blueprints d'automatisation prêts à l'emploi et les scripts WhatsApp pour closer vos premiers clients.",
+    vsl_cta_button: "Rejoindre Eensell University — 499 MAD",
+    vsl_guarantee_pill: "Garantie 14 jours • Accès Immédiat",
 
     // ── V2 Workspace OS Section ──
     ws_badge: "Système d'Exploitation d'Agence Autonome",
@@ -1500,6 +1512,12 @@ export const translations = {
     hero_v2_pill_4: "1 Free Month of Workspace OS",
     hero_v2_vsl_badge: "Watch The Full 12-Minute Breakdown",
     hero_v2_vsl_title: "How to Launch and Sign Your First High-Paying Clients with AI",
+    vsl_badge: "Free 12-Minute Masterclass • Full Breakdown",
+    vsl_hook_title_1: "How to Build a Real AI Business in Morocco",
+    vsl_hook_title_2: "And Close Your First 10,000+ MAD Retainers.",
+    vsl_hook_desc: "No tech jargon, zero coding required. Saad breaks down the exact operating system, pre-built automation blueprints, and Moroccan WhatsApp outreach scripts that close high-paying clients.",
+    vsl_cta_button: "Join Eensell University Now — 499 MAD",
+    vsl_guarantee_pill: "14-Day Money Back Guarantee • Instant Access",
 
     // ── V2 Workspace OS Section ──
     ws_badge: "Autonomous Agency Operating System",

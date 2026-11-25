@@ -5,7 +5,13 @@ import Link from "next/link";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 
 export function Footer() {
-  const { dir, t } = useLanguage();
+  const { dir, t, language, setLanguage } = useLanguage();
+
+  const languages = [
+    { code: "ar" as const, label: "العربية" },
+    { code: "fr" as const, label: "Français" },
+    { code: "en" as const, label: "English" },
+  ];
 
   return (
     <footer dir={dir} className="relative py-14 sm:py-20 bg-white border-t border-slate-200/80 text-slate-600">
@@ -57,11 +63,29 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom copyright & contact */}
+        {/* Bottom copyright, language & contact */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
           <p>© {new Date().getFullYear()} Eensell University. Orders processed via Paddle (Merchant of Record).</p>
 
           <div className="flex items-center gap-4">
+            {/* Clean Footer Language Toggle */}
+            <div className="flex items-center gap-1 bg-slate-100 rounded-full p-0.5 border border-slate-200">
+              {languages.map((l) => (
+                <button
+                  key={l.code}
+                  type="button"
+                  onClick={() => setLanguage(l.code)}
+                  className={`px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer ${
+                    language === l.code
+                      ? "bg-white text-slate-900 shadow-xs"
+                      : "text-slate-500 hover:text-slate-900"
+                  }`}
+                >
+                  {l.label}
+                </button>
+              ))}
+            </div>
+
             <span>
               {t("footer_support")}{" "}
               <a href="mailto:contact@eensell.com" className="font-semibold text-slate-700 hover:text-slate-950 transition-colors">
