@@ -38,8 +38,8 @@ export function PricingSection() {
       dir={dir}
       className="relative py-20 sm:py-32 bg-[#FAFBFE] text-slate-900 overflow-hidden border-t border-slate-200/70"
     >
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[550px] bg-gradient-to-tr from-indigo-100/40 via-violet-50/30 to-emerald-50/30 rounded-full blur-[140px] pointer-events-none" />
+      {/* Background ambient lighting - Warm Orange to Orangish-Yellow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[550px] bg-gradient-to-tr from-orange-100/40 via-amber-50/30 to-orange-50/20 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="container max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header */}
@@ -50,7 +50,7 @@ export function PricingSection() {
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 shadow-2xs mb-4 text-xs font-bold text-slate-800 tracking-wide uppercase"
           >
-            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+            <Sparkles className="w-3.5 h-3.5 text-orange-500" />
             <span>{t("pricing_v2_badge")}</span>
           </motion.div>
 
@@ -62,7 +62,7 @@ export function PricingSection() {
             className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 tracking-tight leading-tight mb-4"
           >
             {t("pricing_v2_title_1")}{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-500 to-orange-700">
               {t("pricing_v2_title_2")}
             </span>
           </motion.h2>
@@ -87,9 +87,9 @@ export function PricingSection() {
           className="relative max-w-4xl mx-auto rounded-[2.5rem] bg-white border-2 border-slate-200/90 shadow-[0_20px_70px_-15px_rgba(15,23,42,0.12)] overflow-hidden"
         >
           {/* Top Banner Header */}
-          <div className="px-6 sm:px-8 py-3.5 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 text-white flex flex-wrap items-center justify-between gap-3">
+          <div className="px-6 sm:px-8 py-3.5 bg-gradient-to-r from-slate-950 via-slate-900 to-black text-white flex flex-wrap items-center justify-between gap-3 border-b border-orange-500/20">
             <div className="flex items-center gap-2 text-xs font-bold">
-              <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
+              <span className="flex h-2 w-2 rounded-full bg-orange-400 animate-ping" />
               <span>OFFICIAL V2 RELEASE &bull; ENROLLMENT OPEN</span>
             </div>
             <div className="flex items-center gap-2 text-xs font-semibold text-slate-300">
@@ -103,7 +103,7 @@ export function PricingSection() {
             <div className="lg:w-5/12 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-100 lg:pr-10 pb-8 lg:pb-0">
               <div>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-indigo-50 text-indigo-700 border border-indigo-200">
+                  <span className="px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-orange-50 text-orange-700 border border-orange-200">
                     PROGRAM PASS
                   </span>
                   <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1">
@@ -131,8 +131,8 @@ export function PricingSection() {
                       {t("pricing_v2_old_price")}
                     </span>
                   </div>
-                  <p className="text-xs text-emerald-700 font-bold flex items-center gap-1 mt-1">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <p className="text-xs text-orange-700 font-bold flex items-center gap-1 mt-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-orange-600 shrink-0" />
                     <span>{t("pricing_v2_frequency")}</span>
                   </p>
                 </div>
@@ -143,10 +143,10 @@ export function PricingSection() {
                 <Link href="/sign-up" className="block w-full">
                   <Button
                     size="lg"
-                    className="w-full h-12 rounded-2xl text-xs sm:text-sm font-bold bg-slate-950 hover:bg-slate-900 text-white shadow-xl cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center gap-2"
+                    className="w-full h-12 rounded-2xl text-xs sm:text-sm font-bold bg-slate-950 hover:bg-slate-900 text-white shadow-xl cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center gap-2 group"
                   >
                     <span>{t("pricing_v2_cta")}</span>
-                    <ArrowRight className="w-4 h-4 rtl:rotate-180" />
+                    <ArrowRight className="w-4 h-4 rtl:rotate-180 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
 
@@ -161,14 +161,14 @@ export function PricingSection() {
                     variant="outline"
                     className="w-full h-11 rounded-2xl text-xs font-bold bg-white hover:bg-slate-50 text-slate-800 border-slate-200 shadow-2xs cursor-pointer flex items-center justify-center gap-2"
                   >
-                    <MessageCircle className="w-4 h-4 text-emerald-600" />
+                    <MessageCircle className="w-4 h-4 text-orange-500" />
                     <span>CIH Bank / WhatsApp</span>
                   </Button>
                 </a>
 
                 <div className="pt-2 flex items-center justify-center gap-4 text-[11px] text-slate-500 font-medium">
                   <span className="flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> {t("pricing_v2_guarantee")}
+                    <ShieldCheck className="w-3.5 h-3.5 text-orange-500" /> {t("pricing_v2_guarantee")}
                   </span>
                 </div>
               </div>
@@ -178,14 +178,14 @@ export function PricingSection() {
             <div className="lg:w-7/12 flex flex-col justify-between">
               <div>
                 <h4 className="text-sm font-extrabold uppercase tracking-wider text-slate-900 mb-5 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-indigo-600" />
+                  <Sparkles className="w-4 h-4 text-orange-500" />
                   <span>{t("pricing_v2_inc_heading")}</span>
                 </h4>
 
                 <ul className="space-y-3.5">
                   {includedItems.map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
-                      <div className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 mt-0.5 text-emerald-700">
+                      <div className="w-4 h-4 rounded-full bg-orange-100 flex items-center justify-center shrink-0 mt-0.5 text-orange-700">
                         <Check className="w-3 h-3 stroke-[2.5]" />
                       </div>
                       <span>{item}</span>

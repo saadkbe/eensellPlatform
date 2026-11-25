@@ -25,8 +25,8 @@ export function FaqSection() {
           
           <div className="lg:col-span-5 relative">
             <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="sticky top-32">
-              <div className="w-20 h-20 rounded-[2rem] bg-gradient-to-br from-[#FF6B4A]/20 to-purple-500/10 flex items-center justify-center mb-8 border border-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.8),0_10px_20px_rgba(255,107,74,0.15)] relative backdrop-blur-md">
-                <div className="absolute inset-0 bg-[#FF6B4A]/10 rounded-[2rem] blur-xl" />
+              <div className="w-20 h-20 rounded-[2rem] bg-gradient-to-br from-orange-500/20 to-amber-500/15 flex items-center justify-center mb-8 border border-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.8),0_10px_20px_rgba(249,115,22,0.15)] relative backdrop-blur-md">
+                <div className="absolute inset-0 bg-orange-500/10 rounded-[2rem] blur-xl" />
                 <span className="text-4xl relative z-10 drop-shadow-md">💡</span>
               </div>
               <h2 className="text-4xl font-black text-zinc-900 mb-6 tracking-tight">

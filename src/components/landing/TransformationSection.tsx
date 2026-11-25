@@ -63,8 +63,8 @@ export function TransformationSection() {
       dir={dir}
       className="relative py-20 sm:py-32 bg-[#FAFBFE] text-slate-900 overflow-hidden border-t border-slate-200/70"
     >
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-gradient-to-b from-indigo-100/30 to-purple-50/20 rounded-full blur-[140px] pointer-events-none" />
+      {/* Background ambient lighting - Orange to Orangish-Yellow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-gradient-to-b from-orange-100/30 to-amber-50/20 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="container max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header */}
@@ -75,7 +75,7 @@ export function TransformationSection() {
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 shadow-2xs mb-4 text-xs font-bold text-slate-700 tracking-wide uppercase"
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#FF6B4A]" />
+            <Sparkles className="w-3.5 h-3.5 text-orange-500" />
             <span>
               {language === "ar"
                 ? "المقارنة الحقيقية"
@@ -95,21 +95,21 @@ export function TransformationSection() {
             {language === "ar" ? (
               <>
                 توقف عن التخبط اليدوي.{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-500 to-orange-700">
                   وانتقل إلى أتمتة الأرباح.
                 </span>
               </>
             ) : language === "fr" ? (
               <>
                 Arrêtez le Bricolage Manuel.{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-500 to-orange-700">
                   Passez à la Croissance Prédictible.
                 </span>
               </>
             ) : (
               <>
                 Stop The Manual Churn.{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-500 to-orange-700">
                   Switch to Predictable Growth.
                 </span>
               </>
@@ -193,14 +193,14 @@ export function TransformationSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="relative rounded-[2.5rem] bg-white border-2 border-emerald-500/30 p-8 sm:p-10 shadow-[0_12px_45px_rgba(16,185,129,0.08)] flex flex-col justify-between overflow-hidden"
+            className="relative rounded-[2.5rem] bg-white border-2 border-orange-500/40 p-8 sm:p-10 shadow-[0_12px_45px_rgba(249,115,22,0.12)] flex flex-col justify-between overflow-hidden"
           >
-            {/* Top decorative accent gradient line */}
-            <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-indigo-500" />
+            {/* Top decorative accent gradient line - Orange to Orangish-Yellow */}
+            <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-orange-600 via-amber-400 to-orange-500" />
 
             <div>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 font-black text-xs uppercase tracking-wider mb-8 shadow-2xs">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-orange-800 font-black text-xs uppercase tracking-wider mb-8 shadow-2xs">
+                <CheckCircle2 className="w-4 h-4 text-orange-600" />
                 <span>
                   {language === "ar"
                     ? "بعد الانضمام: محرك إينسيل الذكي المؤتمت"
@@ -224,7 +224,7 @@ export function TransformationSection() {
                     key={idx}
                     className="flex items-start gap-3.5 text-xs sm:text-sm text-slate-800 font-medium leading-relaxed"
                   >
-                    <div className="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 mt-0.5 text-emerald-700">
+                    <div className="w-5 h-5 rounded-full bg-orange-100 flex items-center justify-center shrink-0 mt-0.5 text-orange-700">
                       <CheckCircle2 className="w-3.5 h-3.5" />
                     </div>
                     <span>{item}</span>
@@ -233,8 +233,8 @@ export function TransformationSection() {
               </ul>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-slate-100 text-xs font-bold text-emerald-700 flex items-center gap-2">
-              <span className="flex h-2 w-2 rounded-full bg-emerald-500" />
+            <div className="mt-8 pt-6 border-t border-slate-100 text-xs font-bold text-orange-700 flex items-center gap-2">
+              <span className="flex h-2 w-2 rounded-full bg-orange-500" />
               <span>
                 {language === "ar"
                   ? "النتيجة: عقود شهرية بين 15,000 و 30,000 درهم، عملاء من الطراز الرفيع، وعمل منظم."

@@ -2,22 +2,17 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
-  Check,
   Sparkles,
   ArrowRight,
   Play,
-  Clock,
   ShieldCheck,
   CheckCircle2,
-  Maximize2,
   Star,
-  Users,
-  Flame,
   Zap,
+  X,
 } from "lucide-react";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 
@@ -75,7 +70,7 @@ const techStack = [
     name: "ElevenLabs Voice",
     category: "Audio Voice Notes",
     icon: (
-      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-slate-900 dark:fill-white" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white" xmlns="http://www.w3.org/2000/svg">
         <path d="M5.5 3h3v18h-3V3zm10 0h3v18h-3V3z" />
       </svg>
     ),
@@ -98,24 +93,6 @@ const techStack = [
       </svg>
     ),
   },
-  {
-    name: "Apify Cloud",
-    category: "Data Extraction",
-    icon: (
-      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-[#00A651]" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#00A651" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-      </svg>
-    ),
-  },
-  {
-    name: "Stripe & CIH",
-    category: "Retainers & Invoicing",
-    icon: (
-      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-[#635BFF]" xmlns="http://www.w3.org/2000/svg">
-        <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697.5 12.521.5 6.084.5 1.77 3.843 1.77 9.537c0 5.86 5.485 6.84 8.784 8.077 2.378.89 3.197 1.624 3.197 2.617 0 1.015-.905 1.572-2.39 1.572-2.41 0-5.11-1.127-6.937-2.188l-.946 5.626c1.69.832 4.673 1.517 7.883 1.517 6.643 0 10.868-3.19 10.868-9.356 0-5.69-5.263-6.903-8.253-8.252z"/>
-      </svg>
-    ),
-  },
 ];
 
 export function HeroSection() {
@@ -125,49 +102,63 @@ export function HeroSection() {
   return (
     <section
       dir={dir}
-      className="relative pt-28 sm:pt-36 md:pt-40 pb-12 sm:pb-16 flex flex-col items-center justify-center overflow-hidden bg-white text-slate-900"
+      className="relative w-full overflow-hidden flex flex-col justify-between items-center text-center bg-black text-white aspect-[9/16] md:aspect-video min-h-[680px] md:min-h-[780px] lg:min-h-[860px]"
     >
-      {/* ── Ambient Web3 Light Mesh Gradients ── */}
-      <div className="absolute top-0 inset-x-0 h-[650px] overflow-hidden pointer-events-none select-none z-0">
-        <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-70" />
-        <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-gradient-to-b from-orange-100/40 via-amber-50/40 to-transparent rounded-full blur-[140px]" />
-        <div className="absolute top-[80px] left-[10%] w-[450px] h-[350px] bg-orange-100/30 rounded-full blur-[130px]" />
-        <div className="absolute top-[120px] right-[10%] w-[450px] h-[350px] bg-emerald-100/30 rounded-full blur-[130px]" />
+      {/* ── BACKGROUND VIDEO LOOP WITH ASPECT RATIO 16:9 (Laptop) & 9:16 (Mobile) ── */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none select-none">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="w-full h-full object-cover aspect-[9/16] md:aspect-video scale-105"
+        >
+          <source src="/herovideobackground.mp4" type="video/mp4" />
+          <source src="/herovideobackground.MOV" type="video/quicktime" />
+        </video>
+
+        {/* ── DARK SUBTLE OVERLAY WITH VIGNETTE FOR CRISP CONTRAST ── */}
+        <div className="absolute inset-0 bg-slate-950/65 backdrop-blur-[0.5px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/45 to-black/95" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_rgba(2,6,23,0.7)_100%)]" />
+
+        {/* ── SIGNATURE ORANGE-TO-AMBER AMBIENT TOP LIGHT ── */}
+        <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-orange-500/20 via-amber-500/10 to-transparent pointer-events-none" />
       </div>
 
-      {/* ── MAIN HERO HEADER (High Trust, Authority & Social Proof) ── */}
-      <div className="relative z-20 container max-w-4xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center">
-        
+      {/* ── FOREGROUND CONTENT (Centered Hero Text & Actions) ── */}
+      <div className="relative z-20 container max-w-4xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center my-auto pt-24 sm:pt-32 md:pt-36 pb-8">
         {/* Authority & Trust Badge Pill */}
         <motion.div
-          initial={{ opacity: 0, y: -8 }}
+          initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-50 border border-slate-200/90 shadow-2xs mb-5 group hover:border-orange-500/40 transition-colors"
+          transition={{ duration: 0.5 }}
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/80 border border-white/20 shadow-xl mb-6 backdrop-blur-md group hover:border-orange-500/50 transition-colors"
         >
-          <div className="flex items-center gap-1 text-amber-500">
+          <div className="flex items-center gap-1 text-amber-400">
             {[1, 2, 3, 4, 5].map((i) => (
               <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
             ))}
           </div>
-          <span className="text-[11px] font-bold text-slate-800 tracking-wide">
+          <span className="text-[11px] font-bold text-slate-200 tracking-wide">
             {t("hero_v2_badge")}
           </span>
           <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
-          <span className="text-[11px] font-extrabold text-orange-600 uppercase tracking-wider">
+          <span className="text-[11px] font-black text-orange-400 uppercase tracking-wider">
             1,370 Membres
           </span>
         </motion.div>
 
-        {/* Refined, Personal & Hooky Headline */}
+        {/* Massive Hooky Headline */}
         <motion.h1
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-2xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-black text-slate-950 tracking-tight leading-[1.14] mb-5 max-w-3xl text-balance"
+          className="text-3xl sm:text-5xl md:text-6xl lg:text-[4rem] font-black text-white tracking-tight leading-[1.12] mb-6 max-w-4xl text-balance drop-shadow-[0_10px_25px_rgba(0,0,0,0.8)]"
         >
           {t("hero_v2_title_1")}{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500 drop-shadow-sm">
             {t("hero_v2_title_2")}
           </span>
         </motion.h1>
@@ -177,7 +168,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="text-sm sm:text-base md:text-lg text-slate-600 max-w-2xl mx-auto mb-7 leading-relaxed font-normal text-balance"
+          className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-200/90 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed font-normal text-balance drop-shadow-md"
         >
           {t("hero_v2_sub")}
         </motion.p>
@@ -187,12 +178,12 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto mb-8"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto mb-8"
         >
           <Link href="/sign-up" className="w-full sm:w-auto">
             <Button
               size="lg"
-              className="w-full sm:w-auto h-12 px-8 text-xs sm:text-sm font-bold bg-slate-950 hover:bg-slate-900 text-white rounded-xl shadow-lg transition-all hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2 group"
+              className="w-full sm:w-auto h-13 px-9 text-xs sm:text-sm md:text-base font-bold bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-2xl shadow-[0_12px_45px_-5px_rgba(249,115,22,0.6)] transition-all hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2 border border-orange-400/30 group"
             >
               <span>{t("hero_v2_cta_primary")}</span>
               <ArrowRight className="w-4 h-4 rtl:rotate-180 group-hover:translate-x-1 transition-transform" />
@@ -202,137 +193,47 @@ export function HeroSection() {
           <Button
             size="lg"
             variant="outline"
-            onClick={() => document.getElementById("vsl-player")?.scrollIntoView({ behavior: "smooth" })}
-            className="w-full sm:w-auto h-12 px-6 text-xs sm:text-sm font-bold bg-white hover:bg-slate-50 text-slate-800 border-slate-200 rounded-xl shadow-2xs transition-all hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2"
+            onClick={() => setIsPlayingVideo(true)}
+            className="w-full sm:w-auto h-13 px-7 text-xs sm:text-sm md:text-base font-bold bg-slate-900/80 hover:bg-slate-800 text-white border-white/20 backdrop-blur-md rounded-2xl shadow-xl transition-all hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2.5"
           >
-            <div className="w-4 h-4 rounded-full bg-orange-50 flex items-center justify-center">
-              <Play className="w-2.5 h-2.5 fill-orange-600 text-orange-600 ml-0.5" />
+            <div className="w-5 h-5 rounded-full bg-orange-500/20 border border-orange-400/40 flex items-center justify-center">
+              <Play className="w-2.5 h-2.5 fill-orange-400 text-orange-400 ml-0.5" />
             </div>
             <span>{t("hero_v2_cta_secondary")}</span>
           </Button>
         </motion.div>
-      </div>
-
-      {/* ── THE VSL FRAME (Clean, Lightweight Video Player Frame) ── */}
-      <motion.div
-        id="vsl-player"
-        initial={{ opacity: 0, y: 25 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.25 }}
-        className="relative z-20 container max-w-4xl mx-auto px-4 sm:px-6"
-      >
-        {/* Glowing Rim Frame Container */}
-        <div className="relative rounded-2xl sm:rounded-3xl p-1.5 sm:p-2 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 border border-slate-300 dark:border-slate-800 shadow-[0_25px_80px_-15px_rgba(249,115,22,0.18)]">
-          
-          {/* Subtle Live Badge at Top of Video Frame */}
-          <div className="px-4 py-2 bg-slate-950 text-slate-400 border-b border-slate-800/80 rounded-t-xl sm:rounded-t-2xl flex items-center justify-between text-[11px] font-mono">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
-              <span className="font-bold text-slate-200">
-                {isRTL ? "عرض تقديمي مباشر • Eensell University V2" : "EXCLUSIF • Démonstration Pratique B2B Maroc"}
-              </span>
-            </div>
-            <div className="hidden sm:flex items-center gap-2 text-slate-400">
-              <Clock className="w-3.5 h-3.5 text-amber-400" />
-              <span>Full Video Breakdown</span>
-            </div>
-          </div>
-
-          {/* Interactive Video Frame Area */}
-          <div className="relative rounded-b-xl sm:rounded-b-2xl overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-black aspect-video flex flex-col items-center justify-center border border-white/5 select-none">
-            {isPlayingVideo ? (
-              <div className="relative w-full h-full bg-black">
-                <video
-                  src="/landingpagevideo.mp4"
-                  controls
-                  autoPlay
-                  playsInline
-                  className="w-full h-full object-contain"
-                />
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setIsPlayingVideo(true)}
-                className="relative w-full h-full flex flex-col items-center justify-center p-6 text-center group cursor-pointer focus:outline-none"
-                aria-label="Play presentation video"
-              >
-                {/* Cinematic Poster Image Background */}
-                <Image
-                  src="/workspace-banner.webp"
-                  alt="Video Presentation Preview"
-                  fill
-                  priority
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 896px"
-                  quality={80}
-                  className="object-cover object-center opacity-40 transition-all duration-700 group-hover:scale-105 group-hover:opacity-50"
-                />
-
-                {/* Dark Vignette Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-slate-950/60 to-black/70 pointer-events-none" />
-
-                {/* Glowing Play Icon Frame with Pulse */}
-                <div className="relative z-10 w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-tr from-orange-500 via-amber-500 to-yellow-400 flex items-center justify-center shadow-[0_0_40px_rgba(249,115,22,0.6)] group-hover:scale-115 group-active:scale-95 transition-all duration-300">
-                  <Play className="w-7 h-7 sm:w-8 sm:h-8 text-slate-950 fill-slate-950 ml-1" />
-                </div>
-
-                <div className="relative z-10 mt-5 space-y-1.5">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[11px] font-semibold text-white mb-1 shadow-sm">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                    <span>1080p Full HD &bull; 14 Min</span>
-                  </div>
-
-                  <p className="text-sm sm:text-base font-bold text-white tracking-wide group-hover:text-orange-400 transition-colors">
-                    {isRTL
-                      ? "فيديو الشرح التقديمي • Eensell University V2"
-                      : language === "fr"
-                      ? "Démonstration Complète Eensell University V2"
-                      : "Official Eensell University V2 Breakdown"}
-                  </p>
-                  <p className="text-xs text-slate-300 font-medium max-w-md">
-                    {isRTL
-                      ? "انقر لتشغيل الفيديو واكتشاف نظام العمل خطوة بخطوة"
-                      : language === "fr"
-                      ? "Cliquez pour lancer la vidéo et découvrir le système pas à pas"
-                      : "Click to play and discover the step-by-step agency operating system"}
-                  </p>
-                </div>
-              </button>
-            )}
-          </div>
-        </div>
 
         {/* Live Verified Trust Metrics below the Video */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.35 }}
-          className="mt-6 flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs font-semibold text-slate-500"
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs font-semibold text-slate-300 drop-shadow"
         >
           <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
             <span>{t("hero_v2_pill_1")}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
             <span>{t("hero_v2_pill_2")}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
             <span>{t("hero_v2_pill_3")}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
             <span>{t("hero_v2_pill_4")}</span>
           </div>
         </motion.div>
-      </motion.div>
+      </div>
 
-      {/* ── INFINITE SCROLL TECH STACK MARQUEE ── */}
-      <div className="relative z-20 w-full mt-16 pt-8 border-t border-slate-200/80 bg-gradient-to-b from-[#FAFAFA]/90 to-white overflow-hidden">
-        <div className="container max-w-6xl mx-auto px-4 text-center mb-6">
-          <p className="text-[11px] font-black text-slate-500 uppercase tracking-widest flex items-center justify-center gap-2">
-            <Zap className="w-3.5 h-3.5 text-orange-500" />
+      {/* ── INFINITE SCROLL TECH STACK MARQUEE (Base of Hero) ── */}
+      <div className="relative z-20 w-full pt-6 pb-6 border-t border-white/10 bg-gradient-to-b from-black/60 to-black/90 backdrop-blur-md overflow-hidden">
+        <div className="container max-w-6xl mx-auto px-4 text-center mb-4">
+          <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest flex items-center justify-center gap-2">
+            <Zap className="w-3.5 h-3.5 text-orange-400" />
             <span>
               {isRTL
                 ? "التقنيات والأنظمة العالمية المعتمدة في برامجنا"
@@ -344,9 +245,9 @@ export function HeroSection() {
         </div>
 
         {/* Gradients for smooth fade on marquee edges */}
-        <div className="relative w-full overflow-hidden py-2">
-          <div className="absolute left-0 top-0 bottom-0 w-24 sm:w-36 bg-gradient-to-r from-white via-white/80 to-transparent z-20 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-36 bg-gradient-to-l from-white via-white/80 to-transparent z-20 pointer-events-none" />
+        <div className="relative w-full overflow-hidden py-1">
+          <div className="absolute left-0 top-0 bottom-0 w-24 sm:w-36 bg-gradient-to-r from-black via-black/80 to-transparent z-20 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-36 bg-gradient-to-l from-black via-black/80 to-transparent z-20 pointer-events-none" />
 
           {/* Infinite Motion Scroll Track */}
           <motion.div
@@ -358,16 +259,16 @@ export function HeroSection() {
             {[...techStack, ...techStack, ...techStack].map((tech, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-3 px-4 sm:px-5 py-2.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-orange-500/40 transition-all duration-300 group shrink-0"
+                className="flex items-center gap-3 px-4 sm:px-5 py-2.5 rounded-2xl bg-slate-900/90 border border-white/10 shadow-md hover:border-orange-500/50 transition-all duration-300 group shrink-0"
               >
-                <div className="w-8 h-8 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-8 h-8 rounded-xl bg-slate-800/80 border border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                   {tech.icon}
                 </div>
                 <div className="text-left rtl:text-right">
-                  <p className="text-xs font-black text-slate-900 group-hover:text-orange-600 transition-colors">
+                  <p className="text-xs font-black text-white group-hover:text-orange-400 transition-colors">
                     {tech.name}
                   </p>
-                  <p className="text-[10px] text-slate-500 font-medium">
+                  <p className="text-[10px] text-slate-400 font-medium">
                     {tech.category}
                   </p>
                 </div>
@@ -376,6 +277,46 @@ export function HeroSection() {
           </motion.div>
         </div>
       </div>
+
+      {/* ── CINEMATIC VSL VIDEO MODAL LIGHTBOX ── */}
+      <AnimatePresence>
+        {isPlayingVideo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6"
+            onClick={() => setIsPlayingVideo(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.92, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-5xl rounded-3xl overflow-hidden bg-black border border-white/15 shadow-[0_25px_90px_rgba(0,0,0,0.9)] aspect-video"
+            >
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setIsPlayingVideo(false)}
+                className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-slate-900/90 hover:bg-orange-600 text-white flex items-center justify-center transition-colors shadow-lg border border-white/20"
+                aria-label="Close presentation video"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <video
+                src="/landingpagevideo.mp4"
+                controls
+                autoPlay
+                playsInline
+                className="w-full h-full object-contain"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

@@ -34,8 +34,8 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
       dir={dir}
       className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs"
-          : "bg-white/85 backdrop-blur-sm border-b border-slate-100"
+          ? "bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs text-slate-900"
+          : "bg-slate-950/60 backdrop-blur-md border-b border-white/10 text-white"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -48,7 +48,9 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
               width={376}
               height={106}
               priority
-              className="h-10 sm:h-12 w-auto object-contain transition-all"
+              className={`h-10 sm:h-12 w-auto object-contain transition-all ${
+                scrolled ? "" : "brightness-0 invert"
+              }`}
             />
           </Link>
         </div>
@@ -58,44 +60,72 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
           <nav className="hidden lg:flex items-center gap-1.5 xl:gap-2">
             <a
               href="#vsl-player"
-              className="px-3 py-1.5 text-xs sm:text-[13px] font-semibold text-slate-700 hover:text-slate-950 transition-colors flex items-center gap-1.5 rounded-lg hover:bg-slate-50"
+              className={`px-3 py-1.5 text-xs sm:text-[13px] font-semibold transition-colors flex items-center gap-1.5 rounded-lg ${
+                scrolled
+                  ? "text-slate-700 hover:text-slate-950 hover:bg-slate-50"
+                  : "text-slate-200 hover:text-white hover:bg-white/10"
+              }`}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
               <span>{t("nav_vsl")}</span>
             </a>
             <a
               href="#workspace"
-              className="px-3 py-1.5 text-xs sm:text-[13px] font-semibold text-slate-700 hover:text-slate-950 transition-colors rounded-lg hover:bg-slate-50"
+              className={`px-3 py-1.5 text-xs sm:text-[13px] font-semibold transition-colors rounded-lg ${
+                scrolled
+                  ? "text-slate-700 hover:text-slate-950 hover:bg-slate-50"
+                  : "text-slate-200 hover:text-white hover:bg-white/10"
+              }`}
             >
               {t("nav_workspace_os")}
             </a>
             <a
               href="#university"
-              className="px-3 py-1.5 text-xs sm:text-[13px] font-semibold text-slate-700 hover:text-slate-950 transition-colors rounded-lg hover:bg-slate-50"
+              className={`px-3 py-1.5 text-xs sm:text-[13px] font-semibold transition-colors rounded-lg ${
+                scrolled
+                  ? "text-slate-700 hover:text-slate-950 hover:bg-slate-50"
+                  : "text-slate-200 hover:text-white hover:bg-white/10"
+              }`}
             >
               {t("nav_university")}
             </a>
             <a
               href="#pricing"
-              className="px-3 py-1.5 text-xs sm:text-[13px] font-semibold text-slate-700 hover:text-slate-950 transition-colors rounded-lg hover:bg-slate-50"
+              className={`px-3 py-1.5 text-xs sm:text-[13px] font-semibold transition-colors rounded-lg ${
+                scrolled
+                  ? "text-slate-700 hover:text-slate-950 hover:bg-slate-50"
+                  : "text-slate-200 hover:text-white hover:bg-white/10"
+              }`}
             >
               {t("nav_pricing")}
             </a>
             <a
               href="#testimonials"
-              className="px-3 py-1.5 text-xs sm:text-[13px] font-semibold text-slate-700 hover:text-slate-950 transition-colors rounded-lg hover:bg-slate-50"
+              className={`px-3 py-1.5 text-xs sm:text-[13px] font-semibold transition-colors rounded-lg ${
+                scrolled
+                  ? "text-slate-700 hover:text-slate-950 hover:bg-slate-50"
+                  : "text-slate-200 hover:text-white hover:bg-white/10"
+              }`}
             >
               {t("nav_testimonials")}
             </a>
             <a
               href="#faq"
-              className="px-3 py-1.5 text-xs sm:text-[13px] font-semibold text-slate-700 hover:text-slate-950 transition-colors rounded-lg hover:bg-slate-50"
+              className={`px-3 py-1.5 text-xs sm:text-[13px] font-semibold transition-colors rounded-lg ${
+                scrolled
+                  ? "text-slate-700 hover:text-slate-950 hover:bg-slate-50"
+                  : "text-slate-200 hover:text-white hover:bg-white/10"
+              }`}
             >
               {t("nav_faq")}
             </a>
             <Link
               href="/contact"
-              className="px-3 py-1.5 text-xs sm:text-[13px] font-semibold text-slate-700 hover:text-slate-950 transition-colors rounded-lg hover:bg-slate-50"
+              className={`px-3 py-1.5 text-xs sm:text-[13px] font-semibold transition-colors rounded-lg ${
+                scrolled
+                  ? "text-slate-700 hover:text-slate-950 hover:bg-slate-50"
+                  : "text-slate-200 hover:text-white hover:bg-white/10"
+              }`}
             >
               {t("nav_contact")}
             </Link>
@@ -105,23 +135,29 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
         {/* Right side Actions & Language (Desktop) */}
         <div className={`flex items-center gap-3 flex-shrink-0 ${hideLinks ? "" : "hidden lg:flex"}`}>
           {/* Lang selector toggle */}
-          <div className="relative pr-2 rtl:pl-2 rtl:pr-0 border-r rtl:border-l rtl:border-r-0 border-slate-200">
+          <div className={`relative pr-2 rtl:pl-2 rtl:pr-0 border-r rtl:border-l rtl:border-r-0 ${
+            scrolled ? "border-slate-200" : "border-white/20"
+          }`}>
             <button
               onClick={() => setIsLangOpen(!isLangOpen)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-colors ${
+                scrolled
+                  ? "hover:bg-slate-100 text-slate-800"
+                  : "hover:bg-white/10 text-white"
+              }`}
             >
               <img
                 src={languages.find((l) => l.code === language)?.flagUrl}
                 alt={language}
                 className="w-4 h-auto rounded-[2px] shadow-2xs border border-slate-200"
               />
-              <span className="font-bold text-xs text-slate-800 hidden sm:block">
+              <span className="font-bold text-xs hidden sm:block">
                 {language.toUpperCase()}
               </span>
               <ChevronDown
-                className={`w-3.5 h-3.5 text-slate-400 transition-transform ${
-                  isLangOpen ? "rotate-180" : ""
-                }`}
+                className={`w-3.5 h-3.5 transition-transform ${
+                  scrolled ? "text-slate-400" : "text-slate-300"
+                } ${isLangOpen ? "rotate-180" : ""}`}
               />
             </button>
 
@@ -157,13 +193,17 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
               <Link href="/sign-in" prefetch={true}>
                 <Button
                   variant="ghost"
-                  className="rounded-xl px-4 h-9 text-xs font-bold text-slate-700 hover:text-slate-950 hover:bg-slate-100 cursor-pointer"
+                  className={`rounded-xl px-4 h-9 text-xs font-bold cursor-pointer transition-colors ${
+                    scrolled
+                      ? "text-slate-700 hover:text-slate-950 hover:bg-slate-100"
+                      : "text-slate-200 hover:text-white hover:bg-white/10"
+                  }`}
                 >
                   {t("nav_signIn")}
                 </Button>
               </Link>
               <Link href="/sign-up" prefetch={true}>
-                <Button className="rounded-xl px-5 h-9 text-xs font-bold bg-slate-950 hover:bg-slate-900 text-white shadow-xs transition-transform hover:-translate-y-0.5 cursor-pointer">
+                <Button className="rounded-xl px-5 h-9 text-xs font-bold bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white shadow-xs transition-transform hover:-translate-y-0.5 cursor-pointer border border-orange-400/30">
                   {t("nav_cta")}
                 </Button>
               </Link>
@@ -178,7 +218,11 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
             <div className="relative">
               <button
                 onClick={() => setIsLangOpen(!isLangOpen)}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 transition-colors border border-slate-200/80 shadow-2xs cursor-pointer"
+                className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl transition-colors border shadow-2xs cursor-pointer ${
+                  scrolled
+                    ? "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-200/80"
+                    : "bg-slate-900/80 hover:bg-slate-850 text-white border-white/20"
+                }`}
                 aria-label="Toggle Language"
               >
                 <img
@@ -190,9 +234,9 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
                   {language}
                 </span>
                 <ChevronDown
-                  className={`w-3 h-3 text-slate-500 transition-transform ${
-                    isLangOpen ? "rotate-180" : ""
-                  }`}
+                  className={`w-3 h-3 transition-transform ${
+                    scrolled ? "text-slate-500" : "text-slate-300"
+                  } ${isLangOpen ? "rotate-180" : ""}`}
                 />
               </button>
 
@@ -224,7 +268,11 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
             </div>
 
             <button
-              className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 transition-colors cursor-pointer"
+              className={`p-2.5 rounded-xl transition-colors cursor-pointer ${
+                scrolled
+                  ? "bg-slate-100 hover:bg-slate-200 text-slate-900"
+                  : "bg-slate-900/80 hover:bg-slate-800 text-white border border-white/20"
+              }`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle Navigation Menu"
             >

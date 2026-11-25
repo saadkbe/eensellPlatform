@@ -1,6 +1,6 @@
 "use client";
 
-import { Star, PlayCircle } from "lucide-react";
+import { Star, PlayCircle, Check, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/components/landing/LanguageProvider";
 import { type TranslationKey } from "@/lib/translations";
@@ -8,26 +8,15 @@ import { type TranslationKey } from "@/lib/translations";
 export function SocialProofSection() {
   const { t, dir, isRTL } = useLanguage();
 
-  const avatars = [
-    "https://randomuser.me/api/portraits/men/32.jpg",
-    "https://randomuser.me/api/portraits/women/44.jpg",
-    "https://randomuser.me/api/portraits/men/46.jpg",
-    "https://randomuser.me/api/portraits/men/52.jpg",
-    "https://randomuser.me/api/portraits/women/68.jpg",
-    "https://randomuser.me/api/portraits/men/75.jpg",
-    "https://randomuser.me/api/portraits/women/90.jpg",
-    "https://randomuser.me/api/portraits/men/86.jpg",
-  ];
-
   const testimonials = [
-    { nameKey: "social_t1_name", roleKey: "social_t1_role", incomeKey: "social_t1_income", contentKey: "social_t1_content", image: avatars[0] },
-    { nameKey: "social_t2_name", roleKey: "social_t2_role", incomeKey: "social_t2_income", contentKey: "social_t2_content", image: avatars[1] },
-    { nameKey: "social_t3_name", roleKey: "social_t3_role", incomeKey: "social_t3_income", contentKey: "social_t3_content", image: avatars[2] },
-    { nameKey: "social_t4_name", roleKey: "social_t4_role", incomeKey: "social_t4_income", contentKey: "social_t4_content", image: avatars[3] },
-    { nameKey: "social_t5_name", roleKey: "social_t5_role", incomeKey: "social_t5_income", contentKey: "social_t5_content", image: avatars[4] },
-    { nameKey: "social_t6_name", roleKey: "social_t6_role", incomeKey: "social_t6_income", contentKey: "social_t6_content", image: avatars[5] },
-    { nameKey: "social_t7_name", roleKey: "social_t7_role", incomeKey: "social_t7_income", contentKey: "social_t7_content", image: avatars[6] },
-    { nameKey: "social_t8_name", roleKey: "social_t8_role", incomeKey: "social_t8_income", contentKey: "social_t8_content", image: avatars[7] },
+    { nameKey: "social_t1_name", roleKey: "social_t1_role", incomeKey: "social_t1_income", contentKey: "social_t1_content", initials: "AM" },
+    { nameKey: "social_t2_name", roleKey: "social_t2_role", incomeKey: "social_t2_income", contentKey: "social_t2_content", initials: "YB" },
+    { nameKey: "social_t3_name", roleKey: "social_t3_role", incomeKey: "social_t3_income", contentKey: "social_t3_content", initials: "OT" },
+    { nameKey: "social_t4_name", roleKey: "social_t4_role", incomeKey: "social_t4_income", contentKey: "social_t4_content", initials: "SK" },
+    { nameKey: "social_t5_name", roleKey: "social_t5_role", incomeKey: "social_t5_income", contentKey: "social_t5_content", initials: "MR" },
+    { nameKey: "social_t6_name", roleKey: "social_t6_role", incomeKey: "social_t6_income", contentKey: "social_t6_content", initials: "HL" },
+    { nameKey: "social_t7_name", roleKey: "social_t7_role", incomeKey: "social_t7_income", contentKey: "social_t7_content", initials: "KD" },
+    { nameKey: "social_t8_name", roleKey: "social_t8_role", incomeKey: "social_t8_income", contentKey: "social_t8_content", initials: "NB" },
   ];
 
   return (
@@ -40,12 +29,25 @@ export function SocialProofSection() {
         {/* Header */}
         <div className="text-center flex flex-col items-center mb-16 md:mb-24">
           <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="flex flex-col items-center mb-6">
-            <div className="flex -space-x-2 mb-4">
-              {avatars.map((imgUrl, i) => (
-                <div key={i} className="w-12 h-12 rounded-full border-[3px] border-zinc-50 overflow-hidden bg-zinc-200 shadow-md relative z-10">
-                  <img src={imgUrl} alt="Member" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+            {/* Clean, Anonymous Monogram UI Avatars */}
+            <div className="flex -space-x-2.5 rtl:space-x-reverse mb-4">
+              {[
+                { label: "AM", bg: "from-slate-800 to-slate-950 text-slate-100" },
+                { label: "YB", bg: "from-orange-500 to-amber-600 text-white" },
+                { label: "OT", bg: "from-zinc-800 to-zinc-950 text-zinc-100" },
+                { label: "SK", bg: "from-slate-700 to-slate-900 text-slate-100" },
+                { label: "MR", bg: "from-amber-600 to-orange-700 text-white" },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className={`w-11 h-11 rounded-full border-[2.5px] border-white bg-gradient-to-br ${item.bg} flex items-center justify-center text-xs font-black shadow-sm relative z-10 select-none`}
+                >
+                  {item.label}
                 </div>
               ))}
+              <div className="w-11 h-11 rounded-full border-[2.5px] border-white bg-slate-950 text-orange-400 flex items-center justify-center text-[10px] font-black shadow-sm relative z-10 select-none tracking-tight">
+                +1.3k
+              </div>
             </div>
             <div className="inline-flex items-center gap-1 bg-white px-4 py-1.5 rounded-full shadow-sm border border-zinc-200">
               {[1, 2, 3, 4, 5].map((i) => <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
@@ -117,8 +119,11 @@ export function SocialProofSection() {
             </h3>
 
             <div className="flex items-center gap-5 pt-6 border-t border-zinc-200/80">
-              <div className="w-16 h-16 rounded-full bg-zinc-200 overflow-hidden border-2 border-white shadow-sm shrink-0">
-                <img src={avatars[1]} alt="Featured Member" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 text-white flex items-center justify-center font-bold text-base shadow-md border-2 border-white shrink-0 select-none">
+                <span>YB</span>
+                <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 border-2 border-white flex items-center justify-center">
+                  <Check className="w-2.5 h-2.5 text-white stroke-[3]" />
+                </span>
               </div>
               <div>
                 <p className="font-bold text-zinc-900 text-lg">
@@ -163,8 +168,13 @@ export function SocialProofSection() {
                 "{t(test.contentKey as TranslationKey)}"
               </p>
               <div className="flex items-center gap-4 mt-auto relative z-10 pt-6 border-t border-zinc-100">
-                <div className="w-14 h-14 rounded-full bg-zinc-100 flex items-center justify-center overflow-hidden shrink-0 border-2 border-white shadow-sm">
-                  <img src={test.image} alt={t(test.nameKey as TranslationKey)} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-slate-900 via-slate-800 to-zinc-900 border border-slate-700/60 flex items-center justify-center shadow-xs shrink-0 select-none">
+                  <span className="font-bold text-xs tracking-wider text-orange-400">
+                    {test.initials}
+                  </span>
+                  <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 border-2 border-white flex items-center justify-center">
+                    <Check className="w-2 h-2 text-white stroke-[3]" />
+                  </span>
                 </div>
                 <div>
                   <h4 className="font-bold text-zinc-900 text-base">{t(test.nameKey as TranslationKey)}</h4>

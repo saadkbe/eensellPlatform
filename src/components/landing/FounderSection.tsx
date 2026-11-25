@@ -173,7 +173,7 @@ export function FounderSection() {
               </div>
 
               <div className="rounded-2xl p-3.5 bg-slate-50 border border-slate-200/80 text-center">
-                <p className="text-xl sm:text-2xl font-black text-emerald-600">
+                <p className="text-xl sm:text-2xl font-black text-amber-500">
                   {t("founder_stat4_val" as TranslationKey)}
                 </p>
                 <p className="text-[10px] font-bold text-slate-500 uppercase mt-0.5">

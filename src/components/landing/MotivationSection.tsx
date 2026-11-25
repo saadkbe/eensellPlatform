@@ -25,8 +25,8 @@ export function MotivationSection() {
       dir={dir}
       className="relative py-24 sm:py-36 bg-[#FAFBFE] text-slate-900 overflow-hidden border-t border-slate-200/70"
     >
-      {/* Background ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[550px] bg-gradient-to-tr from-amber-100/30 via-orange-50/20 to-indigo-100/30 rounded-full blur-[150px] pointer-events-none" />
+      {/* Background ambient glow - Orange to Orangish-Yellow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[550px] bg-gradient-to-tr from-orange-100/30 via-amber-50/20 to-orange-50/20 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="container max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
         <div className="flex flex-col items-center text-center">
@@ -60,21 +60,21 @@ export function MotivationSection() {
             {language === "ar" ? (
               <>
                 ثورة الذكاء الاصطناعي بالمغرب تحدث الآن.{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-500 to-orange-700">
                   هل ستكتفي بالمشاهدة أم ستبني مشروعك؟
                 </span>
               </>
             ) : language === "fr" ? (
               <>
                 La Vague IA au Maroc Se Joue Maintenant.{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-500 to-orange-700">
                   Allez-Vous Regarder ou Bâtir ?
                 </span>
               </>
             ) : (
               <>
                 The Moroccan AI Goldrush Is Happening Right Now.{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-500 to-orange-700">
                   Will You Watch Or Will You Build?
                 </span>
               </>
@@ -115,7 +115,7 @@ export function MotivationSection() {
 
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100">
               <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-                <span className="flex h-2 w-2 rounded-full bg-emerald-500" />
+                <span className="flex h-2 w-2 rounded-full bg-orange-500" />
                 <span>
                   {language === "ar"
                     ? "+350 مؤسس مغربي نشطون حالياً في مجتمعنا"

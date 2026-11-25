@@ -30,42 +30,42 @@ export function WorkspaceShowcaseSection() {
       name: t("ws_tool1_name"),
       tag: t("ws_tool1_step"),
       desc: t("ws_tool1_desc"),
-      color: "emerald",
+      color: "orange",
     },
     {
       icon: Layers,
       name: t("ws_tool2_name"),
       tag: t("ws_tool2_step"),
       desc: t("ws_tool2_desc"),
-      color: "blue",
+      color: "amber",
     },
     {
       icon: MessageSquare,
       name: t("ws_tool3_name"),
       tag: t("ws_tool3_step"),
       desc: t("ws_tool3_desc"),
-      color: "green",
+      color: "orange",
     },
     {
       icon: Mail,
       name: t("ws_tool4_name"),
       tag: t("ws_tool4_step"),
       desc: t("ws_tool4_desc"),
-      color: "purple",
+      color: "amber",
     },
     {
       icon: FileText,
       name: t("ws_tool5_name"),
       tag: t("ws_tool5_step"),
       desc: t("ws_tool5_desc"),
-      color: "amber",
+      color: "orange",
     },
     {
       icon: BookmarkCheck,
       name: t("ws_tool6_name"),
       tag: t("ws_tool6_step"),
       desc: t("ws_tool6_desc"),
-      color: "indigo",
+      color: "amber",
     },
   ];
 
@@ -75,8 +75,8 @@ export function WorkspaceShowcaseSection() {
       dir={dir}
       className="relative py-20 sm:py-32 bg-[#FAFBFE] text-slate-900 overflow-hidden border-t border-slate-200/70"
     >
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-gradient-to-tr from-cyan-100/40 via-indigo-100/30 to-emerald-100/30 rounded-full blur-[150px] pointer-events-none" />
+      {/* Background ambient lighting - Orange to Orangish-Yellow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-gradient-to-tr from-orange-100/30 via-amber-50/20 to-orange-50/20 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="container max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header */}
@@ -87,7 +87,7 @@ export function WorkspaceShowcaseSection() {
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 shadow-2xs mb-4 text-xs font-bold text-slate-800 tracking-wide uppercase"
           >
-            <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+            <Sparkles className="w-3.5 h-3.5 text-orange-500" />
             <span>{t("ws_badge")}</span>
           </motion.div>
 
@@ -99,7 +99,7 @@ export function WorkspaceShowcaseSection() {
             className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 tracking-tight leading-tight mb-4"
           >
             {t("ws_title_1")}{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-500 to-orange-700">
               {t("ws_title_2")}
             </span>
           </motion.h2>
@@ -136,8 +136,8 @@ export function WorkspaceShowcaseSection() {
           transition={{ duration: 0.6 }}
           className="relative max-w-5xl mx-auto mb-16"
         >
-          {/* Subtle gradient glow behind frame */}
-          <div className="absolute -inset-3 bg-gradient-to-r from-indigo-200/50 via-cyan-100/40 to-emerald-100/50 rounded-[3rem] blur-2xl opacity-70 pointer-events-none" />
+          {/* Subtle gradient glow behind frame - Orange to Orangish-Yellow */}
+          <div className="absolute -inset-3 bg-gradient-to-r from-orange-200/30 via-amber-100/30 to-orange-100/20 rounded-[3rem] blur-2xl opacity-70 pointer-events-none" />
 
           <div className="relative rounded-[2rem] sm:rounded-[2.5rem] p-2.5 sm:p-3.5 bg-white border border-slate-200/90 shadow-[0_25px_80px_-20px_rgba(15,23,42,0.14)]">
             {/* macOS Browser Header */}
@@ -145,16 +145,16 @@ export function WorkspaceShowcaseSection() {
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-rose-400" />
                 <div className="w-3 h-3 rounded-full bg-amber-400" />
-                <div className="w-3 h-3 rounded-full bg-emerald-400" />
+                <div className="w-3 h-3 rounded-full bg-orange-400" />
               </div>
 
               <div className="flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-slate-200/80 text-[11px] font-mono text-slate-600 shadow-2xs">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                <ShieldCheck className="w-3.5 h-3.5 text-orange-500" />
                 <span>workspace.eensell.agency/overview</span>
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="flex h-2 w-2 rounded-full bg-emerald-500" />
+                <span className="flex h-2 w-2 rounded-full bg-orange-500" />
                 <span className="text-[11px] font-bold text-slate-700 hidden sm:inline">
                   Live Cloud Instance
                 </span>
@@ -176,7 +176,7 @@ export function WorkspaceShowcaseSection() {
 
             {/* Floating Live Badge Top Left */}
             <div className="hidden md:flex absolute -top-5 -left-4 items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-white/95 border border-slate-200 shadow-xl backdrop-blur-md">
-              <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+              <div className="w-8 h-8 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600">
                 <MapPin className="w-4 h-4" />
               </div>
               <div className="text-left">
@@ -187,12 +187,12 @@ export function WorkspaceShowcaseSection() {
 
             {/* Floating Live Badge Bottom Right */}
             <div className="hidden md:flex absolute -bottom-5 -right-4 items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-white/95 border border-slate-200 shadow-xl backdrop-blur-md">
-              <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+              <div className="w-8 h-8 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600">
                 <MessageSquare className="w-4 h-4" />
               </div>
               <div className="text-left">
                 <p className="text-[11px] font-black text-slate-900">WhatsApp Darija Pitch</p>
-                <p className="text-[10px] text-emerald-600 font-bold">✓✓ Client Meeting Booked</p>
+                <p className="text-[10px] text-orange-600 font-bold">✓✓ Client Meeting Booked</p>
               </div>
             </div>
           </div>
@@ -231,7 +231,7 @@ export function WorkspaceShowcaseSection() {
                 </div>
 
                 <div className="mt-5 pt-3 border-t border-slate-100 flex items-center gap-1.5 text-[11px] font-semibold text-slate-800">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                   <span>Integrated with Eensell OS</span>
                 </div>
               </motion.div>

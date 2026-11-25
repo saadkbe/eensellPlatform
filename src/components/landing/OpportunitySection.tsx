@@ -35,8 +35,8 @@ export function OpportunitySection() {
       dir={dir}
       className="relative py-20 sm:py-32 bg-white text-slate-900 overflow-hidden"
     >
-      {/* Background subtle light ambient aura */}
-      <div className="absolute top-1/3 right-1/4 w-[600px] h-[400px] bg-gradient-to-tr from-cyan-100/40 via-indigo-50/30 to-transparent rounded-full blur-[140px] pointer-events-none" />
+      {/* Background subtle light ambient aura - Orange to Orangish-Yellow */}
+      <div className="absolute top-1/3 right-1/4 w-[600px] h-[400px] bg-gradient-to-tr from-orange-100/40 via-amber-50/20 to-transparent rounded-full blur-[140px] pointer-events-none" />
 
       <div className="container max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-16">
@@ -48,7 +48,7 @@ export function OpportunitySection() {
               viewport={{ once: true }}
               className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-50 border border-slate-200 shadow-2xs text-xs font-bold text-slate-700 tracking-wide uppercase"
             >
-              <TrendingUp className="w-3.5 h-3.5 text-[#FF6B4A]" />
+              <TrendingUp className="w-3.5 h-3.5 text-orange-500" />
               <span>{t("opp_v2_badge")}</span>
             </motion.div>
 
@@ -60,7 +60,7 @@ export function OpportunitySection() {
               className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 tracking-tight leading-[1.15]"
             >
               {t("opp_v2_title_1")}{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-900 to-[#FF6B4A]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-500 to-orange-700">
                 {t("opp_v2_title_2")}
               </span>
             </motion.h2>
@@ -83,7 +83,7 @@ export function OpportunitySection() {
               className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2"
             >
               <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
-                <Sparkles className="w-4 h-4 text-indigo-600" />
+                <Sparkles className="w-4 h-4 text-orange-500" />
                 <span>{t("opp_v2_badge")}</span>
               </div>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
