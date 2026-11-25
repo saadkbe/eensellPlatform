@@ -43,7 +43,7 @@ export function Navbar({ hideLinks = false }: { hideLinks?: boolean } = {}) {
         <div className="flex-shrink-0 flex items-center">
           <Link href="/" className="flex items-center">
             <Image
-              src="/logo2-cropped-black.png"
+              src="/logo2-cropped-black.webp"
               alt="Eensell University"
               width={376}
               height={106}

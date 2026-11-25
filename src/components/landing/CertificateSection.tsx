@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Award, CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/components/landing/LanguageProvider";
@@ -60,10 +61,13 @@ export function CertificateSection() {
             <div className="absolute inset-0 bg-gradient-to-tr from-orange-200 to-zinc-100 rounded-3xl blur-2xl opacity-60"></div>
             
             <div className="relative aspect-[4/3] w-full bg-zinc-50 border-[6px] border-white shadow-xl rounded-2xl flex flex-col items-center justify-center text-center overflow-hidden">
-              <img 
-                src="/certificate.png" 
+              <Image 
+                src="/certificate.webp" 
                 alt="Certificate of Success" 
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 1024px) 100vw, 550px"
+                quality={82}
+                className="object-cover"
               />
             </div>
           </motion.div>

@@ -8,6 +8,7 @@ import "./globals.css";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
 });
 
 const ibmPlexArabic = IBM_Plex_Sans_Arabic({
@@ -20,12 +21,14 @@ const ibmPlexArabic = IBM_Plex_Sans_Arabic({
 const caveat = Caveat({
   subsets: ["latin"],
   variable: "--font-handwritten",
+  display: "swap",
 });
 
 const arefRuqaa = Aref_Ruqaa({
   subsets: ["arabic"],
   weight: ["400", "700"],
   variable: "--font-arabic-hand",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -103,9 +106,6 @@ export const viewport: Viewport = {
 };
 
 import { ThemeProvider } from "@/components/theme-provider";
-import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
-import { extractRouterConfig } from "uploadthing/server";
-import { ourFileRouter } from "@/app/api/uploadthing/core";
 import { ActivityTracker } from "@/components/activity-tracker";
 import { LanguageProvider } from "@/components/landing/LanguageProvider";
 import { StructuredData } from "@/components/seo/StructuredData";
@@ -153,7 +153,6 @@ export default function RootLayout({
           <StructuredData />
         </head>
         <body className={`${inter.variable} ${ibmPlexArabic.variable} ${caveat.variable} ${arefRuqaa.variable} font-sans antialiased`}>
-          <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
           <ActivityTracker />
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
             <LanguageProvider>

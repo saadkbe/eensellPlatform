@@ -15,10 +15,11 @@ export function Footer() {
           <div className="flex flex-col items-center md:items-start gap-3">
             <Link href="/" className="flex items-center">
               <Image
-                src="/logo2-cropped-black.png"
+                src="/logo2-cropped-black.webp"
                 alt="Eensell University"
                 width={376}
                 height={106}
+                loading="lazy"
                 className="h-9 sm:h-11 w-auto object-contain"
               />
             </Link>
@@ -47,6 +48,9 @@ export function Footer() {
             <Link href="/privacy" className="hover:text-slate-950 transition-colors">
               Privacy Policy
             </Link>
+            <Link href="/refund" className="hover:text-slate-950 transition-colors">
+              Refund Policy
+            </Link>
             <Link href="/contact" className="hover:text-slate-950 transition-colors">
               {t("nav_contact")}
             </Link>
@@ -55,7 +59,7 @@ export function Footer() {
 
         {/* Bottom copyright & contact */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-medium">
-          <p>© {new Date().getFullYear()} Eensell University. {t("footer_copyright")}</p>
+          <p>© {new Date().getFullYear()} Eensell University. Orders processed via Paddle (Merchant of Record).</p>
 
           <div className="flex items-center gap-4">
             <span>

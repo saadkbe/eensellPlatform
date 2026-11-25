@@ -63,7 +63,8 @@ export default function PrivacyPage() {
                 We do not sell, trade, or rent your personal information to third parties. We may share your data only in the following circumstances:
               </p>
               <ul className="list-disc pl-6 space-y-3">
-                <li><strong className="text-zinc-800">Service Providers:</strong> With trusted third-party platforms that assist us in operating our website, hosting our courses, or managing communications (e.g., email providers, analytics tools), provided those parties agree to keep this information confidential.</li>
+                <li><strong className="text-zinc-800">Merchant of Record & Payments:</strong> Our order processing is conducted by <strong>Paddle.com</strong> (Paddle Payments Ltd / Paddle.com Inc.), which acts as our Merchant of Record. Paddle processes your payment information securely in compliance with PCI-DSS Level 1 security standards and applicable data protection regulations (GDPR). We do not store or process your complete credit card or financial account numbers on our servers.</li>
+                <li><strong className="text-zinc-800">Service Providers:</strong> With trusted third-party platforms that assist us in operating our website, hosting our courses, or managing communications (e.g., authentication, analytics tools), provided those parties agree to keep this information confidential and secure.</li>
                 <li><strong className="text-zinc-800">Legal Compliance:</strong> When required by law or to protect our legal rights, property, or safety.</li>
               </ul>
             </section>

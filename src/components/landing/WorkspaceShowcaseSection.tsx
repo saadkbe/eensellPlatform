@@ -164,12 +164,13 @@ export function WorkspaceShowcaseSection() {
             {/* Dashboard Real Picture */}
             <div className="relative overflow-hidden rounded-b-[1.5rem] sm:rounded-b-[2rem] bg-slate-900 border border-slate-200/60 shadow-inner">
               <Image
-                src="/images/Eensell Workspace.png"
+                src="/images/eensell-workspace.webp"
                 alt="Eensell Workspace Full Dashboard"
-                width={1800}
-                height={1100}
+                width={1657}
+                height={980}
+                sizes="(max-width: 1024px) 100vw, 1024px"
+                quality={82}
                 className="w-full h-auto object-cover"
-                priority
               />
             </div>
 

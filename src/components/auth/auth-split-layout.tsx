@@ -1,11 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import { Users, CheckCircle2 } from "lucide-react";
-import { ConstellationAnimation } from "@/components/auth/constellation-animation";
+import { AuthShowcase } from "@/components/auth/auth-showcase";
 
 interface AuthSplitLayoutProps {
   children: React.ReactNode;
@@ -13,11 +10,9 @@ interface AuthSplitLayoutProps {
 }
 
 export function AuthSplitLayout({ children, mode }: AuthSplitLayoutProps) {
-  const [activeTab, setActiveTab] = useState<0 | 1 | 2>(0);
-
   return (
     <div className="min-h-screen w-full grid grid-cols-1 md:grid-cols-12 bg-white text-slate-900 antialiased select-none">
-      {/* ── Global Clerk Overrides to ensure 100% flat seamless canvas ── */}
+      {/* ── Global Clerk Overrides to ensure 100% crisp visibility in all themes ── */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -38,8 +33,157 @@ export function AuthSplitLayout({ children, mode }: AuthSplitLayoutProps) {
             .cl-rootBox {
               width: 100% !important;
             }
-            .cl-formFieldInput {
+            
+            /* Social OAuth Buttons (Google) */
+            .cl-socialButtonsBlockButton {
+              background-color: #ffffff !important;
+              border: 1px solid #e2e8f0 !important;
+              color: #0f172a !important;
               border-radius: 0.75rem !important;
+              height: 2.75rem !important;
+              box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+              transition: all 0.15s ease !important;
+            }
+            .cl-socialButtonsBlockButton:hover {
+              background-color: #f8fafc !important;
+              border-color: #cbd5e1 !important;
+            }
+            .cl-socialButtonsBlockButtonText,
+            .cl-socialButtonsBlockButton span,
+            .cl-socialButtonsBlockButton p {
+              color: #0f172a !important;
+              font-weight: 600 !important;
+              font-size: 0.8125rem !important;
+              opacity: 1 !important;
+              display: inline-block !important;
+            }
+            
+            /* Input Fields (Email, Password, Name) */
+            .cl-formFieldInput {
+              background-color: #ffffff !important;
+              border: 1px solid #e2e8f0 !important;
+              color: #0f172a !important;
+              border-radius: 0.75rem !important;
+              font-size: 0.8125rem !important;
+              padding: 0.625rem 0.875rem !important;
+              box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03) !important;
+              transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+            }
+            .cl-formFieldInput:focus {
+              border-color: #09090b !important;
+              outline: none !important;
+              box-shadow: 0 0 0 1px #09090b !important;
+            }
+            .cl-formFieldInput::placeholder {
+              color: #94a3b8 !important;
+            }
+            
+            /* Field Labels */
+            .cl-formFieldLabel {
+              color: #334155 !important;
+              font-weight: 600 !important;
+              font-size: 0.75rem !important;
+              margin-bottom: 0.375rem !important;
+            }
+            
+            /* Primary Submit Button ("Continue" / "Sign in") */
+            .cl-formButtonPrimary {
+              background-color: #09090b !important;
+              border: 1px solid #09090b !important;
+              color: #ffffff !important;
+              font-weight: 700 !important;
+              font-size: 0.8125rem !important;
+              border-radius: 0.75rem !important;
+              height: 2.75rem !important;
+              box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+              cursor: pointer !important;
+              transition: background-color 0.15s ease !important;
+              margin-top: 0.5rem !important;
+            }
+            .cl-formButtonPrimary:hover {
+              background-color: #18181b !important;
+            }
+            .cl-formButtonPrimary,
+            .cl-formButtonPrimary span,
+            .cl-formButtonPrimary p,
+            .cl-formButtonPrimary * {
+              color: #ffffff !important;
+              font-weight: 700 !important;
+            }
+            
+            /* Dividers */
+            .cl-dividerRow {
+              margin: 1.25rem 0 !important;
+            }
+            .cl-dividerLine {
+              background-color: #e2e8f0 !important;
+              height: 1px !important;
+            }
+            .cl-dividerText {
+              color: #94a3b8 !important;
+              background-color: #ffffff !important;
+              font-size: 0.6875rem !important;
+              font-weight: 700 !important;
+              text-transform: uppercase !important;
+              letter-spacing: 0.05em !important;
+              padding: 0 0.5rem !important;
+            }
+            
+            /* Footer Action Links */
+            .cl-footer {
+              background-color: transparent !important;
+              padding: 0 !important;
+            }
+            .cl-footerAction {
+              margin-top: 1.25rem !important;
+              font-size: 0.75rem !important;
+              color: #64748b !important;
+            }
+            .cl-footerActionText {
+              color: #64748b !important;
+              font-size: 0.75rem !important;
+            }
+            .cl-footerActionLink {
+              color: #09090b !important;
+              font-weight: 700 !important;
+              text-decoration: underline !important;
+              margin-left: 0.25rem !important;
+            }
+            .cl-footerActionLink:hover {
+              color: #000000 !important;
+            }
+            
+            /* Identity Preview (e.g., OTP step) */
+            .cl-identityPreview {
+              background-color: #f8fafc !important;
+              border: 1px solid #e2e8f0 !important;
+              border-radius: 0.75rem !important;
+              padding: 0.5rem 0.75rem !important;
+            }
+            .cl-identityPreviewText,
+            .cl-identityPreviewText * {
+              color: #0f172a !important;
+              font-size: 0.75rem !important;
+              font-weight: 600 !important;
+            }
+            .cl-identityPreviewEditButton {
+              color: #475569 !important;
+              font-size: 0.75rem !important;
+            }
+            
+            /* Alert / Error Callouts */
+            .cl-alert,
+            .cl-formFieldErrorText {
+              color: #dc2626 !important;
+              font-size: 0.75rem !important;
+            }
+            
+            /* OTP code inputs */
+            .cl-otpCodeFieldInput {
+              background-color: #ffffff !important;
+              border: 1px solid #cbd5e1 !important;
+              color: #0f172a !important;
+              border-radius: 0.5rem !important;
             }
           `,
         }}
@@ -95,10 +239,10 @@ export function AuthSplitLayout({ children, mode }: AuthSplitLayoutProps) {
       </div>
 
       {/* ══════════════════════════════════════════════════════════
-          RIGHT COLUMN: High-Contrast Dark Tech Column (Community & Workspace)
+          RIGHT COLUMN: Clean High-Converting Showcase Banner
           Visible on md: (768px+) and up
          ══════════════════════════════════════════════════════════ */}
-      <div className="hidden md:flex md:col-span-7 lg:col-span-7 xl:col-span-7 p-8 sm:p-10 lg:p-14 xl:p-16 bg-[#070A12] text-white flex-col justify-between relative overflow-hidden min-h-screen">
+      <div className="hidden md:flex md:col-span-7 lg:col-span-7 xl:col-span-7 p-8 sm:p-10 lg:p-12 xl:p-14 bg-[#070A12] text-white flex-col justify-center relative overflow-hidden min-h-screen">
         {/* Subtle Dark Dot Grid Background */}
         <div
           className="absolute inset-0 opacity-40 pointer-events-none"
@@ -112,138 +256,8 @@ export function AuthSplitLayout({ children, mode }: AuthSplitLayoutProps) {
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[400px] bg-gradient-to-tr from-indigo-600/20 via-cyan-500/15 to-emerald-500/20 rounded-full blur-[130px] pointer-events-none" />
         <div className="absolute bottom-10 right-10 w-[400px] h-[300px] bg-purple-600/15 rounded-full blur-[110px] pointer-events-none" />
 
-        {/* Top Header Badge & Copy */}
-        <div className="relative z-10 max-w-lg">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10 text-emerald-400 text-xs font-bold tracking-wide uppercase mb-4 backdrop-blur-md">
-            <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-            </span>
-            <span>Autonomous Agency OS &bull; Founder Network</span>
-          </div>
-
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-[1.18] mb-3">
-            Connect &bull; Automate &bull; Scale.
-          </h2>
-
-          <p className="text-xs sm:text-sm text-slate-300 font-medium leading-relaxed">
-            The complete Moroccan B2B AI operating system: from Google Maps scraping to Darija WhatsApp pitches and high-ticket client closing.
-          </p>
-        </div>
-
-        {/* ── Central Constellation Network Visualization ── */}
-        <div className="relative z-10 my-auto py-4 flex items-center justify-center">
-          <AnimatePresence mode="wait">
-            {activeTab === 0 && (
-              <motion.div
-                key="tab-0"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className="w-full flex items-center justify-center"
-              >
-                <ConstellationAnimation />
-              </motion.div>
-            )}
-
-            {activeTab === 1 && (
-              <motion.div
-                key="tab-1"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className="w-full max-w-md rounded-2xl bg-slate-900/90 border border-slate-700/80 shadow-2xl p-6 space-y-4 backdrop-blur-md"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
-                    <span className="text-xs font-bold text-white">Live Maps Radar</span>
-                  </div>
-                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30">
-                    Casablanca &bull; Active
-                  </span>
-                </div>
-                <div className="p-4 rounded-xl bg-slate-800/80 border border-slate-700 text-xs space-y-1.5">
-                  <p className="font-bold text-white text-sm">Cabinet Dentaire Dr. Alami Gauthier</p>
-                  <p className="text-slate-400 text-xs">+212 5 22 20 14 55 &bull; 14 Rue Jean Jaurès</p>
-                </div>
-                <div className="flex items-center justify-between text-xs font-bold pt-1">
-                  <span className="text-emerald-400 flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>WhatsApp Voice Note Sent</span>
-                  </span>
-                  <span className="text-slate-400 text-[11px]">Kanban: Meeting Set</span>
-                </div>
-              </motion.div>
-            )}
-
-            {activeTab === 2 && (
-              <motion.div
-                key="tab-2"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className="w-full max-w-md rounded-2xl bg-slate-900/90 border border-slate-700/80 shadow-2xl p-6 space-y-4 backdrop-blur-md"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-indigo-400" />
-                    <span className="text-xs font-bold text-white">Founder Mastermind</span>
-                  </div>
-                  <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
-                    350+ Active
-                  </span>
-                </div>
-                <div className="p-4 rounded-xl bg-slate-800/80 border border-slate-700 text-xs space-y-1.5">
-                  <p className="font-bold text-white text-sm">Omar B. (Marrakech Agency)</p>
-                  <p className="text-slate-300 text-xs leading-relaxed">
-                    &ldquo;Just closed a 12,000 MAD contract for a dental clinic using the Darija WhatsApp pitch script!&rdquo;
-                  </p>
-                </div>
-                <div className="text-xs font-medium text-slate-400 text-center">
-                  Live Zoom Room every Tuesday &amp; Saturday with Saad
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Bottom Carousel Navigation Dots & Active Network Footer */}
-        <div className="relative z-10 flex flex-col items-center gap-4">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setActiveTab(0)}
-              className={`h-2 rounded-full transition-all cursor-pointer ${
-                activeTab === 0 ? "w-7 bg-white" : "w-2 bg-slate-700 hover:bg-slate-500"
-              }`}
-              aria-label="Ecosystem View"
-            />
-            <button
-              type="button"
-              onClick={() => setActiveTab(1)}
-              className={`h-2 rounded-full transition-all cursor-pointer ${
-                activeTab === 1 ? "w-7 bg-white" : "w-2 bg-slate-700 hover:bg-slate-500"
-              }`}
-              aria-label="Workspace View"
-            />
-            <button
-              type="button"
-              onClick={() => setActiveTab(2)}
-              className={`h-2 rounded-full transition-all cursor-pointer ${
-                activeTab === 2 ? "w-7 bg-white" : "w-2 bg-slate-700 hover:bg-slate-500"
-              }`}
-              aria-label="Community View"
-            />
-          </div>
-
-          <p className="text-xs text-slate-400 font-medium text-center">
-            🇲🇦 Active founders in Casablanca, Rabat, Marrakech, Tangier &amp; Fès.
-          </p>
-        </div>
+        {/* Clean Showcase Component */}
+        <AuthShowcase />
       </div>
     </div>
   );

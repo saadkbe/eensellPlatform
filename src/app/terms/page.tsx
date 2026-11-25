@@ -41,30 +41,37 @@ export default function TermsPage() {
                 Eensell University provides educational content, digital workflows, AI agency frameworks, and a community platform. We provide training and education; we do not provide software licenses or access to premium third-party tools.
               </p>
               <ul className="list-disc pl-6 space-y-3">
-                <li><strong className="text-zinc-800">Access:</strong> Membership grants you lifetime access to the educational platform and community for a one-time fee.</li>
-                <li><strong className="text-zinc-800">Account Activation:</strong> Due to our manual payment verification process (e.g., CIH bank transfers), account activation may take a short processing period. Access is granted once payment is fully verified.</li>
-                <li><strong className="text-zinc-800">Account Security:</strong> Your account is for your personal use only. Sharing login credentials, downloading proprietary content for redistribution, or unauthorized sharing of the materials is strictly prohibited and will result in immediate termination of your account without a refund.</li>
+                <li><strong className="text-zinc-800">Access:</strong> Membership grants you digital access to the educational platform, workspaces, and curated resources according to your selected tier.</li>
+                <li><strong className="text-zinc-800">Instant Activation:</strong> Account access is provisioned automatically upon successful order completion and payment confirmation via our Merchant of Record.</li>
+                <li><strong className="text-zinc-800">Account Security:</strong> Your account is for your personal use only. Sharing login credentials, downloading proprietary content for redistribution, or unauthorized sharing of the materials is strictly prohibited and will result in immediate termination of your account.</li>
               </ul>
             </section>
 
             <section>
-              <h2 className="text-2xl md:text-3xl font-black text-zinc-900 mb-6">3. Intellectual Property</h2>
+              <h2 className="text-2xl md:text-3xl font-black text-zinc-900 mb-6">3. Merchant of Record & Billing</h2>
+              <p>
+                Our order process is conducted by our online reseller and Merchant of Record, <strong>Paddle.com</strong>. Paddle is the Merchant of Record for all our orders. Paddle provides customer service inquiries, collects sales taxes/VAT in compliance with international law, and handles returns and payments.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl md:text-3xl font-black text-zinc-900 mb-6">4. Intellectual Property</h2>
               <p>
                 All materials provided inside Eensell University, including but not limited to videos, AI automations, templates, written guides, and scripts, are the exclusive intellectual property of Eensell. You are granted a limited, non-exclusive license to use these materials for your own personal business use. You may not copy, reproduce, redistribute, or sell our content.
               </p>
             </section>
 
             <section>
-              <h2 className="text-2xl md:text-3xl font-black text-zinc-900 mb-6">4. Earnings Disclaimer & Limitation of Liability</h2>
+              <h2 className="text-2xl md:text-3xl font-black text-zinc-900 mb-6">5. Earnings Disclaimer & Limitation of Liability</h2>
               <p>
-                Eensell University provides educational resources and frameworks for building an AI agency. We do not guarantee any specific financial results, income, or success. Your results depend entirely on your own effort, execution, and market conditions. We are not liable for any direct, indirect, or consequential loss or damage arising from your use of our platform or business strategies.
+                Eensell University provides educational resources and frameworks for building modern AI workflows and client services. We do not guarantee any specific financial results, income, or success. Your results depend entirely on your own effort, execution, and market conditions. We are not liable for any direct, indirect, or consequential loss or damage arising from your use of our platform or business strategies.
               </p>
             </section>
 
             <section>
-              <h2 className="text-2xl md:text-3xl font-black text-zinc-900 mb-6">5. Strict No Refund Policy</h2>
+              <h2 className="text-2xl md:text-3xl font-black text-zinc-900 mb-6">6. Cancellations and Refund Policy</h2>
               <p>
-                Because Eensell University grants immediate access to proprietary digital products, downloadable assets, and exclusive community spaces, all sales are final. We maintain a strict no-refund policy. Once a payment is submitted and access to the platform has been granted, no refunds will be issued under any circumstances.
+                Subscription memberships can be cancelled at any time directly through your account dashboard. For details on our 14-day conditional satisfaction guarantee on digital access, please consult our full <a href="/refund" className="text-[#FF6B4A] hover:underline font-bold">Refund Policy</a>.
               </p>
             </section>
 

@@ -43,7 +43,7 @@ export function SocialProofSection() {
             <div className="flex -space-x-2 mb-4">
               {avatars.map((imgUrl, i) => (
                 <div key={i} className="w-12 h-12 rounded-full border-[3px] border-zinc-50 overflow-hidden bg-zinc-200 shadow-md relative z-10">
-                  <img src={imgUrl} alt="Member" className="w-full h-full object-cover" />
+                  <img src={imgUrl} alt="Member" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
@@ -82,7 +82,8 @@ export function SocialProofSection() {
                 */}
                 <video 
                   src="/FEEDBACK1.mp4" 
-                  poster="/images/confident_thumbnail_cinematic.jpg" 
+                  poster="/images/confident_thumbnail_cinematic.webp" 
+                  preload="none"
                   controls
                   className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
                 />
@@ -117,7 +118,7 @@ export function SocialProofSection() {
 
             <div className="flex items-center gap-5 pt-6 border-t border-zinc-200/80">
               <div className="w-16 h-16 rounded-full bg-zinc-200 overflow-hidden border-2 border-white shadow-sm shrink-0">
-                <img src={avatars[1]} alt="Featured Member" className="w-full h-full object-cover" />
+                <img src={avatars[1]} alt="Featured Member" loading="lazy" decoding="async" className="w-full h-full object-cover" />
               </div>
               <div>
                 <p className="font-bold text-zinc-900 text-lg">
@@ -147,6 +148,7 @@ export function SocialProofSection() {
         <motion.div 
           animate={{ x: isRTL ? ["0%", "50%"] : ["0%", "-50%"] }}
           transition={{ repeat: Infinity, ease: "linear", duration: 60 }}
+          style={{ willChange: "transform" }}
           className="flex w-max hover:[animation-play-state:paused]"
         >
           {[...testimonials, ...testimonials, ...testimonials, ...testimonials, ...testimonials].map((test, idx) => (
@@ -162,7 +164,7 @@ export function SocialProofSection() {
               </p>
               <div className="flex items-center gap-4 mt-auto relative z-10 pt-6 border-t border-zinc-100">
                 <div className="w-14 h-14 rounded-full bg-zinc-100 flex items-center justify-center overflow-hidden shrink-0 border-2 border-white shadow-sm">
-                  <img src={test.image} alt={t(test.nameKey as TranslationKey)} className="w-full h-full object-cover" />
+                  <img src={test.image} alt={t(test.nameKey as TranslationKey)} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <h4 className="font-bold text-zinc-900 text-base">{t(test.nameKey as TranslationKey)}</h4>

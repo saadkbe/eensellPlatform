@@ -49,12 +49,12 @@ export function FounderSection() {
             <div className="relative rounded-[2.5rem] p-2.5 sm:p-3 bg-slate-950 border border-orange-500/30 shadow-[0_20px_60px_-15px_rgba(249,115,22,0.25)] group">
               <div className="relative aspect-square w-full rounded-[2rem] overflow-hidden bg-slate-900">
                 <Image
-                  src="/self portrait founder.png"
+                  src="/self-portrait-founder.webp"
                   alt="Saad Kaabouche - Founder of Eensell"
                   fill
                   sizes="(max-width: 1024px) 100vw, 480px"
+                  quality={82}
                   className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
-                  priority
                 />
 
                 {/* Subtle dark gradient overlay at bottom for badge contrast */}

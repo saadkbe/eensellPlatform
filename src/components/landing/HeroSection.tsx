@@ -120,6 +120,7 @@ const techStack = [
 
 export function HeroSection() {
   const { dir, t, isRTL, language } = useLanguage();
+  const [isPlayingVideo, setIsPlayingVideo] = useState(false);
 
   return (
     <section
@@ -154,7 +155,7 @@ export function HeroSection() {
           </span>
           <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
           <span className="text-[11px] font-extrabold text-orange-600 uppercase tracking-wider">
-            +70,000 Membres
+            1,370 Membres
           </span>
         </motion.div>
 
@@ -237,33 +238,67 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Empty Video Frame Area */}
-          <div className="relative rounded-b-xl sm:rounded-b-2xl overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-black aspect-video flex flex-col items-center justify-center p-6 text-center group border border-white/5 select-none">
-            {/* Ambient Background Grid & Glow */}
-            <div className="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
+          {/* Interactive Video Frame Area */}
+          <div className="relative rounded-b-xl sm:rounded-b-2xl overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-black aspect-video flex flex-col items-center justify-center border border-white/5 select-none">
+            {isPlayingVideo ? (
+              <div className="relative w-full h-full bg-black">
+                <video
+                  src="/landingpagevideo.mp4"
+                  controls
+                  autoPlay
+                  playsInline
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setIsPlayingVideo(true)}
+                className="relative w-full h-full flex flex-col items-center justify-center p-6 text-center group cursor-pointer focus:outline-none"
+                aria-label="Play presentation video"
+              >
+                {/* Cinematic Poster Image Background */}
+                <Image
+                  src="/workspace-banner.webp"
+                  alt="Video Presentation Preview"
+                  fill
+                  priority
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 896px"
+                  quality={80}
+                  className="object-cover object-center opacity-40 transition-all duration-700 group-hover:scale-105 group-hover:opacity-50"
+                />
 
-            {/* Glowing Play Icon Frame */}
-            <div className="relative z-10 w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-tr from-orange-500 via-amber-500 to-yellow-400 flex items-center justify-center shadow-[0_0_35px_rgba(249,115,22,0.45)] group-hover:scale-110 transition-transform duration-300">
-              <Play className="w-7 h-7 sm:w-8 sm:h-8 text-slate-950 fill-slate-950 ml-1" />
-            </div>
+                {/* Dark Vignette Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-slate-950/60 to-black/70 pointer-events-none" />
 
-            <div className="relative z-10 mt-5 space-y-1">
-              <p className="text-sm sm:text-base font-bold text-white tracking-wide">
-                {isRTL
-                  ? "فيديو الشرح التقديمي • Eensell University V2"
-                  : language === "fr"
-                  ? "Démonstration Complète Eensell University V2"
-                  : "Official Eensell University V2 Breakdown"}
-              </p>
-              <p className="text-xs text-slate-400 font-medium">
-                {isRTL
-                  ? "انقر على زر الاشتراك بالأسفل للوصول إلى كافة الدروس ومساحة العمل"
-                  : language === "fr"
-                  ? "Découvrez comment lancer votre agence IA au Maroc pas à pas"
-                  : "Complete step-by-step agency launch blueprint"}
-              </p>
-            </div>
+                {/* Glowing Play Icon Frame with Pulse */}
+                <div className="relative z-10 w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-tr from-orange-500 via-amber-500 to-yellow-400 flex items-center justify-center shadow-[0_0_40px_rgba(249,115,22,0.6)] group-hover:scale-115 group-active:scale-95 transition-all duration-300">
+                  <Play className="w-7 h-7 sm:w-8 sm:h-8 text-slate-950 fill-slate-950 ml-1" />
+                </div>
+
+                <div className="relative z-10 mt-5 space-y-1.5">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[11px] font-semibold text-white mb-1 shadow-sm">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    <span>1080p Full HD &bull; 14 Min</span>
+                  </div>
+
+                  <p className="text-sm sm:text-base font-bold text-white tracking-wide group-hover:text-orange-400 transition-colors">
+                    {isRTL
+                      ? "فيديو الشرح التقديمي • Eensell University V2"
+                      : language === "fr"
+                      ? "Démonstration Complète Eensell University V2"
+                      : "Official Eensell University V2 Breakdown"}
+                  </p>
+                  <p className="text-xs text-slate-300 font-medium max-w-md">
+                    {isRTL
+                      ? "انقر لتشغيل الفيديو واكتشاف نظام العمل خطوة بخطوة"
+                      : language === "fr"
+                      ? "Cliquez pour lancer la vidéo et découvrir le système pas à pas"
+                      : "Click to play and discover the step-by-step agency operating system"}
+                  </p>
+                </div>
+              </button>
+            )}
           </div>
         </div>
 
@@ -317,6 +352,7 @@ export function HeroSection() {
           <motion.div
             animate={{ x: isRTL ? ["0%", "50%"] : ["0%", "-50%"] }}
             transition={{ repeat: Infinity, ease: "linear", duration: 32 }}
+            style={{ willChange: "transform" }}
             className="flex items-center w-max gap-4 sm:gap-6 hover:[animation-play-state:paused]"
           >
             {[...techStack, ...techStack, ...techStack].map((tech, idx) => (
