@@ -101,18 +101,43 @@ export function HeroSection() {
 
   useEffect(() => {
     const video = videoRef.current;
-    if (video) {
-      video.setAttribute("muted", "");
-      video.defaultMuted = true;
-      video.muted = true;
-      video.playsInline = true;
+    if (!video) return;
+
+    // Mobile Autoplay attributes & properties (iOS Safari & Android Chrome)
+    video.setAttribute("playsinline", "true");
+    video.setAttribute("webkit-playsinline", "true");
+    video.setAttribute("muted", "");
+    video.defaultMuted = true;
+    video.muted = true;
+    video.volume = 0;
+
+    const playVideo = () => {
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
-          // Autoplay fallback handled gracefully
+          // Fallback if blocked by iOS Low Power Mode
         });
       }
-    }
+    };
+
+    playVideo();
+
+    // First touch / scroll trigger for iOS Low Power Mode battery saver
+    const handleUserInteraction = () => {
+      if (video.paused) {
+        video.play().catch(() => {});
+      }
+    };
+
+    window.addEventListener("touchstart", handleUserInteraction, { passive: true, once: true });
+    window.addEventListener("touchend", handleUserInteraction, { passive: true, once: true });
+    window.addEventListener("scroll", handleUserInteraction, { passive: true, once: true });
+
+    return () => {
+      window.removeEventListener("touchstart", handleUserInteraction);
+      window.removeEventListener("touchend", handleUserInteraction);
+      window.removeEventListener("scroll", handleUserInteraction);
+    };
   }, []);
 
   return (
@@ -129,6 +154,8 @@ export function HeroSection() {
           loop
           muted
           playsInline
+          // @ts-ignore
+          webkit-playsinline="true"
           preload="auto"
           poster="/herovideobackground_frame0.jpg"
           className="absolute inset-0 w-full h-full object-cover scale-105"
@@ -137,10 +164,10 @@ export function HeroSection() {
           <source src="/herovideobackground.MOV" type="video/quicktime" />
         </video>
 
-        {/* ── DARK SUBTLE OVERLAY (Clear video visibility with crisp contrast) ── */}
-        <div className="absolute inset-0 bg-black/52" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-transparent to-black/85" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_35%,_rgba(0,0,0,0.65)_100%)]" />
+        {/* ── DARK SUBTLE OVERLAY (Just a bit darker for crisp typography contrast) ── */}
+        <div className="absolute inset-0 bg-black/55" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/20 to-black/80" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_35%,_rgba(0,0,0,0.6)_100%)]" />
 
         {/* ── SIGNATURE ORANGE-TO-AMBER AMBIENT TOP LIGHT ── */}
         <div className="absolute top-0 inset-x-0 h-72 bg-gradient-to-b from-orange-500/20 via-amber-500/5 to-transparent pointer-events-none" />
