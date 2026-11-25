@@ -138,9 +138,9 @@ export function HeroSection() {
         </video>
 
         {/* ── DARK SUBTLE OVERLAY (Clear video visibility with crisp contrast) ── */}
-        <div className="absolute inset-0 bg-black/35" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/75" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_40%,_rgba(0,0,0,0.5)_100%)]" />
+        <div className="absolute inset-0 bg-black/52" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-transparent to-black/85" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_35%,_rgba(0,0,0,0.65)_100%)]" />
 
         {/* ── SIGNATURE ORANGE-TO-AMBER AMBIENT TOP LIGHT ── */}
         <div className="absolute top-0 inset-x-0 h-72 bg-gradient-to-b from-orange-500/20 via-amber-500/5 to-transparent pointer-events-none" />
