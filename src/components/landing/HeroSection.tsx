@@ -101,13 +101,16 @@ export function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.defaultMuted = true;
-      videoRef.current.muted = true;
-      const playPromise = videoRef.current.play();
+    const video = videoRef.current;
+    if (video) {
+      video.setAttribute("muted", "");
+      video.defaultMuted = true;
+      video.muted = true;
+      video.playsInline = true;
+      const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
-          // Autoplay fallback
+          // Autoplay fallback handled gracefully
         });
       }
     }
@@ -122,11 +125,13 @@ export function HeroSection() {
       <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none select-none">
         <video
           ref={videoRef}
+          src="/herovideobackground.mp4"
           autoPlay
           loop
           muted
           playsInline
           preload="auto"
+          poster="/herovideobackground_frame0.jpg"
           className="absolute inset-0 w-full h-full object-cover scale-105"
         >
           <source src="/herovideobackground.mp4" type="video/mp4" />
@@ -134,12 +139,12 @@ export function HeroSection() {
         </video>
 
         {/* ── DARK SUBTLE OVERLAY (Clear video visibility with crisp contrast) ── */}
-        <div className="absolute inset-0 bg-black/45" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-transparent to-black/85" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_30%,_rgba(0,0,0,0.6)_100%)]" />
+        <div className="absolute inset-0 bg-black/35" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/75" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_40%,_rgba(0,0,0,0.5)_100%)]" />
 
         {/* ── SIGNATURE ORANGE-TO-AMBER AMBIENT TOP LIGHT ── */}
-        <div className="absolute top-0 inset-x-0 h-80 bg-gradient-to-b from-orange-500/20 via-amber-500/10 to-transparent pointer-events-none" />
+        <div className="absolute top-0 inset-x-0 h-72 bg-gradient-to-b from-orange-500/20 via-amber-500/5 to-transparent pointer-events-none" />
       </div>
 
       {/* ── FOREGROUND CONTENT (Centered Hero Text & Actions) ── */}

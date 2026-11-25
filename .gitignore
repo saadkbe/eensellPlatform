@@ -26,6 +26,8 @@
 *.mp4
 *.mov
 *.avi
+!public/herovideobackground.mp4
+!public/herovideobackground.MOV
 
 # debug
 npm-debug.log*
