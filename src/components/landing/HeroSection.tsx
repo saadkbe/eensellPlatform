@@ -98,33 +98,48 @@ const techStack = [
 export function HeroSection() {
   const { dir, t, isRTL, language } = useLanguage();
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay fallback
+        });
+      }
+    }
+  }, []);
 
   return (
     <section
       dir={dir}
-      className="relative w-full overflow-hidden flex flex-col justify-between items-center text-center bg-black text-white aspect-[9/16] md:aspect-video min-h-[680px] md:min-h-[780px] lg:min-h-[860px]"
+      className="relative w-full overflow-hidden flex flex-col justify-between items-center text-center bg-black text-white min-h-[92svh] md:min-h-[85vh] md:aspect-video aspect-[9/16]"
     >
       {/* ── BACKGROUND VIDEO LOOP WITH ASPECT RATIO 16:9 (Laptop) & 9:16 (Mobile) ── */}
       <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none select-none">
         <video
+          ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
           preload="auto"
-          className="w-full h-full object-cover aspect-[9/16] md:aspect-video scale-105"
+          className="absolute inset-0 w-full h-full object-cover scale-105"
         >
           <source src="/herovideobackground.mp4" type="video/mp4" />
           <source src="/herovideobackground.MOV" type="video/quicktime" />
         </video>
 
-        {/* ── DARK SUBTLE OVERLAY WITH VIGNETTE FOR CRISP CONTRAST ── */}
-        <div className="absolute inset-0 bg-slate-950/65 backdrop-blur-[0.5px]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/45 to-black/95" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_rgba(2,6,23,0.7)_100%)]" />
+        {/* ── DARK SUBTLE OVERLAY (Clear video visibility with crisp contrast) ── */}
+        <div className="absolute inset-0 bg-black/45" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-transparent to-black/85" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_30%,_rgba(0,0,0,0.6)_100%)]" />
 
         {/* ── SIGNATURE ORANGE-TO-AMBER AMBIENT TOP LIGHT ── */}
-        <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-orange-500/20 via-amber-500/10 to-transparent pointer-events-none" />
+        <div className="absolute top-0 inset-x-0 h-80 bg-gradient-to-b from-orange-500/20 via-amber-500/10 to-transparent pointer-events-none" />
       </div>
 
       {/* ── FOREGROUND CONTENT (Centered Hero Text & Actions) ── */}
